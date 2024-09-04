@@ -229,7 +229,7 @@ git clone --bare git@github.com:byu-cpe/ecen520_student.git
 cd ecen520_student.git/
 git push --mirror git@github.com:byu-ecen520-fall2024/520-assignments-<githubusername>.git
 cd ..
-rm -rf ecen323_student.git```
+rm -rf ecen520_student.git
 ```
 More details on this process can be found at Step 3 of the [ECEN 323 web page](https://byu-cpe.github.io/ecen323/tutorials/git_setup/).
 
