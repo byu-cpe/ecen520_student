@@ -205,6 +205,21 @@ See the assignment description for details on this portion of your grade.
 
 These instructions summarize how to setup your GitHub repository for this class.
 
+## Setting up a GitHub SSH Key
+
+If you haven't already, you'll need to add an SSH key to your GitHub account from the machine that you will be cloning these repositories to. You can generate a new key by running the following command:
+```
+cd ~
+ssh-keygen -t rsa
+```
+You can find and copy your newly generated SSH key by writing it to the terminal:
+```
+cd ~
+cat .ssh/id_rsa.pub
+```
+Select and copy the entire output from the 'cat' command and paste it into the box you will be prompted with when you go to add your key to your GitHub account.
+More details on this process can be found at Steps 1 and 2 of the [ECEN 323 web page](https://byu-cpe.github.io/ecen323/tutorials/git_setup/).
+
 ## GitHub Classroom Repository
 
 You will need to create a GitHub classroom repository for this class.
@@ -229,7 +244,7 @@ git clone --bare git@github.com:byu-cpe/ecen520_student.git
 cd ecen520_student.git/
 git push --mirror git@github.com:byu-ecen520-fall2024/520-assignments-<githubusername>.git
 cd ..
-rm -rf ecen323_student.git```
+rm -rf ecen520_student.git```
 ```
 More details on this process can be found at Step 3 of the [ECEN 323 web page](https://byu-cpe.github.io/ecen323/tutorials/git_setup/).
 
