@@ -15,13 +15,13 @@ module tx_top_tb ();
     logic [7:0] char_to_send = 0;
     logic tx_initialized = 0;
 
-    parameter integer DEBOUNCE_TIME_US = 100;
+    parameter integer DEBOUNCE_DELAY_US = 100;
     parameter logic PARITY = 1'd1;
     parameter integer BAUD_RATE = 19_200;
     parameter integer NUMBER_OF_CHARS = 5;
 
     localparam integer CLK_FREQUENCY = 100_000_000;
-    localparam integer BOUNCE_CLOCKS = CLK_FREQUENCY / 1_000_000 * DEBOUNCE_TIME_US;
+    localparam integer BOUNCE_CLOCKS = CLK_FREQUENCY / 1_000_000 * DEBOUNCE_DELAY_US;
 
     // Clock Generator
     always begin
@@ -41,13 +41,13 @@ module tx_top_tb ();
     );
 
     // Instantiate Top-level design
-    tx_top #(.DEBOUNCE_TIME_US(DEBOUNCE_TIME_US), .PARITY(PARITY), .BAUD_RATE(BAUD_RATE))
+    tx_top #(.DEBOUNCE_DELAY_US(DEBOUNCE_DELAY_US), .PARITY(PARITY), .BAUD_RATE(BAUD_RATE))
     tx_top(
         .CLK100MHZ(clk),
         .CPU_RESETN(rst_n),
         .SW(sw),
         .BTNC(btnc_bouncy),
-        .LED(led_i),
+        .LED(led),
         .UART_RXD_OUT(tx_out),
         .LED16_B(tx_busy)
     );
@@ -95,8 +95,8 @@ module tx_top_tb ();
     initial begin
         int clocks_to_delay;
         $display("===== TX Top TB =====");
-        $display("BAUD_RATE=%d PARITY=%d DEBOUNCE_TIME_US %d BOUNCE_CLOCKS %d",
-            BAUD_RATE, PARITY, DEBOUNCE_TIME_US, BOUNCE_CLOCKS);
+        $display("BAUD_RATE=%d PARITY=%d DEBOUNCE_DELAY_US %d BOUNCE_CLOCKS %d",
+            BAUD_RATE, PARITY, DEBOUNCE_DELAY_US, BOUNCE_CLOCKS);
 
         // Simulate some time with no stimulus/reset while clock is running
         #100ns
