@@ -100,14 +100,14 @@ Once you have created your design and downloaded it to the board, you can make s
 
 1. Required Makefile rules:
 
-* `synth_adxl362_cntrl`
-* `sim_top`:
-* `sim_top_100`:
-* `gen_bit`: generates `spi_adxl362.bit`
-* `gen_bit_100`: generates `spi_adxl362_100.bit`
+   * `synth_adxl362_cntrl`
+   * `sim_top`:
+   * `sim_top_100`:
+   * `gen_bit`: generates `spi_adxl362.bit`
+   * `gen_bit_100`: generates `spi_adxl362_100.bit`
 
-1. You need to have at least 3 "Error" commits in your repository
-2. Assignment specific Questions:
+2. You need to have at least 3 "Error" commits in your repository
+3. Assignment specific Questions:
     1. Provide a table summarizing the resources your design uses from the implementation utilization report.
     2. Review the timing report and summarize the following:
         * Determine the "Worst Negative Slack" (or WNS).
