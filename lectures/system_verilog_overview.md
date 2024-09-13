@@ -6,9 +6,11 @@ We will focus primarily on syntax for structural design in SystemVerilog and com
 <!-- Get them started on basic RTL SV design to complete first two labs -->
 
 ## Reading
-  * Review chapters 8, 11, and 14 [Dr. Nelson's](https://www.amazon.com/Designing-Digital-Systems-SystemVerilog-v2-1-ebook/dp/B091BBVG4C/ref=sr_1_1?crid=3TUDSUSI1BURK&keywords=Designing+Digital+Systems+With+SystemVerilog+%28v2.1%29&qid=1662573889&s=digital-text&sprefix=designing+digital+systems+with+systemverilog+v2.1+%2Cdigital-text%2C89&sr=1-1) ECEN 220 textbook
+
+* Review chapters 8, 11, and 14 [Dr. Nelson's](https://www.amazon.com/Designing-Digital-Systems-SystemVerilog-v2-1-ebook/dp/B091BBVG4C/ref=sr_1_1?crid=3TUDSUSI1BURK&keywords=Designing+Digital+Systems+With+SystemVerilog+%28v2.1%29&qid=1662573889&s=digital-text&sprefix=designing+digital+systems+with+systemverilog+v2.1+%2Cdigital-text%2C89&sr=1-1) ECEN 220 textbook
 
 ## Key Concepts
+
 * Purpose of SystemVerilog and how it differs from other programming languages
 * Module definition (ports, module naming) (chapter 8)
 * Parameterization (chapter ?)

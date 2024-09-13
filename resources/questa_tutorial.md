@@ -1,7 +1,7 @@
 # QuestaSim Tutorial
 
 This brief tutorial will help you get started using QuestaSim in both GUI mode and command line mode.
-GUI mode should only be used when debugging interactively. 
+GUI mode should only be used when debugging interactively.
 The command line mode will be used for grading.
 Copy the following files to complete the tutorials: [counter.sv](./counter.sv) and [counter_tb.sv](./counter_tb.sv).
 You are encouraged to access the help documentation within QuestaSim to get more details about the tool.
@@ -15,7 +15,7 @@ You are encouraged to access the help documentation within QuestaSim to get more
     * This will create a directory for your project and create a ".mpf" file for the project settings and a directory called "work" where your compiled files will be stored. It will also create a new "project" tab in the main window.
 3. Add files to the project: `Project > Add to Project > Existing File ...`
     * Add the files `counter.sv` and `counter_tb.sv`
-4. Compile the files by selecting "Compile > Compile All" 
+4. Compile the files by selecting "Compile > Compile All"
 5. Start simulation by selecting "Simulate > Start Simulation"
     * This will open the simulation window
     * Expand "Work" in the "Design tab" and select "counter_test"
@@ -28,7 +28,6 @@ You are encouraged to access the help documentation within QuestaSim to get more
 7. Run the simulation by selecting "Simulate > Run > Run -All"
 8. View the simulation waveform
 
-
 ## QuestaSim Command Line Tutorial
 
 1. Starting vsim in command line mode: `vsim -c`
@@ -36,17 +35,16 @@ You are encouraged to access the help documentation within QuestaSim to get more
 3. Start simulation: `vsim -c work.counter_tb -voptargs=+acc`
 4. Run the simulation to the end: `run -all`
 
-
 ## QuestaSim Waveform Helps
 
 Waveform editing quick key commands:
+
 * `F`: Full waveform zoom
 * `I`: Zoom in
 * `O`: Zoom Out
 
-You can create a `.do` file that helps setup your waveforms when you run vsim.
+You can create a `.do` file that helps set up your waveforms when you run vsim.
 This file can include dividers and waveforms before you start:
-
 
 ```
 add wave -divider "Top"
@@ -81,15 +79,18 @@ Ideas:
 -->
 
 Commands:
+
 * `exit`:
-* `examine`: 
+* `examine`:
 
 References:
+
 * [Brief Tutorial](https://vhdlwhiz.com/the-modelsim-commands-you-need-to-know/)
 * [ModelSim user manual](https://faculty-web.msoe.edu/johnsontimoj/Common/FILES/modelsim_user.pdf)
 * [Command reference](https://web.eecs.utk.edu/~dbouldin/protected/modelsim_se_ref.pdf)
 
 Example
+
 ```
 vlib work
 vlog tx.sv
@@ -99,6 +100,7 @@ vsim -c work.tx_tb -do "run -all"
 ```
 
 Libraries for primitives
+
 ```
 vmap unisims_ver /tools/Xilinx/Vivado/2024.1/data/questa/unisims_ver
 vcom ../vhdl/seven_segment_display.vhd
@@ -106,7 +108,6 @@ vlog mmcm_top.sv
 vlog /tools/Xilinx/Vivado/2024.1/data/verilog/src/glbl.v
 vsim mmcm_top glbl -L unisims_ver
 ```
-
 
 ```
 add wave -position insertpoint  \
@@ -117,9 +118,10 @@ sim:/counter_tb/load \
 sim:/counter_tb/din \
 sim:/counter_tb/cnt
 ```
+
 <!--
 
-Running firefox over X11 on mac
+Running firefox over X11 on Mac
 
 export XAUTHORITY=$HOME/.Xauthority
 

@@ -1,18 +1,18 @@
 #!/usr/bin/python3
 
-'''
+"""
 A set of classes for performing a specific test within a git repo.
 Base classes can be created for performing tool-specific tests.
 Several generic test classes are included that could be used in any
 type of repository.
-'''
+"""
 
-import subprocess
+import datetime
 import os
+import subprocess
 import sys
 from enum import Enum
-from git import Repo
-import datetime
+
 
 #########################################################3
 # Base repo test classes
@@ -23,16 +23,18 @@ class result_type(Enum):
     WARNING = 2
     ERROR = 3
 
-class repo_test_result():
+
+class repo_test_result:
     """ Class for indicating the result of a repo test
     """
 
-    def __init__(self, test, result = result_type.SUCCESS, msg = None):
+    def __init__(self, test, result=result_type.SUCCESS, msg=None):
         self.test = test
         self.result = result
         self.msg = msg
 
-class repo_test():
+
+class repo_test:
     """ Class for performing a test on files within a repository.
     Each instance of this class represents a _single_ test with a single
     executable. Multiple tests can be performed by creating multiple instances
@@ -40,12 +42,12 @@ class repo_test():
     This is intended as a super class for custom test modules.
     """
 
-    def __init__(self, abort_on_error=True, process_output_filename = None):
+    def __init__(self, abort_on_error=True, process_output_filename=None):
         """ Initialize the test module with a repo object """
         self.abort_on_error = abort_on_error
         self.process_output_filename = process_output_filename
         # List of files that should be deleted after the test is done (i.e., log files)
-        self.files_to_delete = []  
+        self.files_to_delete = []
 
     def module_name(self):
         """ returns a string indicating the name of the module. Used for logging. """
@@ -53,9 +55,9 @@ class repo_test():
 
     def perform_test(self, repo_test_suite):
         """ This function should be overridden by a subclass. It performs the test using
-        the repo_test_suite object to obtain test-specific information. """ 
+        the repo_test_suite object to obtain test-specific information. """
         return False
-    
+
     def success_result(self, msg=None):
         return repo_test_result(self, result_type.SUCCESS, msg)
 
@@ -65,7 +67,7 @@ class repo_test():
     def error_result(self, msg=None):
         return repo_test_result(self, result_type.ERROR, msg)
 
-    def execute_command(self, repo_test_suite, proc_cmd, process_output_filename = None ):
+    def execute_command(self, repo_test_suite, proc_cmd, process_output_filename=None):
         """ Completes a sub-process command. and print to a file and stdout.
         Args:
             proc_cmd -- The string command to be executed.
@@ -78,7 +80,7 @@ class repo_test():
                 This can be None if no output file is wanted.
         Returns: the sub-process return code
         """
-        
+
         fp = None
         if repo_test_suite.log_dir is not None and process_output_filename is not None:
             if not os.path.exists(self.repo_test_suite.log_dir):
@@ -91,10 +93,10 @@ class repo_test():
             repo_test_suite.print("Writing output to:", process_output_filepath)
             self.files_to_delete.append(process_output_filepath)
         cmd_str = " ".join(proc_cmd)
-        message = "Executing the following command in directory:"+str(repo_test_suite.working_path)+":"+str(cmd_str)
+        message = "Executing the following command in directory:" + str(repo_test_suite.working_path) + ":" + str(cmd_str)
         repo_test_suite.print(message)
         if fp:
-            fp.write(message+"\n")
+            fp.write(message + "\n")
         # Execute command		
         proc = subprocess.Popen(
             proc_cmd,
@@ -117,18 +119,20 @@ class repo_test():
         """ Cleanup any files that were created by the test. """
         for file in self.files_to_delete:
             if os.path.exists(file):
-                os.remove(file) 
+                os.remove(file)
 
-#########################################################3
+            #########################################################3
+
+
 # Generic, non-repo test classes
 #########################################################3
 
 class file_exists_test(repo_test):
-    ''' Checks to see if files exist in a repo directory
-    '''
+    """ Checks to see if files exist in a repo directory
+    """
 
     def __init__(self, repo_file_list, abort_on_error=True):
-        '''  '''
+        """  """
         super().__init__(abort_on_error)
         self.repo_file_list = repo_file_list
 
@@ -136,7 +140,7 @@ class file_exists_test(repo_test):
         name_str = "Files Exist: "
         for repo_file in self.repo_file_list:
             name_str += f'{repo_file}, '
-        return name_str[:-2] # Remove the last two characters (', ')
+        return name_str[:-2]  # Remove the last two characters (', ')
 
     def perform_test(self, repo_test_suite):
         return_val = True
@@ -150,13 +154,14 @@ class file_exists_test(repo_test):
             return self.success_result()
         return self.error_result()
 
-class make_test(repo_test):
-    ''' Executes a makefile rule in the repository.
-    '''
 
-    def __init__(self, make_rule, generate_output_file = True, make_output_filename=None,
+class make_test(repo_test):
+    """ Executes a makefile rule in the repository.
+    """
+
+    def __init__(self, make_rule, generate_output_file=True, make_output_filename=None,
                  abort_on_error=True):
-        ''' make_rule is the string makefile rule that is executed. '''
+        """ make_rule is the string makefile rule that is executed. """
         if generate_output_file and make_output_filename is None:
             # default makefile output filename
             make_output_filename = "make_" + make_rule.replace(" ", "_") + '.log'
@@ -173,15 +178,17 @@ class make_test(repo_test):
             return self.error_result()
         return self.success_result()
 
+
 #########################################################3
 # Git repo test classes
 #########################################################3
 
 class check_for_untracked_files(repo_test):
-    ''' This tests the repo for any untracked files in the repository.
-    '''
-    def __init__(self, ignore_ok = True):
-        '''  '''
+    """ This tests the repo for any untracked files in the repository.
+    """
+
+    def __init__(self, ignore_ok=True):
+        """  """
         super().__init__()
         self.ignore_ok = ignore_ok
 
@@ -203,11 +210,13 @@ class check_for_untracked_files(repo_test):
         # return True
         return self.success_result()
 
+
 class check_for_tag(repo_test):
-    ''' This tests to see if the given tag exists in the repository.
-    '''
+    """ This tests to see if the given tag exists in the repository.
+    """
+
     def __init__(self, tag_name):
-        '''  '''
+        """  """
         super().__init__()
         self.tag_name = tag_name
 
@@ -223,11 +232,13 @@ class check_for_tag(repo_test):
         repo_test_suite.print_error(f'Tag {self.tag_name} not found in repository')
         return self.warning_result()
 
+
 class check_for_max_repo_files(repo_test):
-    ''' Check to see if the repository has more than a given number of files.
-    '''
+    """ Check to see if the repository has more than a given number of files.
+    """
+
     def __init__(self, max_dir_files):
-        '''  '''
+        """  """
         super().__init__()
         self.max_dir_files = max_dir_files
 
@@ -243,13 +254,15 @@ class check_for_max_repo_files(repo_test):
             return self.warning_result()
         return self.success_result()
 
+
 class check_for_ignored_files(repo_test):
-    ''' Checks to see if there are any ignored files in the repo directory.
+    """ Checks to see if there are any ignored files in the repo directory.
     The intent is to make sure that these ignore files are removed through a clean
     operation. Returns true if there are no ignored files in the directory.
-    '''
-    def __init__(self, check_path = None):
-        '''  '''
+    """
+
+    def __init__(self, check_path=None):
+        """  """
         super().__init__()
         self.check_path = check_path
 
@@ -273,12 +286,13 @@ class check_for_ignored_files(repo_test):
         # return True
         return self.success_result()
 
+
 class check_for_uncommitted_files(repo_test):
-    ''' Checks for uncommitted files in the repo directory.
-    '''
+    """ Checks for uncommitted files in the repo directory.
+    """
 
     def __init__(self):
-        '''  '''
+        """  """
         super().__init__()
 
     def module_name(self):
@@ -297,12 +311,13 @@ class check_for_uncommitted_files(repo_test):
         # return True
         return self.success_result()
 
+
 class check_number_of_files(repo_test):
-    ''' Counts the number of files in the repo directory.
-    '''
+    """ Counts the number of files in the repo directory.
+    """
 
     def __init__(self, max_files=sys.maxsize):
-        '''  '''
+        """  """
         super().__init__()
         self.max_files = max_files
 
@@ -322,11 +337,13 @@ class check_number_of_files(repo_test):
         # return True
         return self.success_result()
 
+
 class list_git_commits(repo_test):
-    ''' Prints the commits of the given directory in the repo.
-    '''
-    def __init__(self, check_path = None):
-        '''  '''
+    """ Prints the commits of the given directory in the repo.
+    """
+
+    def __init__(self, check_path=None):
+        """  """
         super().__init__()
         self.check_path = check_path
 
@@ -347,11 +364,13 @@ class list_git_commits(repo_test):
         # return True
         return self.success_result()
 
+
 class check_remote_updates(repo_test):
-    ''' Checks to see if the repository has the latest commites from a remote.
-    '''
-    def __init__(self, remote_name, use_date_of_current_commit = False):
-        '''  '''
+    """ Checks to see if the repository has the latest commits from a remote.
+    """
+
+    def __init__(self, remote_name, use_date_of_current_commit=False):
+        """  """
         super().__init__()
         self.remote_name = remote_name
         self.use_date_of_current_commit = use_date_of_current_commit
@@ -364,9 +383,9 @@ class check_remote_updates(repo_test):
         current_branch = repo_test_suite.repo.active_branch
         local_commit = repo_test_suite.repo.commit(current_branch)
         local_commit_date = datetime.datetime.fromtimestamp(local_commit.committed_date)
-        print(f"current branch:{current_branch}, commit hash {local_commit.hexsha[:7]} commit date {local_commit_date}" )
+        print(f"current branch:{current_branch}, commit hash {local_commit.hexsha[:7]} commit date {local_commit_date}")
         # Get the remote
-        remote = repo_test_suite.repo.remote(name = self.remote_name)
+        remote = repo_test_suite.repo.remote(name=self.remote_name)
         if remote is None:
             repo_test_suite.print_error(f"Remote {self.remote_name} not found")
             return self.error_result()
@@ -394,7 +413,7 @@ class check_remote_updates(repo_test):
         # git config --global alias.tm "commit --no-commit --no-ff"
 
         if latest_remote_commit > local_commit_date:
-            repo_test_suite.print_error(f"Git Remote \'{self.remote_name}\' has some newer commits that are not integarated into the local repository")
+            repo_test_suite.print_error(f"Git Remote \'{self.remote_name}\' has some newer commits that are not integrated into the local repository")
             return self.warning_result()
 
         return self.success_result()

@@ -1,9 +1,11 @@
 #!/usr/bin/python3
 
-import pathlib
-import os
 import git
+import os
+import pathlib
+
 from repo_test import result_type
+
 
 class TermColor:
     """ Terminal codes for printing in color """
@@ -16,16 +18,17 @@ class TermColor:
     BOLD = "\033[1m"
     UNDERLINE = "\033[4m"
 
-class repo_test_suite():
-    ''' This class is used to manage the execution of "tests" within a specific directories
-    of a GitHub repository for the purpose of evaluating code within github repositories.
+
+class repo_test_suite:
+    """ This class is used to manage the execution of "tests" within a specific directories
+    of a GitHub repository for the purpose of evaluating code within GitHub repositories.
 
     A key function of this class is to manage the output of the test suite.
     There are two kinds of output generated during the test suite:
     - Command output: The actual output of commands executed as part of a test
     - Test summary: Text that summarizes the test status and results.
-    There are three three output targets for this text:
-    - stdout: The console output of the test suite. 
+    There are three output targets for this text:
+    - stdout: The console output of the test suite.
     - summary log file: A file that contains the summary of the test output.
     - Command specific log files: Files for a specific test output to isolate the output from other tests
 
@@ -40,10 +43,10 @@ class repo_test_suite():
             This can be None if no output file logging is wanted.
     summary_log_filename: The name of the file where a summary of the test output will be written.
 
-    '''
+    """
 
-    def __init__(self, repo, test_name = None, working_dir = None, print_to_stdout = True, 
-                 verbose = False, summary_log_filename = None, log_dir = None, ):
+    def __init__(self, repo, test_name=None, working_dir=None, print_to_stdout=True,
+                 verbose=False, summary_log_filename=None, log_dir=None, ):
         # Reference to the Git repository
         self.repo = repo
         self.repo_root_path = pathlib.Path(repo.git.rev_parse('--show-toplevel'))
@@ -55,10 +58,10 @@ class repo_test_suite():
         else:
             self.working_path = pathlib.Path(self.script_path)
         # Relative repo path
-        self.relative_repo_path = self.working_path.relative_to(self.repo_root_path)        
+        self.relative_repo_path = self.working_path.relative_to(self.repo_root_path)
         # Directory of the logs
         self.log_dir = log_dir
-        self.tests_to_perform = [] # list of test_module objects
+        self.tests_to_perform = []  # list of test_module objects
         self.print_to_stdout = print_to_stdout
         self.verbose = verbose
         self.test_log_fp = None
@@ -75,14 +78,14 @@ class repo_test_suite():
         self.test_results = {}
 
     def add_test_module(self, test_module):
-        ''' Add a test module to the test suite. '''
+        """ Add a test module to the test suite. """
         self.tests_to_perform.append(test_module)
 
     def print_color(self, color, *msg):
         """ Print a message in color """
         print(color + " ".join(str(item) for item in msg), TermColor.END)
 
-    def print(self, message, verbose_message = False):
+    def print(self, message, verbose_message=False):
         """ Prints a string to the appropriate locations. """
         # Print to std_out?
         if not verbose_message or self.verbose:
@@ -94,20 +97,20 @@ class repo_test_suite():
     def print_error(self, message):
         """ Prints a string to the appropriate locations. """
         # Print to std_out?
-        self.print_color(self.error_color,message)
+        self.print_color(self.error_color, message)
 
     def print_test_status(self, message):
-        self.print_color(self.test_color,message)
+        self.print_color(self.test_color, message)
 
     def test_cleanup(self):
-        ''' Close the log file '''
+        """ Close the log file """
         for test in self.tests_to_perform:
             test.cleanup()
         if self.test_log_fp:
             self.test_log_fp.close()
 
     def run_tests(self):
-        ''' Run all the registered tests '''
+        """ Run all the registered tests """
         self.print_test_start_message()
         self.iterate_through_tests(self.tests_to_perform)
         # Wrap up
@@ -144,15 +147,14 @@ class repo_test_suite():
                 for error in errors:
                     self.print_error(f"  {error.test.module_name()}")
 
-
-    def iterate_through_tests(self, list_of_tests, start_step = 1):
-        ''' Run list of tests '''
-        for idx, test in enumerate(list_of_tests):# (but no setup or wrap-up):
-            self.print_test_status(f"Step {idx+start_step}. {test.module_name()}")
+    def iterate_through_tests(self, list_of_tests, start_step=1):
+        """ Run list of tests """
+        for idx, test in enumerate(list_of_tests):  # (but no setup or wrap-up):
+            self.print_test_status(f"Step {idx + start_step}. {test.module_name()}")
             self.execute_test_module(test)
 
     def execute_test_module(self, test_module):
-        ''' Executes the 'perform_test' function of the tester_module and logs its result in the log file '''
+        """ Executes the 'perform_test' function of the tester_module and logs its result in the log file """
 
         # Check to see if the test should proceed
         # if not self.proceed_with_tests:
@@ -163,19 +165,19 @@ class repo_test_suite():
         result = test_module.perform_test(self)
         self.test_results[test_module] = result
         if result.result == result_type.SUCCESS:
-            self.print_test_status(str.format("Success:{}\n",module_name))
+            self.print_test_status(str.format("Success:{}\n", module_name))
         elif result.result == result_type.WARNING:
-            self.print_error(str.format("Warning:{}\n",module_name))
+            self.print_error(str.format("Warning:{}\n", module_name))
         else:
-            self.print_error(str.format("Failed:{}\n",module_name))
+            self.print_error(str.format("Failed:{}\n", module_name))
         return result
 
+
 # Static methods
-def create_from_path(path = None):
-    ''' Create a repo_test_suite object from a path. If no path is given,
-    the current directory is used. '''
+def create_from_path(path=None):
+    """ Create a repo_test_suite object from a path. If no path is given,
+    the current directory is used. """
     if path is None:
         path = os.getcwd()
     repo = git.Repo(path, search_parent_directories=True)
     return repo_test_suite(repo, path)
-

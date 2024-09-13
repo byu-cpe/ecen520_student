@@ -12,54 +12,62 @@ Although you are welcome to run the synthesis tool in the GUI mode, you will nee
 You are encouraged to use the command line mode during development to make sure you are familiar with the process.
 
 Start by running vivado in interactive mode as follows:
+
 ```
 vivado -mode batch
 ```
+
 You will have access to the Vivado tools in batch mode allowing you to execute individual tcl commands to perform the synthesis and implementation steps.
-The discussion below will describe these commands for interactive use but you will eventually run these as a .tcl synthesis script.
+The discussion below will describe these commands for interactive use, but you will eventually run these as a .tcl synthesis script.
 You will need to execute several commands to complete the synthesis process:
+
 1. Load the HDL files<br>
-The first step involves compiling your HDL files into a representation that can be synthesized.
-Although your files have been previously compiled for simulation in QuestaSim, they must be compiled again within the Vivado tools.
-You can load the files using the [`read_verilog`](../resources/vivado_command_line.md#read_verilog) command with the `-sv` option.
-The following example demonstrates how to compile two files in the Vivado tools:
-```
-read_verilog -sv tx.sv
-read_verilog -sv tx_top.sv
-```
-Note that since we are not simulating in this process, you do not need to compile the testbench files - these files are only used for simulation in QuestaSim.
+   The first step involves compiling your HDL files into a representation that can be synthesized.
+   Although your files have been previously compiled for simulation in QuestaSim, they must be compiled again within the Vivado tools.
+   You can load the files using the [`read_verilog`](../resources/vivado_command_line.md#read_verilog) command with the `-sv` option.
+   The following example demonstrates how to compile two files in the Vivado tools:
+
+   ```
+   read_verilog -sv tx.sv
+   read_verilog -sv tx_top.sv
+   ```
+   
+   Note that since we are not simulating in this process, you do not need to compile the testbench files - these files are only used for simulation in QuestaSim.
 
 2. Load the xdc files<br>
-The next step involves loading the XDC file that contains the pin constraints for your design.
-Your design will not be able to be synthesized and implemented without these constraints.
-This is done using the [`read_xdc`](../resources/vivado_command_line.md#read_xdc) command.
-The following command demonstrates how to load the .xdc file:
-```
-read_xdc top.xdc
-```
+   The next step involves loading the XDC file that contains the pin constraints for your design.
+   Your design will not be able to be synthesized and implemented without these constraints.
+   This is done using the [`read_xdc`](../resources/vivado_command_line.md#read_xdc) command.
+   The following command demonstrates how to load the .xdc file:
+
+   ```
+   read_xdc top.xdc
+   ```
 
 3. Run the synthesis command
 
-The final step for synthesis is to run perform the actual synthesis using the [`synth_design`](../resources/vivado_command_line.md#synth_design) command.
-This command requires at least two options: the top-level module name and the part number of the FPGA you are targeting.
-The following example demonstrates how to run the synthesis command for a top-level module named `top` and the part we are using on the NexysDDR board:
-```synth_design -top top -part xc7a100tcsg324-1
-```
-
-Sometimes you will need to change the top-level parameters of your design as part of the synthesis step.
-This can be done using the `-generic` option.
-For example, the option `-generic {BAUD_RATE=115200}` would change the top-level BAUD_RATE of your design if you wanted to synthesize a design with a different baud rate.
-
-This command may take some time to execute and will produce a lot of text output.
-It is possible that the synthesis will fail due to errors in your design.
-Even though your design simulates correctly, you may have not coded your HDL properly to result in a successful synthesis.
-You may spend a fair amount of time iterating through your design when you have synthesis errors.
-If you resolve synthesis errors, you should resimulate your design to make sure it is still working properly.
+   The final step for synthesis is to run perform the actual synthesis using the [`synth_design`](../resources/vivado_command_line.md#synth_design) command.
+   This command requires at least two options: the top-level module name and the part number of the FPGA you are targeting.
+   The following example demonstrates how to run the synthesis command for a top-level module named `top` and the part we are using on the NexysDDR board:
+   
+   ```
+   synth_design -top top -part xc7a100tcsg324-1
+   ```
+   
+   Sometimes you will need to change the top-level parameters of your design as part of the synthesis step.
+   This can be done using the `-generic` option.
+   For example, the option `-generic {BAUD_RATE=115200}` would change the top-level BAUD_RATE of your design if you wanted to synthesize a design with a different baud rate.
+   
+   This command may take some time to execute and will produce a lot of text output.
+   It is possible that the synthesis will fail due to errors in your design.
+   Even though your design simulates correctly, you may have not coded your HDL properly to result in a successful synthesis.
+   You may spend a fair amount of time iterating through your design when you have synthesis errors.
+   If you resolve synthesis errors, you should resimulate your design to make sure it is still working properly.
 
 The synthesis process is very important and there is a lot of important information within the synthesis logs generated by Vivado.
 You should get in the habit of reviewing this log to learn more about your implemented design.
 In addition, you should look for any warnings and resolve all warnings before proceeding to implementation.
-The synthesis tool may generate a number of warnings and you may need to downgrade some warning messages to info messages to get a clean synthesis.
+The synthesis tool may generate a number of warnings, and you may need to downgrade some warning messages to info messages to get a clean synthesis.
 This [summary](../resources/vivado_command_line.md#adjusting-message-severity-levels) describes how to add lines to your .xdc file to adjust the severity of messages generated by the synthesis tool.
 
 <!--
@@ -89,21 +97,26 @@ It is often important to save the state of your implemented design so you can re
 You can save the state of your design by using the [`write_checkpoint`](../resources/vivado_command_line.md#create-checkpoint) command.
 You should generate a checkpoint file for every design you implement (i.e., after placement and routing).
 
-```write_checkpoint -force checkpoint_impl.dcp
+```
+write_checkpoint -force checkpoint_impl.dcp
 ```
 
 Later, you can load the state of your design by using the [`read_checkpoint`](../resources/vivado_command_line.md#read-checkpoint) command.
-```read_checkpoint
+
+```
+read_checkpoint
 ```
 
 There are several commands that will generate reports to help you understand your design.
 These reports will be required in all of your implementation assignments.
+
 * **io**: A summary of the I/O ports used in your design
 * **timing_summary**: A summary of your design timing, the timing constraints and violations in your design. We will be carefully reviewing this report in future assignments'
 * **utilization**: A summary of the resources used in your design
 * **drc**: A summary of the "design rule checks" for your design
 
 Execute each of the following commands after implementation to generate these reports:
+
 ```
 report_io -file io.rpt
 report_timing_summary -max_paths 10 -report_unconstrained -file timing_summary_routed.rpt -warn_on_violation
@@ -112,6 +125,7 @@ report_drc -file drc_routed.rpt
 ```
 
 ## Bitstream Generation
+
 If you have successfully completed the implementation process, you can proceed to the bitstream generation step to generate the bitstream for downloading to the FPGA board.
 The following command demonstrates how to generate the bitstream file:
 

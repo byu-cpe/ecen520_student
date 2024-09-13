@@ -3,7 +3,6 @@
 To test your synthesized and implemented designs you will need a way to download the bitstream to your FPGA board.
 This page summarizes several different ways for downloading your bitstreams to your board.
 
-
 ## OpenOCD
 
 There is an open source tool named [OpenOCD](https://openocd.org/) that can be used to download bitstreams to your board on Linux and Mac computers.
@@ -35,7 +34,8 @@ puts [drscan xc7.tap 32 0]
 puts "Programming FPGA..."
 # Note that the name of the bitfile must be specified in the line below
 pld load 0 tx_top.bit
-exit```
+exit
+```
 
 To run this script with OpenOCD, execute the following command:
 
@@ -58,5 +58,4 @@ You can run the Vivado hardware manager in one of two ways:
 
 If you are running windows, there is a light-weight tool named "Adept" that you can use to download your bitstream to your board.
 You can access the Adept tool from the [Digilent website](https://digilent.com/shop/software/digilent-adept/) (Digilent manufactures the Nexys DDR board that you are using in this class).
-Older instructions for accessing the tool can be found from the [ECEN 220](https://ecen220wiki.groups.et.byu.net/resources/tool_resources/ToolsUseOptions/#download-to-your-board-using-adept-2-windows-only
-) lab web page.
+Older instructions for accessing the tool can be found from the [ECEN 220](https://ecen220wiki.groups.et.byu.net/resources/tool_resources/ToolsUseOptions/#download-to-your-board-using-adept-2-windows-only) lab web page.

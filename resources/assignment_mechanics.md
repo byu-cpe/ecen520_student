@@ -1,17 +1,17 @@
 # ECEN 520 Assignment Mechanics
 
-This page describes the mechanics of completing assignments including how to submit your assignments for the class. 
+This page describes the mechanics of completing assignments including how to submit your assignments for the class.
 
 ## GitHub
 
 All assignments for this class will involve committing report files and source code to a private GitHub repository.
 If you do not have a GitHub account, you will need to [create an account](https://github.com/signup?ref_cta=Sign+up&ref_loc=header+logged+out&ref_page=%2F&source=header-home) for use in this class.
 <!--
-Send me your github username so I can add you as a user on the [ECEN_520](https://github.com/byu-cpe/ECEN_520) github repository which contains course materials, the class wiki, and assignment descriptions.
+Send me your GitHub username, so I can add you as a user on the [ECEN_520](https://github.com/byu-cpe/ECEN_520) GitHub repository which contains course materials, the class wiki, and assignment descriptions.
 -->
 It is essential that you become proficient with using Git and GitHub for this class.
-You will be responsible for learning how to use 'git' and 'GitHub' for creating repositories, committing code, managing Markdown files, and maintaining your projects. 
-If you are not familiar with using these tools you are encouraged to complete the BYU bootcamp tutorials for [git](https://byu-cpe.github.io/ComputingBootCamp/tutorials/git/) and [GitHub](https://byu-cpe.github.io/ComputingBootCamp/tutorials/github/). 
+You will be responsible for learning how to use 'git' and 'GitHub' for creating repositories, committing code, managing Markdown files, and maintaining your projects.
+If you are not familiar with using these tools you are encouraged to complete the BYU bootcamp tutorials for [git](https://byu-cpe.github.io/ComputingBootCamp/tutorials/git/) and [GitHub](https://byu-cpe.github.io/ComputingBootCamp/tutorials/github/).
 There are many other tutorials online you can follow to sharpen your git/GitHub skills.
 
 You will need to create a custom repository for this class that includes startercode to help you get started.
@@ -20,7 +20,7 @@ The instructions for creating this repository are described in the [Setting up y
 ## Generative AI & GPTs
 
 Generative AI tools like chatbots and Co-Pilot can be helpful in completing assignments.
-You are welcome to use co-pilot within VSCode to help you write your HDL code but you are strongly encouraged to type the code in yourself until you are comfortable with the syntax and structure of the code.
+You are welcome to use co-pilot within VSCode to help you write your HDL code, but you are strongly encouraged to type the code in yourself until you are comfortable with the syntax and structure of the code.
 You will be responsible for understanding the syntax and structure of SystemVerilog (and the other languages we use in this class) and you will be tested on this knowledge in the exams.
 If you rely exclusively on Co-Pilot to write your code you will likely not understand the syntax as well as you should for exams and for designing on your own.
 
@@ -51,8 +51,8 @@ Each assignment report template will also provide several questions specific for
 
 Your assignment submission will involve adding a variety of files into your repository as described in the assignment instructions.
 More details on what files are needed will be included in the instructions of each assignment.
-These files will be reviewed as part of your assignment grade. 
-You will be required to follow several [Git repository standards](./coding_standard#git_repository_standards) as you maintain your repository and your assignment grade will be based in part on how these standards are followed.
+These files will be reviewed as part of your assignment grade.
+You will be required to follow several [Git repository standards](./coding_standard#git-repository-standards) as you maintain your repository and your assignment grade will be based in part on how these standards are followed.
 
 ## Makefiles
 
@@ -63,10 +63,10 @@ You will lose points on your assignment if you fail to clean all intermediate fi
 
 ## Assignment Submission Process
 
-An assignment "submission" involves a final commit and tag of files to your class repository. 
-The assignment due dates are posted on learning suite. 
+An assignment "submission" involves a final commit and tag of files to your class repository.
+The assignment due dates are posted on learning suite.
 Each assignment submission will require a unique 'tag' where the actual tag is the same as the directory for the assignment.
-When grading your assignment, I will check the submission time of this tag. 
+When grading your assignment, I will check the submission time of this tag.
 If your latest commit of any file in the assignment with this tag is later than the deadline then you will be penalized for being late.
 You may change your files after the submission date but do not retag these files unless you are changing your submission.
 A [submission process checklist](#assignment-submission-checklist) has been created for you to review as you submit your assignments.
@@ -86,11 +86,12 @@ When using Git, you typically commit your code when you have something working t
 In this class we will use Git more aggressively by having you commit your code *when you encounter a problem*.
 This way I can track your progress through the assignment and see the problems you ran into.
 These commits will help me improve the labs and provide better feedback.
-Further, I plan on using your commit history as part of a training set for a machine learning project I am working on (this project will collect examples of "non working" HDL code, the error messages that were generated, and the fixes that were made to get the code working).
+Further, I plan on using your commit history as part of a training set for a machine learning project I am working on (this project will collect examples of "non-working" HDL code, the error messages that were generated, and the fixes that were made to get the code working).
 
 When committing your code after you experience a problem add a commit message with the following form: `"ERR:<error code> <Error summary>"`.
 This message is needed for me to review the various types of errors you are experiencing and see how you resolve the problem.
 The following error codes should be used:
+
 * VLOG: An error with the QuestaSim module compilation. Use this error code for VHDL errors as well (the VCOM tool in QuestaSim)
 * SIM: An error when trying to run the vsim simulation tool. Note that this code should not be used when your module simulates but operates incorrectly. This is for errors in the elaboration process before starting the vsim simulation.
 * TEST: When your module fails a simulation testbench
@@ -111,24 +112,24 @@ Proper submissions of assignments is an involved process that must be followed c
 This section provides a brief summary checklist of what you need to do to submit your assignment.
 
 1. Merge your repository with the latest starter code to make sure you have the latest starter code before submission.
-1. Make sure all assignment specific "makefile" rules are implemented and are working.
+2. Make sure all assignment specific "makefile" rules are implemented and are working.
     * The required makefile rules for each assignment will be summarized in the assignment instructions. You are welcome to include any others you like.
     * You will not get any credit for the assignment if any of your makefile rules fail.
-2. Make sure all the _essential_ files needed to complete your project are committed into your repository.
-    * If any essential files are missing then your make rules will likely fail and you will not get any credit for the assignment.
-3. Make sure _non-essential_ files are **NOT** committed to your repository
+3. Make sure all the _essential_ files needed to complete your project are committed into your repository.
+    * If any essential files are missing then your make rules will likely fail, and you will not get any credit for the assignment.
+4. Make sure _non-essential_ files are **NOT** committed to your repository
     * It is possible to inadvertently commit temporary project files.
     * You will lose significant points if you commit large number of non-essential temporary files.
-4. Make sure you have a `.gitignore` file for your assignment directory and that all intermediate files created during the build process are ignored.
+5. Make sure you have a `.gitignore` file for your assignment directory and that all intermediate files created during the build process are ignored.
     * You will lose points if intermediate files are generated by your make rule and are not ignored by your `.gitignore` file.
-5. Make sure you have a `make clean` rule that cleans _all_ intermediate files generated by your project.
+6. Make sure you have a `make clean` rule that cleans _all_ intermediate files generated by your project.
     * This rule needs to clean these files even if they are ignored
     * You will lose points if your `make clean` rule does not clean all intermediate files.
-6. Each assignment will have a test script named `assignment_check.py` that will run all your rules and check your repository for compliance as described above. Run this script and clean up any problems that this script may identify.
-7. Copy the template [report](../resources/report_template.md) file into your assignment directory and name it `report.md`. 
+7. Each assignment will have a test script named `assignment_check.py` that will run all your rules and check your repository for compliance as described above. Run this script and clean up any problems that this script may identify.
+8. Copy the template [report](../resources/report_template.md) file into your assignment directory and name it `report.md`.
     * Complete the required sections of the report.
     * Complete any assignment specific responses in the report. These will be listed in the assignment instructions.
-8. Commit, tag, and push your repository with the predetermined assignment tag.
+9. Commit, tag, and push your repository with the predetermined assignment tag.
 
 Each assignment has a `assignment_check.py` script that you can run to check your repository for compliance with the assignment requirements.
 
@@ -138,23 +139,27 @@ This section provides a brief summary of how your assignment will be graded.
 I will run these commands on the digital lab computers using the software installed on those computers.
 
 1. Fetch and get tag of your submission
-```
-git fetch --all --tags
-git pull
-git checkout tags/<assignment tag>
-```
+
+    ```
+    git fetch --all --tags
+    git pull
+    git checkout tags/<assignment tag>
+    ```
+
 2. Check date of submission and compare with the due date
-```
-git log -n 1 tags/<assignment tag>
-```
+
+    ```
+    git log -n 1 tags/<assignment tag>
+    ```
+
 3. Run the assignment test script (for example, `python3 assignment_check.py --noclean`) without running the clean step
-   * review the logs for any warnings and errors
+    * review the logs for any warnings and errors
 4. Review products of the build script
     * Download any bitstreams and run them on the FPGA board
     * Review the synthesis/implementation logs
-3. Run the test script again with 'clean' and review the logs for any warnings and errors
-4. Review and grade the `report.md` file and the assignment specific responses
-5. Review the code for coding standard compliance
+5. Run the test script again with 'clean' and review the logs for any warnings and errors
+6. Review and grade the `report.md` file and the assignment specific responses
+7. Review the code for coding standard compliance
 
 <!--
 7. Check to see if there are any files that are generated during the build process but not ignored. I will run the following command:
@@ -172,11 +177,12 @@ If there are any files that remain that are not cleaned by the `make clean` then
 ## Assignment Grading
 
 Each assignment will be graded using the following three components:
-* **Operation** of your final assignment 
+
+* **Operation** of your final assignment
 * **Coding Standard** of your submission
 * **Assignment specific criteria**
-The actual allocation of the assignment grade will be specified in the assignment page.
-Each of these will be described in more detail below.
+  The actual allocation of the assignment grade will be specified in the assignment page.
+  Each of these will be described in more detail below.
 
 **Operation**
 
@@ -190,8 +196,8 @@ All of your submissions should conform to the class [coding standards](./coding_
 The coding standards are progressive meaning that additional standards will be added gradually throughout the class.
 Each assignment will indicate which code standard level you will be required to follow.
 
-In addition to following coding standards, you are required to follow several git repository organization [standards](./coding_stadard.md#git-repository-standards).
-Several basic standards for organizing your github repositories are given to aid in the grading of assignments and to provide a tidy repository environment.
+In addition to following coding standards, you are required to follow several git repository organization [standards](./coding_standard.md#git-repository-standards).
+Several basic standards for organizing your GitHub repositories are given to aid in the grading of assignments and to provide a tidy repository environment.
 
 You will receive full credit for this portion of your assignment grading if you conform to the coding and repository standards.
 You will receive feedback for any violations of these standards as part of your assignment grade.
@@ -203,7 +209,7 @@ See the assignment description for details on this portion of your grade.
 
 # Setting up your GitHub Repository
 
-These instructions summarize how to setup your GitHub repository for this class.
+These instructions summarize how to set up your GitHub repository for this class.
 
 ## GitHub Classroom Repository
 
@@ -221,9 +227,10 @@ My GitHub username is `wirthlin`.
 
 ## ECEN 520 Student Template Code
 
-The [ECEN 520 student repository](https://github.com/byu-cpe/ecen520_student) is a repository that contains all the template code you need to complete the assignemnts for this class.
+The [ECEN 520 student repository](https://github.com/byu-cpe/ecen520_student) is a repository that contains all the template code you need to complete the assignments for this class.
 You will need to populate your classroom repository with this repository to get started on your assignments.
-The following commands will clone the student repository and push it to your classroom repository (make sure to change your github username):
+The following commands will clone the student repository and push it to your classroom repository (make sure to change your GitHub username):
+
 ```
 git clone --bare git@github.com:byu-cpe/ecen520_student.git
 cd ecen520_student.git/
@@ -231,6 +238,7 @@ git push --mirror git@github.com:byu-ecen520-fall2024/520-assignments-<githubuse
 cd ..
 rm -rf ecen520_student.git```
 ```
+
 More details on this process can be found at Step 3 of the [ECEN 323 web page](https://byu-cpe.github.io/ecen323/tutorials/git_setup/).
 
 At this point you should have a remote repository that contains all the starter code for the class.
@@ -239,6 +247,7 @@ At this point you should have a remote repository that contains all the starter 
 
 Once you have a remote repository that is properly populated with the starter code, you will need to clone this repository to your local machine.
 Complete the following steps every time you create a local repository for an assignment:
+
 ```
 # Clone your repository
 git clone git@github.com:byu-ecen520-fall2024/520-assignments-<githubusername>.git ~/ecen520
@@ -246,11 +255,11 @@ git clone git@github.com:byu-ecen520-fall2024/520-assignments-<githubusername>.g
 cd ~/ecen520
 git remote add startercode git@github.com:byu-cpe/ecen520_student.git
 ```
+
 <!-- https://github.com/byu-cpe/ecen520_student -->
 
 
 See Steps 4-5 of the [ECEN 323 web page](https://byu-cpe.github.io/ecen323/tutorials/git_setup/) for more details of this process.
-
 
 ### Updating Your Starter Code
 
@@ -258,6 +267,7 @@ The class starter code will be continually updated throughout the semester.
 You are responsible for updating your local repository with the latest starter code.
 You should do this before starting each assignment as well as before submitting your assignment to make sure you have the latest starter code.
 The steps for updating your starter code are as follows:
+
 ```
 git fetch startercode
 git merge startercode/main -m "Merging starter code"
