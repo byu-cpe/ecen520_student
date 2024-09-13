@@ -22,9 +22,10 @@ These computers can be accessed as `embed-XX.ee.byu.edu` where `XX` is the numbe
 ## Xilinx Vivado
 
 1. Source the following file to set up the environment for Vivado: ```source  /tools/Xilinx/Vivado/2024.1/settings64.sh```
-2. You can tell if it is setup properly by running the following command: ```vivado -version```
+2. You can tell if it is set up properly by running the following command: ```vivado -version```
 
 ## QuestaSim
+
 <!--
 Modelsim version 10
 https://faculty-web.msoe.edu/johnsontimoj/Common/FILES/modelsim_user.pdf
@@ -32,10 +33,13 @@ Command reference version 5
 https://web.eecs.utk.edu/~dbouldin/protected/modelsim_se_ref.pdf
 -->
 
-### QuestaSim Setup 
+### QuestaSim Setup
+
 1. Add the following lines to your .bashrc or a startup script.
+
 ```
 export PATH=$PATH:/tools/questasim/bin
 export LM_LICENSE_FILE=1717@ece-modelsim.byu.edu
 ```
-2. You can tell if questasim is setup properly by running the following command: ```vsim -version```
+
+1. You can tell if questasim is set up properly by running the following command: ```vsim -version```

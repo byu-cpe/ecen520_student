@@ -6,15 +6,15 @@ Instructions for using these tools in the GUI mode are provided on the ECEN 220 
 
 ## Synthesis and Implementation
 
-The Vivado Synthesis and Implementation tools are used to convert your HDL into a configuration bitstream that can be download to your FPGA.
+The Vivado Synthesis and Implementation tools are used to convert your HDL into a configuration bitstream that can be downloaded to your FPGA.
 Like the simulation tools, the Vivado synthesis and implementation tools can also be run from the command line.
 The process of performing synthesis and implementation, however, operates much differently than the simulation tools.
 To implement a configuration bitstream you need to run a set of Tcl commands within the Vivado tool.
-You can execute these commands in the GUI but you can also execute the commands on the command line interactively or with a script.
+You can execute these commands in the GUI, but you can also execute the commands on the command line interactively or with a script.
 Note that the instructions described below involve running the implementation in [non-project mode](https://docs.xilinx.com/r/en-US/ug892-vivado-design-flows-overview/Using-Non-Project-Mode).
 
 <!--
-Note that there is a difference between synthsis and implementation - they are considered very different steps with different manuals/reports.
+Note that there is a difference between synthesis and implementation - they are considered very different steps with different manuals/reports.
 
 Reports: (see "Report" class of TCL commands)
 
@@ -29,7 +29,7 @@ report_timing_summary -max_paths 10 -report_unconstrained -file tx_top_timing_su
 report_clock_utilization -file tx_top_clock_utilization_routed.rpt
 
 The synthesis "report" appears to be just the output of Vivado during the synthesis run.
-Is there a way to steer the "syntehsis" oputput to its own file?
+Is there a way to steer the "synthesis" output to its own file?
 Not sure what: -debug_log does
 
 implementation.log is just the output of vivado for the implementation steps.
@@ -37,13 +37,16 @@ implementation.log is just the output of vivado for the implementation steps.
 -->
 
 The following example demonstrates how to execute the commands within a Tcl script from the command line.
+
 ```
 vivado -mode batch -source tx_synth.tcl -log tx_implement.log
 ```
+
 The options for this command are as follows:
+
 * `-mode batch`: This option indicates that the Vivado tool should be run in batch mode. In this mode, the GUI is not opened and the runs a TCL command shell.
-* `-source <tcl file>` : This option indicates that the Vivado tool should execute the commands in the given tcl file. The Vivado executale will exit after executing all of the commands in this file.
-* `-log <log file<`: This option indicates that the Vivado tool should write all of the output generated from executing the given TCL script to the given log file. It is a good idea to use this option when you are generating bitstreams as all of the feedback from the synthesis tool is generatet to std_out during execution and you will often want to refer to this output when evaluating your synthesis and implementation.
+* `-source <tcl file>` : This option indicates that the Vivado tool should execute the commands in the given tcl file. The Vivado executable will exit after executing all of the commands in this file.
+* `-log <log file<`: This option indicates that the Vivado tool should write all of the output generated from executing the given TCL script to the given log file. It is a good idea to use this option when you are generating bitstreams as all of the feedback from the synthesis tool is generated to std_out during execution, and you will often want to refer to this output when evaluating your synthesis and implementation.
 
 A sample script that performs the full implementation is shown below:
 
@@ -93,10 +96,11 @@ The `synth_design` command performs the logic synthesis.
 Logic synthesis is a very complex operation that runs the Vivado synthesis tool (refer to the [Vivado Synthesis User Guide](https://docs.xilinx.com/r/en-US/ug901-vivado-synthesis) for details on the synthesis tool).
 There are numerous options available for controlling the synthesis process.
 A few of these will be listed below.
- * `-top`: This option specifies the top-level module that is to be synthesized. This module must be one of the modules that was read in with the `read_verilog` command.
- * `-verbose`: This option enables verbose operation. It is usually a good idea to carefully review the output of your synthesis tool and enable verbosity so you can see any potential issues with your design.
- * `-part`: This option specifies the FPGA part that will be used during synthesis. For this class, we will use the `xc7a100tcsg324-1` part on the Nexys DDR board.
- * `-generic`: This option is used to change the parameters of the top-level module that is being synthesized. The value is a string with a parameter name, followed by '=', and then the value. For example, `-generic {BAUD_RATE=115200}`. Multiple `-generic` options can be used to set multiple parameters.
+
+* `-top`: This option specifies the top-level module that is to be synthesized. This module must be one of the modules that was read in with the `read_verilog` command.
+* `-verbose`: This option enables verbose operation. It is usually a good idea to carefully review the output of your synthesis tool and enable verbosity so you can see any potential issues with your design.
+* `-part`: This option specifies the FPGA part that will be used during synthesis. For this class, we will use the `xc7a100tcsg324-1` part on the Nexys DDR board.
+* `-generic`: This option is used to change the parameters of the top-level module that is being synthesized. The value is a string with a parameter name, followed by '=', and then the value. For example, `-generic {BAUD_RATE=115200}`. Multiple `-generic` options can be used to set multiple parameters.
 
 #### Setting Parameters for Synthesis
 
@@ -104,6 +108,7 @@ As with simulation, you may want to change the parameters of a module that you a
 This is done by using the `-generic` option with the `synth_design` TCL command.
 The value you give to this parameter is a string within braces that provides both the parameter name and the value that you will change to.
 The following example shows how to use this option to set a `BAUD_RATE` parameter to a value of 9600:
+
 ```
 synth_desigh -top my_top -partxc7a100tcsg324-1 -generic {BAUD_RATE=9600}
 ```
@@ -113,11 +118,10 @@ synth_desigh -top my_top -partxc7a100tcsg324-1 -generic {BAUD_RATE=9600}
 After synthesis, the next phase involves implementation which takes the synthesized design and maps it to the resources of the FPGA part you have selected.
 There are three commands used during the implementation process.
 
-
 #### opt_design
 
 This command performs a number of design optimizations to make it lower power, improved timing, and lower resources.
-This command is _optional_ and you may not want to use it in early labs.
+This command is _optional,_ and you may not want to use it in early labs.
 
 #### place_design
 
@@ -131,7 +135,7 @@ This command is _required_.
 
 ### Generate reports
 
-Once your design has been implemnetd, it is essential to review the design details to learn about the performance, utilization, and potential issues with your design.
+Once your design has been implemented, it is essential to review the design details to learn about the performance, utilization, and potential issues with your design.
 There are many commands that will generate a variety of reports to help you understand your design.
 These commands are called after your design has completed the implementation process.
 
@@ -169,6 +173,7 @@ This is done with the `write_bitstream` command.
 ```
 write_bitstream -force tx.bit
 ```
+
 * `-force`: Overwrite the bitstream if it exists
 
 ### Create Checkpoint
@@ -181,14 +186,21 @@ This is done with the `write_bitstream` command.
 ```
 write_checkpoint -force tx.dcp
 ```
+
 * `-force`: Overwrite the checkpoint if it exists
+
+### Read Checkpoint
+
+```
+
+```
 
 ## Adjusting Message Severity Levels
 
-The messages you get from the tools are very important and it is essential that you understand and handle all warnings and erorrs.
+The messages you get from the tools are very important, and it is essential that you understand and handle all warnings and errors.
 Sometimes it is necessary to adjust the severity level of the messages you get from the tools as some messages are very important and not listed as a warning and others are not that important and listed as a warning.
-You can adjust the severity of a message by using the tcl `set_msg_config` command in Vivado. 
-The following set of tcl commands adjusts the warnings appropriate for this class. 
+You can adjust the severity of a message by using the tcl `set_msg_config` command in Vivado.
+The following set of tcl commands adjusts the warnings appropriate for this class.
 You should run these commands before performing synthesis.
 
 ```
@@ -244,29 +256,40 @@ You can run the hardware manager from the TCL interpreter when running vivado in
 These instructions were summarized from this [document](https://docs.xilinx.com/r/en-US/ug835-vivado-tcl-commands/open_hw_manager).
 
 First, enter the Vivado TCL command interpreter:
+
 ```
 $ vivado -mode tcl
 ```
+
 Next, open the hardware manager:
+
 ```
 Vivado% open_hw_manager
 ```
+
 With your board connected to your computer, connect to the hardware server and open your hardware target:
+
 ```
 Vivado% connect_hw_server
 Vivado% open_hw_target
 ```
+
 Once you have successfully connected to your board, you can see which device you are using by executing the `current_hw_device` command.
 
 Set the programming bit file to the bitstream:
+
 ```
 Vivado% set_property PROGRAM.FILE {<path to bitfile>} [get_hw_devices xc7a100t_0]
 ```
+
 Now, program the device:
+
 ```
 Vivado% program_hw_device
 ```
+
 Finally, close the hardware manager:
+
 ```
 Vivado% close_hw_manager
 ```

@@ -3,7 +3,7 @@
 For this first assignment, you will be designing and simulating a UART transmitter.
 Hopefully this assignment will be more of a review as the design of a UART transmitter is a common exercise in many introductory digital design courses.
 The purpose of this assignment is to help you review your digital design skills and help you become familiar with the simulation tool.
-You will not be synthesizing and downloading your design in this lab as you will focus primarily on design and simulation. 
+You will not be synthesizing and downloading your design in this lab as you will focus primarily on design and simulation.
 You will synthesize and download the design in the next lab.
 
 ## Assignment Mechanics
@@ -14,10 +14,10 @@ Carefully review these guidelines before proceeding with this assignment.
 
 ### Create a GitHub Repository
 
-As described in the [assignment mechanics](../resources/assignment_mechanics.md#github) page, you will need to submit your laboratory assignments using GitHub. 
+As described in the [assignment mechanics](../resources/assignment_mechanics.md#github) page, you will need to submit your laboratory assignments using GitHub.
 When you have created your repository, add me as a collaborator as instructed in the mechanics web page.
 
-You must place your assignment code within a specific assignment directory as described in the [assignments overview](../Readme.md) page.
+You must place your assignment code within a specific assignment directory as described in the [assignments overview](../README.md) page.
 Make sure your add this directory to your repository and place all assignment specific code in this directory.
 You will also need to tag your repository when you are ready to submit.
 
@@ -37,7 +37,7 @@ You will learn about other tools (including the FPGA tools) in future assignment
 We will be using a number of different tools throughout the semester and many of these tools have an integrated text editor.
 It is strongly recommended that you use [VSCode](https://code.visualstudio.com/) for all your text editing needs.
 We will use the command line version of most of these tools and thus will rely on VSCode for all text editing.
-VSCode is a free, open-source text editor that is available for Windows, Linux, and MacOS.
+VSCode is a free, open-source text editor that is available for Windows, Linux, and macOS.
 In addition to editing your files, you can also use VSCode to manage the GitHub repository for your assignments (commit, pull, push, etc.).
 You will be much more productive in this class if you learn how to use VSCode proficiently.
 
@@ -58,39 +58,40 @@ The primary goal of this assignment is to design a UART transmitter for transmit
 You will need to create this design in *SystemVerilog* and simulate it using QuestaSim.
 There is a ECEN 320 lab description for a [UART Transceiver](https://byu-cpe.github.io/ecen320/labs/lab-09/) that you can use as a reference.
 
-Create your transmitter with the following ports and parameters (you must name the ports and parameters as indicated for the testbenches to operate correctly):
+Create your transmitter with the following ports and parameters (you must name the ports and parameters as indicated for the test-benches to operate correctly):
 
-| Port Name | Direction | Width | Function |
-| ---- | ---- | ---- | ---- |
-| clk | Input | 1 | Clock |
-| rst | Input | 1 | Reset |
-| send | Input | 1 | Control signal to start a transmit operation |
-| din | Input | 8 | 8 data bits to send |
-| busy | Output | 1 | Indicates that the transmitter is in the middle of a transmission |
-| tx_out | Output | 1 | Transmitter output signal |
+| Port Name | Direction | Width | Function                                                          |
+|-----------|-----------|-------|-------------------------------------------------------------------|
+| clk       | Input     | 1     | Clock                                                             |
+| rst       | Input     | 1     | Reset                                                             |
+| send      | Input     | 1     | Control signal to start a transmit operation                      |
+| din       | Input     | 8     | 8 data bits to send                                               |
+| busy      | Output    | 1     | Indicates that the transmitter is in the middle of a transmission |
+| tx_out    | Output    | 1     | Transmitter output signal                                         |
 
-| Parameter Name | Type | Default | Purpose |
-| ---- | ---- | ---- | ---- |
-| CLK_FREQUENCY | integer | 100_000_000 | Clock frequency of the design |
-| BAUD_RATE | integer | 19_200 | Baud rate of the design |
-| PARITY | integer | 1 | Parity type (0 = Even, 1 = Odd) |
+| Parameter Name | Type    | Default     | Purpose                         |
+|----------------|---------|-------------|---------------------------------|
+| CLK_FREQUENCY  | integer | 100_000_000 | Clock frequency of the design   |
+| BAUD_RATE      | integer | 19_200      | Baud rate of the design         |
+| PARITY         | integer | 1           | Parity type (0 = Even, 1 = Odd) |
 
 Design your transmitter to operate as follows:
+
 * Determine the baud period based on the clock frequency and baud rate parameters
 * Generate your UART transmission signal as follows:
-  * Send a start bit (low)
-  * Send 8 data bits
-  * Send a parity bit (Based on the parity parameter)
-  * Send 1 stop bit
+    * Send a start bit (low)
+    * Send 8 data bits
+    * Send a parity bit (Based on the parity parameter)
+    * Send 1 stop bit
 * The 'tx' signal starts out high on reset (not low!). This is to prevent any inadvertent characters from being sent when your module is reset
 * The 'busy' signal is asserted whenever you are in the middle of a transmission (i.e., not in an idle state)
-  * Ignore the 'send' signal if you are in the middle of a transmission
+    * Ignore the 'send' signal if you are in the middle of a transmission
 * Reset the internal state machines/counters when the 'rst' signal is asserted
-  * Use asynchronous resets for the synchronous elements of your design
+    * Use asynchronous resets for the synchronous elements of your design
 * Add a synchronizing flip-flop on the output of the TX signal so there are no glitches on your output tx signal
 * You do not need to implement handshaking as described by the 320 lab assignment.
 
-Note that you must follow the [Level 1](../resources/coding_standard.md#level_1) coding standards for your Verilog files.
+Note that you must follow the [Level 1](../resources/coding_standard.md#level-1) coding standards for your Verilog files.
 
 ## Verifying Transmitter and Testbench
 
@@ -103,24 +104,26 @@ You may want to simulate your design using a `.tcl` file during the early stages
 There are tutorials for using TCL on the 320 page [here](https://byu-cpe.github.io/ecen320/tutorials/lab_03/04_tcl_tutorial/) and [here](https://byu-cpe.github.io/ecen320/tutorials/lab_04/00_tcl_tutorial_2/).
 Note that you are not required to simulate with `.tcl` files and such files will not be graded as part of this assignment.
 -->
-We will be using and writing testbenches through the semester to help aid in your verification efforts.
+We will be using and writing test-benches through the semester to help aid in your verification efforts.
 A testbench, [tx_tb.sv](./tx_tb.sv), has been created for you to test your transmitter.
-This testbench also includes a behavioral model of a simple UART "receiver", [rx_model.sv](./rx_modelsv).
+This testbench also includes a behavioral model of a simple UART "receiver", [rx_model.sv](./rx_model.sv).
 You will need to test your transmitter with this testbench (and associated model) and make sure it operates without any warnings or errors.
 
 Although you are free to use the GUI version of the ModelSim tools during the development process, you will be required to build your project using the command line.
-All grading of your assignment will be done by building your project using the command line. 
+All grading of your assignment will be done by building your project using the command line.
 This will involve creating a `makefile` with a number of rules for simulating and synthesizing your project.
 <!--
 A resource page with instructions for using the Vivado [command line](../resources/vivado_command_line.md) is available for you.
 -->
 When your transmitter operates correctly with the testbench, create a makefile with the `sim_tx` rule that will simulate your transmitter with the testbench from the command line.
 Here is a sample makefile rule that will run the testbench simulation from the command line (you may need to adapt this to the names used by your design files):
+
 ```
 sim_tx: tx.sv
     vlog tx.sv tx_tb.sv rx_model.sv
     vsim -c work.tx_tb -do "run -all; quit"
 ```
+
 **Note** the use of the `quit` command in the `vsim` command.
 This is necessary to exit the simulation after the simulation is complete so you can go on to the next makefile rule.
 
@@ -135,7 +138,7 @@ sim_tx_115200_even: tx.sv
     vsim -c work.tx_tb -gBAUD_RATE=115200 -gPARITY=0 -do "run -all; quit"
 ```
 
-After your module passes both testbenches you are ready to submit your assignment.
+After your module passes both test-benches you are ready to submit your assignment.
 
 ## Assignment Submission
 
@@ -147,8 +150,8 @@ The following assignment specific items should be included in your repository:
 1. Required Makefile rules:
     * `sim_tx`: performs command line simulation of tx testbench using the default parameters
     * `sim_tx_115200_even`: performs command line simulation of tx testbench with a baud rate of 115200 and even parity
-1. You need to have at least 3 "Error" commits in your repository as described [here](../resources/assignment_mechanics.md#github-commits).
-2. Assignment specific Questions:
+2. You need to have at least 3 "Error" commits in your repository as described [here](../resources/assignment_mechanics.md#github-commits).
+3. Assignment specific Questions:
     1. Provide a short summary of how much HDL review you had to do to complete the assignment. Also, rate your HDL designs skills from 1-10.
     2. Indicate the simulation time of the two different simulations and suggest why the simulation times are different
     3. Add the following statement to your report: "I have read the ECEN 520 assignment submission process and have resolved any questions I have with this process"

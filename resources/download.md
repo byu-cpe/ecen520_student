@@ -3,7 +3,6 @@
 To test your synthesized and implemented designs you will need a way to download the bitstream to your FPGA board.
 This page summarizes several different ways for downloading your bitstreams to your board.
 
-
 ## OpenOCD
 
 There is an open source tool named [OpenOCD](https://openocd.org/) that can be used to download bitstreams to your board on Linux and Mac computers.

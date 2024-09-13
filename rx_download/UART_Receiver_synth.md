@@ -1,4 +1,3 @@
-
 <!--
 Notes:
 - Warnings:
@@ -22,27 +21,27 @@ You will also create a seven segment display controller for displaying data from
 For this assignment and for most future assignments you will need to display values on the seven segment display of the Nexys DDR board.
 To make this easier, you will create a seven segment display controller that will drive the seven segment display.
 
-Create a "seven segment controller" module that will drive the seven segment display of the Nexys DDR board. 
+Create a "seven segment controller" module that will drive the seven segment display of the Nexys DDR board.
 This module can be based on the [segment sevent display](http://ecen220wiki.groups.et.byu.net/labs/lab-05/) module developed in ECEN 220.
-Note that there are eight digits on the seven segment display for this board so you will need to support all eight digits with your module. 
+Note that there are eight digits on the seven segment display for this board so you will need to support all eight digits with your module.
 Include the following ports and parameters in your module:
 
-| Port Name | Direction | Width | Function |
-| ---- | ---- | ---- | ----  |
-| clk | Input | 1 | Clock |
-| rst | Input | 1 | Reset |
-| display_val | Input | 32 | 32-bit value to display |
-| dp | Input | 8 | Digit point (one for each segment) |
-| blank | Input | 1 | When asserted, blank the display |
-| segments | Output | 7 | The seven segment drivers (see table below) |
-| dp_out | Output | 1 | The output digit point driver signal |
-| an_out | Output | 8 | Anode signal for each segment |
-| ---- | ---- | ---- |
-| CLK_FREQUECY | 100_000_000 | The clock frequency |
-| SEGMENT_DISPLAY_US  | 10_000 | The amount of time to display each digit  |
- 
+| Port Name          | Direction   | Width                                    | Function                                    |
+|--------------------|-------------|------------------------------------------|---------------------------------------------|
+| clk                | Input       | 1                                        | Clock                                       |
+| rst                | Input       | 1                                        | Reset                                       |
+| display_val        | Input       | 32                                       | 32-bit value to display                     |
+| dp                 | Input       | 8                                        | Digit point (one for each segment)          |
+| blank              | Input       | 1                                        | When asserted, blank the display            |
+| segments           | Output      | 7                                        | The seven segment drivers (see table below) |
+| dp_out             | Output      | 1                                        | The output digit point driver signal        |
+| an_out             | Output      | 8                                        | Anode signal for each segment               |
+| ----               | ----        | ----                                     |
+| CLK_FREQUECY       | 100_000_000 | The clock frequency                      |
+| SEGMENT_DISPLAY_US | 10_000      | The amount of time to display each digit |
+
 The anode signals should be driven in a round-robin fashion so that each digit is displayed for a short amount of time.
-These signals are low asserted. 
+These signals are low asserted.
 The cathode signals are also low asserted and are defined as follows:
 
 ```
@@ -75,73 +74,76 @@ See the instructions from the [previous assignment](../rx_sim/UART_Receiver_sim.
 
 Create a top-level design that uses the following top-level ports:
 
-| Port Name | Direction | Width | Function |
-| ---- | ---- | ---- | ----  |
-| CLK100MHZ | Input | 1 | Clock |
-| CPU_RESETN | Input | 1 | Reset (low asserted) |
-| SW | Input | 8 | Switches (8 data bits to send) |
-| BTNC | Input | 1 | Control signal to start a transmit operation |
-| LED | Output | 16 | Board LEDs (used for data and busy) |
-| UART_RXD_OUT | Output | 1 | Transmitter output signal |
-| UART_TXD_IN | Input | 1 | Receiver input signal |
-| LED16_B | Output | 1 | Used for TX busy signal |
-| LED17_R | Output | 1 | Used for RX busy signal |
-| LED17_G | Output | 1 | Used for RX error signal |
-| AN | [7:0] | Output | Anode signals for the seven segment display |
-| CA, CB, CC, CD, CE, CF, CG | [6:0] | Output | Seven segment display cathode signals |
-| DP | Output | 1 | Seven segment display digit point signal |
+| Port Name                  | Direction | Width  | Function                                     |
+|----------------------------|-----------|--------|----------------------------------------------|
+| CLK100MHZ                  | Input     | 1      | Clock                                        |
+| CPU_RESETN                 | Input     | 1      | Reset (low asserted)                         |
+| SW                         | Input     | 8      | Switches (8 data bits to send)               |
+| BTNC                       | Input     | 1      | Control signal to start a transmit operation |
+| LED                        | Output    | 16     | Board LEDs (used for data and busy)          |
+| UART_RXD_OUT               | Output    | 1      | Transmitter output signal                    |
+| UART_TXD_IN                | Input     | 1      | Receiver input signal                        |
+| LED16_B                    | Output    | 1      | Used for TX busy signal                      |
+| LED17_R                    | Output    | 1      | Used for RX busy signal                      |
+| LED17_G                    | Output    | 1      | Used for RX error signal                     |
+| AN                         | [7:0]     | Output | Anode signals for the seven segment display  |
+| CA, CB, CC, CD, CE, CF, CG | [6:0]     | Output | Seven segment display cathode signals        |
+| DP                         | Output    | 1      | Seven segment display digit point signal     |
 
-| Parameter Name | Default Value | Purpose |
-| ---- | ---- | ---- |
-| CLK_FREQUENCY  | 100_000_000 | Specify the clock frequency |
-| BAUD_RATE | 19_200 | Specify the receiver baud rate |
-| PARITY | 1 | Specify the parity bit (0 = even, 1 = odd) |
-| SEGMENT_DISPLAY_US  | 1_000 | The amount of time in microseconds to display each digit (1 ms) |
-| DEBOUNCE_DELAY_US | integer | 1_000 | Specifies the minimum debounce delay in micro seconds (1 ms) |
+| Parameter Name     | Default Value | Purpose                                                         |
+|--------------------|---------------|-----------------------------------------------------------------|
+| CLK_FREQUENCY      | 100_000_000   | Specify the clock frequency                                     |
+| BAUD_RATE          | 19_200        | Specify the receiver baud rate                                  |
+| PARITY             | 1             | Specify the parity bit (0 = even, 1 = odd)                      |
+| SEGMENT_DISPLAY_US | 1_000         | The amount of time in microseconds to display each digit (1 ms) |
+| DEBOUNCE_DELAY_US  | integer       | 1_000                                                           | Specifies the minimum debounce delay in micro seconds (1 ms) |
 
 Design your top-level circuit as follows:
+
 * Attach the `CPU_RESETN` signal to two flip-flops to synchronize it to the clock. Use this synchronized signal for the reset in your design (note that the input reset polarity is negative asserted)
 * Hook up the center button (BTNC) to your circuit through a debouncer. Make sure you pass in the top-level debounce time parameter. Create one-shot logic for the tx_write signal from the debounce output.
 * Instance your transmitter
-  * Hook the TX output signal to the top-level `UART_RXD_OUT` pin of the board (i.e., to the host)
-  * Attach the lower 8 switches on the board to the input to the UART transmitter (i.e., the value of the switches is the value to transmit over the UART).
-  * Attach the lower 8 switches on the board to the lower 8 LEDs. This way the user can more easily see the value of the switches with the LEDs
-  * Attach the tx busy signal to the LED16_B signal to provide a blue LED indicator when the transmitter is busy
+    * Hook the TX output signal to the top-level `UART_RXD_OUT` pin of the board (i.e., to the host)
+    * Attach the lower 8 switches on the board to the input to the UART transmitter (i.e., the value of the switches is the value to transmit over the UART).
+    * Attach the lower 8 switches on the board to the lower 8 LEDs. This way the user can more easily see the value of the switches with the LEDs
+    * Attach the tx busy signal to the LED16_B signal to provide a blue LED indicator when the transmitter is busy
 * Instance your receiver
-  * Add a two flip-flop synchronizer between the RX input signal (`UART_TXD_IN`) and the input rx signal to your receiver. This is necessary to avoid metastibilty and properly synchronize the asynchronous input.
-  * Hook up the upper 8 LEDs to the data received by your receiver. These LEDs should display the last value received by the receiver. You should only update these LEDs when the 'data_strobe' indicates a new character has been received
-  * Attach the rx busy signal to the LED17_R signal to provide a red LED indicator when the receiver is busy
-  * Attach the rx error signal to the LED17_G signal to provide a green LED indicator when the receiver has an error
+    * Add a two flip-flop synchronizer between the RX input signal (`UART_TXD_IN`) and the input rx signal to your receiver. This is necessary to avoid metastibilty and properly synchronize the asynchronous input.
+    * Hook up the upper 8 LEDs to the data received by your receiver. These LEDs should display the last value received by the receiver. You should only update these LEDs when the 'data_strobe' indicates a new character has been received
+    * Attach the rx busy signal to the LED17_R signal to provide a red LED indicator when the receiver is busy
+    * Attach the rx error signal to the LED17_G signal to provide a green LED indicator when the receiver has an error
 * Create four 8-bit registers that hold the last four values received by your receiver
-  * When the data_strobe occurs, load the value received by the receiver into the first register and shift the values in the other registers.
+    * When the data_strobe occurs, load the value received by the receiver into the first register and shift the values in the other registers.
 * Instance your seven segment display controller as described below
-  * Drive the data to display with the four 8-bit registers described above. The most recent value received should be driven on the right two digits, the second value received should be driven on the left two digits, and so on.
-  * Drive all zeros on the digit point input and tie the "blank" signal to zero. 
-  * Hook up the seven segment display outputs to the top-level outputs of the design (i.e., AN, CA, CB, CC, CD, CE, CF, CG, DP)
+    * Drive the data to display with the four 8-bit registers described above. The most recent value received should be driven on the right two digits, the second value received should be driven on the left two digits, and so on.
+    * Drive all zeros on the digit point input and tie the "blank" signal to zero.
+    * Hook up the seven segment display outputs to the top-level outputs of the design (i.e., AN, CA, CB, CC, CD, CE, CF, CG, DP)
 
 ## Top-level testbench
 
 Create testbench for your top-level rx/tx design by copying and modifying the [tx_top_tb.sv](../tx_download/tx_top_tb.sv) file from the tx download assignment and renaming to rxtx_top_tb.sv:
 The following adaptations should be made to the structure of this testbench:
+
 * Add a parameter MIN_SEGMENT_DISPLAY_US to the testbench with a default of 200. The defaults for the testbench should be a baud rate of 19200, a clock frequency of 100 MHz, and odd parity.
 * Remove the rx_model simulation model
 * Instance your rxtx_top design instead of the tx_top design
-  * Pass the testbench parameters down to the rxtx_top design
-  * Attach the `UART_RXD_OUT` output of your top-level design (i.e., transmitter output) to the `UART_TXD_IN` input of your top-level design (i.e., receiver input). This way when you transmit a character from your transmit module, it will be received by your receiver module.
+    * Pass the testbench parameters down to the rxtx_top design
+    * Attach the `UART_RXD_OUT` output of your top-level design (i.e., transmitter output) to the `UART_TXD_IN` input of your top-level design (i.e., receiver input). This way when you transmit a character from your transmit module, it will be received by your receiver module.
 * Hook up the seven_segment_check model to your top-level design so you can see the output of the seven segment display (see ssd_tb.sv)
 
 This testbench should be designed as follows:
+
 * Perform the following sequence of events for your testbench:
-  * Execute the simulation for a few clock cycles without setting any of the inputs
-  * Set default values for the inputs (reset, buttons, and switchces)
-  * Wait for a few clock cycle, Assert the reset for a few clock cycles, Deassert the reset (don't forget that the reset signal for the board is low asserted)
-  * Perform at least 8 character transfers as follows:
-    * Choose a random value for the character you want to send
-    * Set the switch values to this value
-    * Press btnc long enough to make it through your debouncer
-    * Wait until the tx_busy and rx_busy LED values are both zero
-    * Check to make sure the upper LEDs match the value you sent
-    * Check to make sure there is no error
+    * Execute the simulation for a few clock cycles without setting any of the inputs
+    * Set default values for the inputs (reset, buttons, and switchces)
+    * Wait for a few clock cycle, Assert the reset for a few clock cycles, Deassert the reset (don't forget that the reset signal for the board is low asserted)
+    * Perform at least 8 character transfers as follows:
+        * Choose a random value for the character you want to send
+        * Set the switch values to this value
+        * Press btnc long enough to make it through your debouncer
+        * Wait until the tx_busy and rx_busy LED values are both zero
+        * Check to make sure the upper LEDs match the value you sent
+        * Check to make sure there is no error
 
 Make sure your top-level design successfully passes this testbench.
 Add a makefile rule named `sim_rx_top` that will perform this simulation from the command line.
@@ -162,13 +164,13 @@ Instructions for setting top-level parameters during synthesis can be found [her
 Download this different bitfile with a different baud rate and make sure it is operating correctly in Putty.
 
 The synthesis step is a very important part of the implementation process and you should always check the logs for warnings that are generated during this step.
-It is a good practice to address _all_ warnings generated from the synthesis process. 
+It is a good practice to address _all_ warnings generated from the synthesis process.
 In many cases you will need to change your orginal HDL code to address the warnings.
 Review your synthesis logs and try to address all of the warnings that you can.
 In some cases you can ignore the warning.
 If you are certain that you can ignore the warning, you will want to change the synthesis settings such that the particular warning is changed to an "INFO" or less severe message in the logs.
 Review the instructions on [adjusting the message severity level](../resources/vivado_command_line.md#adjusting-message-severity-levels) to see how to do this.
-These instructions list messages that can be downgraded and those that should be upgraded. 
+These instructions list messages that can be downgraded and those that should be upgraded.
 You will need to make sure that you don't have *any* synthesis warnings in your implementation.
 
 Note that you should add the following to your .xdc file to get rid of the "Missing CFGBVS and CONFIG_VOLTAGE Design Properties" warning:
@@ -179,7 +181,6 @@ set_property CONFIG_VOLTAGE 3.3 [current_design]
 ```
 
 ## Submission and Grading
-
 
 The following assignment specific items should be included in your repository:
 
@@ -194,9 +195,9 @@ The following assignment specific items should be included in your repository:
 2. Assignment specific Questions:
     1. Provide a table summarizing the resources your design uses from the implementation utilization report.
     1. Review the timing report and summarize the following:
-       * Determine the "Worst Negative Slack" (or WNS). 
-       * Summarize the `no_input_delay` and `no_output_delay` section of the report.
-       * How many total endpoints are there on your clock signal?
-       * Find the first net in the `Max Delay Paths` section and indicate the source and destination of this maximum path.
+        * Determine the "Worst Negative Slack" (or WNS).
+        * Summarize the `no_input_delay` and `no_output_delay` section of the report.
+        * How many total endpoints are there on your clock signal?
+        * Find the first net in the `Max Delay Paths` section and indicate the source and destination of this maximum path.
     1. Indicate how many times you had to synthesize and download your bitstream before your circuit worked.
 
