@@ -10,7 +10,7 @@ module tx_tb ();
 
     parameter NUMBER_OF_CHARS = 20;
     parameter BAUD_RATE = 19_200;
-    parameter CLOCK_PERIOD = 100_000_000;
+    parameter CLOCK_FREQUENCY = 100_000_000;
 
     localparam BAUD_CLOCKS = CLOCK_PERIOD / BAUD_RATE;
 
@@ -26,7 +26,8 @@ module tx_tb ();
     // Instantiate Desgin Under Test (DUT)
     //////////////////////////////////////////////////////////////////////////////////
 
-    tx tx(
+    tx #(.CLK_FREQUENCY(CLOCK_FREQUENCY), .BAUD_RATE(BAUD_RATE), .PARITY(PARITY))
+    tx(
         .clk(clk),
         .rst(rst),
         .send(tb_send),
