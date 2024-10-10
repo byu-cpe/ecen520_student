@@ -235,4 +235,6 @@ Make sure all synthesis warnings and errors are resolved before submitting your 
   (trade off between learning testenches and testing their circuits properly)
 
 - Does it make sense to break this up into two pieces: one 8-bit controller and one 3-byte controller? Perhaps make a single controller for the ADXL that is general.  FOrcing a 8-bit repreaed controller isn't that general.
+  - Probably have them just create a design that does the full 24-bit transfer as one step. Perhaps make the number of bits for a transfer a parameter.
+- Move the synthesis step from the next assignment back to this assignment (the out of context synthesis step)
 -->

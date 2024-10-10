@@ -125,3 +125,9 @@ Other operations:
        * How many total endpoints are there on your clock signal?
        * Find the first net in the `Max Delay Paths` section and indicate the source and destination of this maximum path.
     1. Indicate how many times you had to synthesize and download your bitstream before your circuit worked.
+
+<!--
+- Add an exercise where the students do one of the following:
+  1. Open the fpga layout tool and browse around the design. Find the I/O and logic resources.
+  2. Start going through the timing report in more detail.
+-->
