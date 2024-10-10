@@ -37,16 +37,16 @@ Unlike the UART, data is being written and read at the same time.
 The use of two data signals, `MISO` and `MOSI` allow this full duplex communication to occur.
 
 <!-- SCLK -->
-The controller you design will need to generate the `SCLK` signal used by the subunits.
+The controller you design will need to generate the `SPI_SCLK` signal used by the subunits.
 This clock is not continuous as with a conventional clock and will only toggle during a transaction.
 When there is no transaction, the signal should be low.
-There is a control bit `CPOL` that determines the polarity of the idle `SCLK`.
+There is a control bit `CPOL` that determines the polarity of the idle `SPI_SCLK`.
 We will assume `CPOL` = 0 meaning that SCLK is low when no transactions are in process.
-The `SCLK` signal will toggle at a much slower rate than our input 100 MHz clock.
-For the [accelerometer](https://www.analog.com/media/en/technical-documentation/data-sheets/ADXL362.pdf) we are using, the maximum frequency of the `SCLK` is 10 MHz (the clock low and clock high phases must be 50 ns or longer for a minimum clock period of 100 ns).  
-Your controller will need to generate the desired `SCLK` frequency based on a parameter, `SPI_CLOCK_HZ`.
-Like the UART, you will need to have a state that is multiple clock cycles long for each phase of the `SCLK` signal.
-You will determine the number of clock cycles for each phase of `SCLK` by the `SPI_CLOCK_HZ` and `SYS_CLOCK_HZ` module parameters.
+The `SPI_SCLK` signal will toggle at a much slower rate than our input 100 MHz clock.
+For the [accelerometer](https://www.analog.com/media/en/technical-documentation/data-sheets/ADXL362.pdf) we are using, the maximum frequency of the `SPI_SCLK` is 10 MHz (the clock low and clock high phases must be 50 ns or longer for a minimum clock period of 100 ns).  
+Your controller will need to generate the desired `SPI_SCLK` frequency based on a parameter, `SCLK_FREQUENCY`.
+Like the UART, you will need to have a state that is multiple clock cycles long for each phase of the `SPI_SCLK` signal.
+You will determine the number of clock cycles for each phase of `SPI_SCLK` by the `SCLOCK_FREQUENCY` and `CLK_FREQUENCY` module parameters.
 
 Your controller should generate the `/CS`, `SCLK`, and `MOSI` signals as shown in the following SPI transaction diagram:
 
@@ -166,18 +166,18 @@ Start your controller module by creating the top-level ports:
 | CLK_FREQUENCY | 100_000_000 | Specify the clock frequency of the board |
 | SCLK_FREQUENCY  | 500_000 | Specify the frequency of the SCLK |
 
-You will need to create a state machine in your top-level design to implement the three byte transfer using the SPI controller (i.e., send one byte, issue hold_ss and issue second byte, and so on for three bytes). 
+You will need to create a state machine in your top-level design to implement the three byte transfer using the SPI controller (i.e., send one byte, issue hold_cs and issue second byte, and so on for three bytes). 
 When the `start` signal is asserted read the `write` signal to determine what type of operation to perform.
 If `write` is asserted, perform a write sequence.
 If `read` is asserted, perform a read sequence. 
 These sequences are as follows:
 
   * Write register (when `write` is asserted)
-    * Byte 0: write register (0x0a)
+    * Byte 0: write register (0x0a) command that tells the adxl362 that you will be preforming a WRITE
     * Byte 1: 8-bit address (taken from the `address` input)
     * Byte 2: Data to write (taken from `data_to_send`)
   * Read register (when `write` is de-asserted)
-    * Byte 0: read register (0x0b)
+    * Byte 0: read register (0x0b) command that tells the adxl362 that you will be preforming a READ
     * Byte 1: 8-bit address (taken from the `address` input)
     * Byte 2: Don't care (capture the byte received on this operation)
 
@@ -197,7 +197,7 @@ This testbench should be designed as follows:+
   * Perform the following operations within your testbench by setting the address and data_to_send:
     * Read the DEVICEID register (0x0). Should get 0xad
     * Read the PARTID (0x02) to make sure you are getting consistent correct data (0xF2)
-    * Read the status register (0x0b): should get 0x40 on power up (0xC0?)
+    * Read the status register (0x0b): should get 0x41 on power up (0xC0?)
     * Write the value 0x52 to register 0x1F for a soft reset
 
 Make sure your design successfully passes this testbench.
@@ -222,6 +222,7 @@ Make sure all synthesis warnings and errors are resolved before submitting your 
     * `sim_spi_cntrl`
     * `sim_spi_cntrl_100`
     * `sim_adxl362`
+    * `sim_adxl362_100`
 1. You need to have at least 4 "Error" commits in your repository
 2. No assignment specific questions for this assignment
 

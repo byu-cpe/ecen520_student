@@ -1,186 +1,142 @@
-<!--
-
-Need to be more clear on Putty settings. 
-- Parity? (enforce it!)
-- Default baud rate?
-They use glbl.v file for simulation. Need to include in their repository.
-Don't hard code any paths in makefile! (perhaps have an environment variable that is set so I can reuse their makefiles)
-- Have them simulate the full fight song
-
-Futgure: if they hit enter, make sure both CR/LF are sent back
-- buffer empties when right pressed.
-- start fight song with new line (make it more clear how to setup putty and what to send at the end of the line)
-- Have the fight song spit out the text as fast as possible (no delays).
--->
 # BRAM
 
-In this assignment you will practice using BRAMs and interfacing them to your UART. 
-You will use your BRAM to buffer data received from the UART receiver and to send over the transmitter. 
-Two different BRAMs will be used in this assignment. 
+In this assignment you will practice using BRAMs by creating two different modules that instance a BRAM.
 
 ## Synchronous FIFO
 
-Create a module that implements a simple synchronous FIFO for 8-bit bytes (this will be used with the UART).
-Your FIFO should be created by as follows:
-* Instance a RAMB36E1 primitive into your design using an 8-bit data bus
-* Create a "write address" counter that indicates which address to write to. Every time a byte is written to the FIFO (i.e., when 'we' is asserted), the write address should increment by one. The address should roll over if you reach the limit
-* Perform a write to the memory when the 'we' signal is asserted.
-* Create a "read address" counter that indicates which address to read from. You should read from the memory every clock cycle. Increment this address every time the 're' signal is asserted.
-* Create an 'empty' signal that is asserted when the read address is equal to the write address.
-* Create a 'full' signal that is asserted when the write address is one less than the read address.
+Create a module that implements a simple synchronous FIFO for ASCII bytes (this will be used with the UART).
+The ports of this module should be as follows:
 
-Your design 
 | Port Name | Direction | Width | Function |
 | ---- | ---- | ---- | ----  |
 | clk | Input | 1 | Clock |
 | rst | Input | 1 | Synchronous Reset |
 | we | Input | 1 | Write enable |
-| re | Input | 8 | Read enable |
+| re | Input | 1 | Read enable |
 | din | Input | 8 | Data In |
 | dout | Output | 8 | Data Out |
 | full | Output | 1 | Indicates FIFO is full |
 | empty | Output | 1 | Indicates FIFO is empty |
 
-Create a simple testbench that demonstrates 
+Your FIFO should be created by as follows:
+* Create a "write address" counter and a "read address" counter that indicate which address to write to and read from, respectively.
+  * Every time a byte is written to the FIFO (i.e., when 'we' is asserted), the write address should increment by one. The address should roll over if you reach the limit. 
+  * You should read from the memory every clock cycle. Increment this address every time the `re` signal is asserted.
+* Perform a write to the memory when the `we` signal is asserted.
+* Create an 'empty' signal that is asserted when the read address is equal to the write address.
+* Create a 'full' signal that is asserted when the write address is one less than the read address.
+* Instance a `RAMB36E1` primitive into your design using an 8-bit data bus. You will need to carefully read the details about this primitive in the [7 Series Memory Resources (UG473)](https://docs.amd.com/v/u/en-US/ug473_7Series_Memory_Resources) (see page 25).
+  * Make sure all inputs are wired up. Many inputs are not needed but every input should have a constant if it is not used.
+  * Use the 'A' port for writing to the BRAM and the 'B' port for reading from the BRAM. 
+  * To configure each of the ports to 8 bits, set the `READ_WIDTH_B` parameter to 9  and the `WRITE_WIDTH_A` to 9.
+  * Set the `WRITE_MODE_A` parameter to "READ_FIRST"
+  * Connect the following ports appropriately. Make sure you connect all the bits of each of the port (see the datasheet for details):
+    * `DIADI` and `DOBDO` (32-bit data ports)
+    * `ADDRARDADDR` and `ADDRBWRADDR` (16 bits) It is tricky to hook up the address ports appropriately. Read the data sheet carefully to understand how to connect this port.
+    * `WEA` (4 bit write enable).
+    * `ENARDEN`
 
-## Fight Song RAM
+### BRAM FIFO Testbench 
 
-Create a second module that implements a simple RAM that stores the BYU fight song.
+Create a simple testbench that demonstrates writing a few bytes, reading/writing a few bytes, and the full/empty signals working properly.
+Use a SystemVerilog 'queue' to store the values of the FIFO so you can check that the order you write is the order that you read.
+Print a message each time an element is written to or read from the FIFO.
 
-Instance a single BRAM as a device primitive in your HDL (do not 'infer' the BRAM with your RTL). 
-This BRAM should be organized as 8bit x 4096 (i.e., 4096 8-bit ASCII characters). 
-Initialize the contents of the BRAM to include the text of the BYU fight song (see below). 
-Note that the fight song will not fill the entire BRAM so you should only send the characters associated with the fight song and no more.
-Make sure you send new line characters(\r\n) at the end of each line.
+To simulate the `RAMB36E1` primitive you will need to include the 'unisim' library in your simulation.
+This precompiled library contains all the simulation models of the Xilinx primitives.
+Follow these steps to include this library in your simulation environment:
+* Add the following line to your `modelsim.ini` file: `unisim = /tools/Xilinx/Vivado/2024.1/data/questa/unisim`. Note that the path for this library is based on the computers in the digital lab. You may need to adjust this path if you are using a different computer.
+* Add the flag `-L unisim` to your `vlog` command in your simulation script.
+Create a makefile rule named `sim_bram_fifo` that runs this simulation from the command line.
 
-You should design your circuit so that when the **left** button is pressed, the _entire_ fight song is sent over the UART transmitter. 
-You will need to implement flow control so that you don't send another character until the previous character has been sent. 
-Also, you will need to put some sort of null or stop character at the end of the fight song so that you know when to stop.
+<!--
+* `vlib unisim`
+* `vmap unisim <Simulation library path>`. For the computers in the digital lab, the simulation path is: 
+-->
+### BRAM FIFO Synthesis
 
-```
-Rise all loyal Cougars and hurl your challenge to the foe.
-You will fight, day or night, rain or snow.
-Loyal, strong, and true
-Wear the white and blue.
-While we sing, get set to spring.
-Come on Cougars it's up to you. Oh!
+After verifying that your FIFO works properly, create a makefile rule named `synth_bram_fifo` that synthesizes your FIFO design in the out of context synthesis mode (see the [instructions](../rx_sim/UART_Receiver_sim.md#receiver-synthesis) on how to do this).
+Resolve any synthesis errors or warnings before proceeding with the next module.
+Make sure the synthesis log shows that one RAMB36E1 was allocated for your module.
+If you made any changes to your modules to resolve synthesis errors, rerun the testbench to make sure the module operates correctly.
 
-Chorus:
-Rise and shout, the Cougars are out
-along the trail to fame and glory.
-Rise and shout, our cheers will ring out
-As you unfold your victr'y story.
+## ASCII BRAM ROM
 
-On you go to vanquish the foe for Alma Mater's sons and daughters.
-As we join in song, in praise of you, our faith is strong.
-We'll raise our colors high in the blue
-And cheer our Cougars of BYU.
-```
+Create a second module that implements a "ROM" that stores a set of ASCII characters that can be read out one character at a time.
+This module will be used to store a message sent over the UART.
+The ports of this module should be as follows:
 
-If the left button is pressed again during transmission you should ignore it (i.e., send the entire text before sending another one)
+| Port Name | Direction | Width | Function |
+| ---- | ---- | ---- | ----  |
+| clk | Input | 1 | Clock |
+| rst | Input | 1 | Synchronous Reset |
+| init | Input | 1 | Return pointer to zero |
+| re | Input | 1 | Read enable |
+| dout | Output | 8 | Data Out |
+| rom_end | Output | 1 | Indicates the buffer is empty  |
 
+| Parameter | Type | Function |
+| ---- | ---- | ---- |
+| FILENAME | string | File name of the ASCII file to read |
 
+Design your module to operate as follows:
+* Create an "inferred" memory that is 8 bits x 4096 (i.e., don't instance the BRAM primitive but use the inferred memory in your HDL).
+* Provide a parameter that contains a file name that contains the data to be stored in the ROM. Create an initial block that performs this initialization.
+* Create a read pointer that indicates which address to read from
+* Increment this pointer every time `re` is asserted
+* Reset the pointer when `init` is asserted
+* Assert the 'end' signal when the value of the memory output is zero
 
+### BRAM ROM Testbench 
 
+Create a testbench that demonstrates the ability to read all the contents of the ROM until the `end` signal is asserted.
+Provide a couple of clock cycles between each read.
 
-## Top-Level Design
+You will need to populate your ROM with a text message.
+Two text messages have been provided for you: [fight_song.txt](fight_song.txt) and [declaration_of_independence.txt](declaration_of_independence.txt).
+These text files cannot be directly loaded into the memory using the `readmemh` command because they are ASCII files.
+I have created a python script, [gen_readmem.py](gen_readmem.py), that will convert these files into a format that can be read by the `readmemh` command.
+The following example demonstrates how to create a memory file that is readable by the `readmemh` command:
 
-Start this assignment by creating a top-level module with the same top-level ports as the UART receiver assignment.
-Add the BTNL and BTNR ports to the top-level module to represent the left and right buttons on the Basys3 board (you will need a debouncer for each of these buttons).
-You may want to copy your top-level design and modify it as a starting point.
-Include the following in your top-level design:
-* Attach the `CPU_RESETN` signal to two flip-flops as you did in the previous assignment.
-* Instance your transmitter much as you did in the previous assignment
-  * Hook the TX output signal to the top-level `UART_RXD_OUT` pin of the board (i.e., to the host)
-  * Attach the TX busy signal to the LED16_B signal to provide a blue LED indicator when the transmitter is busy
-* Instance your receiver
-  * Add a two flip-flop synchronizer between the RX input signal (`UART_TXD_IN`)
-  * Attach the rx busy signal to the LED17_R signal to provide a red LED indicator when the receiver is busy
-  * Attach the rx error signal to the LED17_G signal to provide a green LED indicator when the receiver has an error
-* Attach the lower 8 switches on the board to the lower 8 LEDs.
-* Create four 8-bit registers that hold the last four values received by your receiver
-* Instance your seven segment display controller and display the last four values as you did in the previous assignment
-* Hook up the center button (BTNC) to your circuit through a debouncer and cause the transmitter to send the values on the switches when this button has been pushed. 
+`python3 gen_readmem.py fight_song.txt fight_song.mem -l 4096 -r`
 
-The difference between this assignment and the previous one is that you will transmit data over the UART from three different sources: BRAM Fight song, BRAM buffer, and the switches with BTNC.
-In addition, you will be saving the storing the received values into a BRAM buffer.
-More details on these additions will be described below.
+Create a memory file for both text files and add a parameter to your testbench to specify the default ROM contents.
+Configure your testbench to use the `fight_song.mem` file by default.
+Create a makefile rule named `sim_bram_rom` that runs your testbench with the `fight_song.mem` from the command line.
+Also, create a makefile rule named `sim_bram_rom_declaration` that runs your testbench with the `declaration_of_independence.mem` file.
 
+### BRAM ROM Synthesis 
 
-
-Implement a UART "buffer" with a second BRAM that saves the data received from the UART receiver one character after another.
-Infer a second BRAM from HDL (no instancing of primitive) that is organized as 8x4096. 
-This BRAM should store each character received from the UART in one address after the next. 
-Create a counter that indicates the location where to store the next UART received character (you will need to display this counter in hex on the seven segment display).
-When the **right** button is pressed, your circuit should send each character received in the BRAM over the UART back to the host.
-Once the data has been sent, reset your counters so that you only send the new data received after the button has been pressed (you don't want to send the data received more than once).
-
-Your BRAM will act like a FIFO: characters received from the UART are placed in the BRAM FIFO and when the button is pressed, the BRAM fifo is read and sent over the transmitter until the FIFO has emptied.
-
-## Fight Song BRAM
-
-Instance a single BRAM as a device primitive in your HDL (do not 'infer' the BRAM with your RTL). 
-This BRAM should be organized as 8bit x 4096 (i.e., 4096 8-bit ASCII characters). 
-Initialize the contents of the BRAM to include the text of the BYU fight song (see below). 
-Note that the fight song will not fill the entire BRAM so you should only send the characters associated with the fight song and no more.
-Make sure you send new line characters(\r\n) at the end of each line.
-
-You should design your circuit so that when the **left** button is pressed, the _entire_ fight song is sent over the UART transmitter. 
-You will need to implement flow control so that you don't send another character until the previous character has been sent. 
-Also, you will need to put some sort of null or stop character at the end of the fight song so that you know when to stop.
-
-```
-Rise all loyal Cougars and hurl your challenge to the foe.
-You will fight, day or night, rain or snow.
-Loyal, strong, and true
-Wear the white and blue.
-While we sing, get set to spring.
-Come on Cougars it's up to you. Oh!
-
-Chorus:
-Rise and shout, the Cougars are out
-along the trail to fame and glory.
-Rise and shout, our cheers will ring out
-As you unfold your victr'y story.
-
-On you go to vanquish the foe for Alma Mater's sons and daughters.
-As we join in song, in praise of you, our faith is strong.
-We'll raise our colors high in the blue
-And cheer our Cougars of BYU.
-```
-If the left button is pressed again during transmission you should ignore it (i.e., send the entire text before sending another one)
-
-## BRAM Playback
-
-Implement a UART "buffer" with a second BRAM that saves the data received from the UART receiver one character after another.
-Infer a second BRAM from HDL (no instancing of primitive) that is organized as 8x4096. 
-This BRAM should store each character received from the UART in one address after the next. 
-Create a counter that indicates the location where to store the next UART received character (you will need to display this counter in hex on the seven segment display).
-When the **right** button is pressed, your circuit should send each character received in the BRAM over the UART back to the host.
-Once the data has been sent, reset your counters so that you only send the new data received after the button has been pressed (you don't want to send the data received more than once).
-
-Your BRAM will act like a FIFO: characters received from the UART are placed in the BRAM FIFO and when the button is pressed, the BRAM fifo is read and sent over the transmitter until the FIFO has emptied.
-
-## Testbench
-
-Create a top-level testbench that instantiates your design and simulates the behavior of all three ways to send data over the UART.
-
-* Hook up my UART receiver model that prints out the characters it receives.
-* Instance a second copy of your transmitter in the testbench so that you can provide data for the receiver. Control this by your testbench.
-* Hook up the seven segment display checker (even though we don't really care about it much)
-
-* Initialize and reset your design
-* Have your testbench transmitter send the characters "Hello World" to your receiver
-* Send two characters over the transmitter by pressing BTNC
-* Press buttonL to send the fight song. Send the entire sequence to make sure it stops (this may take a while)
-* Have your testbench transmitter send the characters "Good Bye" to your receiver
-* Press button R to send the data in your BRAM buffer out the transmitter
-
-
-Create a makefile rule `sim_top` that performs this simulation from the command line. Genrics?
-Create a makefile rule `gen_bit` that generates a bitstream for your top-level design. Generics?
-
+After verifying that your FIFO works properly, create a makefile rule for synthesizing your BRAM ROM in the out of context synthesis mode.
+The makefile rule should be named: `synth_bram_rom` and should synthesize the ROM with the `fight_song` file contents.
+Resolve any synthesis errors or warnings before proceeding with the next module.
+**Make sure** the synthesis log shows that one RAMB36E1 was allocated for your module.
+If you made any changes to your modules to resolve synthesis errors, rerun the testbench to make sure the module operates correctly.
 
 ## Submission
 
-Add detailed timing analysis to your README.md file.
+The assignment submission steps are described in the [assignment mechanics checklist](../resources/assignment_mechanics.md#assignment-submission-checklist) page.
+Carefully review these steps as you submit your assignment.
+
+The following assignment specific items should be included in your repository:
+
+1. Required Makefile rules:
+  * `sim_bram_fifo`
+  * `sim_bram_rom`
+  * `sim_bram_rom_declaration`
+  * `synth_bram_fifo`
+  * `synth_bram_rom`
+2. You need to have at least 4 "Error" commits in your repository
+3. Assignment specific Questions:
+    1. Create a table in your report that indicates the total number of primitives for each design based on the synthesis reports. The table listed below is an example of what you should include in your report. You will need to include all cells used in each of the two designs.
+
+| Cell Type | BRAM ROM | BRAM FIFO |
+| ---- | ---- | ---- |
+| CARRY4 | | |
+| RAMB36E1 | | |
+
+
+<!--
+They use glbl.v file for simulation. Need to include in their repository.
+Don't hard code any paths in makefile! (perhaps have an environment variable that is set so I can reuse their makefiles)
+-->
