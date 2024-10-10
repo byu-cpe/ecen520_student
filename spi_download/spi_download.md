@@ -74,14 +74,14 @@ This testbench should be designed as follows:
     * Write the value 0x52 to register 0x1F for a soft reset
 
 Make sure your top-level design successfully passes this testbench.
-Add makefile rules named `sim_top`, using default parameters, and `sim_top_100`, that uses a 100_000 SCLK frequency, that will perform this simulation from the command line.
+Add makefile rules named `sim_top`, using default parameters, and `sim_top_100`, that uses a 100_000 SCLK_FREQUENCY, that will perform this simulation from the command line.
 
 
 ### Implementation and Download
 
 At this point you are ready to implement your design, generate a bitfile and download your design to your board.
-Create a new makefile rule named `gen_bit` that will generate a bitfile named `spi_adx362l.bit` for your top-level design with the default top-level parameters.
-Create a new makefile rule named `gen_bit_100` that will generate a bitfile named `spi_adx362l_100.bit` with a 100_000 SCLK frequency.
+Create a new makefile rule named `gen_bit` that will generate a bitfile named `spi_adxl362.bit` for your top-level design with the default top-level parameters.
+Create a new makefile rule named `gen_bit_100` that will generate a bitfile named `spi_adxl362_100.bit` with a 100_000 SCLK frequency.
 
 Once you have created your design and downloaded it to the board.
 Test the board by running the commands listed below on the switches and buttons.
