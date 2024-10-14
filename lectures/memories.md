@@ -20,4 +20,8 @@ We will discuss different ways of insantiating memories within HDL code and how 
   * How to infer BRAMs from HDL
   * What is a FIFO and why is it used
 
-<!-- discuss CAM memories? -->
+<!-- Future: (probably two lectures in the future)
+- Examples of dual port block ram inference
+- Discuss LUT RAMs
+- discuss CAM memories
+-->
