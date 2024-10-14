@@ -187,4 +187,7 @@ Future Changes:
 - Several students had problems with the debouncer parameters. They would do a multiplication that resulted in a large number that didn't fit in 32 bits and then when dividing they would have an invalid number. Provide additional instructions or more exmaples on how to create this parameter without the overflow issue.
   - Related to this, we need to have a testbench for the debouncer at the larger time scale so that we can catch this in simulation.
 - Have them experiment with different state encoding values to see how it affects reousrce utilization.
+- We should be adding the following attribute to all synchronier flip-flops in the download labs. Add this to the tx_download and all future download labs
+   (* ASYNC_REG = "TRUE" *) logic [31:0] ssd_sync;
+
 -->
