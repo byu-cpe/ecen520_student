@@ -130,4 +130,5 @@ Other operations:
 - Add an exercise where the students do one of the following:
   1. Open the fpga layout tool and browse around the design. Find the I/O and logic resources.
   2. Start going through the timing report in more detail.
+  3. Have a constraint that requires the SPICLK and MOSI/MISO flip flps to be very close to the I/O. Need to make sure the a the timing delay between CLK/MISO/MOSI is as small as possible.
 -->
