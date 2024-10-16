@@ -46,7 +46,7 @@ To simulate the `RAMB36E1` primitive you will need to include the 'unisim' libra
 This precompiled library contains all the simulation models of the Xilinx primitives.
 Follow these steps to include this library in your simulation environment:
 * Add the following line to your `modelsim.ini` file: `unisim = /tools/Xilinx/Vivado/2024.1/data/questa/unisim`. Note that the path for this library is based on the computers in the digital lab. You may need to adjust this path if you are using a different computer.
-* Add the flag `-L unisim` to your `vlog` command in your simulation script.
+* Add the flag `-L unisim` to your `vsim` command in your simulation script.
 Create a makefile rule named `sim_bram_fifo` that runs this simulation from the command line.
 
 <!--
