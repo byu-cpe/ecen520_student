@@ -30,29 +30,29 @@ This repository contains the lecture schedule (including links to lecture summar
 | **Week 6** | |
 | 10/7/2024  | [Memories](./lectures/memories.md)  |
 | 10/9/2024  | [Timing overview and review](./lectures/timing_overview.md) |
-| 10/11/2024 | [Clock jitter, duty cycle, clock skew](./lectures/clock_skew.md) |
+| 10/11/2024 | [Clock Skew](./lectures/clock_skew.md) |
 | **Week 7** | |
 | 10/14/2024 | [Xilinx Clock Timing reports](./lectures/xilinx_timing.md) |
 | 10/16/2024 | [Xilinx Clock Resources (MMCM)](./lectures/xilinx_clocking.md) |
 | 10/18/2024 | [Reset timing and strategies](./lectures/reset_strategies.md) |
 | **Week 8** | |
-| 10/21/2024 | [Poor Sequential Design Practice]() |
-| 10/23/2024 | [Metastability & Synchronizer design]() |
-| 10/25/2024 | [Clock domain crossing]() |
+| 10/21/2024 | [Metastability & Synchronizer design](./lectures/metastability.md) |
+| 10/23/2024 | [Clock domain crossing](./lectures/clock_crossing.md) |
+| 10/25/2024 | [Handshaking and Data Transfer](./lectures/handshaking.md) |
 | **Week 9** | |
-| 10/28/2024 |  |
-| 10/30/2024 | [Handshaking]() |
-| 11/1/2024  | [Data transfer across clock domains]() |
-| **Week 10**| [Pipelining and Retiming]() |
+| 10/28/2024 | [Pipelining and Retiming](./lectures/pipelining.md) |
+| 10/30/2024 | [Digital Arithmetic #1]() |
+| 11/1/2024  | [Digital Arithmetic #2]() |
+| **Week 10**|  |
 | 11/4/2024  | [VHDL Part 1]() |
 | 11/6/2024  | [VHDL Part 2]() |
 | 11/8/2024  | **Exam #2** |
 | **Week 11**| |
-| 11/11/2024 | [Digital Arithmetic #1]() |
-| 11/13/2024 | [Digital Arithmetic #2]()|
-| 11/15/2024 | [DSP Blocks]() |
+| 11/11/2024 | [Poor Sequential Design Practice]() |
+| 11/13/2024 |  |
+| 11/15/2024 |  |
 | **Week 12**| |
-| 11/18/2024 | []() |
+| 11/18/2024 | [DSP Blocks]() |
 | 11/20/2024 | []() |
 | 11/22/2024 | No Class |
 | **Week 13**| |
@@ -80,5 +80,7 @@ Review the [assignment mechanics](./resources/assignment_mechanics.md) page to l
 | 4 | [UART Synthesis and Download](./rx_download/UART-Receiver_synth.md) | `rx_download` |
 | 5 | [SPI Controller-Simulation](./spi_cntrl/SPI_cntrl.md) | `spi_cntrl` |
 | 6 | [SPI Controller-Download](./spi_download/spi_download.md) | `spi_download` |
+| 7 | [BRAM](./bram/bram.md) | `bram` |
+| 8 | [BRAM-Download](./bram_download/bram_download.md) | `bram_download` |
 
 **Additional Assignments will be posted when they are ready**

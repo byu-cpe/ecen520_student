@@ -17,5 +17,3 @@ We will focus primarily on syntax for structural design in SystemVerilog and com
 * SystemVerilog constants (chapter 11)
 * Multi-bit wire accessing (chapter 11)
 * Dataflow statements and operators (chapter 14)
-
-## Resources
