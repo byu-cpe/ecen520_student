@@ -23,19 +23,19 @@ Create a top-level design that uses the following top-level ports:
 | LED | Output | 16 | Board LEDs  |
 | LED16_B | Output | 1 |  |
 | ACL_MISO | Input | 1 | ADXL362 SPI MISO |
-| ACL_SCLK | Input | 1 | ADXL362 SPI SCLK |
-| ACL_CSN | Input | 1 | ADXL362 SPI CSN|
-| ACL_MOSI | Input | 1 | ADXL362 SPI MOSI |
-| AN | [7:0] | Output | Anode signals for the seven segment display |
-| CA, CB, CC, CD, CE, CF, CG | [6:0] | Output | Seven segment display cathode signals |
+| ACL_SCLK | Output | 1 | ADXL362 SPI SCLK |
+| ACL_CSN | Output | 1 | ADXL362 SPI CSN|
+| ACL_MOSI | Output | 1 | ADXL362 SPI MOSI |
+| AN  | Output | 8 | Anode signals for the seven segment display |
+| CA, CB, CC, CD, CE, CF, CG | Output | 1 each | Seven segment display cathode signals |
 | DP | Output | 1 | Seven segment display digit point signal |
 
 | Parameter Name | Default Value | Purpose |
 | ---- | ---- | ---- |
 | CLK_FREQUENCY  | 100_000_000 | Specify the clock frequency |
 | SEGMENT_DISPLAY_US  | 1_000 | The amount of time in microseconds to display each digit (1 ms) |
-| DEBOUNCE_TIME_US | integer | 1_000 | Specifies the minimum debounce delay in micro seconds (1 us) |
-| SCL_FREQUENCY | integer | 1_000_000 | ADXL SPI SCLK rate |
+| DEBOUNCE_TIME_US | 1_000 | Specifies the minimum debounce delay in micro seconds (1 us) |
+| SCLK_FREQUENCY | 1_000_000 | ADXL SPI SCLK rate |
 
 
 Create a top-level circuit that includes the following:
@@ -65,7 +65,7 @@ This testbench should be designed as follows:
   * attach the SPI signals from the top-level design to the SPI signals of the simulation
 * Perform the following sequence of events for your testbench:
   * Execute the simulation for a few clock cycles without setting any of the inputs
-  * Set default values for the inputs (reset, buttons, and switchces)
+  * Set default values for the inputs (reset, buttons, and switches)
   * Wait for a few clock cycle, assert the reset for a few clock cycles, deassert the reset (don't forget that the reset signal for the board is low asserted)
   * Perform the following operations within your testbench by setting the buttons and switches:
     * Read the DEVICEID register (0x0). Should get 0xad
@@ -74,14 +74,14 @@ This testbench should be designed as follows:
     * Write the value 0x52 to register 0x1F for a soft reset
 
 Make sure your top-level design successfully passes this testbench.
-Add makefile rules named `sim_top`, using default parameters, and `sim_top_100`, that uses a 100_000 SCLK frequency, that will perform this simulation from the command line.
+Add makefile rules named `sim_top`, using default parameters, and `sim_top_100`, that uses a 100_000 SCLK_FREQUENCY, that will perform this simulation from the command line.
 
 
 ### Implementation and Download
 
 At this point you are ready to implement your design, generate a bitfile and download your design to your board.
-Create a new makefile rule named `gen_bit` that will generate a bitfile named `spi_adx362l.bit` for your top-level design with the default top-level parameters.
-Create a new makefile rule named `gen_bit_100` that will generate a bitfile named `spi_adx362l_100.bit` with a 100_000 SCLK frequency.
+Create a new makefile rule named `gen_bit` that will generate a bitfile named `spi_adxl362.bit` for your top-level design with the default top-level parameters.
+Create a new makefile rule named `gen_bit_100` that will generate a bitfile named `spi_adxl362_100.bit` with a 100_000 SCLK frequency.
 
 Once you have created your design and downloaded it to the board.
 Test the board by running the commands listed below on the switches and buttons.

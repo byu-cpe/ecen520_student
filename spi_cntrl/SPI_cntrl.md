@@ -173,11 +173,11 @@ If `read` is asserted, perform a read sequence.
 These sequences are as follows:
 
   * Write register (when `write` is asserted)
-    * Byte 0: write register (0x0a)
+    * Byte 0: write register (0x0a) command that tells the adxl362 that you will be preforming a WRITE
     * Byte 1: 8-bit address (taken from the `address` input)
     * Byte 2: Data to write (taken from `data_to_send`)
   * Read register (when `write` is de-asserted)
-    * Byte 0: read register (0x0b)
+    * Byte 0: read register (0x0b) command that tells the adxl362 that you will be preforming a READ
     * Byte 1: 8-bit address (taken from the `address` input)
     * Byte 2: Don't care (capture the byte received on this operation)
 

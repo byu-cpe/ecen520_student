@@ -16,7 +16,3 @@ In this lecture, we will discuss how glitches can occur in finite state machines
   * Moore output buffering and inability to implement Mealy output buffering
   * FSM Output glitches
 
-
-## Resources
-
-
