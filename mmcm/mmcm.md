@@ -73,7 +73,7 @@ For this part you will create enable signals in various clock domains and "count
 
 When synchronizing the pulse signal that crosses clock domains, you will want to use the `ASYNC_REG` attribute to instruct the synthesis tool that these signals are asynchronous.
 This attribute specifices that (1) A register can receive asynchronous data on the D input pin relative to its source clock and (2) a register is a synchronizing register within a synchronization chain.
-From the documentation:
+From the documentation [Vivado Synthesis Guide, page 40](https://www.xilinx.com/support/documentation/sw_manuals/xilinx2017_4/ug901-vivado-synthesis.pdf):
 > Specifying ASYNC_REG also affects optimization, placement, and routing to improve mean time between failure (MTBF) for registers that can go metastable. If ASYNC_REG is applied, the placer will ensure the flip-flops on a synchronization chain are placed closely together to maximize MTBF. Registers that have this property that are directly connected will be grouped and placed together into a single SLICE/CLB, assuming they have a compatible control set and the number of registers does not exceed the available resources of the SLICE/CLB.
 
 ```
@@ -132,42 +132,18 @@ It is possible you will get metastability, but this is not an issue for the seve
 | 0x9 | CNTB_0[47:12]  |
 | 0xA | CNT_META |
 
-## Testbench
+### Timing Constraints
 
-Create a top-level testbench that simulates your design.
-This testbench should demonstrate e your clocking, counter circuits, seven segment display and mux are all working properly. 
-This testbench is relatively simple and should just issue a reset signal, wait for the MMCMs to lock, and run for long enough to demonstrate the proper operation of all the clocks and counters.
-Create a makefile rule `sim_mmcm` that performs this simulation from the commandline.
-
-Add a timescale directive to your testbench as follows (you will need picosecond resolution for this simulation):
-```
-`timescale 1ns / 1ps
-```
-
-## Implementation and Download
-
-Create a makefile rule `gen_bit` that generates a bitstream for your top-level design.
-
+In addition to the `(* ASYNC_REG = "TRUE" *)` attribute that you add to your HDL, you will need to add a number of additional timing constraints for this design.
 For every clock domain crossing signal, you will need to add a `set_false_path` constraint to your .xdc file.
-
 `set_false_path -from [ get_cells clk0_cntr_reg[*] ] -to [get_cells ssd_sync_reg[*] ]
 `
-
-## Timing Analysis
-
-It is important that you implement the circuit with *no* timing violations. 
-Without any special care, you will end up with timing violations. 
-You will need to treat some of the timing situations in your design with special care. 
-Here are some guidelines for getting a successful timing analysis:
-  * Add the property "ASYNC_REG=true" to your clock domain crossing synchronizers (see page 40 of the [Vivado Synthesis Guide](https://www.xilinx.com/support/documentation/sw_manuals/xilinx2017_4/ug901-vivado-synthesis.pdf)). This will let the synthesis tool know that it should not optimize the flip-flops away and that you want to move the synchronizer flip-flop as close to the output of the previous flip-flop as possible.
-  * You need to add a constraint in your .xdc file to ignore the timing between asynchronous FFs. Details on how to ignore these timing paths are described below. This occurs in two places:
+Without this constraint, the timing analysis tool will try to resolve timing for two signals of different clock domains.
+The following situations provide examples of when you will need to add a `set_false_path` constraint:
     * The synchronizer for the pulse3 and pulse4 signals that are crossing clock domains
-    * The synchronizer register used to synchronize the various counters to the top-level clock domain
+    * The synchronizer register used to synchronize the various counters to the top-level clock domain (for the seven-segment display)
     * The input to the "metastability A" FF used to detect metastability.
-
-You will use the `set_false_path` constraint directive to have the timing analysis tool ignore these paths. 
-The following examples demonstrate how to use this command:
-
+The following example demonstrates this constraint:
 ```
 # Sets a false path from counter0 to the ssd_sync register (all 32 bits)
 # Note that Vivado adds the "_reg" name to your HDL name
@@ -177,26 +153,63 @@ set_false_path -from [ get_cells clk0_cntr_reg[*] ] -to [ get_cells ssd_sync_reg
 set_false_path -from [ get_cells pulse3_reg ] -to [ get_cells pulse3_clk0_d_reg ]
 ```
 
+## Testbench
+
+Create a top-level testbench that simulates your design.
+This testbench should demonstrate e your clocking, counter circuits, seven segment display and mux are all working properly. 
+This testbench is relatively simple and should just issue a reset signal, wait for the MMCMs to lock, and run for long enough to demonstrate the proper operation of all the clocks and counters.
+Create a makefile rule `sim_mmcm` that performs this simulation from the command line.
+
+Add a timescale directive to your testbench as follows (you will need picosecond resolution for this simulation):
+```
+`timescale 1ns / 1ps
+```
+
+Run your simulation in the GUI mode and create a waveform that demonstrates the proper operation of each of your 7 clocks.
+Take a screenshot of each waveform. 
+Use markers to measure the frequency/period, the phase offset, and the duty cycle.
+
+## Implementation and Download
+
+Create a makefile rule `gen_bit` that generates a bitstream for your top-level design.
+Make sure your design meets the timing constraint and doesn't have any errors or warnings.
+Download your design and make sure it operates as expected.
+
+
+### Design Timing Analysis
+
+Carefully review the timing analysis file for your design.
+From this file, answer the following questions in your report:
+* Determine the worst case negative slack
+  * What are the source and destination of this signal?
+  * What is the clock skew between the source and destination clocks of this signal?
+* Determine the worst hold time constraint
+  * What are the source and destination of this signal?
+  * What is the clock skew between the source and destination clocks of this signal?
+* How many design endpoints are there in your design?
+
 ## Submission
 
-1. Prepare your repository
-    * `sim_top`: performs command line simulation of the top testbench
-    * `gen_bit`: Generates a bitstream for your top-level design
-3. Create your assignment [Readme.md](../resources/assignment_mechanics.md#assignment-submission) file
-  * Create the template file based on the instructions linked above
-  * Add the following items for the assignment-specific section of the readme:
-    1. **Resoures**: Provide a summary of the number of resources your design uses (see the output from the utilization report). Specifically, indicate the number of `Slice LUTs`, `Slice Registers`, and `Bonded IOB` resources your design uses.
-    2. **Warnings**: You should not have _any_ warnings in your project as described in the assignment instructions above. Make sure you don't have any warnings and state this in your readme. If you do have warnings, you need to provide strong justification for them.
-    3. **Timing**: Determine the "Worst Negative Slack" (or WNS). This is found in the timing report and indicates how much timing you slack you have with the current clocking.
-    4. **Waveforms**:  Create one or more waveforms with markers to demonstrate each of your 7 clocks operating correctly. Take a screenshot of the waveform. Make sure you demonstrate correct frequency (by measuring period), phase offset, and duty cycle.
+The assignment submission steps are described in the [assignment mechanics checklist](../resources/assignment_mechanics.md#assignment-submission-checklist) page.
+Carefully review these steps as you submit your assignment.
+
+The following assignment specific items should be included in your repository:
+
+1. Required Makefile rules:
+  * `sim_mmcm`
+  * `gen_bit`
+2. You need to have at least 3 "Error" commits in your repository
+3. Assignment specific Questions:
+  * Provide a summary of the number of resources your design uses (see the output from the utilization report).
+  * Provide an inline image of each of your waveforms demonstrating the proper operation of each of your 7 clocks.
+  * Provide your timing analysis results
+
 
 
 <!--
-- Make sure they put their images _inline_ (rather than links) so I don't have to click to grade. One separate image for each counter and an annotation of text.
 - The build makefiles had hard coded paths for the glbl.v file. Need to modify the instructions so that the make will work on any computer (have them copy it to their repo?)
 - Have them figure out the TCL commands for printing the simulation files to an image
 - Need to ahve the testbench print more out with more interesting notes/comments
-- Have them create a 48-bit counter instead of 32-bit counter and display the top 32 bits (so we don't get roll over so fast)
 - Force them to get metastability? If so, how to force it? (more guidelines). See Baker's
 - Force them to use generate statements? It is a good place to learn to use them.
 -->
@@ -221,7 +234,7 @@ set_false_path -from [get_clocks clock3] -to [get_clocks clock0]
 set_false_path -from [get_clocks {clock* sclock*}] -to [get_clocks sys_clk_pin]
 -->
 
-
+<!--
 
 **Tips**
 
@@ -242,6 +255,7 @@ To avoid getting unnecessary warnings, provide an empty `()` for the port as fol
   .CLKOUT0B(),                  // Leave unconnected (won't generate a warning)
 
 ```
+-->
 
 
 <!--
