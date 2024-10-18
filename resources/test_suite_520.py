@@ -14,9 +14,9 @@ from repo_test_suite import repo_test_suite
 
 class test_suite_520(repo_test_suite):
 
-    def __init__(self, repo, assignment_name, min_err_commits = 3, max_repo_files = 20):
+    def __init__(self, repo, assignment_name, min_err_commits = 3, max_repo_files = 20, summary_log_filename = None):
         # Reference to the Git repository
-        super().__init__(repo,test_name = assignment_name)
+        super().__init__(repo,test_name = assignment_name, summary_log_filename = summary_log_filename)
         self.repo_tests = []
         self.build_tests = []
         self.clean_tests = []
@@ -55,9 +55,9 @@ class test_suite_520(repo_test_suite):
     def add_build_test(self,test):
         self.build_tests.append(test)
 
-    def add_make_test(self,make_rule):
+    def add_make_test(self,make_rule,timeout_seconds = 5*60):
         ''' Add a makefile rule test '''
-        make_test = repo_test.make_test(make_rule)
+        make_test = repo_test.make_test(make_rule,timeout_seconds=timeout_seconds)
         self.add_build_test(make_test)
 
     def run_tests(self):
@@ -81,13 +81,24 @@ def build_test_suite_520(assignment_name,  min_err_commits = 3, max_repo_files =
     parser.add_argument("--norepo", action="store_true", help="Do not run Repo tests")
     parser.add_argument("--nobuild", action="store_true", help="Do not run build tests")
     parser.add_argument("--noclean", action="store_true", help="Do not run clean tests")
+    parser.add_argument("--log", type=str, help="Save output to a log file (relative file path)")
     args=parser.parse_args()
+
+    # Get repo
     if args.repo is None:
         path = os.getcwd()
     else:
         path = args.repo
     repo = git.Repo(path, search_parent_directories=True)
-    test_suite = test_suite_520(repo, assignment_name, min_err_commits = min_err_commits, max_repo_files = max_repo_files)
+    # Log file
+    summary_log_filename = None
+    if args.log is not None:
+        summary_log_filename = args.log
+
+    # Build test suite
+    test_suite = test_suite_520(repo, assignment_name, min_err_commits = min_err_commits, 
+        max_repo_files = max_repo_files, summary_log_filename = summary_log_filename)
+
     if args.norepo:
         test_suite.run_repo_tests = False
     if args.nobuild:
