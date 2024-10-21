@@ -50,7 +50,7 @@ This repository contains the lecture schedule (including links to lecture summar
 | **Week 11**| |
 | 11/11/2024 | [Digital Arithmetic #2]() |
 | 11/13/2024 | [DSP Blocks]() |
-| 11/15/2024 | [CLB Blocks]() |
+| 11/15/2024 | [DDR IP]() [CLB Blocks]() |
 | **Week 12**| |
 | 11/18/2024 | [IO Resources]() |
 | 11/20/2024 | [AXI Bus]() |
