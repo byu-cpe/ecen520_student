@@ -41,14 +41,14 @@ This repository contains the lecture schedule (including links to lecture summar
 | 10/25/2024 | [Handshaking and Data Transfer](./lectures/handshaking.md) |
 | **Week 9** | |
 | 10/28/2024 | [Pipelining and Retiming](./lectures/pipelining.md) |
-| 10/30/2024 | [Digital Arithmetic #1]() |
-| 11/1/2024  | [Digital Arithmetic #2]() |
+| 10/30/2024 | [Poor Sequential Design Practice]() |
+| 11/1/2024  | [VHDL Part 1]()  |
 | **Week 10**|  |
-| 11/4/2024  | [VHDL Part 1]() |
-| 11/6/2024  | [VHDL Part 2]() |
+| 11/4/2024  | [VHDL Part 2]() |
+| 11/6/2024  | [Digital Arithmetic #1]() |
 | 11/8/2024  | **Exam #2** |
 | **Week 11**| |
-| 11/11/2024 | [Poor Sequential Design Practice]() |
+| 11/11/2024 | [Digital Arithmetic #2]() |
 | 11/13/2024 |  |
 | 11/15/2024 |  |
 | **Week 12**| |
