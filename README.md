@@ -82,5 +82,6 @@ Review the [assignment mechanics](./resources/assignment_mechanics.md) page to l
 | 6 | [SPI Controller-Download](./spi_download/spi_download.md) | `spi_download` |
 | 7 | [BRAM](./bram/bram.md) | `bram` |
 | 8 | [BRAM-Download](./bram_download/bram_download.md) | `bram_download` |
-| 9 | [VGA Controller (VHDL)]() | `vga` |
+| 9 | [MMCM Clocking](./mmcm/mmcm.md) | `mmcm` |
+| 10 | [VGA Controller (VHDL)]() | `vga` |
 
