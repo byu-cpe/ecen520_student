@@ -27,3 +27,6 @@ This lecture will review reset strategies and their timing implications.
   * Synchronous vs asynchronous resets (pros and cons of each)
   * Timing implications of reset strategies
 
+## Resources
+
+  * https://www.eetimes.com/how-do-i-reset-my-fpga/

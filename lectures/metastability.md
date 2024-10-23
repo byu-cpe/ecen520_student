@@ -1,5 +1,5 @@
+# Metastability and Synchronizer Design
 
-# Metastability and Synchonizer Design
 When the timing constraints of a flip-flop are not met then the flip-flop may go metastable.
 This lecture will summarize the causes of metastability and techniques for addressing metastability when it cannot be resolved easily.
 
@@ -20,4 +20,8 @@ This lecture will summarize the causes of metastability and techniques for addre
 ## Reference
 
   * [Chu, chapter 16 slides (Timing/Clock Skew)](https://github.com/byu-cpe/ECEN_620/blob/main/docs/chu/chap16_1.pdf)
-<!-- Could add some metastability generation circuit references here -->
+  * [Clock Synchronization Approaches](https://www.embedded.com/asynchronous-reset-synchronization-and-distribution-challenges-and-solutions/)
+  * [Understanding Metastability in FPGAs, Intel/Altera](https://www.intel.com/content/dam/www/programmable/us/en/pdfs/literature/wp/wp-01082-quartus-ii-metastability.pdf)
+
+<!--  http://userweb.eng.gla.ac.uk/scott.roy/DCD3/technotes.pdf (design to detect metastability) : this resource is gone -->
+

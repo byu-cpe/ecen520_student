@@ -62,8 +62,12 @@ class repo_test_suite():
         self.print_to_stdout = print_to_stdout
         self.verbose = verbose
         self.test_log_fp = None
-        if summary_log_filename:
-            summary_log_filepath = self.log_dir + '/' + summary_log_filename
+        if summary_log_filename is not None:
+            if self.log_dir is None:
+                log_dir = pathlib.Path(".")
+            else:
+                log_dir = pathlib.Path(self.log_dir)
+            summary_log_filepath = log_dir / summary_log_filename
             self.test_log_fp = open(summary_log_filepath, "w")
             if not self.test_log_fp:
                 self.print_error("Error opening file for writing:", summary_log_filepath)
@@ -81,6 +85,9 @@ class repo_test_suite():
     def print_color(self, color, *msg):
         """ Print a message in color """
         print(color + " ".join(str(item) for item in msg), TermColor.END)
+        if self.test_log_fp is not None:
+            # Don't print color codes to the log file
+            self.test_log_fp.write(" ".join(str(item) for item in msg) + "\n")
 
     def print(self, message, verbose_message = False):
         """ Prints a string to the appropriate locations. """
@@ -88,7 +95,7 @@ class repo_test_suite():
         if not verbose_message or self.verbose:
             if self.print_to_stdout:
                 print(message)
-            if self.test_log_fp:
+            if self.test_log_fp is not None:
                 self.test_log_fp.write(message + '\n')
 
     def print_error(self, message):

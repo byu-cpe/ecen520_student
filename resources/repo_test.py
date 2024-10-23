@@ -13,6 +13,9 @@ import sys
 from enum import Enum
 from git import Repo
 import datetime
+import time
+import threading
+import queue
 
 #########################################################3
 # Base repo test classes
@@ -40,12 +43,13 @@ class repo_test():
     This is intended as a super class for custom test modules.
     """
 
-    def __init__(self, abort_on_error=True, process_output_filename = None):
+    def __init__(self, abort_on_error=True, process_output_filename = None, timeout_seconds = 0):
         """ Initialize the test module with a repo object """
         self.abort_on_error = abort_on_error
         self.process_output_filename = process_output_filename
         # List of files that should be deleted after the test is done (i.e., log files)
-        self.files_to_delete = []  
+        self.files_to_delete = []
+        self.timeout_seconds = timeout_seconds
 
     def module_name(self):
         """ returns a string indicating the name of the module. Used for logging. """
@@ -65,7 +69,15 @@ class repo_test():
     def error_result(self, msg=None):
         return repo_test_result(self, result_type.ERROR, msg)
 
-    def execute_command(self, repo_test_suite, proc_cmd, process_output_filename = None ):
+    def read_stdout_to_queue_thread(proc, output_queue):
+        while True:
+            line = proc.stdout.readline()
+            if line:
+                output_queue.put(line.strip())
+            else:
+                break
+
+    def execute_command(self, repo_test_suite, proc_cmd, process_output_filename = None):
         """ Completes a sub-process command. and print to a file and stdout.
         Args:
             proc_cmd -- The string command to be executed.
@@ -95,7 +107,8 @@ class repo_test():
         repo_test_suite.print(message)
         if fp:
             fp.write(message+"\n")
-        # Execute command		
+        # Execute command
+        start_time = time.time()
         proc = subprocess.Popen(
             proc_cmd,
             cwd=repo_test_suite.working_path,
@@ -103,13 +116,33 @@ class repo_test():
             stderr=subprocess.STDOUT,
             universal_newlines=True,
         )
-        for line in proc.stdout:
-            if repo_test_suite.print_to_stdout:
-                sys.stdout.write(line)
-            if fp:
-                fp.write(line)
-                fp.flush()
-        # Wait until process is donetest
+        output_queue = queue.Queue()
+        output_thread = threading.Thread(target=repo_test.read_stdout_to_queue_thread, args=(proc, output_queue))
+        output_thread.start()
+
+        while proc.poll() is None and output_thread.is_alive():
+            try:
+                line = output_queue.get(timeout=1.0)
+                line = line + "\n"
+                if repo_test_suite.print_to_stdout:
+                    sys.stdout.write(line)
+                    sys.stdout.flush()
+                if repo_test_suite.test_log_fp:
+                    repo_test_suite.test_log_fp.write(line)
+                    repo_test_suite.test_log_fp.flush()
+                if fp:
+                    fp.write(line)
+                    fp.flush()
+            except queue.Empty:
+                # If the queue is empty, just move on: we waited for output and will try again
+                pass
+            if self.timeout_seconds > 0:
+                elapsed_time = time.time() - start_time
+                if elapsed_time > self.timeout_seconds:
+                    # Timeout exceeded, terminate the process
+                    repo_test_suite.print_error(f"Process exceeded {self.timeout_seconds} seconds and was terminated.")
+                    proc.terminate()
+                    return 1
         proc.communicate()
         return proc.returncode
 
@@ -118,6 +151,7 @@ class repo_test():
         for file in self.files_to_delete:
             if os.path.exists(file):
                 os.remove(file) 
+
 
 #########################################################3
 # Generic, non-repo test classes
@@ -155,12 +189,13 @@ class make_test(repo_test):
     '''
 
     def __init__(self, make_rule, generate_output_file = True, make_output_filename=None,
-                 abort_on_error=True):
+                 abort_on_error=True, timeout_seconds = 0):
         ''' make_rule is the string makefile rule that is executed. '''
         if generate_output_file and make_output_filename is None:
             # default makefile output filename
             make_output_filename = "make_" + make_rule.replace(" ", "_") + '.log'
-        super().__init__(abort_on_error=abort_on_error, process_output_filename=make_output_filename)
+        super().__init__(abort_on_error=abort_on_error, process_output_filename=make_output_filename,
+            timeout_seconds=timeout_seconds)
         self.make_rule = make_rule
 
     def module_name(self):
