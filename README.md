@@ -40,11 +40,11 @@ This repository contains the lecture schedule (including links to lecture summar
 | 10/23/2024 | [Clock domain crossing](./lectures/clock_crossing.md) |
 | 10/25/2024 | [Handshaking and Data Transfer](./lectures/handshaking.md) |
 | **Week 9** | |
-| 10/28/2024 | [Pipelining and Retiming](./lectures/pipelining.md) |
-| 10/30/2024 | [Poor Sequential Design Practice]() |
-| 11/1/2024  | [VHDL Part 1]()  |
+| 10/28/2024 | [Poor Design Practice](./lectures/poor_practice.md) |
+| 10/30/2024 | No Class (catch up) |
+| 11/1/2024  | [Pipelining and Retiming](./lectures/pipelining.md) |
 | **Week 10**|  |
-| 11/4/2024  | [VHDL Part 2]() |
+| 11/4/2024  | [VHDL Part 1]() [VHDL Part 2]() |
 | 11/6/2024  | [Digital Arithmetic #1]() |
 | 11/8/2024  | **Exam #2** |
 | **Week 11**| |
@@ -66,6 +66,11 @@ This repository contains the lecture schedule (including links to lecture summar
 | **Week 15**| |
 | 12/9/2024  | Review for Exam |
 | 12/11/2024 | No Class |
+
+<!--
+Other Lectures: 
+* ILA (Integrated Logic Analyzer)
+-->
 
 ## Assignments
 
