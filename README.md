@@ -54,7 +54,7 @@ This repository contains the lecture schedule (including links to lecture summar
 | **Week 12**| |
 | 11/18/2024 | [IO Resources]() |
 | 11/20/2024 | [AXI Bus]() |
-| 11/22/2024 | No Class |
+| 11/22/2024 | No Class (gone for research) |
 | **Week 13**| |
 | 11/25/2024 | No Class (Gone for research) |
 | 11/27/2024 | No Class - Thanksgiving Break |
@@ -65,7 +65,7 @@ This repository contains the lecture schedule (including links to lecture summar
 | 12/6/2024  | [AXI Bus]() |
 | **Week 15**| |
 | 12/9/2024  | Review for Exam |
-| 12/11/2024 | No Class |
+| 12/11/2024 | Final Exam in class |
 
 <!--
 Other Lectures: 
