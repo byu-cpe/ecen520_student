@@ -154,6 +154,9 @@ The following assignment specific items should be included in your repository:
     3. Add the following statement to your report: "I have read the ECEN 520 assignment submission process and have resolved any questions I have with this process"
 
 <!-- Notes:
+- General note for all assignments: Make the repoprt format more clear and instruct the students to leave the question headings so it is easier to grade. Perhaps give an example in this first assignment so they know what is expected. Remove the "suggestion 1"
+  - Tell them I will penalize on spelling mistakes. Use a simple spell checker (VS code has one)
+
 - Need to help people learn how to use the GUI simulator. They just tried using the command line only. (Maybe a tutorial on how to use the GUI simulator?)
 - Need to have a way for the testbench to generate an error when there is a problem so the python file catches the error.
 - Modify the testbench to include a function (compute parity) so the students have an example of how to use a function (when they do this for the receiver testbench)
