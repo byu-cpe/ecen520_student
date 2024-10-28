@@ -44,10 +44,10 @@ This repository contains the lecture schedule (including links to lecture summar
 | 10/30/2024 | No Class (catch up) |
 | 11/1/2024  | [Pipelining and Retiming](./lectures/pipelining.md) |
 | **Week 10**|  |
-| 11/4/2024  | [VHDL Part 1]()  |
-| 11/6/2024  |  |
+| 11/4/2024  | [VHDL Part 1](./lectures/vhdl1.md) |
+| 11/6/2024  | [VHDL Part 2](./lectures/vhdl2.md) |
 | 11/8/2024  | **Exam #2** |
-| **Week 11**| [VHDL Part 2]() |
+| **Week 11**|  |
 | 11/11/2024 | [Digital Arithmetic #1]() [Digital Arithmetic #2]() |
 | 11/13/2024 | [DSP Blocks]() |
 | 11/15/2024 | [DDR IP]() [CLB Blocks]() |
