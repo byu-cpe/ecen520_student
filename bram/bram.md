@@ -138,6 +138,8 @@ The following assignment specific items should be included in your repository:
 
 
 <!--
+- Use the description from Chu section 9.3.2 for creating a FIFO (have them read this and implement this)
+
 They use glbl.v file for simulation. Need to include in their repository.
 Don't hard code any paths in makefile! (perhaps have an environment variable that is set so I can reuse their makefiles)
 -->
