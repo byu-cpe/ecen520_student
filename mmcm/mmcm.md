@@ -171,7 +171,7 @@ Use markers to measure the frequency/period, the phase offset, and the duty cycl
 
 ## Implementation and Download
 
-Create a makefile rule `gen_bit` that generates a bitstream for your top-level design.
+Create a makefile rule `gen_bit` that generates a bitstream for your top-level design named `mmcm.bit`.
 Make sure your design meets the timing constraint and doesn't have any errors or warnings.
 Download your design and make sure it operates as expected.
 
