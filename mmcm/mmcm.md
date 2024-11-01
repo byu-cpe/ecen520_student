@@ -41,7 +41,7 @@ Note that you can look at the text for the module definition of this primitive i
     * CLKOUT3: Lower clock frequency as input, out of phase with input. Do not use power of 2 divide and make this at least 6x lower frequency than the input.
     * CLKOUT4: Higher clock frequency as input, out of phase with input. Do not use power of 2 multiply and make this at least 2.5x greater than input clock.
     * CLKOUT5: Lower clock frequency as input (but different from CLKOUT3), in phase with input
-    * CLKOUT6: Higher clock frequency as input (but different from CLKOUT5), in phase with input
+    * CLKOUT6: Higher clock frequency as input (but different from CLKOUT4), in phase with input
 
 ### Clock Domain Reset signals
 
