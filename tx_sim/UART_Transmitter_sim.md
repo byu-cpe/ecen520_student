@@ -160,6 +160,7 @@ The following assignment specific items should be included in your repository:
 - Need to help people learn how to use the GUI simulator. They just tried using the command line only. (Maybe a tutorial on how to use the GUI simulator?)
 - Need to have a way for the testbench to generate an error when there is a problem so the python file catches the error.
 - Modify the testbench to include a function (compute parity) so the students have an example of how to use a function (when they do this for the receiver testbench)
+- In the testbench, change the din regularly during a transmission to catch students who are not latching the din value on the signal.
 - Need to clarify that you need a reset for your always_ff blocks
 - Indicate that you can't use udnerscores in your makefile (.e., -gBAUD_RATE=115_200 won't work)
 - Clean up testbench so that it serves as a good example for the students to use for the receiver testbench
