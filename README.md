@@ -40,21 +40,21 @@ This repository contains the lecture schedule (including links to lecture summar
 | 10/23/2024 | [Clock domain crossing](./lectures/clock_crossing.md) |
 | 10/25/2024 | [Handshaking and Data Transfer](./lectures/handshaking.md) |
 | **Week 9** | |
-| 10/28/2024 | [Pipelining and Retiming](./lectures/pipelining.md) |
-| 10/30/2024 | [Poor Sequential Design Practice]() |
-| 11/1/2024  | [VHDL Part 1]()  |
+| 10/28/2024 | [Poor Design Practice](./lectures/poor_practice.md) |
+| 10/30/2024 | No Class (catch up) |
+| 11/1/2024  | [Pipelining and Retiming](./lectures/pipelining.md) |
 | **Week 10**|  |
-| 11/4/2024  | [VHDL Part 2]() |
-| 11/6/2024  | [Digital Arithmetic #1]() |
+| 11/4/2024  | [VHDL Part 1](./lectures/vhdl1.md) |
+| 11/6/2024  | [VHDL Part 2](./lectures/vhdl2.md) |
 | 11/8/2024  | **Exam #2** |
-| **Week 11**| |
-| 11/11/2024 | [Digital Arithmetic #2]() |
+| **Week 11**|  |
+| 11/11/2024 | [Digital Arithmetic #1]() [Digital Arithmetic #2]() |
 | 11/13/2024 | [DSP Blocks]() |
 | 11/15/2024 | [DDR IP]() [CLB Blocks]() |
 | **Week 12**| |
 | 11/18/2024 | [IO Resources]() |
 | 11/20/2024 | [AXI Bus]() |
-| 11/22/2024 | No Class |
+| 11/22/2024 | No Class (gone for research) |
 | **Week 13**| |
 | 11/25/2024 | No Class (Gone for research) |
 | 11/27/2024 | No Class - Thanksgiving Break |
@@ -65,7 +65,12 @@ This repository contains the lecture schedule (including links to lecture summar
 | 12/6/2024  | [AXI Bus]() |
 | **Week 15**| |
 | 12/9/2024  | Review for Exam |
-| 12/11/2024 | No Class |
+| 12/11/2024 | Final Exam in class |
+
+<!--
+Other Lectures: 
+* ILA (Integrated Logic Analyzer)
+-->
 
 ## Assignments
 
@@ -83,5 +88,5 @@ Review the [assignment mechanics](./resources/assignment_mechanics.md) page to l
 | 7 | [BRAM](./bram/bram.md) | `bram` |
 | 8 | [BRAM-Download](./bram_download/bram_download.md) | `bram_download` |
 | 9 | [MMCM Clocking](./mmcm/mmcm.md) | `mmcm` |
-| 10 | [VGA Controller (VHDL)]() | `vga` |
+| 10 | [VGA Controller (VHDL)](./vga/vga.md) | `vga` |
 

@@ -16,6 +16,7 @@ import datetime
 import time
 import threading
 import queue
+import pathlib
 
 #########################################################3
 # Base repo test classes
@@ -158,7 +159,9 @@ class repo_test():
 #########################################################3
 
 class file_exists_test(repo_test):
-    ''' Checks to see if files exist in a repo directory
+    ''' Checks to see if files exist in a repo directory. Note that this is a file system
+    check and not a git check. The intent of this test is to see if the given file is
+    created after executing some other command.
     '''
 
     def __init__(self, repo_file_list, abort_on_error=True):
@@ -180,6 +183,41 @@ class file_exists_test(repo_test):
                 repo_test_suite.print_error(f'File does not exist: {file_path}')
                 return_val = False
             repo_test_suite.print(f'File exists: {file_path}')
+        if return_val:
+            return self.success_result()
+        return self.error_result()
+
+class file_not_tracked_test(repo_test):
+    ''' Checks to see if a given file is 'not tracked' in the repository.
+    This is usually used to test for files that are created during the
+    build and not meant for tracking in the repository.
+    '''
+
+    def __init__(self, files_not_tracked_list):
+        super().__init__()
+        self.files_not_tracked_list = files_not_tracked_list
+
+    def module_name(self):
+        name_str = "Files Not Tracked: "
+        for repo_file in self.files_not_tracked_list:
+            name_str += f'{repo_file}, '
+        return name_str[:-2] # Remove the last two characters (', ')
+
+    def perform_test(self, repo_test_suite):
+        return_val = True
+        test_dir = repo_test_suite.working_path
+        tracked_dir_files = repo_test_suite.repo.git.ls_files(test_dir).splitlines()
+        # Get the filenames from the full path
+        tracked_dir_filenames = [pathlib.Path(file).name for file in tracked_dir_files]
+        #print(tracked_dir_filenames)
+        for not_tracked_file in self.files_not_tracked_list:
+            #file_path = repo_test_suite.working_path / repo_file
+            #print("checking",not_tracked_file)
+            # Check to make sure this file is not tracked
+            if not_tracked_file in tracked_dir_filenames:
+                repo_test_suite.print_error(f'File should NOT be tracked in the repository: {file_path}')
+                #print(repo_test_suite.repo.untracked_files)
+                return_val = False
         if return_val:
             return self.success_result()
         return self.error_result()

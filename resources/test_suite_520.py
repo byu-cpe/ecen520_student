@@ -59,6 +59,15 @@ class test_suite_520(repo_test_suite):
     def add_build_test(self,test):
         self.build_tests.append(test)
 
+    def add_filegen_test(self,gen_file_list):
+        ''' Add tests to see if a file was generated and if the file is not committed in the repo '''
+        # Add test to see if the file was generated (in the current working directory)
+        check_file_test = repo_test.file_exists_test(gen_file_list)
+        self.add_build_test(check_file_test)
+        # Add test to see if the file was generated (in the current working directory)
+        non_committed_files_test = repo_test.file_not_tracked_test(gen_file_list)
+        self.add_build_test(non_committed_files_test)
+
     def add_make_test(self,make_rule,timeout_seconds = 5*60):
         ''' Add a makefile rule test '''
         make_test = repo_test.make_test(make_rule,timeout_seconds=timeout_seconds)
