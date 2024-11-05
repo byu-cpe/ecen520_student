@@ -38,10 +38,10 @@ Note that you can look at the text for the module definition of this primitive i
   * Create additional clock outputs with the following requirements:
     * CLKOUT1: Same clock frequency as input, phase shifted 180 degrees, 25% duty cycle
     * CLKOUT2: Same clock frequency as input, phase shifted 90 degrees, 75% duty cycle
-    * CLKOUT3: Lower clock frequency as input, out of phase with input. Do not use power of 2 divide and make this at least 6x lower frequency than the input.
-    * CLKOUT4: Higher clock frequency as input, out of phase with input. Do not use power of 2 multiply and make this at least 2.5x greater than input clock.
-    * CLKOUT5: Lower clock frequency as input (but different from CLKOUT3), in phase with input
-    * CLKOUT6: Higher clock frequency as input (but different from CLKOUT5), in phase with input
+    * CLKOUT3: Lower clock frequency than input, out of phase with input. Do not use power of 2 divide and make this at least 6x lower frequency than the input.
+    * CLKOUT4: Higher clock frequency than input, out of phase with input. Do not use power of 2 multiply and make this at least 2.5x greater than input clock.
+    * CLKOUT5: Lower clock frequency than input (but different from CLKOUT3), in phase with input
+    * CLKOUT6: Higher clock frequency than input (but different from CLKOUT5), in phase with input
 
 ### Clock Domain Reset signals
 
@@ -69,7 +69,7 @@ For this part you will create enable signals in various clock domains and "count
   * Create a single pulse in CLKOUT3 that occurs every 4 clock cycles (PULSE3). Make sure this pulse is glitch free.
   * Create a single pulse in CLKOUT4 that occurs every 100 clock cycles (PULSE4). Make sure this pulse is glitch free.
   * Create a 32-bit counter in the CLKOUT0 domain that counts the PULSE3 pulses. Note that you should only count once for each unique PULSE3 signal. This counter will be referred to as PULSE3CNT.
-  * Create a 32-bit counter in the CLKOUT0 domain that counts the PULSE4 pulses. Note that you should only count once for each unique PULSE3 signal. This counter will be referred to as PULSE4CNT.
+  * Create a 32-bit counter in the CLKOUT0 domain that counts the PULSE4 pulses. Note that you should only count once for each unique PULSE4 signal. This counter will be referred to as PULSE4CNT.
 
 When synchronizing the pulse signal that crosses clock domains, you will want to use the `ASYNC_REG` attribute to instruct the synthesis tool that these signals are asynchronous.
 This attribute specifices that (1) A register can receive asynchronous data on the D input pin relative to its source clock and (2) a register is a synchronizing register within a synchronization chain.
