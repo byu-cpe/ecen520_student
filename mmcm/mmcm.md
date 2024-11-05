@@ -14,7 +14,7 @@ Create your top-level design with the following ports and parameters.
 | CLK100MHZ | Input | 1 | Clock |
 | CPU_RESETN | Input | 1 | Reset (low asserted) |
 | SW | Input | 4 | Switches (Determine which counter to display) |
-| LED | Output | 4 | Board LEDs (deisplay the switches) |
+| LED | Output | 4 | Board LEDs (display the switches) |
 | AN | Output | 8 | Anode signals for the seven segment display |
 | CA, CB, CC, CD, CE, CF, CG | 1 each | Output | Seven segment display cathode signals |
 | DP | Output | 1 | Seven segment display digit point signal |
