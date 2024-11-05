@@ -66,8 +66,8 @@ These counters will be referred to later in the description as CNT0, CNT1, ... C
 
 For this part you will create enable signals in various clock domains and "count" these enable pulses in a different clock domain. 
 
-  * Create a single pulse in CLKOUT3 that occurs every 4 clock cycles (PULSE3). Make sure this pulse is glitch free.
-  * Create a single pulse in CLKOUT4 that occurs every 100 clock cycles (PULSE4). Make sure this pulse is glitch free.
+  * Create a single pulse in the CLKOUT3 domain that is asserted for one clock cycle every 4 clock cycles (PULSE3). Make sure this pulse is glitch free.
+  * Create a single pulse in the CLKOUT4 domain that is asserted for one clock cycle every 100 clock cycles (PULSE4). Make sure this pulse is glitch free.
   * Create a 32-bit counter in the CLKOUT0 domain that counts the PULSE3 pulses. Note that you should only count once for each unique PULSE3 signal. This counter will be referred to as PULSE3CNT.
   * Create a 32-bit counter in the CLKOUT0 domain that counts the PULSE4 pulses. Note that you should only count once for each unique PULSE4 signal. This counter will be referred to as PULSE4CNT.
 
@@ -89,7 +89,7 @@ Do **NOT** use deskewing in this configuration (i.e., do not align the input CLK
 The goal here is to make a second MMCM that is *not* necessarily synchronous with the input clock (in most cases you would just make them synchronous).
 This MMCM should be reset when the first MMCM is not locked (i.e., the output of the first locked signal should drive the input of the second reset with an inverter so that the second MMCM doesn't start to operate until the first one has locked).
 Create a counter for this new clock domain named CNTB_0. 
-This counter should be reset using an appropriate reset signal.
+This counter should be reset using an appropriate reset signal (i.e., a reset signal that is synchronous with the clock domain of CNTB_0).
 
 ### Metastability Circuit
 
