@@ -167,7 +167,7 @@ The following assignment specific items should be included in your repository:
     1. Provide a table summarizing the resources your design uses. Use the template table below. You can get this information from the implementation utilization report.
     1. Determine the "Worst Negative Slack" (or WNS). This is found in the timing report and indicates how much timing you slack you have with the current clocking (we will discuss this later in the semester).
     1. Indicate how many times you had to synthesize your design
-    1. Indicate how many times you had to download your bitstream before your circuit worked.
+    1. Indicate how many times you had to download your bitstream before your circuit worked. Note that I want two numbers: number of synthesis attempts and number of download attempts. Do not mix these together.
 
 Sample Resource Utilization Table:
 

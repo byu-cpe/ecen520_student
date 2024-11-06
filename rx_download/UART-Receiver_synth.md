@@ -143,6 +143,11 @@ You will need to add the command line option to change the baud rate of your top
 ## Implementation and Download
 
 At this point you are ready to implement your design, generate a bitfile and download it to your board.
+Ideally, you will just synthesize your design, generate a bitfile, and it will work the first time you download it.
+In reality, most people will have to go through this process a few times to resolve synthesis and implementation issues.
+**Make sure you keep track of the number of times you 'synthesize' and the number of times you 'download' your bitstream.** 
+This will be required for your assignment report.
+
 Create a new makefile rule named `gen_bit` that will generate a bitfile named `rxtx_top.bit` for your top-level design with the default top-level parameters.
 Download your design to your board and use 'putty' to make sure the UART receiver is working correctly using Putty or some other terminal emulator. You will need to transmit signals from 'putty' to your board, you can do this by pressing 'ctrl+j' in the 'putty' emulator, and then using your keyboard to send char values.
 
@@ -189,11 +194,13 @@ The following assignment specific items should be included in your repository:
        * Summarize the `no_input_delay` and `no_output_delay` section of the report.
        * How many total endpoints are there on your clock signal?
        * Find the first net in the `Max Delay Paths` section and indicate the source and destination of this maximum path.
-    1. Indicate how many times you had to synthesize and download your bitstream before your circuit worked.
+    1. Indicate how many times you had to synthesize and download your bitstream before your circuit worked. Provide two numbers: one for synthesis attempts and one for download attempts.
 
 
 <!--
 Notes:
+- Need to improve the ssd_check and testbench.
+
 - Warnings:
   - Teach them how to set the tools to ignore warnings and how to get rid of warnings
   - Tell them that they should not have *any* warnings during synthesis
