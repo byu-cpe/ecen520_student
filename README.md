@@ -48,9 +48,9 @@ This repository contains the lecture schedule (including links to lecture summar
 | 11/6/2024  | [VHDL Part 2](./lectures/vhdl2.md) |
 | 11/8/2024  | **Exam #2** |
 | **Week 11**|  |
-| 11/11/2024 | [Digital Arithmetic #1]()  |
-| 11/13/2024 | [Digital Arithmetic #2]() |
-| 11/15/2024 | [DSP Blocks]()  |
+| 11/11/2024 | [Digital Arithmetic #1](./lectures/arith1.md)  |
+| 11/13/2024 | [Digital Arithmetic #2](./lectures/arith1.md) |
+| 11/15/2024 | [DSP Blocks](./lectures/dsp.md)  |
 | **Week 12**| |
 | 11/18/2024 | [DDR IP]() |
 | 11/20/2024 | [CLB Blocks]() [IO Resources]() |
