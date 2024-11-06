@@ -14,7 +14,7 @@ Create your top-level design with the following ports and parameters.
 | CLK100MHZ | Input | 1 | Clock |
 | CPU_RESETN | Input | 1 | Reset (low asserted) |
 | SW | Input | 4 | Switches (Determine which counter to display) |
-| LED | Output | 4 | Board LEDs (deisplay the switches) |
+| LED | Output | 4 | Board LEDs (display the switches) |
 | AN | Output | 8 | Anode signals for the seven segment display |
 | CA, CB, CC, CD, CE, CF, CG | 1 each | Output | Seven segment display cathode signals |
 | DP | Output | 1 | Seven segment display digit point signal |
@@ -38,10 +38,10 @@ Note that you can look at the text for the module definition of this primitive i
   * Create additional clock outputs with the following requirements:
     * CLKOUT1: Same clock frequency as input, phase shifted 180 degrees, 25% duty cycle
     * CLKOUT2: Same clock frequency as input, phase shifted 90 degrees, 75% duty cycle
-    * CLKOUT3: Lower clock frequency as input, out of phase with input. Do not use power of 2 divide and make this at least 6x lower frequency than the input.
-    * CLKOUT4: Higher clock frequency as input, out of phase with input. Do not use power of 2 multiply and make this at least 2.5x greater than input clock.
-    * CLKOUT5: Lower clock frequency as input (but different from CLKOUT3), in phase with input
-    * CLKOUT6: Higher clock frequency as input (but different from CLKOUT5), in phase with input
+    * CLKOUT3: Lower clock frequency than input, out of phase with input. Do not use power of 2 divide and make this at least 6x lower frequency than the input.
+    * CLKOUT4: Higher clock frequency than input, out of phase with input. Do not use power of 2 multiply and make this at least 2.5x greater than input clock.
+    * CLKOUT5: Lower clock frequency than input (but different from CLKOUT3), in phase with input
+    * CLKOUT6: Higher clock frequency than input (but different from CLKOUT4), in phase with input
 
 ### Clock Domain Reset signals
 
@@ -66,10 +66,10 @@ These counters will be referred to later in the description as CNT0, CNT1, ... C
 
 For this part you will create enable signals in various clock domains and "count" these enable pulses in a different clock domain. 
 
-  * Create a single pulse in CLKOUT3 that occurs every 4 clock cycles (PULSE3). Make sure this pulse is glitch free.
-  * Create a single pulse in CLKOUT4 that occurs every 100 clock cycles (PULSE4). Make sure this pulse is glitch free.
+  * Create a single pulse in the CLKOUT3 domain that is asserted for one clock cycle every 4 clock cycles (PULSE3). Make sure this pulse is glitch free.
+  * Create a single pulse in the CLKOUT4 domain that is asserted for one clock cycle every 100 clock cycles (PULSE4). Make sure this pulse is glitch free.
   * Create a 32-bit counter in the CLKOUT0 domain that counts the PULSE3 pulses. Note that you should only count once for each unique PULSE3 signal. This counter will be referred to as PULSE3CNT.
-  * Create a 32-bit counter in the CLKOUT0 domain that counts the PULSE4 pulses. Note that you should only count once for each unique PULSE3 signal. This counter will be referred to as PULSE4CNT.
+  * Create a 32-bit counter in the CLKOUT0 domain that counts the PULSE4 pulses. Note that you should only count once for each unique PULSE4 signal. This counter will be referred to as PULSE4CNT.
 
 When synchronizing the pulse signal that crosses clock domains, you will want to use the `ASYNC_REG` attribute to instruct the synthesis tool that these signals are asynchronous.
 This attribute specifices that (1) A register can receive asynchronous data on the D input pin relative to its source clock and (2) a register is a synchronizing register within a synchronization chain.
@@ -89,7 +89,7 @@ Do **NOT** use deskewing in this configuration (i.e., do not align the input CLK
 The goal here is to make a second MMCM that is *not* necessarily synchronous with the input clock (in most cases you would just make them synchronous).
 This MMCM should be reset when the first MMCM is not locked (i.e., the output of the first locked signal should drive the input of the second reset with an inverter so that the second MMCM doesn't start to operate until the first one has locked).
 Create a counter for this new clock domain named CNTB_0. 
-This counter should be reset using an appropriate reset signal.
+This counter should be reset using an appropriate reset signal (i.e., a reset signal that is synchronous with the clock domain of CNTB_0).
 
 ### Metastability Circuit
 

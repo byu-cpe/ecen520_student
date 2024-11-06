@@ -48,19 +48,19 @@ This repository contains the lecture schedule (including links to lecture summar
 | 11/6/2024  | [VHDL Part 2](./lectures/vhdl2.md) |
 | 11/8/2024  | **Exam #2** |
 | **Week 11**|  |
-| 11/11/2024 | [Digital Arithmetic #1]() [Digital Arithmetic #2]() |
-| 11/13/2024 | [DSP Blocks]() |
-| 11/15/2024 | [DDR IP]() [CLB Blocks]() |
+| 11/11/2024 | [Digital Arithmetic #1]()  |
+| 11/13/2024 | [Digital Arithmetic #2]() |
+| 11/15/2024 | [DSP Blocks]()  |
 | **Week 12**| |
-| 11/18/2024 | [IO Resources]() |
-| 11/20/2024 | [AXI Bus]() |
+| 11/18/2024 | [DDR IP]() |
+| 11/20/2024 | [CLB Blocks]() [IO Resources]() |
 | 11/22/2024 | No Class (gone for research) |
 | **Week 13**| |
 | 11/25/2024 | No Class (Gone for research) |
 | 11/27/2024 | No Class - Thanksgiving Break |
 | 11/29/2024 | No Class - Thanksgiving Break |
 | **Week 14**| |
-| 12/2/2024  | [IP Integrator]() |
+| 12/2/2024  | [AXI Bus]() [IP Integrator]() |
 | 12/4/2024  | [Simulation Coverage/Assertions]() |
 | 12/6/2024  | [AXI Bus]() |
 | **Week 15**| |
