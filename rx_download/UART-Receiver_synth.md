@@ -200,7 +200,7 @@ The following assignment specific items should be included in your repository:
 <!--
 Notes:
 - Need to improve the ssd_check and testbench.
-
+- Clarify that the digit points should not be driven
 - Warnings:
   - Teach them how to set the tools to ignore warnings and how to get rid of warnings
   - Tell them that they should not have *any* warnings during synthesis
