@@ -17,3 +17,5 @@ This lecture will provide a brief overview of the VHDL language.
   * Conditional signal assignment
   * Selected signal assignment
 
+
+
