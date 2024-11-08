@@ -15,6 +15,8 @@ from repo_test_suite import repo_test_suite
 #   This will allow for the makefile rule to fail and mark the test as a failure
 # - Check to see if the starter code has been updated (to match the date of the tag)
 # - For uncommitted files, should we only check for the current directory or the entire repo?
+# - In the main set of python scripts (not the test_suite_520) provide a way of copying files from the build before the clean.
+#   This way you can save the files somewhere else for inpection wihtout having to rerun without the clean step.
 
 class test_suite_520(repo_test_suite):
 
