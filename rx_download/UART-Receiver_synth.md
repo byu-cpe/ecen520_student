@@ -111,7 +111,7 @@ Design your top-level circuit as follows:
 
 ## Top-level testbench
 
-Create testbench for your top-level rx/tx design by copying and modifying the [tx_top_tb.sv](../tx_download/tx_top_tb.sv) file from the tx download assignment and renaming to rxtx_top_tb.sv:
+Create testbench for your top-level rx/tx design by copying and modifying the [tx_top_tb.sv](../tx_download/tx_top_tb.sv) file from the tx download assignment and renaming to `rxtx_top_tb.sv`:
 The following adaptations should be made to the structure of this testbench:
 * Add a parameter MIN_SEGMENT_DISPLAY_US to the testbench with a default of 200. The defaults for the testbench should be a baud rate of 19200, a clock frequency of 100 MHz, and odd parity.
 * Remove the rx_model simulation model
@@ -215,4 +215,5 @@ Notes:
     - Explain how to use the "check signal" or end of line
     - Get rid of the initial warning
     - Sample the data every cycle instead of at the end of a segment to avoid one cycle off issue
+  - Need to specify specific names for the top for ease of grading (testbench does require a name fortunately)
 -->
