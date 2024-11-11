@@ -80,6 +80,9 @@ Add makefile rules named `sim_top`, using default parameters, and `sim_top_100`,
 ### Implementation and Download
 
 At this point you are ready to implement your design, generate a bitfile and download your design to your board.
+It is likely that you will iterate more than once through the synthesis and bitstream download steps.
+Carefully track the number of times you synthesize your design and track the number of times you had to download your design on the board.
+These numbers will be required in the report section of this assignment.
 Create a new makefile rule named `gen_bit` that will generate a bitfile named `spi_adxl362.bit` for your top-level design with the default top-level parameters.
 Create a new makefile rule named `gen_bit_100` that will generate a bitfile named `spi_adxl362_100.bit` with a 100_000 SCLK frequency.
 
@@ -124,7 +127,7 @@ Other operations:
        * Summarize the `no_input_delay` and `no_output_delay` section of the report.
        * How many total endpoints are there on your clock signal?
        * Find the first net in the `Max Delay Paths` section and indicate the source and destination of this maximum path.
-    1. Indicate how many times you had to synthesize and download your bitstream before your circuit worked.
+    1. Indicate how many times you had to (1) synthesize your design and (2) download your bitstream before your circuit worked. Note that two different numbers are needed for this response.
 
 <!--
 - Add an exercise where the students do one of the following:
@@ -132,4 +135,6 @@ Other operations:
   2. Start going through the timing report in more detail.
   3. Have a constraint that requires the SPICLK and MOSI/MISO flip flps to be very close to the I/O. Need to make sure the a the timing delay between CLK/MISO/MOSI is as small as possible.
   4. Add a jitter constraint to the clock (new starting with his assignment). Also add false_paths constraints for the SWitches and LEDs.
+- Provide instructions for putting board in a known state. Many boards are "locked" based on previous student user. Provide instructions on how to "unlock" and put the board in an initial state.
+- Have studens put in false path constraints for i/o without flip flops
 -->
