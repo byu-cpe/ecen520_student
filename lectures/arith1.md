@@ -17,6 +17,3 @@ This lecture summarizes the basics of creating proper digital arithmetic HDL usi
     * unsigned/unsigned
     * signed/unsigned and signed/unsigned
     * signed/signed
-  * Verilog 95 artihmetic rules
-  * Signed artihmetic in Verilog 2001
-  * Rules for arithmetic: mismatched types, incomplete size, etc.

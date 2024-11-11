@@ -49,18 +49,18 @@ This repository contains the lecture schedule (including links to lecture summar
 | 11/8/2024  | **Exam #2** |
 | **Week 11**|  |
 | 11/11/2024 | [Digital Arithmetic #1](./lectures/arith1.md)  |
-| 11/13/2024 | [Digital Arithmetic #2](./lectures/arith1.md) |
+| 11/13/2024 | [Digital Arithmetic #2](./lectures/arith2.md) |
 | 11/15/2024 | [DSP Blocks](./lectures/dsp.md)  |
 | **Week 12**| |
 | 11/18/2024 | [DDR IP]() |
-| 11/20/2024 | [CLB Blocks]() [IO Resources]() |
+| 11/20/2024 | [CLB Blocks]()  |
 | 11/22/2024 | No Class (gone for research) |
 | **Week 13**| |
 | 11/25/2024 | No Class (Gone for research) |
 | 11/27/2024 | No Class - Thanksgiving Break |
 | 11/29/2024 | No Class - Thanksgiving Break |
 | **Week 14**| |
-| 12/2/2024  | [AXI Bus]() [IP Integrator]() |
+| 12/2/2024  | [IO Resources]() [AXI Bus]() [IP Integrator]() |
 | 12/4/2024  | [Simulation Coverage/Assertions]() |
 | 12/6/2024  | [AXI Bus]() |
 | **Week 15**| |
@@ -89,4 +89,5 @@ Review the [assignment mechanics](./resources/assignment_mechanics.md) page to l
 | 8 | [BRAM-Download](./bram_download/bram_download.md) | `bram_download` |
 | 9 | [MMCM Clocking](./mmcm/mmcm.md) | `mmcm` |
 | 10 | [VGA Controller (VHDL)](./vga/vga.md) | `vga` |
+| 11 | [DDR](./ddr/ddr.md) | `ddr` |
 
