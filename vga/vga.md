@@ -87,8 +87,8 @@ Design your top-level as follows:
 * Generate the colors on the RGB as follows:
   * When no button is pressed, display the color bar pattern (see below)
   * When BTNC is pressed, blank the screen (display black)
-  * When BTNU is pressed, display a white screen
-  * When BTND is pressed, display the screen with the color specified by the switches where the 12 switches specify the color as follows:
+  * When BTNU is pressed, display the screen with the color specified by the switches where the 12 switches specify the color as follows:
+  * When BTND is pressed, display a white screen
     * [11:8] : Red
     * [7:4] : Green
     * [3:0] : Blue
