@@ -4,16 +4,7 @@
 read_verilog -sv ddr_top.sv
 read_xdc ddr_top.xdc 
 
-# See the following for synthesis
-# ddr/proj/mig_7series_0_ex/mig_7series_0_ex.runs/synth_1/example_top.tcl
-# And the following for implementation
-# ddr/proj/mig_7series_0_ex/mig_7series_0_ex.runs/impl_1/example_top.tcl
-
-# read_ip -quiet mig_7series_0/mig_7series_0.xci
-# set_property used_in_implementation false [get_files -all /home/wirthlin/ee620/520-assignments-wirthlin/ddr/mig_7series_0/mig_7series_0/user_design/constraints/mig_7series_0_ooc.xdc]
-# set_property used_in_implementation false [get_files -all /home/wirthlin/ee620/520-assignments-wirthlin/ddr/mig_7series_0/mig_7series_0/user_design/constraints/mig_7series_0.xdc]
-
-
+# read the DDR IP files
 read_verilog ./mig_7series_0/mig_7series_0/user_design/rtl/mig_7series_0.v
  read_verilog ./mig_7series_0/mig_7series_0/user_design/rtl/mig_7series_0_mig.v
   read_verilog ./mig_7series_0/mig_7series_0/user_design/rtl/clocking/mig_7series_v4_2_iodelay_ctrl.v

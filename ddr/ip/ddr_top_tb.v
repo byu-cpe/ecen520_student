@@ -76,32 +76,6 @@
 
 module ddr_top_tb;
 
-
-//    //***************************************************************************
-//    // Traffic Gen related parameters
-//    //***************************************************************************
-//    parameter SIMULATION            = "TRUE";
-//    parameter PORT_MODE             = "BI_MODE";
-//    parameter DATA_MODE             = 4'b0010;
-//    parameter TST_MEM_INSTR_MODE    = "R_W_INSTR_MODE";
-//    parameter EYE_TEST              = "FALSE";
-//                                      // set EYE_TEST = "TRUE" to probe memory
-//                                      // signals. Traffic Generator will only
-//                                      // write to one single location and no
-//                                      // read transactions will be generated.
-//    parameter DATA_PATTERN          = "DGEN_ALL";
-//                                       // For small devices, choose one only.
-//                                       // For large device, choose "DGEN_ALL"
-//                                       // "DGEN_HAMMER", "DGEN_WALKING1",
-//                                       // "DGEN_WALKING0","DGEN_ADDR","
-//                                       // "DGEN_NEIGHBOR","DGEN_PRBS","DGEN_ALL"
-//    parameter CMD_PATTERN           = "CGEN_ALL";
-//                                       // "CGEN_PRBS","CGEN_FIXED","CGEN_BRAM",
-//                                       // "CGEN_SEQUENTIAL", "CGEN_ALL"
-//    parameter BEGIN_ADDRESS         = 32'h00000000;
-//    parameter END_ADDRESS           = 32'h00000fff;
-//    parameter PRBS_EADDR_MASK_POS   = 32'hff000000;
-
    //***************************************************************************
    // The following parameters refer to width of various ports
    //***************************************************************************

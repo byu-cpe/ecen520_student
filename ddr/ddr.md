@@ -23,4 +23,5 @@ The following assignment specific items should be included in your repository:
   * `gen_bit`
 2. You need to have at least 4 "Error" commits in your repository
 3. Assignment specific Questions:
+  * "DDR Controller IP" Questions
 

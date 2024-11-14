@@ -143,6 +143,18 @@ Further, create a `makefile` that includes the following rules:
 Experiment with your clean and build rules to make sure you can easily remove and recreate the IP from your repository.
 You should make sure your IP is cleaned as part of your top-level assignment clean process.
 
+## Generate the Example Design project
+
+The DDR controller IP comes with an example project that demonstrates how to use the DDR controller.
+This particular project is not designed for the Nexys4 DDR board we are using but we need several files from this project to simulate and build the DDR controller.
+
+A TCL script, [create_example_project](./create_example_project.tcl), has been created to generate the example project in a directory named `example_design`.
+Run the following command to generate the example project using this TCL script:
+```
+vivado -mode batch -source create_example_project.tcl -nojournal -notrace
+```
+Include a makefile rule to create this project and make sure you delete this directory as part of your clean process.
+
 ## Example DDR Project
 
 A sample DDR project has been created for you to demonstrate how to use the DDR controller on the Nexys4 DDR board.
@@ -150,32 +162,84 @@ You will go through the process of simulating and building a bitstream to demons
 This section will describe how to build and simulate this example project.
 You will likely refer to this design as part of your assignment.
 
+### Top Level Design
 
+The top-level design for the DDR controller is in the file [`ddr_top.sv`](./ddr_top.sv).
+You will need to carefully review and understand this design.
+This design is organized as follows:
+* It contains a MMCM to generate a 200 MHz clock for the DDR controller
+* It contains the DDR controller IP to interface with the DDR memory
+* It contains a simple state machine to facilitate reading and writing data to the DDR memory with the buttons and switches
 
+The design operates as follows:
+* There is a 27-bit address register for the memory interface. It can be set as follows:
+  * Set the 16 switches to the lower 16 address bits and press BTNC
+  * Set the bottom 11 switches to the upper 11 address bits and press BTNU
+* Perform a byte write by setting the lower 8 switches and pressing BTNL. The data will be written to the address specified by the address register.
+* Perform a byte read by pressing BTNR. The data at the address specified by the address register will be displayed on the LEDs.
 
-In this section you will experiment with the example design created by the DDR controller IP.
+Review the [IP manual](https://docs.amd.com/r/en-US/ug586_7Series_MIS) to answer the following questions in your report.
+Put your answers under the heading: "DDR Controller IP".
+* What is the purpose of the `app_rd_data_valid` signal?
+* What is the width the controller data bus?
+* What is the purpose of the `app_wdf_data` signal?
+* Why are two different states needed for the Write process (`WRITE_DATA_FIFO` and `ISSUE_WRITE_CMD`)?
 
-1. Simulate the example design (become familiar with the simulation and ask questions)
-2. Synthesize the design (and give extra work for targing board)
-3. Download the bitstream to the board
+Included with the top-level design is the file `ddr_top.xdc` that describes the pinout for the top-level design _excluding_ the pins for the DDR controller.
 
+### Simulating the Design
+
+Simulate the design in questasim to learn about how the design operates as well as to see how the simulation environment is setup.
+You will need to create your own custom simulation environment for your DDR design and can use this design example as a reference.
+
+The testbench `ddr_top_tb.v` has been created to demonstrate simulation of the top-level design.
+This testbench was created based on the "example project" that can be created from the IP within the IP generator.
+This testbench is written in verilog so it has less features than a systemverilog testbench.
+The testbench includes the following features:
+* It generates the top-level 100 MHz clock
+* It generates a reset signal
+* It instances the top-level design
+* It instances a DDR2 memory model to simulate the DDR memory
+* After the memory has initialized and calibrated, the testbench performs a few simple reads and writes
+
+There are two steps you need to complete before running the simulation.
+
+#### Update Modelsim.ini
+
+Before running the simulation, you will need to modify your `modelsim.ini` file to include three libraries that are needed to simulate the DDR controller.
+These libraries include the `unisim`, `secureip`, and `unisims_ver` libraries.
+The following lines can be added to your `modelsim.ini` file:
+ ```unisim = /mnt/toolsdisk/Xilinx/Vivado/2024.1/data/questa/unisim
+secureip = /mnt/toolsdisk/Xilinx/Vivado/2024.1/data/questa/secureip
+unisims_ver = /mnt/toolsdisk/Xilinx/Vivado/2024.1/data/questa/unisims_ver
 ```
-open_example_project -force -dir /home/wirthlin/ee620/520-assignments-wirthlin/ddr/proj [get_ips  mig_7series_0]
-source /home/wirthlin/ee620/520-assignments-wirthlin/ddr/mig_7series_0/mig_7series_0_ex.tcl -notrace
+Alternatively, you can execute the following commands to update your `modelsim.ini` file:
+```
+vmap unisim /tools/Xilinx/Vivado/2024.1/data/questa/unisim
+vmap secureip /tools/Xilinx/Vivado/2024.1/data/questa/secureip
+vmap unisims_ver /tools/Xilinx/Vivado/2024.1/data/questa/unisims_ver
 ```
 
+#### Copy Simulation Files
 
-  * `managed_ip_projects` (a directory that contains the synthesized products. This will be relatively empty at this point.)
-  * `mig_7series_0` (a directory containing the DDR controller IP. Design files and simulation files)
-    * `example_design` (a directory containing the example design including a testbench and memory simulation model)
+There are several simulation files from Vivado installation that you need to include in your `IP` directory.
+* `./mig_7series_0/example_design/ddr2_model.v`
+* `./mig_7series_0/example_design/ddr2_model_parameters.vh`
 
+### Synthesizing the Design
 
-* "Generate": (synthesis)
+A synthesis build script [`ddr_top_synth.tcl`]() has been created to generate a bitfile for the design.
+This synthesis script will read in the top-level design file as well as the files associated with the DDR controller.
+Familiarize yourself with script as you will need to make a similar script for your assignment design.
+Run the script as follows:
+```
+	vivado -mode batch -source ddr_top_synth.tcl -log ./logs/ddr_top_implement.log -nojournal -notrace
+```
+Create a makefile rule to generate the bitfile for the design.
 
-The "Generate Output Products" dialog box will appear.
-Click "Generate" to create the DDR controller IP (this will take some time).
+### Running the Design
 
-Questions:
-* How to archive this in a git repository? (tcl script?)
-* How to setup a simulation?
-* Do you need to run synthesis or can you just run it as part of your top level design?
+After generating the bitfile, program the Nexys4 DDR board with the bitfile.
+Run the design and make sure you can read and write data to different addresses of the DDR memory.
+
+At this point you have all the files you need to generate your own custom DDR design.
