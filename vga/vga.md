@@ -88,10 +88,10 @@ Design your top-level as follows:
   * When no button is pressed, display the color bar pattern (see below)
   * When BTNC is pressed, blank the screen (display black)
   * When BTNU is pressed, display the screen with the color specified by the switches where the 12 switches specify the color as follows:
-  * When BTND is pressed, display a white screen
     * [11:8] : Red
     * [7:4] : Green
     * [3:0] : Blue
+  * When BTND is pressed, display a white screen
 * Create a 32-bit counter that counts the number of frames that have been displayed
 * Instance your seven segment controller and display the frame count on the display
 * Have the LEDs display the values on the switches
