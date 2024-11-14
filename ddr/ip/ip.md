@@ -202,10 +202,6 @@ The testbench includes the following features:
 * It instances a DDR2 memory model to simulate the DDR memory
 * After the memory has initialized and calibrated, the testbench performs a few simple reads and writes
 
-There are two steps you need to complete before running the simulation.
-
-#### Update Modelsim.ini
-
 Before running the simulation, you will need to modify your `modelsim.ini` file to include three libraries that are needed to simulate the DDR controller.
 These libraries include the `unisim`, `secureip`, and `unisims_ver` libraries.
 The following lines can be added to your `modelsim.ini` file:
@@ -220,11 +216,14 @@ vmap secureip /tools/Xilinx/Vivado/2024.1/data/questa/secureip
 vmap unisims_ver /tools/Xilinx/Vivado/2024.1/data/questa/unisims_ver
 ```
 
-#### Copy Simulation Files
-
-There are several simulation files from Vivado installation that you need to include in your `IP` directory.
-* `./mig_7series_0/example_design/ddr2_model.v`
-* `./mig_7series_0/example_design/ddr2_model_parameters.vh`
+You can run the simulation in GUI mode by executing the following command: `source ddr_top_sim.do`
+You will manually need to execute `run` to run the simulation.
+Run the simulation to answer the following questions.
+Put your answers under the heading: "DDR Controller Simulation".
+* What time does the `init_calib_complete` signal go high?
+* What are the values of the `ddr2_dq` signals during the first write caused by the `BTNL` button press?
+* What is the clock period of the `ddr2_ck_p` clock signal?
+* What is the clock period of the `cli_ui` clock signal?
 
 ### Synthesizing the Design
 
