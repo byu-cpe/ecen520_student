@@ -54,10 +54,10 @@ Create a makefile rule `sim_ddr_fifo` that performs this simulation.
 
 ## DDR UART FIFO Bitfile Generation
 
-Create a syntehsis script that will synthezie your design and generate a bitfile.
+Create a synthesis script that will synthesis your design and generate a bitfile named `ddr_fifo_top.bit`.
 Create a makefile rule `gen_bit` that performs this task.
 
-Make sure your bitstream operates corretly on the board.
+Make sure your bitstream operates correctly on the board.
 
 ## Submission
 
