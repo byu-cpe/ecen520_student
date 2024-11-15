@@ -52,16 +52,16 @@ This repository contains the lecture schedule (including links to lecture summar
 | 11/13/2024 | [Digital Arithmetic #2](./lectures/arith2.md) |
 | 11/15/2024 | [DSP Blocks](./lectures/dsp.md)  |
 | **Week 12**| |
-| 11/18/2024 | [DDR IP]() |
-| 11/20/2024 | [CLB Blocks]()  |
+| 11/18/2024 | [DDR](./lectures/ddr.md) |
+| 11/20/2024 | [IO Resources](./lectures/io.md)  |
 | 11/22/2024 | No Class (gone for research) |
 | **Week 13**| |
 | 11/25/2024 | No Class (Gone for research) |
 | 11/27/2024 | No Class - Thanksgiving Break |
 | 11/29/2024 | No Class - Thanksgiving Break |
 | **Week 14**| |
-| 12/2/2024  | [IO Resources]() [AXI Bus]() [IP Integrator]() |
-| 12/4/2024  | [Simulation Coverage/Assertions]() |
+| 12/2/2024  | [CLB Blocks](./lectures/clb.md) |
+| 12/4/2024  | [IP Integrator]() [Simulation Coverage/Assertions]() |
 | 12/6/2024  | [AXI Bus]() |
 | **Week 15**| |
 | 12/9/2024  | Review for Exam |
