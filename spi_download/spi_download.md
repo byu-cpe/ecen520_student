@@ -11,7 +11,7 @@ If you made any changes to your modules to resolve synthesis errors, rerun the t
 
 ## SPI Top-Level Design
 
-Create a top-level design that uses the following top-level ports:
+Create a top-level design in a file named `spi_top.sv` that uses the following top-level ports:
 
 | Port Name | Direction | Width | Function |
 | ---- | ---- | ---- | ----  |
@@ -56,7 +56,7 @@ Create a top-level circuit that includes the following:
 
 ## SPI Top-Level Testbench
 
-Create a top-level testbench of your top-level design that tests the operation of your top-level AXDL362L controller.
+Create a top-level testbench of your top-level design in a file named `spi_top_tb.sv`that tests the operation of your top-level AXDL362L controller.
 This testbench should be designed as follows:
 * Make the top-level testbench parameterizable with the top-level parameters
 * Create a free-running clock
