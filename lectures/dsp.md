@@ -5,8 +5,9 @@ This lecture reviews the internals of the 7 Series DSP.
 
 ## Reading
 
-  * [DSP Guide](https://www.xilinx.com/support/documentation/user_guides/ug479_7Series_DSP48E1.pdf)
-
+  * [DSP Guide](https://docs.amd.com/v/u/en-US/ug479_7Series_DSP48E1)
+    * Chapter 1: DSP48E1 Slice Overview
+    * Chapter 2: DSP48E1 Slice Architecture
 
 ## Key Concepts
 

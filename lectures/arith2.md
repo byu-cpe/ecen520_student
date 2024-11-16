@@ -9,4 +9,8 @@
 
 ## Key Concepts
 
+  * Verilog 95 artihmetic rules
+  * Signed artihmetic in Verilog 2001
+  * Rules for arithmetic: mismatched types, incomplete size, etc.
+
 

@@ -70,7 +70,7 @@ Create a top-level design in VHDL named `vga_top.vhd` with your VHDL VGA control
 | BTNU | Input | 1 | Button U - Color |
 | BTND | Input | 1 | Button D - White |
 | SW | Input | 12 | Switches (Specify color) |
-| LED | Output | 12 | Board LEDs (used for data and busy) |
+| LED | Output | 12 | Board LEDs (follow the switches) |
 | AN | Output | 8 | Anode signals for the seven segment display |
 | CA, CB, CC, CD, CE, CF, CG | 1 each | Output | Seven segment display cathode signals |
 | DP | Output | 1 | Seven segment display digit point signal |
@@ -87,13 +87,14 @@ Design your top-level as follows:
 * Generate the colors on the RGB as follows:
   * When no button is pressed, display the color bar pattern (see below)
   * When BTNC is pressed, blank the screen (display black)
-  * When BTNU is pressed, display a white screen
-  * When BTND is pressed, display the screen with the color specified by the switches where the 12 switches specify the color as follows:
+  * When BTNU is pressed, display the screen with the color specified by the switches where the 12 switches specify the color as follows:
     * [11:8] : Red
     * [7:4] : Green
     * [3:0] : Blue
+  * When BTND is pressed, display a white screen
 * Create a 32-bit counter that counts the number of frames that have been displayed
 * Instance your seven segment controller and display the frame count on the display
+* Have the LEDs display the values on the switches
 
 The color bar pattern displays a different color for each vertical line.
 You will need to set the 12 color signals to the appropriate color for each vertical line.
