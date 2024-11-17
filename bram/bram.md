@@ -139,6 +139,7 @@ The following assignment specific items should be included in your repository:
 
 
 <!--
+- Need to have check script copy the modelsim.ini file to the student's directory for grading outside of the repo OR have them commit the modelsim.ini file
 - Use the description from Chu section 9.3.2 for creating a FIFO (have them read this and implement this)
 
 They use glbl.v file for simulation. Need to include in their repository.
