@@ -43,7 +43,7 @@ Include the following parameters and associated default values in your design:
 
 ## DDR UART FIFO Simulation
 
-Create a top-level testbench that simulates the design in command line mode.
+Create a top-level testbench in a file named `ddr_uart_fifo_tb.sv` that simulates the design in command line mode.
 Instance your top-level design, the DDR memory controller, and the UART receiver and transmitter.
 Design your testbench to do the following;
 * Wait until the `init_calib_complete` signal is asserted
