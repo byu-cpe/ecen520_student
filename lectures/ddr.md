@@ -5,7 +5,7 @@ This lecture reviews how a DRAM functions and the key concepts needed to interfa
 
 **Reading**
 
-  * [Micron Data Sheet](https://media-www.micron.com/-/media/client/global/documents/products/data-sheet/dram/ddr2/1gb_ddr2.pdf?rev=854b480189b84d558d466bc18efe270c)
+  * [Micron Data Sheet](https://media.digikey.com/pdf/Data%20Sheets/Micron%20Technology%20Inc%20PDFs/MT47H256M4,128M8,64M16.pdf)
     * Functional Description: Page 10-11
     * Review block diagram: Figure 5
     * Pin assignments: pages 17-18
