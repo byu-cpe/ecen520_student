@@ -80,7 +80,7 @@ You can move back and forth between these pages by pressing the "Back" and "Next
   * Reference clock: Use System Clock  <!-- We generate the signal at the top level -->
   * Internal VREF: select enabled (change)
   * Leave all other settings at the default value
-* "Extended FPGA Options"
+* "Extended FPGA Options" (Internal Termination for High Range Banks)
   * Leave at default
 * "I/O Planning Options"
   * Select Fixed Pin Out
@@ -90,8 +90,7 @@ You can move back and forth between these pages by pressing the "Back" and "Next
   * Press the "Validate" button to validate the pinout
   * Press "Next" to continue
 * "System Signals Selection"
-  * "System Clock Pin Selection"
-    * For "sys_clk_i" select 35 for "Bank Number" and E3 for "Pin Number"
+  * Leave everything the same (no changes)
 * "Summary"
   * Select "Next"
 * "Simulation Options"
