@@ -204,9 +204,9 @@ The testbench includes the following features:
 Before running the simulation, you will need to modify your `modelsim.ini` file to include three libraries that are needed to simulate the DDR controller.
 These libraries include the `unisim`, `secureip`, and `unisims_ver` libraries.
 The following lines can be added to your `modelsim.ini` file:
- ```unisim = /mnt/toolsdisk/Xilinx/Vivado/2024.1/data/questa/unisim
-secureip = /mnt/toolsdisk/Xilinx/Vivado/2024.1/data/questa/secureip
-unisims_ver = /mnt/toolsdisk/Xilinx/Vivado/2024.1/data/questa/unisims_ver
+ ```unisim = /tools/Xilinx/Vivado/2024.1/data/questa/unisim
+secureip = /tools/Xilinx/Vivado/2024.1/data/questa/secureip
+unisims_ver = /tools/Xilinx/Vivado/2024.1/data/questa/unisims_ver
 ```
 Alternatively, you can execute the following commands to update your `modelsim.ini` file:
 ```
