@@ -33,7 +33,7 @@ In the "New IP Location" dialog box, enter the following information:
 * Simulator language: leave as 'mixed'
 * Choose your `ddr/ip` assignment directory as the location of the IP. 
 
-Select "OK" to create the directory.
+Select "Finish" to create the directory.
 You will then enter the "Manage IP" window.
 Creating this IP directory will create `managed_ip_project` subdirectory.
 This directory contains the global settings for the IP management window.
@@ -114,7 +114,7 @@ This link didn't work for me.
 The public link to this IP is: https://docs.amd.com/r/en-US/ug586_7Series_MIS
 
 After completing the IP generation process, generate a Tcl script that you can use to recreate your project at a later time.
-The following TCL command will generate a file named `make_ip.tcl` that you can run to recreate the IP and avoicd the GUI steps described above:
+The following TCL command will generate a file named `make_ip.tcl` that you can run to recreate the IP and avoid the GUI steps described above:
 `write_project_tcl make_ip.tcl`
 
 Exit the GUI.
