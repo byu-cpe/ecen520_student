@@ -91,4 +91,5 @@ Review the [assignment mechanics](./resources/assignment_mechanics.md) page to l
 | 9 | [MMCM Clocking](./mmcm/mmcm.md) | `mmcm` |
 | 10 | [VGA Controller (VHDL)](./vga/vga.md) | `vga` |
 | 11 | [DDR](./ddr/ddr.md) | `ddr` |
+| 11 | [Project](./project/project.md) | `project` |
 
