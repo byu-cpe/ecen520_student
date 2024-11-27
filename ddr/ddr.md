@@ -29,7 +29,7 @@ Create a top-level design named `ddr_uart_fifo.sv` that does the following:
   * When a character is received from the UART receiver, write the character to the DDR at the address specific by the write address register. Increment this address.
   * When BTNC is pressed, read the full DDR FIFO and send each character one at a time to the UART transmitter.
 * Instance your seven segment display controller and display the number of characters received from the UART receiver. This count should be the total sum of characters received and does not need to be reset after the FIFO buffer has been transferred.
-* If BTNU is pressed, reset the DDR FIFO counters
+* If BTNU is pressed, reset the DDR FIFO counters (i.e., ignore all the data that is in the FIFO). Do not reset the number of characters received counter.
 * Display the `init_calib_complete` signal on `LED16_B`
 
 Include the following parameters and associated default values in your design:
