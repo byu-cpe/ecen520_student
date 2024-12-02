@@ -16,7 +16,8 @@ This lecture reviews the I/O resources available on the 7 series FPGA.
   * The meaning and purpose of DCI
   * Input buffers: IBUF, IBUFG, IBUFDS
   * Output buffers and I/O buffers
+  * The purpose of input and output flip-flops in the ILOGIC and OLOGIC primitives
   * What is an I/O standard
   * Purpose of IDDR, ODDR blocks
-  * What is a SERDES and when should it be used
+  * What is a OSERDES/ISERDES and what do they do?
 

@@ -31,7 +31,7 @@ This lecture reviews how a DRAM functions and the key concepts needed to interfa
   * Be able to interpret Figure 5 of the data sheet (i.e., how a dram is organized)
   * Difference between banks, rows, and columns
   * Purpose of all signals on the device
-  * DRAM commands: Activate, precharge, refresh, read, write
+  * DRAM commands: Activate, precharge, refresh, read, write (when and how each command is needed)
   * How to perform single reads or burst reads with the dram
   * How to perform single writes or bursts of writes with the dram
 
