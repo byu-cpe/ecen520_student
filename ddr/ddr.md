@@ -50,7 +50,7 @@ Design your testbench to do the following;
 * Write several characters to the design by sending data over your transmitter. Print a message to the console when each character is sent.
 * Press BTNC to read the data back from the DDR FIFO. Print a message to the console when each character is receivfed
 
-Create a makefile rule `sim_ddr_fifo` that performs this simulation.
+Create a makefile rule `sim_ddr_uart_top` that performs this simulation.
 
 ## DDR UART FIFO Bitfile Generation
 
