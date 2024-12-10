@@ -201,7 +201,7 @@ The following assignment specific items should be included in your repository:
 2. You need to have at least 3 "Error" commits in your repository
 3. Assignment specific Questions:
   * Provide a summary of the number of resources your design uses (see the output from the utilization report).
-  * Provide an inline image of each of your waveforms demonstrating the proper operation of each of your 7 clocks.
+  * Provide an inline image of each of your waveforms demonstrating the proper operation of each of your 7 clocks (don't forget to add the appropriate markers as described above)
   * Provide your timing analysis results
 
 
