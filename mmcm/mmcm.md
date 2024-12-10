@@ -7,7 +7,7 @@ You will use the switches, buttons, seven segment display, and LEDs to interact 
 ##  Top-Level Design
 
 This assignment will involve the creation of a single top-level design.
-Create your top-level design with the following ports and parameters.
+Create your top-level design with the name `mmcm_top.sv` and with following ports and parameters.
 
 | Port Name | Direction | Width | Function |
 | ---- | ---- | ---- | ----  |
@@ -155,7 +155,7 @@ set_false_path -from [ get_cells pulse3_reg ] -to [ get_cells pulse3_clk0_d_reg 
 
 ## Testbench
 
-Create a top-level testbench that simulates your design.
+Create a top-level testbench named `mmcm_top_tb.sv` that simulates your design.
 This testbench should demonstrate e your clocking, counter circuits, seven segment display and mux are all working properly. 
 This testbench is relatively simple and should just issue a reset signal, wait for the MMCMs to lock, and run for long enough to demonstrate the proper operation of all the clocks and counters.
 Create a makefile rule `sim_mmcm` that performs this simulation from the command line.
