@@ -120,16 +120,16 @@ It is possible you will get metastability, but this is not an issue for the seve
 
 | SW[3:0]  | Display  |
 | --- | --- |
-| 0x0 | CNT0[47:12] |
-| 0x1 | CNT1[47:12]  |
-| 0x2 | CNT2[47:12]  |
-| 0x3 | CNT3[47:12]  |
-| 0x4 | CNT4[47:12]  |
-| 0x5 | CNT5[47:12]  |
-| 0x6 | CNT6[47:12]  |
+| 0x0 | CNT0[47:16] |
+| 0x1 | CNT1[47:16]  |
+| 0x2 | CNT2[47:16]  |
+| 0x3 | CNT3[47:16]  |
+| 0x4 | CNT4[47:16]  |
+| 0x5 | CNT5[47:16]  |
+| 0x6 | CNT6[47:16]  |
 | 0x7 | PULSE3CNT |
 | 0x8 | PULSE4CNT |
-| 0x9 | CNTB_0[47:12]  |
+| 0x9 | CNTB_0[47:16]  |
 | 0xA | CNT_META |
 
 ### Timing Constraints
