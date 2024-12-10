@@ -214,6 +214,7 @@ The following assignment specific items should be included in your repository:
 - Need to ahve the testbench print more out with more interesting notes/comments
 - Force them to get metastability? If so, how to force it? (more guidelines). See Baker's
 - Force them to use generate statements? It is a good place to learn to use them.
+- Makethe cross domain coutners increment at a much slower rate (more delay) than is current.
 -->
 
 <!--
