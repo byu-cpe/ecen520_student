@@ -14,11 +14,13 @@ This lecture reviews the details of the 7 Series CLB and describes how a variety
 Note that you are not expected to memorize any details about the CLB architecture.
 Instead, you are expected to understand the key principles of the CLB and use the CLB given the appropriate information from the data sheet.
 
+  * Understand the organization of a CLB tile
+  * Understand how to determine the "INIT" string for a look up table (LUT)
   * Difference between a CLB tile and slice
   * How logic can be implemented in look-up tables
-  * Be able to map arbitrary logic to look up tables
   * How multiple LUTs within a CLB can be combined to create wider logic functions
   * Use of multiplexers to create wide multiplexing functions
+  * Understand the difference between the SLICEM and SLICEL slices
   * Purpose of a carry chain and how it speeds up carry logic
-  * What is distributed RAM and how does it operate in the context of a LUT/CLB
+  * What is distributed RAM and how does it operate in the context of a LUT/CLB. How do you infer distributed RAM from HDL?
   * What is a SRL and how does it operate in the context of a LUT/CLB

@@ -54,23 +54,26 @@ This repository contains the lecture schedule (including links to lecture summar
 | **Week 12**| |
 | 11/18/2024 | [DDR](./lectures/ddr.md) |
 | 11/20/2024 | [IO Resources](./lectures/io.md)  |
-| 11/22/2024 | No Class (gone for research) |
+| 11/22/2024 | No Class |
 | **Week 13**| |
-| 11/25/2024 | No Class (Gone for research) |
+| 11/25/2024 | No Class |
 | 11/27/2024 | No Class - Thanksgiving Break |
 | 11/29/2024 | No Class - Thanksgiving Break |
 | **Week 14**| |
 | 12/2/2024  | [CLB Blocks](./lectures/clb.md) |
-| 12/4/2024  | [AXI Bus](./lectures/axi.md)  |
-| 12/6/2024  | [IP Integrator](./lectures/ip_integrator.md)  |
-| **Week 15**| [Alternative HDLs](./lectures/alt_hdl.md) |
+| 12/4/2024  | [AXI Bus](./lectures/axi.md) |
+| 12/6/2024  | [IP Integration](./lectures/ip_integration.md)  |
+| **Week 15**|  |
 | 12/9/2024  | Review for Exam |
 | 12/11/2024 | Final Exam in class |
 
 <!--
 Other Lectures: 
 * ILA (Integrated Logic Analyzer)
-* Simulation Coverage/Assertions
+* Simulation Coverage
+* Assertions
+* [Alternative HDLs](./lectures/alt_hdl.md)
+* [Wishbone Bus](./lectures/wishbone.md)
 -->
 
 ## Assignments
@@ -91,4 +94,5 @@ Review the [assignment mechanics](./resources/assignment_mechanics.md) page to l
 | 9 | [MMCM Clocking](./mmcm/mmcm.md) | `mmcm` |
 | 10 | [VGA Controller (VHDL)](./vga/vga.md) | `vga` |
 | 11 | [DDR](./ddr/ddr.md) | `ddr` |
+| 11 | [Project](./project/project.md) | `project` |
 

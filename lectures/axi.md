@@ -19,5 +19,6 @@ This lecture summarizes the AXI bus and reviews the basic transactions of an AXI
   * Understand the basic operation of a write AXI transaction (and the use of each channel for the transaction)
   * Understand the purpose of the VALID, READY, and LAST signals
   * Understand the differences between AXI and AXI lite
+  * Overlapping of transactions
   * Understand the fundamentals of the AXI stream interface and the signals needed for this interface
 

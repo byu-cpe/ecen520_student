@@ -28,8 +28,8 @@ Create a top-level design named `ddr_uart_fifo.sv` that does the following:
   * Do not proceed in your state machine until the `init_calib_complete` signal is asserted
   * When a character is received from the UART receiver, write the character to the DDR at the address specific by the write address register. Increment this address.
   * When BTNC is pressed, read the full DDR FIFO and send each character one at a time to the UART transmitter.
-* Instance your seven segment display controller and display the number of characters received from the UART receiver.
-* If BTNU is pressed, reset the DDR FIFO counters
+* Instance your seven segment display controller and display the number of characters received from the UART receiver. This count should be the total sum of characters received and does not need to be reset after the FIFO buffer has been transferred.
+* If BTNU is pressed, reset the DDR FIFO counters (i.e., ignore all the data that is in the FIFO). Do not reset the number of characters received counter.
 * Display the `init_calib_complete` signal on `LED16_B`
 
 Include the following parameters and associated default values in your design:
@@ -43,14 +43,14 @@ Include the following parameters and associated default values in your design:
 
 ## DDR UART FIFO Simulation
 
-Create a top-level testbench that simulates the design in command line mode.
+Create a top-level testbench in a file named `ddr_uart_fifo_tb.sv` that simulates the design in command line mode.
 Instance your top-level design, the DDR memory controller, and the UART receiver and transmitter.
 Design your testbench to do the following;
 * Wait until the `init_calib_complete` signal is asserted
 * Write several characters to the design by sending data over your transmitter. Print a message to the console when each character is sent.
 * Press BTNC to read the data back from the DDR FIFO. Print a message to the console when each character is receivfed
 
-Create a makefile rule `sim_ddr_fifo` that performs this simulation.
+Create a makefile rule `sim_ddr_uart_top` that performs this simulation.
 
 ## DDR UART FIFO Bitfile Generation
 

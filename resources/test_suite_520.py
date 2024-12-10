@@ -70,7 +70,7 @@ class test_suite_520(repo_test_suite):
         non_committed_files_test = repo_test.file_not_tracked_test(gen_file_list)
         self.add_build_test(non_committed_files_test)
 
-    def add_make_test(self,make_rule,timeout_seconds = 5*60):
+    def add_make_test(self,make_rule,timeout_seconds = 10*60):
         ''' Add a makefile rule test '''
         make_test = repo_test.make_test(make_rule,timeout_seconds=timeout_seconds)
         self.add_build_test(make_test)

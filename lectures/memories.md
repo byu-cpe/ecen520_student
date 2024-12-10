@@ -15,6 +15,7 @@ We will discuss different ways of insantiating memories within HDL code and how 
   * What are block memories used for
   * Understand the various modes of operation: WRITE_FIRST, READ_FIRST, and NO_CHANGE_MODE
   * Use the BRAM in different address/data width configurations
+  * Understand the write and read timing of a BRAM
   * Timing parameters of a BRAM
   * How to instance a BRAM as a module
   * How to infer BRAMs from HDL

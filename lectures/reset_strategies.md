@@ -21,8 +21,8 @@ This lecture will review reset strategies and their timing implications.
 
 ## Key Concepts
 
-  * Purpose of a reset signal. 
-  * Use of resets in FPGAs
+  * Purpose of a reset signal
+  * Use of resets in FPGAs (different ways to reset, preferred reset strategy)
   * RTL implications of resets (not mixing asynchronous/synchronous, proper reset RTL coding)
   * Synchronous vs asynchronous resets (pros and cons of each)
   * Timing implications of reset strategies
