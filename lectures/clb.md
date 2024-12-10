@@ -15,9 +15,9 @@ Note that you are not expected to memorize any details about the CLB architectur
 Instead, you are expected to understand the key principles of the CLB and use the CLB given the appropriate information from the data sheet.
 
   * Understand the organization of a CLB tile
+  * Understand how to determine the "INIT" string for a look up table (LUT)
   * Difference between a CLB tile and slice
   * How logic can be implemented in look-up tables
-  * Be able to map arbitrary logic to look up tables
   * How multiple LUTs within a CLB can be combined to create wider logic functions
   * Use of multiplexers to create wide multiplexing functions
   * Understand the difference between the SLICEM and SLICEL slices
