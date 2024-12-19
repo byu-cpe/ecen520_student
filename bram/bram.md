@@ -4,7 +4,7 @@ In this assignment you will practice using BRAMs by creating two different modul
 
 ## Synchronous FIFO
 
-Create a module that implements a simple synchronous FIFO for ASCII bytes (this will be used with the UART).
+Create a module in a file named `bram_fifo.sv` that implements a simple synchronous FIFO for ASCII bytes (this will be used with the UART).
 The ports of this module should be as follows:
 
 | Port Name | Direction | Width | Function |
@@ -36,10 +36,11 @@ Your FIFO should be created by as follows:
     * `ADDRARDADDR` and `ADDRBWRADDR` (16 bits) It is tricky to hook up the address ports appropriately. Read the data sheet carefully to understand how to connect this port.
     * `WEA` (4 bit write enable).
     * `ENARDEN`
+  * Do not include the parameters for initializing the memory. In fact, use only those parameters that you plan to override.
 
 ### BRAM FIFO Testbench 
 
-Create a simple testbench that demonstrates writing a few bytes, reading/writing a few bytes, and the full/empty signals working properly.
+Create a simple testbench named  `bram_fifo_tb.sv` that demonstrates writing a few bytes, reading/writing a few bytes, and the full/empty signals working properly.
 Use a SystemVerilog 'queue' to store the values of the FIFO so you can check that the order you write is the order that you read.
 Print a message each time an element is written to or read from the FIFO.
 
@@ -63,7 +64,7 @@ If you made any changes to your modules to resolve synthesis errors, rerun the t
 
 ## ASCII BRAM ROM
 
-Create a second module that implements a "ROM" that stores a set of ASCII characters that can be read out one character at a time.
+Create a second module in a file named `bram_rom.sv` that implements a "ROM" that stores a set of ASCII characters that can be read out one character at a time.
 This module will be used to store a message sent over the UART.
 The ports of this module should be as follows:
 
@@ -90,7 +91,7 @@ Design your module to operate as follows:
 
 ### BRAM ROM Testbench 
 
-Create a testbench that demonstrates the ability to read all the contents of the ROM until the `end` signal is asserted.
+Create a testbench in a file named `bram_rom_tb.sv`that demonstrates the ability to read all the contents of the ROM until the `end` signal is asserted.
 Provide a couple of clock cycles between each read.
 
 You will need to populate your ROM with a text message.
@@ -138,6 +139,9 @@ The following assignment specific items should be included in your repository:
 
 
 <!--
+- Need to have check script copy the modelsim.ini file to the student's directory for grading outside of the repo OR have them commit the modelsim.ini file
+- Use the description from Chu section 9.3.2 for creating a FIFO (have them read this and implement this)
+
 They use glbl.v file for simulation. Need to include in their repository.
 Don't hard code any paths in makefile! (perhaps have an environment variable that is set so I can reuse their makefiles)
 -->

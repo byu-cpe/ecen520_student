@@ -30,7 +30,7 @@ Feel free to change the generics to use a much faster baud rate for your UART to
 
 ## Synthesis, Implementation, and Bitstream Generation
 
-Create a makefile rule `gen_bit` that generates a bitstream for your top-level design.
+Create a makefile rule `gen_bit` that generates a bitstream named `bram_top.bit` for your top-level design.
 During the synthesis process, create a design checkpoint file (`.dcp`) for your top-level design as you will need to use it as described below.
 Set the generics for the generated bitfile as follows:
 * `BAUD_RATE` = 115200

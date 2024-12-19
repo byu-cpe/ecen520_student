@@ -111,7 +111,7 @@ Design your top-level circuit as follows:
 
 ## Top-level testbench
 
-Create testbench for your top-level rx/tx design by copying and modifying the [tx_top_tb.sv](../tx_download/tx_top_tb.sv) file from the tx download assignment and renaming to rxtx_top_tb.sv:
+Create testbench for your top-level rx/tx design by copying and modifying the [tx_top_tb.sv](../tx_download/tx_top_tb.sv) file from the tx download assignment and renaming to `rxtx_top_tb.sv`:
 The following adaptations should be made to the structure of this testbench:
 * Add a parameter MIN_SEGMENT_DISPLAY_US to the testbench with a default of 200. The defaults for the testbench should be a baud rate of 19200, a clock frequency of 100 MHz, and odd parity.
 * Remove the rx_model simulation model
@@ -143,6 +143,11 @@ You will need to add the command line option to change the baud rate of your top
 ## Implementation and Download
 
 At this point you are ready to implement your design, generate a bitfile and download it to your board.
+Ideally, you will just synthesize your design, generate a bitfile, and it will work the first time you download it.
+In reality, most people will have to go through this process a few times to resolve synthesis and implementation issues.
+**Make sure you keep track of the number of times you 'synthesize' and the number of times you 'download' your bitstream.** 
+This will be required for your assignment report.
+
 Create a new makefile rule named `gen_bit` that will generate a bitfile named `rxtx_top.bit` for your top-level design with the default top-level parameters.
 Download your design to your board and use 'putty' to make sure the UART receiver is working correctly using Putty or some other terminal emulator. You will need to transmit signals from 'putty' to your board, you can do this by pressing 'ctrl+j' in the 'putty' emulator, and then using your keyboard to send char values.
 
@@ -189,11 +194,13 @@ The following assignment specific items should be included in your repository:
        * Summarize the `no_input_delay` and `no_output_delay` section of the report.
        * How many total endpoints are there on your clock signal?
        * Find the first net in the `Max Delay Paths` section and indicate the source and destination of this maximum path.
-    1. Indicate how many times you had to synthesize and download your bitstream before your circuit worked.
+    1. Indicate how many times you had to synthesize and download your bitstream before your circuit worked. Provide two numbers: one for synthesis attempts and one for download attempts.
 
 
 <!--
 Notes:
+- Need to improve the ssd_check and testbench.
+- Clarify that the digit points should not be driven
 - Warnings:
   - Teach them how to set the tools to ignore warnings and how to get rid of warnings
   - Tell them that they should not have *any* warnings during synthesis
@@ -203,4 +210,10 @@ Notes:
   - Make sure that the data displayed on the LEDs doesn't change/flicker (i.e., latch the data)
   - Note that many studens struggled debugging their receiver and the transmitter model at the same time. It wasn't clear which one has the problem.
      - Suggestion: create a top-level testbench that just hooks up my receiver model to their transmitter model and is used to validate their transmitter model. This way, they can have a known good transmitter model to test their receiver.
+  - seven segment display model/checker
+    - Students don't know how to use it and are confused. Provide more documentation and expectations on what it does.
+    - Explain how to use the "check signal" or end of line
+    - Get rid of the initial warning
+    - Sample the data every cycle instead of at the end of a segment to avoid one cycle off issue
+  - Need to specify specific names for the top for ease of grading (testbench does require a name fortunately)
 -->

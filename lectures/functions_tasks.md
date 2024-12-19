@@ -11,3 +11,8 @@
 **Resources**
   * ChipVerify summary of [display](https://www.chipverify.com/verilog/verilog-display-tasks), [tasks](https://www.chipverify.com/verilog/verilog-task), and [functions](https://www.chipverify.com/verilog/verilog-functions),
 
+<!--
+This lecture was a bit thin. Consider adding more content and exmaples of testbenches that use functions/tasks
+  (maybe a model exmaple?)
+I added a discussion on generate statements. Need to give them reading on this.
+-->
