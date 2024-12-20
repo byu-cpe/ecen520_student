@@ -70,3 +70,17 @@ The following assignment specific items should be included in your repository:
 3. Assignment specific Questions:
   * "DDR Controller IP" Questions
 
+<!--
+Changes:
+- Use an AXI interface instead of this odd "UI" interface that is hard to understand and difficult to use (it forces students to learn about AXI)
+- Provide more discussion about the clock domains and approaches for handling the clock domains (which clock is Tx/rx? need to know clocks of these)
+- Need to provide a template for the quyestios so it is easier to grade
+- Is there a way we can reduce the number of warnings?
+- Need to be more clear on what should be printed for the simulation and testbench for grading. Perhaps a header for ease of grading and finding results.
+
+- Student comments:
+* If you could put in the ddr.md that `[0:0]` has to be included before some of the ports in our top module that would be great. As it appears to be redundant so multiple of us have removed it, but it has to be there or it causes a lot of weird issues.
+* took a very long time figuring out the file structures and getting the IP to implement together
+* The disparity between simulation and implementation, where my first printed character would be replaced by the most recent character in its same column number (despite being if a different row), caused many additional hours of debugging with little to go on.
+  * It may be helpful to give a more in dept explainaiton in the lab write up of the DDR
+-->
