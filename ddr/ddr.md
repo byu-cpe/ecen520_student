@@ -73,6 +73,8 @@ The following assignment specific items should be included in your repository:
 <!--
 Changes:
 - Use an AXI interface instead of this odd "UI" interface that is hard to understand and difficult to use (it forces students to learn about AXI)
+- Figure out a way to build the project using an envhiroinment variable pointing to the simulation libraries. I was forced to build this on the digital labs because these libraries were hard coded
+- Adrianna and Michael's designs didn't work. Odd behvaior that I couldn't figure out. Need more debuggging experience to help with these problems.
 - Provide more discussion about the clock domains and approaches for handling the clock domains (which clock is Tx/rx? need to know clocks of these)
 - Need to provide a template for the quyestios so it is easier to grade
 - Is there a way we can reduce the number of warnings?
