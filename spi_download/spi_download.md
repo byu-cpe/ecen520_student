@@ -45,8 +45,9 @@ Create a top-level circuit that includes the following:
 * The lower 8 switches should be used to specify the 8-bit address of the adxl362 register to read/write
 * The upper 8 switches should be used to specify the 8-bit data used for adxl362 register writes
 * The 16 LEDs should follow the value of the switches to allow the user can easily verify that the address/data is properly set.
-* The left button (BTNL) should be used to initiate a write to the accelerometer (where the address and data to write are specfied by the switches)
+* The left button (BTNL) should be used to initiate a write operation to the accelerometer (where the address and data to write are specified by the switches)
 * The right button (BTNR) should be used to initiate a read from the accelerometer
+  * Note that if the interface to the accelerometer is busy when either a BTNL or BTNR is pressed, the operation should proceed when the interface is no longer busy.
 * Instance your seven segment display controller and hook it up so that the last byte received from a register read is displayed on the _right two digits_ of the seven segment display.
 * Read the X, Y, and Z accelerator values periodically and continuously write the values to the seven segment display (one value per digit)
   * The X-Axis (register 0x08) should be displayed on the digits 2 and 3 (where digit 0 is the rightmost digit)
