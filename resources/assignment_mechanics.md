@@ -77,7 +77,7 @@ Each assignment will have a due date/time published on learning suite.
 It is your responsibility to identify the due date and submit your assignment on time.
 Late assignments will be accepted and graded but will be subject to a 20% penalty.
 Late submissions can be submitted at any time but late submissions will not be graded in a timely manner and may not receive any feedback.
-**No credit will be given for any assignments submitted after midnight on the last day of class (December 11th).**
+**No credit will be given for any assignments submitted after midnight on the last day of class (December 10th).**
 
 ## GitHub Commits
 
