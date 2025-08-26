@@ -135,15 +135,25 @@ The following assignment specific items should be included in your repository:
 2. You need to have at least 4 "Error" commits in your repository
 3. Assignment specific Questions:
   * Review the timing report for your VGA controller. Complete the clock domain table below for each clock domain. 
-  * 
+
 
 **Clock Domain Report** 
+
+Create a markdown compatible table that includes the following information for each clock domain in your design:
 
 | Clock Domain | Frequency/Period | Setup Worst Slack | Hold Worst Slack |
 | ---- | ---- | ---- | --- |
 
 
 <!--
+* This assignment uses compiled libraries for simulation. Need to figure out how to make this generic for my lab.
+* Add more detail on blanking as without doing it properly visuals won't show up on the screen/vga.
+* In the slides, an example of using a component all on one page would be useful. Since it is broken up I wasn't initially sure where the component was supposed to go.
+* Need to make the report a bit more involved (more exploration)
+* I still do not understand fully how the hsync and vsync work. the diagrams did not seem to line up with what was in the lab instructions, but it worked
+* Clarification on hsync and vsync timing (specifically that they should be after the displayable region) would be very helpful!
+
+
 Timing group example:
 ```
 From Clock:  sys_clk_pin

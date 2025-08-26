@@ -50,3 +50,11 @@ The following assignment specific items should be included in your repository:
   * **Improvements**: Describe a few improvements you could make to the design should you have more time.
   * **File List**: List all the system verilog files you created to build your design. Clearly indicate which one is the top design.
 
+<!--
+- Be more specific on the file names. 
+- REquire them to be very specific about how to run the design (buttons, baud rate, etc.) Many students didn't cinldue this information.
+- Require some minimum complexity of IP (the tri-color LED core isn't really enough)
+- Require them to put their non-ip file in the top level (not a sub directory) to simplify grading.
+- Students struggled to find an IP. Need to find some good IP ideas to make it easier.
+- It looks like a few students didn't put the IP generation process in the makefile. Need to add a rule that explicilty does this (add it to the passoff script)
+-->

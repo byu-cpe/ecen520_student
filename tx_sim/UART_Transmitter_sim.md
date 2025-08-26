@@ -148,15 +148,9 @@ The following assignment specific items should be included in your repository:
     * `sim_tx`: performs command line simulation of tx testbench using the default parameters
     * `sim_tx_115200_even`: performs command line simulation of tx testbench with a baud rate of 115200 and even parity
 1. You need to have at least 3 "Error" commits in your repository as described [here](../resources/assignment_mechanics.md#github-commits).
-2. Assignment specific Questions:
-    1. Provide a short summary of how much HDL review you had to do to complete the assignment. Also, rate your HDL designs skills from 1-10.
-    2. Indicate the simulation time (not the clock time) of the two different simulations and suggest why the simulation times are different
-    3. Add the following statement to your report: "I have read the ECEN 520 assignment submission process and have resolved any questions I have with this process"
+2. Complete the [report.md](report.md) file in your assignment directory.
 
 <!-- Notes:
-- General note for all assignments: Make the repoprt format more clear and instruct the students to leave the question headings so it is easier to grade. Perhaps give an example in this first assignment so they know what is expected. Remove the "suggestion 1"
-  - Tell them I will penalize on spelling mistakes. Use a simple spell checker (VS code has one)
-
 - Need to help people learn how to use the GUI simulator. They just tried using the command line only. (Maybe a tutorial on how to use the GUI simulator?)
 - Need to have a way for the testbench to generate an error when there is a problem so the python file catches the error.
 - Modify the testbench to include a function (compute parity) so the students have an example of how to use a function (when they do this for the receiver testbench)

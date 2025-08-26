@@ -21,8 +21,9 @@ These standards are required for **all** assignments.
       * Class
       * Date 
       * Brief description (at least one sentence)
-    * A short comment is required for every always block (or process in VHDL)
-    * Provide a short comment for every module instantiated in your design
+    * A short comment is required for every `always` block (or process in VHDL) as well as `initial` blocks
+    * A short comment is required for every module instantiated in your design
+    * A short comment is required for every generate statement in your design
   * **Magic Numbers**
     * Do not use "Magic Numbers" embedded in your code. Instead, define a constant with a meaningful name and use the constant. Exceptions to this include the following:
        * Using the constant '1' or '0'.
