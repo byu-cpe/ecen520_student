@@ -1,6 +1,5 @@
 # SPI
  
-
 In this assignment, you will create a [SPI](https://en.wikipedia.org/wiki/Serial_Peripheral_Interface) controller for communicating with a SPI device.
 
 The SPI protocol is used extensively in embedded systems as a way to control external devices using a simple serial protocol. 
@@ -76,7 +75,7 @@ In this figure three single byte transfers are performed with `/CS` held low for
 
 ![Multi Byte Transaction](./adxl362_spi_read.jpg)
 
-Create a controller with the following top-level ports and parameters:
+Create a controller the name `spi_cntrl.sv` that has following top-level ports and parameters:
 
 | Port Name | Direction | Width | Function |
 | ---- | ---- | ---- | ----  |
@@ -117,7 +116,7 @@ When designing yoru controller, use the following Verilog 2001/SystemVerilog con
 
 ## SPI Testbench
 
-Once you have created your SPI controller, create a testbench to simulate transactions with your controller.
+Once you have created your SPI controller, create a testbench named `spi_cntrl_tb.sv` to simulate transactions with your controller.
 I have provided a [simulation model](./spi_subunit.sv) for you that simulates a SPI subnode.
 Instance your SPI controller and the provided simulation model and connect the two together.
 Design your testbench to do the following:
@@ -143,7 +142,7 @@ Links to the accelerometer are listed below for your convenience.
 
 The ADXL362 accelerometer uses a three byte transfer to perform a read or a write to/from its registers (see figures 36 and 37 of the [data sheet](https://www.analog.com/media/en/technical-documentation/data-sheets/ADXL362.pdf)). 
 You will need to support both the write and read register operation as described below.
-Start your controller module by creating the top-level ports:
+Create your controller module in a file named `adxl362_cntrl.sv` and create the following top-level ports:
 
 | Port Name | Direction | Width | Function |
 | ---- | ---- | ---- | ----  |
@@ -183,7 +182,7 @@ These sequences are as follows:
 
 ## ADXL362 Testbench
 
-Create a testbench of your controller that tests the operation of your AXDL362L controller.
+Create a testbench of your controller named `adxl362_tb.sv` that tests the operation of your AXDL362L controller.
 This testbench should be designed as follows:+
 * Make the top-level testbench parameterizable with the two top-level parameters.
 * Create a free-running clock
@@ -233,4 +232,8 @@ Make sure all synthesis warnings and errors are resolved before submitting your 
   (prehaps have them provide such a statement in the testbench output)
 - Perhaps I provide a detailed module test bench and they create the top-level testbench
   (trade off between learning testenches and testing their circuits properly)
+
+- Does it make sense to break this up into two pieces: one 8-bit controller and one 3-byte controller? Perhaps make a single controller for the ADXL that is general.  FOrcing a 8-bit repreaed controller isn't that general.
+  - Probably have them just create a design that does the full 24-bit transfer as one step. Perhaps make the number of bits for a transfer a parameter.
+- Move the synthesis step from the next assignment back to this assignment (the out of context synthesis step)
 -->

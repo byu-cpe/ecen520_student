@@ -58,7 +58,7 @@ The primary goal of this assignment is to design a UART transmitter for transmit
 You will need to create this design in *SystemVerilog* and simulate it using QuestaSim.
 There is a ECEN 320 lab description for a [UART Transceiver](https://byu-cpe.github.io/ecen320/labs/lab-09/) that you can use as a reference.
 
-Create your transmitter with the following ports and parameters (you must name the ports and parameters as indicated for the testbenches to operate correctly):
+Create your transmitter with the filename `tx.sv` with the following ports and parameters (you must name the ports and parameters as indicated for the testbenches to operate correctly):
 
 | Port Name | Direction | Width | Function |
 | ---- | ---- | ---- | ---- |
@@ -148,7 +148,16 @@ The following assignment specific items should be included in your repository:
     * `sim_tx`: performs command line simulation of tx testbench using the default parameters
     * `sim_tx_115200_even`: performs command line simulation of tx testbench with a baud rate of 115200 and even parity
 1. You need to have at least 3 "Error" commits in your repository as described [here](../resources/assignment_mechanics.md#github-commits).
-2. Assignment specific Questions:
-    1. Provide a short summary of how much HDL review you had to do to complete the assignment. Also, rate your HDL designs skills from 1-10.
-    2. Indicate the simulation time of the two different simulations and suggest why the simulation times are different
-    3. Add the following statement to your report: "I have read the ECEN 520 assignment submission process and have resolved any questions I have with this process"
+2. Complete the [report.md](report.md) file in your assignment directory.
+
+<!-- Notes:
+- Need to help people learn how to use the GUI simulator. They just tried using the command line only. (Maybe a tutorial on how to use the GUI simulator?)
+- Need to have a way for the testbench to generate an error when there is a problem so the python file catches the error.
+- Modify the testbench to include a function (compute parity) so the students have an example of how to use a function (when they do this for the receiver testbench)
+- In the testbench, change the din regularly during a transmission to catch students who are not latching the din value on the signal.
+- Need to clarify that you need a reset for your always_ff blocks
+- Indicate that you can't use udnerscores in your makefile (.e., -gBAUD_RATE=115_200 won't work)
+- Clean up testbench so that it serves as a good example for the students to use for the receiver testbench
+  - Put all the internal signals together and label rather than splitting them up by the parameters.
+  - Use an "error count" variable and incremenet the error when erorrs occur. Use this in a print statement at the end of the testbench. (demonstrate error counting)
+-->

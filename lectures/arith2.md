@@ -10,7 +10,8 @@
 ## Key Concepts
 
   * Verilog 95 artihmetic rules
-  * Signed artihmetic in Verilog 2001
-  * Rules for arithmetic: mismatched types, incomplete size, etc.
+  * Signed artihmetic rules in Verilog 2001 (i.e., when is the result signed or unsigned)
+  * The syntax and meaning of signed literals in Verilog 2001 (what happens when there are fewer or more bits)
+  * Rules for arithmetic: mismatched types, incomplete size, sign extension, etc.
 
 

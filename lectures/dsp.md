@@ -13,6 +13,7 @@ This lecture reviews the internals of the 7 Series DSP.
 
   * Be able to interpret and understand the various DSP architecture diagrams
   * Understand the various operation combinations of the DSP
+  * Understand what the SIMD mode is and how it is different from the conventional mode
   * How to infer a multiplier from HDL
   * The purpose of a barrel shifter
   * Understand the internal pipelining of the multiplier

@@ -11,7 +11,7 @@ If you made any changes to your modules to resolve synthesis errors, rerun the t
 
 ## SPI Top-Level Design
 
-Create a top-level design that uses the following top-level ports:
+Create a top-level design in a file named `spi_top.sv` that uses the following top-level ports:
 
 | Port Name | Direction | Width | Function |
 | ---- | ---- | ---- | ----  |
@@ -45,8 +45,9 @@ Create a top-level circuit that includes the following:
 * The lower 8 switches should be used to specify the 8-bit address of the adxl362 register to read/write
 * The upper 8 switches should be used to specify the 8-bit data used for adxl362 register writes
 * The 16 LEDs should follow the value of the switches to allow the user can easily verify that the address/data is properly set.
-* The left button (BTNL) should be used to initiate a write to the accelerometer (where the address and data to write are specfied by the switches)
+* The left button (BTNL) should be used to initiate a write operation to the accelerometer (where the address and data to write are specified by the switches)
 * The right button (BTNR) should be used to initiate a read from the accelerometer
+  * Note that if the interface to the accelerometer is busy when either a BTNL or BTNR is pressed, the operation should proceed when the interface is no longer busy.
 * Instance your seven segment display controller and hook it up so that the last byte received from a register read is displayed on the _right two digits_ of the seven segment display.
 * Read the X, Y, and Z accelerator values periodically and continuously write the values to the seven segment display (one value per digit)
   * The X-Axis (register 0x08) should be displayed on the digits 2 and 3 (where digit 0 is the rightmost digit)
@@ -56,7 +57,7 @@ Create a top-level circuit that includes the following:
 
 ## SPI Top-Level Testbench
 
-Create a top-level testbench of your top-level design that tests the operation of your top-level AXDL362L controller.
+Create a top-level testbench of your top-level design in a file named `spi_top_tb.sv`that tests the operation of your top-level AXDL362L controller.
 This testbench should be designed as follows:
 * Make the top-level testbench parameterizable with the top-level parameters
 * Create a free-running clock
@@ -80,6 +81,9 @@ Add makefile rules named `sim_top`, using default parameters, and `sim_top_100`,
 ### Implementation and Download
 
 At this point you are ready to implement your design, generate a bitfile and download your design to your board.
+It is likely that you will iterate more than once through the synthesis and bitstream download steps.
+Carefully track the number of times you synthesize your design and track the number of times you had to download your design on the board.
+These numbers will be required in the report section of this assignment.
 Create a new makefile rule named `gen_bit` that will generate a bitfile named `spi_adxl362.bit` for your top-level design with the default top-level parameters.
 Create a new makefile rule named `gen_bit_100` that will generate a bitfile named `spi_adxl362_100.bit` with a 100_000 SCLK frequency.
 
@@ -124,4 +128,14 @@ Other operations:
        * Summarize the `no_input_delay` and `no_output_delay` section of the report.
        * How many total endpoints are there on your clock signal?
        * Find the first net in the `Max Delay Paths` section and indicate the source and destination of this maximum path.
-    1. Indicate how many times you had to synthesize and download your bitstream before your circuit worked.
+    1. Indicate how many times you had to (1) synthesize your design and (2) download your bitstream before your circuit worked. Note that two different numbers are needed for this response.
+
+<!--
+- Add an exercise where the students do one of the following:
+  1. Open the fpga layout tool and browse around the design. Find the I/O and logic resources.
+  2. Start going through the timing report in more detail.
+  3. Have a constraint that requires the SPICLK and MOSI/MISO flip flps to be very close to the I/O. Need to make sure the a the timing delay between CLK/MISO/MOSI is as small as possible.
+  4. Add a jitter constraint to the clock (new starting with his assignment). Also add false_paths constraints for the SWitches and LEDs.
+- Provide instructions for putting board in a known state. Many boards are "locked" based on previous student user. Provide instructions on how to "unlock" and put the board in an initial state.
+- Have studens put in false path constraints for i/o without flip flops
+-->

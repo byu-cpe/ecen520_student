@@ -20,7 +20,7 @@ We will learn about the global clock routing and how to use the MMCM and PLL pri
   * BUFGCTRL, BUFG, BUFIO primitives
   * Understand the major components of the MMCM
     * MMCM Use Models (Figures 3-11,3-13,3-14,3-15,3-16)
-  * Know how to use the MMCM in a variety of situations: clock dejitter/synthesizer, clock network deskew, zero delay buffer, etc.
+  * Know how to use the MMCM in a variety of situations: clock dejitter/synthesizer, clock network deskew, zero delay buffer, etc. Understand how to set the various parameters of the MMCM to obtain the desired clocking behavior.
   * Understand how to use multiple cascading MMCMs and how to use the locked signal for resets
 
 **Reference**
