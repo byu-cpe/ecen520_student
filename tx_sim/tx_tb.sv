@@ -6,8 +6,9 @@ module tx_tb ();
 
     parameter NUMBER_OF_CHARS = 20;
     parameter BAUD_RATE = 19_200;
-    parameter CLOCK_FREQUENCY = 100_000_000;
-    localparam BAUD_CLOCKS = CLOCK_FREQUENCY / BAUD_RATE;
+    parameter CLK_FREQUENCY = 100_000_000;
+    parameter PARITY = 0;
+    localparam BAUD_CLOCKS = CLK_FREQUENCY / BAUD_RATE;
 
     logic clk, rst, tb_send, tb_tx_out, tx_busy;
     logic [7:0] tb_din;
