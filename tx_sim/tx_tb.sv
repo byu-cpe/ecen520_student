@@ -14,7 +14,6 @@ module tx_tb ();
     logic [7:0] tb_din;
     logic [7:0] char_to_send = 0;
     logic [7:0] rx_data;
-    logic odd_parity_calc = 1'b0;
     logic rx_busy, rx_model_err;
     int errors = 0;
 
@@ -118,6 +117,9 @@ module tx_tb ();
         for(int i = 0; i < NUMBER_OF_CHARS; i++) begin
             char_to_send = $urandom_range(0,255);
             initiate_tx(char_to_send);
+            // Set the 'din' to a different value after initiating transfer (make sure it is latched)
+            repeat($urandom_range(500,1000)) @(negedge clk)
+            tb_din = $urandom(256);
             // Wait until transmission is over
             wait (tx_busy == 1'b0);
             // check to see that character received is the one that was sent

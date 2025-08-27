@@ -89,10 +89,23 @@ Design your transmitter to operate as follows:
   * Use asynchronous resets for the synchronous elements of your design
 * Add a synchronizing flip-flop on the output of the TX signal so there are no glitches on your output tx signal
 * You do not need to implement handshaking as described by the 320 lab assignment.
-
+* Make sure you have a reset clause on all of your 'always_ff' blocks.
 Note that you must follow the [Level 1](../resources/coding_standard.md#level_1) coding standards for your Verilog files.
 
-## Verifying Transmitter and Testbench
+## Simulating Transmitter
+
+Simulate the transmitter in Modelsim with the GUI to see if your module operates properly.
+Simulation `.do` files can be used to interactively simulate your file.
+The [sim_tx.do](sim_tx.do) file can be used to simulate a simple transmission.
+Use this simulation file to make sure your module properly simulates a full byte.
+After properly simulating your module, take a screen shot of your modelsim waveform and make sure your state machine variables are included in the waveform.
+Name your simluation file `tx_sim.png` and include it in your repository.
+
+After verifying that your module can properly simulate a single byte, create a new simulation file named `long_sim.do` that simulates the transfer of four bytes.
+Make sure there is at least 50 us of delay between the transmissions. 
+Transmit two bytes that have an odd number of bits and two bytes with an even number of bits to verify the operation of your parity generation circuit.
+
+## Transmitter Testbench
 
 An essential part of digital design is properly _verifying_ your design.
 For this design and all designs you create in this class you will be carefully verifying with a design testbench.
@@ -134,6 +147,7 @@ sim_tx_115200_even: tx.sv
     vlog -sv tx.sv tx_tb.sv rx_model.sv
     vsim -c work.tx_tb -gBAUD_RATE=115200 -gPARITY=0 -do "run -all; quit"
 ```
+**Note**: You can't use an underscore in the parameters on the command line (i.e., -gBAUD_RATE=115_200 will not work).
 
 After your module passes both testbenches you are ready to submit your assignment.
 
@@ -147,17 +161,11 @@ The following assignment specific items should be included in your repository:
 1. Required Makefile rules:
     * `sim_tx`: performs command line simulation of tx testbench using the default parameters
     * `sim_tx_115200_even`: performs command line simulation of tx testbench with a baud rate of 115200 and even parity
+1. Make sure you have committed your `tx_sim.png` waveform simulation file. Also, make sure you have committed the `long_sim.do` simulation file.
 1. You need to have at least 3 "Error" commits in your repository as described [here](../resources/assignment_mechanics.md#github-commits).
 2. Complete the [report.md](report.md) file in your assignment directory.
 
 <!-- Notes:
 - Need to help people learn how to use the GUI simulator. They just tried using the command line only. (Maybe a tutorial on how to use the GUI simulator?)
 - Need to have a way for the testbench to generate an error when there is a problem so the python file catches the error.
-- Modify the testbench to include a function (compute parity) so the students have an example of how to use a function (when they do this for the receiver testbench)
-- In the testbench, change the din regularly during a transmission to catch students who are not latching the din value on the signal.
-- Need to clarify that you need a reset for your always_ff blocks
-- Indicate that you can't use udnerscores in your makefile (.e., -gBAUD_RATE=115_200 won't work)
-- Clean up testbench so that it serves as a good example for the students to use for the receiver testbench
-  - Put all the internal signals together and label rather than splitting them up by the parameters.
-  - Use an "error count" variable and incremenet the error when erorrs occur. Use this in a print statement at the end of the testbench. (demonstrate error counting)
 -->
