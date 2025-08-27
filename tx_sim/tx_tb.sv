@@ -119,7 +119,7 @@ module tx_tb ();
             initiate_tx(char_to_send);
             // Set the 'din' to a different value after initiating transfer (make sure it is latched)
             repeat($urandom_range(500,1000)) @(negedge clk)
-            tb_din = $urandom(256);
+            tb_din = $urandom_range(255,0);
             // Wait until transmission is over
             wait (tx_busy == 1'b0);
             // check to see that character received is the one that was sent
