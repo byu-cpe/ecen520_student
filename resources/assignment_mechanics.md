@@ -212,7 +212,7 @@ These instructions summarize how to setup your GitHub repository for this class.
 ## GitHub Classroom Repository
 
 You will need to create a GitHub classroom repository for this class.
-Visit the following [URL](https://classroom.github.com/a/NLOnd6Wh) to create your classroom repository.
+Visit the following [URL](https://classroom.github.com/a/Z81XcTBg) to create your classroom repository.
 I will have access to your repository for grading purposes.
 
 <!--
@@ -231,11 +231,11 @@ The following commands will clone the student repository and push it to your cla
 ```
 git clone --bare git@github.com:byu-cpe/ecen520_student.git
 cd ecen520_student.git/
-git push --mirror git@github.com:byu-ecen520-fall2024/520-assignments-<githubusername>.git
+git push --mirror git@github.com:byu-ecen520-fall2025/520-assignments-<githubusername>.git
 cd ..
-rm -rf ecen520_student.git```
+rm -rf ecen520_student.git
 ```
-More details on this process can be found at Step 3 of the [ECEN 323 web page](https://byu-cpe.github.io/ecen323/tutorials/git_setup/).
+More details on this process can be found at Step 3 of the [ECEN 320 web page](https://byu-cpe.github.io/ecen320/tutorials/git/git_classroom_setup/).
 
 At this point you should have a remote repository that contains all the starter code for the class.
 
