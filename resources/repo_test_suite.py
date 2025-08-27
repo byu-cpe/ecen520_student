@@ -74,6 +74,7 @@ class repo_test_suite():
         self.test_name = test_name
         # Colors
         self.test_color = TermColor.YELLOW
+        self.warning_color = TermColor.YELLOW
         self.error_color = TermColor.RED
         # Test result dictionary
         self.test_results = {}
@@ -84,10 +85,16 @@ class repo_test_suite():
 
     def print_color(self, color, *msg):
         """ Print a message in color """
-        print(color + " ".join(str(item) for item in msg), TermColor.END)
+        msg_str = " ".join(str(item) for item in msg)
         if self.test_log_fp is not None:
-            # Don't print color codes to the log file
-            self.test_log_fp.write(" ".join(str(item) for item in msg) + "\n")
+            # Don't print color codes to the log file, just plain message
+            self.test_log_fp.write(msg_str + "\n")
+        if color is not None:
+            msg_str = color + msg_str + TermColor.END
+        print(msg_str)
+
+    def print_verbose(self, message):
+        self.print(message, verbose_message = True)
 
     def print(self, message, verbose_message = False):
         """ Prints a string to the appropriate locations. """
@@ -99,9 +106,12 @@ class repo_test_suite():
                 self.test_log_fp.write(message + '\n')
 
     def print_error(self, message):
-        """ Prints a string to the appropriate locations. """
-        # Print to std_out?
+        """ Prints a message using the 'error_color' """
         self.print_color(self.error_color,message)
+
+    def print_warning(self, message):
+        """ Prints a message using the 'warning_color' """
+        self.print_color(self.warning_color,message)
 
     def print_test_status(self, message):
         self.print_color(self.test_color,message)
@@ -126,8 +136,8 @@ class repo_test_suite():
         self.print_test_status(f"Running test \'{self.test_name}\'")
         self.print_test_status("")
 
-    def print_test_end_message(self):
-        self.print_test_status(f"Test completed \'{self.test_name}\'")
+    def print_test_summary(self):
+        ''' Print a summary of the test results '''
         warnings = []
         errors = []
         success = []
@@ -140,7 +150,7 @@ class repo_test_suite():
             else:
                 errors.append(result)
         if len(warnings) == 0 and len(errors) == 0:
-            self.print_test_status(f"  No errors or warnings")
+            self.print_test_status("  No errors or warnings")
         else:
             if len(warnings) != 0:
                 self.print_error(f" {len(warnings)} Warnings")
@@ -151,12 +161,15 @@ class repo_test_suite():
                 for error in errors:
                     self.print_error(f"  {error.test.module_name()}")
 
-
     def iterate_through_tests(self, list_of_tests, start_step = 1):
-        ''' Run list of tests '''
+        ''' Run list of tests. Return True if all tests pass, False otherwise '''
+        set_result = True
         for idx, test in enumerate(list_of_tests):# (but no setup or wrap-up):
             self.print_test_status(f"Step {idx+start_step}. {test.module_name()}")
-            self.execute_test_module(test)
+            result_obj = self.execute_test_module(test)
+            if result_obj.result != result_type.SUCCESS:
+                set_result = False
+        return set_result
 
     def execute_test_module(self, test_module):
         ''' Executes the 'perform_test' function of the tester_module and logs its result in the log file '''
