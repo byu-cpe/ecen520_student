@@ -47,7 +47,7 @@ I recommend that you install the [Verilog-HDL/SystemVerilog/Bluespec SystemVeril
 
 For this assignment you will be using QuestaSim as a simulator to simulate your design.
 QuestaSim is a commercial HDL simulator that is used in the design of large, complex ASICs and will be the simulator we use for this course.
-QuestaSim has been installed on the computers in the digital lab and the embedded systems lab (see this link for [setting up your environment](../resources/tools.md#questasim-setup) to use these tools).
+QuestaSim has been installed on the computers in the digital lab and the embedded systems lab (see this`long_sim.do` link for [setting up your environment](../resources/tools.md#questasim-setup) to use these tools).
 
 Go through the [QuestaSim Tutorial](../resources/questa_tutorial.md) to learn how to use QuestaSim in both GUI and command line mode.
 You will need to use the command line mode for submitting this assignment.
@@ -92,18 +92,28 @@ Design your transmitter to operate as follows:
 * Make sure you have a reset clause on all of your 'always_ff' blocks.
 Note that you must follow the [Level 1](../resources/coding_standard.md#level_1) coding standards for your Verilog files.
 
-## Simulating Transmitter
+## Simulating Transmitter with '.do' files
 
 Simulate the transmitter in Modelsim with the GUI to see if your module operates properly.
 Simulation `.do` files can be used to interactively simulate your file.
-The [sim_tx.do](sim_tx.do) file can be used to simulate a simple transmission.
+The [sim_tx.do](sim_tx.do) file can be used to simulate a simple single byte transmission.
 Use this simulation file to make sure your module properly simulates a full byte.
-After properly simulating your module, take a screen shot of your modelsim waveform and make sure your state machine variables are included in the waveform.
+After properly simulating your module, take a [screen shot](https://byu-cpe.github.io/ecen320/tutorials/lab_computers/screen_capture/) of your modelsim waveform and make sure your state machine variables are included in the waveform.
 Name your simluation file `tx_sim.png` and include it in your repository.
+
+<!--
+After debugging your module and creating a simulation file, create a Makefile rule named `sim_tx_do` that will compile your tx module and simulate the module using the 'sim_tx.do' file.
+```
+sim_tx_do: tx.sv sim_tx.do
+    vlog tx.sv
+    vsim -c work.tx -do "run -all; quit"
+```
+-->
 
 After verifying that your module can properly simulate a single byte, create a new simulation file named `long_sim.do` that simulates the transfer of four bytes.
 Make sure there is at least 50 us of delay between the transmissions. 
 Transmit two bytes that have an odd number of bits and two bytes with an even number of bits to verify the operation of your parity generation circuit.
+Create a screen shot named `tx_sim_long.png` that captures the four byte transfer.
 
 ## Transmitter Testbench
 
@@ -161,11 +171,9 @@ The following assignment specific items should be included in your repository:
 1. Required Makefile rules:
     * `sim_tx`: performs command line simulation of tx testbench using the default parameters
     * `sim_tx_115200_even`: performs command line simulation of tx testbench with a baud rate of 115200 and even parity
-1. Make sure you have committed your `tx_sim.png` waveform simulation file. Also, make sure you have committed the `long_sim.do` simulation file.
-1. You need to have at least 3 "Error" commits in your repository as described [here](../resources/assignment_mechanics.md#github-commits).
+1. Make sure you have committed your `tx_sim.png` and `tx_sim_long.png` waveform simulation file. Also, make sure you have committed the `long_sim.do` simulation file.
 2. Complete the [report.md](report.md) file in your assignment directory.
 
 <!-- Notes:
-- Need to help people learn how to use the GUI simulator. They just tried using the command line only. (Maybe a tutorial on how to use the GUI simulator?)
 - Need to have a way for the testbench to generate an error when there is a problem so the python file catches the error.
 -->
