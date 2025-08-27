@@ -20,9 +20,9 @@ from datetime import datetime
 # Script changes:
 # * flag to do a remote check like the TAs would do (default is local)
 
-class test_suite_320(repo_test_suite):
+class test_suite_520(repo_test_suite):
     ''' 
-    Represents a suite of tests to perform on a ECEN 320 repository. 
+    Represents a suite of tests to perform on a ECEN 520 repository. 
         repo: The git.Repo object that represents the local repository being tested.
         assignment_name: The name of the assignment (used for tagging, i.e. 'lab01')
         starter_check_date: A date object indicating the last date to check for starter code updates
@@ -298,14 +298,14 @@ class test_suite_320(repo_test_suite):
             self.print_warning(f"Github Submission commit file '{file_path}' not yet created - waiting")
         return False
 
-def build_test_suite_320(assignment_name, max_repo_files = 20, start_date = None):
+def build_test_suite_520(assignment_name, max_repo_files = 20, start_date = None):
     """ A helper function used by 'main' functions to build a test suite based on command line arguments.
         assignment_name: the name of the assignment used for taggin (e.g. 'lab01')
         max_repo_files: the maximum number of files allowed in the lab directory of the repository
         start_date: the date when the lab officialy starts (used to prevent early submissions and to enforce startercode updating)
            This parameter is a string and is in the format "MM/DD/YYYY". If no parameter is given, None is used.
     """
-    parser = argparse.ArgumentParser(description=f"Test suite for 320 Assignment: {assignment_name}")
+    parser = argparse.ArgumentParser(description=f"Test suite for 520 Assignment: {assignment_name}")
     parser.add_argument("--submit",  action="store_true", help="Submit the assignment to the remote repository (tag and push)")
     parser.add_argument("--repo", help="Path to the local repository to test (default is current directory)")
     parser.add_argument("--force", action="store_true", help="Force submit (no prompt)")
@@ -336,7 +336,7 @@ def build_test_suite_320(assignment_name, max_repo_files = 20, start_date = None
         start_date = datetime.strptime(start_date, "%m/%d/%Y")
 
     # Build test suite
-    test_suite = test_suite_320(repo, assignment_name,
+    test_suite = test_suite_520(repo, assignment_name,
         max_repo_files = max_repo_files, summary_log_filename = summary_log_filename, submit = args.submit,
         starter_branch = args.starterbranch, starter_check_date = start_date)
     test_suite.force = args.force
