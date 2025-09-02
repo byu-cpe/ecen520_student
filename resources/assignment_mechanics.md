@@ -38,9 +38,8 @@ If you feel that the class chatbot is insufficient, please contact me to help me
 ## Assignment Reports
 
 Every assignment will require you to submit a report.
-This report is submitted as a markdown file named `report.md` in your assignment submission directory.
-A [template report](./report_template.md) file has been created for you.
-You need to customize this for each assignment and include it with your repository as part of your submission.
+Each assignment has a template report named `report.md` prepared for you in the assignment directory.
+You will need to fill in this report and commit it to your repository.
 
 For each assignment you will need to keep track of the number of hours you spent on the assignment.
 This helps me gauge the difficulty of the assignment and see how long it takes for you to complete it.

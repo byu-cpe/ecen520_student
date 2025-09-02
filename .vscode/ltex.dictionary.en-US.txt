@@ -1,1 +1,3 @@
 testbench
+SystemVerilog
+combinational
