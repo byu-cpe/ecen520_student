@@ -169,28 +169,17 @@ The following assignment specific items should be included in your repository:
     1. Indicate how many times you had to synthesize your design
     1. Indicate how many times you had to download your bitstream before your circuit worked. Note that I want two numbers: number of synthesis attempts and number of download attempts. Do not mix these together.
 
-Sample Resource Utilization Table:
-
-| Resource | Utilization |
-| ---- | ---- |
-| BUFG   |  |
-| CARRY4 |  |
-| LUTx   |  |
-| FDRE   |  |
-| IBUF   |  |
-| OBUF   |  |
-
 
 <!--
+Preparation:
+- Make sure students can use putty on the lab machines. Try it out on the labs ahead of time.
 Future Changes:
-- Make sure students can use putty. Try it out on the labs ahead of time.
 - Provide more requirements on what is expecrted for the size of the desgin and state machine results. Don't have them just cut and paste: have them talk about the results (number of state bits, and some observations)
 - Enforce certain warnings not showing up (CFG_Voltage, etc, parallel synthesis). Make it easier to earch for these warnings in grading.
-= Better instructions on how to download
+- Better instructions on how to download
 - add instructions in the lab instructions for how to set a parameter from the TCL script
 - Need to explain in more detail the need to carefully review the syntehsis logs. Perhaps provide a few examples of what to look for in the logs.
 - Have them save the synthesis and implementation logs as a specific file in their directory that we can look at later
-- Rename this file to better match the assignment name
 - The debounce module uses clock cycles, but tx_top uses microseconds. The need to translate wasn't clear until I was failing testbenches.
 - Several students had problems with the debouncer parameters. They would do a multiplication that resulted in a large number that didn't fit in 32 bits and then when dividing they would have an invalid number. Provide additional instructions or more exmaples on how to create this parameter without the overflow issue.
   - Related to this, we need to have a testbench for the debouncer at the larger time scale so that we can catch this in simulation.

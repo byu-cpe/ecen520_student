@@ -84,7 +84,7 @@ Review the [assignment mechanics](./resources/assignment_mechanics.md) page to l
 | # | Name | Directory/Lab Tag | 
 | ---- | ----| ----|
 | 1 | [UART Transmitter-Simulation](./tx_sim/UART_Transmitter_sim.md) | `tx_sim` |
-| 2 | [UART Transmitter-Synthesis and Download](./tx_download/UART_Transmitter_synth.md) | `tx_download` |
+| 2 | [UART Transmitter-Synthesis and Download](./tx_download/tx_download.md) | `tx_download` |
 | 3 | [UART Receiver Simulation](./rx_sim/UART_Receiver_sim.md) | `rx_sim` |
 | 4 | [UART Synthesis and Download](./rx_download/UART-Receiver_synth.md) | `rx_download` |
 | 5 | [SPI Controller-Simulation](./spi_cntrl/SPI_cntrl.md) | `spi_cntrl` |
