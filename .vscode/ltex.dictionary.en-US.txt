@@ -1,3 +1,11 @@
 testbench
 SystemVerilog
 combinational
+debouncer
+debounce
+QuestaSim
+bitstream
+startercode
+bootcamp
+Makefiles
+makefiles

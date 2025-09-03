@@ -5,7 +5,7 @@ This page describes the mechanics of completing assignments including how to sub
 ## GitHub
 
 All assignments for this class will involve committing report files and source code to a private GitHub repository.
-If you do not have a GitHub account, you will need to [create an account](https://github.com/signup?ref_cta=Sign+up&ref_loc=header+logged+out&ref_page=%2F&source=header-home) for use in this class.
+If you do not have a GitHub account, you will need to [create an account](https://github.com/) for use in this class.
 <!--
 Send me your github username so I can add you as a user on the [ECEN_520](https://github.com/byu-cpe/ECEN_520) github repository which contains course materials, the class wiki, and assignment descriptions.
 -->
@@ -73,7 +73,7 @@ The assignment due dates are posted on learning suite.
 Each assignment submission will require a unique 'tag' where the actual tag is the same as the directory for the assignment.
 When grading your assignment, I will check the submission time of this tag. 
 If your latest commit of any file in the assignment with this tag is later than the deadline then you will be penalized for being late.
-You may change your files after the submission date but do not retag these files unless you are changing your submission.
+You may change your files after the submission date but do not re-tag these files unless you are changing your submission.
 A [submission process checklist](#assignment-submission-checklist) has been created for you to review as you submit your assignments.
 
 ## Assignment Due Dates and Late Policy
@@ -81,7 +81,7 @@ A [submission process checklist](#assignment-submission-checklist) has been crea
 Each assignment will have a due date/time published on learning suite.
 It is your responsibility to identify the due date and submit your assignment on time.
 Late assignments will be accepted and graded but will be subject to a 20% penalty.
-Late submissions can be submitted at any time but late submissions will not be graded in a timely manner and may not receive any feedback.
+Late submissions can be submitted at any tim, but late submissions will not be graded in a timely manner and may not receive any feedback.
 **No credit will be given for any assignments submitted after midnight on the last day of class (December 10th).**
 
 ## GitHub Commits
@@ -91,7 +91,7 @@ When using Git, you typically commit your code when you have something working t
 In this class we will use Git more aggressively by having you commit your code *when you encounter a problem*.
 This way I can track your progress through the assignment and see the problems you ran into.
 These commits will help me improve the labs and provide better feedback.
-Further, I plan on using your commit history as part of a training set for a machine learning project I am working on (this project will collect examples of "non working" HDL code, the error messages that were generated, and the fixes that were made to get the code working).
+Further, I plan on using your commit history as part of a training set for a machine learning project I am working on (this project will collect examples of "non-working" HDL code, the error messages that were generated, and the fixes that were made to get the code working).
 
 When committing your code after you experience a problem add a commit message with the following form: `"ERR:<error code> <Error summary>"`.
 This message is needed for me to review the various types of errors you are experiencing and see how you resolve the problem.
@@ -194,7 +194,7 @@ The coding standards are progressive meaning that additional standards will be a
 Each assignment will indicate which code standard level you will be required to follow.
 
 In addition to following coding standards, you are required to follow several git repository organization [standards](./coding_stadard.md#git-repository-standards).
-Several basic standards for organizing your github repositories are given to aid in the grading of assignments and to provide a tidy repository environment.
+Several basic standards for organizing your GitHub repositories are given to aid in the grading of assignments and to provide a tidy repository environment.
 
 You will receive full credit for this portion of your assignment grading if you conform to the coding and repository standards.
 You will receive feedback for any violations of these standards as part of your assignment grade.
@@ -226,7 +226,7 @@ My GitHub username is `wirthlin`.
 
 The [ECEN 520 student repository](https://github.com/byu-cpe/ecen520_student) is a repository that contains all the template code you need to complete the assignments for this class.
 You will need to populate your classroom repository with this repository to get started on your assignments.
-The following commands will clone the student repository and push it to your classroom repository (make sure to change your github username):
+The following commands will clone the student repository and push it to your classroom repository (make sure to change your GitHub username):
 ```
 git clone --bare git@github.com:byu-cpe/ecen520_student.git
 cd ecen520_student.git/

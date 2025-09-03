@@ -21,6 +21,11 @@ Before creating the top-level design, create a debouncer module to debounce the 
 A debouncer is needed to prevent a single press of the button from being interpreted as multiple presses and thus causing multiple characters to be transmitted over the UART.
 You will use this module in several of your future assignments during the semester.
 
+A detailed description of the debouncer can be found in the ECEN 320 [debouncer lab](https://byu-cpe.github.io/ecen320/labs/debouncer/) under Exercise #1. 
+Create your debouncer module using the same ports and parameters as listed in the lab.
+You are welcome to use the debouncer you created in a previous class but you may need to modify the debouncer so that it matches the ports and parameters described in the ECEN 320 lab.
+
+<!--
 Create a module named `debounce` with the following top-level ports and parameters:
 | Port Name | Direction | Width | Function |
 | ---- | ---- | ---- | ---- |
@@ -38,8 +43,9 @@ Your debouncer will need to have a parameter that specifies the number of clocks
 This way you can simulate your debouncer with relatively short debounce times but synthesize your debouncer with a longer debounce time.
 
 Design your debouncer with the following requirements:
-* Place a two flip-flop synchronizer on the input `async_in` signal to sycnrhonize the input signal to the clock domain.
+* Place a two flip-flop synchronizer on the input `async_in` signal to synchronizer the input signal to the clock domain.
 * Create a counter within your module to count the `DEBOUNCE_CLKS` before transitioning the output signal. You can use the `$clog2` function to determine how many bits are needed for the counter (i.e., `$clog2(DEBOUNCE_CLKS)`)
+-->
 
 When you have created your debouncer, simulate your debouncer with the testbench `debouncer_tb.sv` until your debouncer passes all tests.
 Create a makefile rule named `sim_debouncer` that will perform this simulation from the command line using the default module parameters.
@@ -74,6 +80,8 @@ Create your top-level design as follows:
   * Attach the lower 8 switches on the board to the lower 8 LEDs. This way the user can more easily see the value of the switches with the LEDs
   * Attach the `tx_busy` signal from your transmitter to the LED16_B signal. This is the "blue" color for tri-color LED 16 on the board (it should flash blue when the transmitter is busy)
   * Attach the CPU reset so that when pressed, the system will be reset (note that the input reset polarity is negative asserted). Add two synchronizing flip-flops between the reset button and your internal reset signal to synchronize the reset signal to the global clock. We will discuss the purpose of these synchronizing flip flops later in the class
+
+**TODO**: Put the synchrnooizer in the top level design (not the debouncer)
 
 Note that you must follow the [Level 2](../resources/coding_standard.md#level_2) coding standards for your Verilog files.
 
@@ -174,7 +182,6 @@ The following assignment specific items should be included in your repository:
 Preparation:
 - Make sure students can use putty on the lab machines. Try it out on the labs ahead of time.
 Future Changes:
-- Provide more requirements on what is expecrted for the size of the desgin and state machine results. Don't have them just cut and paste: have them talk about the results (number of state bits, and some observations)
 - Enforce certain warnings not showing up (CFG_Voltage, etc, parallel synthesis). Make it easier to earch for these warnings in grading.
 - Better instructions on how to download
 - add instructions in the lab instructions for how to set a parameter from the TCL script
@@ -183,8 +190,10 @@ Future Changes:
 - The debounce module uses clock cycles, but tx_top uses microseconds. The need to translate wasn't clear until I was failing testbenches.
 - Several students had problems with the debouncer parameters. They would do a multiplication that resulted in a large number that didn't fit in 32 bits and then when dividing they would have an invalid number. Provide additional instructions or more exmaples on how to create this parameter without the overflow issue.
   - Related to this, we need to have a testbench for the debouncer at the larger time scale so that we can catch this in simulation.
-- Have them experiment with different state encoding values to see how it affects reousrce utilization.
 - We should be adding the following attribute to all synchronier flip-flops in the download labs. Add this to the tx_download and all future download labs
    (* ASYNC_REG = "TRUE" *) logic [31:0] ssd_sync;
 * Suggestion 1 Make a note that the testbenches don't check for latches and that if your download fails but synthesis succeeds then this is a likely cause. 
+Future Ideas:
+  - Have them experiment with different state encoding values to see how it affects reousrce utilization.
+
 -->

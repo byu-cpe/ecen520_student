@@ -33,3 +33,5 @@
 | FDRE   |  |
 | IBUF   |  |
 | OBUF   |  |
+
+(For LUTx, add up the total number of LUTs of all sizes)
