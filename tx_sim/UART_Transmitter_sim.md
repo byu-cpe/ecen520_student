@@ -138,24 +138,26 @@ This will involve creating a `makefile` with a number of rules for simulating an
 A resource page with instructions for using the Vivado [command line](../resources/vivado_command_line.md) is available for you.
 -->
 When your transmitter operates correctly with the testbench, create a makefile with the `sim_tx` rule that will simulate your transmitter with the testbench from the command line.
+Your makefile rule should generate a file named `tx_sim.log` with the simulation output.
 Here is a sample makefile rule that will run the testbench simulation from the command line (you may need to adapt this to the names used by your design files):
 ```
 sim_tx: tx.sv
     vlog tx.sv tx_tb.sv rx_model.sv
-    vsim -c work.tx_tb -do "run -all; quit"
+    vsim -c work.tx_tb -l tx_sim.log -do "run -all; quit"
 ```
 **Note** the use of the `quit` command in the `vsim` command.
 This is necessary to exit the simulation after the simulation is complete so you can go on to the next makefile rule.
 
 You will need to verify that your transmitter works correctly with multiple baud rates and clock frequencies.
 Further, you need to verify that your transmitter works with both even and odd parity.
-You will need to create a makefile rule named `sim_tx_115200_even` that command line simulation of tx testbench with a baud rate of 115200 and even parity.
+You will need to create a makefile rule named `sim_tx_115200_even` that performs a command line simulation of the tx testbench with a baud rate of 115200 and even parity.
+The output of this simulation should be saved in a file named `tx_sim_115200_even.log`.
 The following makefile rule demonstrates how to elaborate the simulation model with different top-level parameters:
 
 ```
 sim_tx_115200_even: tx.sv
     vlog -sv tx.sv tx_tb.sv rx_model.sv
-    vsim -c work.tx_tb -gBAUD_RATE=115200 -gPARITY=0 -do "run -all; quit"
+    vsim -c work.tx_tb -l tx_sim.log -gBAUD_RATE=115200 -gPARITY=0 -do "run -all; quit"
 ```
 **Note**: You can't use an underscore in the parameters on the command line (i.e., -gBAUD_RATE=115_200 will not work).
 

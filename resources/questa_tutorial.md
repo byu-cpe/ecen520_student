@@ -32,6 +32,7 @@ You are encouraged to access the help documentation within QuestaSim to get more
 ## QuestaSim Command Line Tutorial
 
 1. Starting vsim in command line mode: `vsim -c`
+    * the `-logfile <logfile path>` option can be used to save all stdout output to a file for review
 2. Compile the example files: `vlog counter.sv counter_tb.sv`. This will create a directory `work` with the compiled files.
 3. Start simulation: `vsim -c work.counter_tb -voptargs=+acc`
 4. Run the simulation to the end: `run -all`
