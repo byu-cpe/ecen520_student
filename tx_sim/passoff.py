@@ -16,7 +16,13 @@ def main():
     tester = test_suite_520.build_test_suite_520("tx_sim", start_date="09/03/2025", max_repo_files = 20)
     tester.add_required_tracked_files(["tx.sv","tx_sim.png", "tx_sim_long.png"])
     tester.add_Makefile_rule("sim_tx", ["tx.sv"], ["tx_sim.log"])
+    tester.add_build_test(repo_test.file_regex_check("tx_sim.log", "Test Passed", 
+                                                     "tx testbench Test", error_on_match = False,
+                                                     error_msg = "tx testbench failed"))
     tester.add_Makefile_rule("sim_tx_115200_even", ["tx.sv"], ["tx_sim_115200_even.log"])
+    tester.add_build_test(repo_test.file_regex_check("tx_sim_115200_even.log", "Test Passed", 
+                                                     "tx testbench Test - 115200 even", error_on_match = False,
+                                                     error_msg = "tx testbench 115200 even failed"))
     tester.run_tests()
 
 if __name__ == "__main__":
