@@ -202,11 +202,11 @@ When grading your assignments, I will checkout your repository with the tag asso
 If your assignment fails the script, you will not receive any credit for the assignment.
 
 Once your assignment passes the script, it will be graded using the following three components:
-* **Operation** of your final assignment 
-* **Coding Standard** of your submission
-* **Assignment specific criteria**
+    * **Operation** of your final assignment 
+    * **Coding Standard** of your submission
+    * **Assignment specific criteria**
 The actual allocation of the assignment grade will be specified in the assignment page.
-Each of these compontents will be described in more detail below.
+Each of these components will be described in more detail below.
 
 **Operation**
 

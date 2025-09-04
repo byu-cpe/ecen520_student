@@ -9,3 +9,11 @@ startercode
 bootcamp
 Makefiles
 makefiles
+UART
+Vivado
+makefile
+Xilinx
+xdc
+Debouncer
+ECEN
+Modelsim

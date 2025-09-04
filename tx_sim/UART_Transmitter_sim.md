@@ -99,7 +99,7 @@ Simulation `.do` files can be used to interactively simulate your file.
 The [sim_tx.do](sim_tx.do) file can be used to simulate a simple single byte transmission.
 Use this simulation file to make sure your module properly simulates a full byte.
 After properly simulating your module, take a [screen shot](https://byu-cpe.github.io/ecen320/tutorials/lab_computers/screen_capture/) of your modelsim waveform and make sure your state machine variables are included in the waveform.
-Name your simluation file `tx_sim.png` and include it in your repository.
+Name your screenshot file `tx_sim.png` and include it in your repository.
 
 <!--
 After debugging your module and creating a simulation file, create a Makefile rule named `sim_tx_do` that will compile your tx module and simulate the module using the 'sim_tx.do' file.

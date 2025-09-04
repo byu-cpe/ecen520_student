@@ -1,29 +1,26 @@
 
+# TX Download
+
 For this assignment you will create a top-level design for your UART transmitter, synthesize the transmitter, and download it to the FPGA board.
 
 **Assignment reminders**
 
-* As with the previous assignment, you must place your assignment code within a specific assignment directory as described in the [assignments overview](../README.md) page.
+As with the previous assignment, you must place your assignment code within a specific assignment directory as described in the [assignments overview](../README.md) page.
 Make sure your add this directory to your repository and place all assignment specific code in this directory.
-* You will also need to tag your repository when you are ready to submit.
-* You are required to make frequent commits when you have design failures as described [here](../resources/assignment_mechanics.md#github-commits)
+<!-- * You will also need to tag your repository when you are ready to submit.
+* You are required to make frequent commits when you have design failures as described [here](../resources/assignment_mechanics.md#github-commits) -->
 
-## Top-Level Transmitter Design
 
-There are several steps needed to create a working UART transmitter design from your transmitter module from the last assignment.
-You will need to create a top-level design that includes your transmitter module, a debouncer, and a one-shot detector.
-You will need to create an xdc file that maps the pins of the FPGA to the ports of your design and you will need to run your full design files and xdc file through the Xilinx synthesis tools. 
-The instructions below will guide you through these steps.
+## Debouncer
 
-### Debouncer
-
-Before creating the top-level design, create a debouncer module to debounce the buttons on the FPGA board.
-A debouncer is needed to prevent a single press of the button from being interpreted as multiple presses and thus causing multiple characters to be transmitted over the UART.
+You will need a "debouncer" circuit to debounce the button input sent to your TX module.
+Without a debouncer, you will be sending multiple button presses to your TX module, which can cause it to transmit more than one byte every time you press the button.
+Start this assignment by creating a debouncer module.
 You will use this module in several of your future assignments during the semester.
 
 A detailed description of the debouncer can be found in the ECEN 320 [debouncer lab](https://byu-cpe.github.io/ecen320/labs/debouncer/) under Exercise #1. 
-Create your debouncer module using the same ports and parameters as listed in the lab.
-You are welcome to use the debouncer you created in a previous class but you may need to modify the debouncer so that it matches the ports and parameters described in the ECEN 320 lab.
+Create your debouncer module using the same module name, ports, and parameters as listed in the ECEN 320 lab.
+You are welcome to use the debouncer you created in a previous class, but you may need to modify the debouncer so that it matches the ports and parameters described in the ECEN 320 lab.
 
 <!--
 Create a module named `debounce` with the following top-level ports and parameters:
@@ -47,14 +44,31 @@ Design your debouncer with the following requirements:
 * Create a counter within your module to count the `DEBOUNCE_CLKS` before transitioning the output signal. You can use the `$clog2` function to determine how many bits are needed for the counter (i.e., `$clog2(DEBOUNCE_CLKS)`)
 -->
 
-When you have created your debouncer, simulate your debouncer with the testbench `debouncer_tb.sv` until your debouncer passes all tests.
+### Debouncer .do Simulation
+
+Simulate the debouncer in Modelsim with the GUI to see if your module operates properly using the default module parameters.
+Create a file named `debounce_sim.do` that adds waveform signals to the waveform viewer, stimulates the input by creating a few short pulses and then completes a full high to low and low to high transition on the debouncer output.
+Set the WAIT_TIME_US time to 10 us for your simulation.
+Include in the waveform view your state machine state and any counters used by the debouncer.
+After properly simulating your module, take a screenshot of the Modelsim waveform showing the proper operation.
+Name your screenshot `debounce_sim.png`
+
+### Debouncer Testbench Simulation
+
+When you have created your debouncer, simulate your debouncer with the testbench `tb_debouncer.sv` until your debouncer passes all tests.
 Create a makefile rule named `sim_debouncer` that will perform this simulation from the command line using the default module parameters.
+Save the output to a file named `sim_debouncer.log` 
 
-### Create a top-level FPGA design
+The testbench has a short default WAIT_TIME_US for shorter simulations (5 us).
+Create a makefile rule that simulates your debouncer with a WAIT_TIME_US = 10000 (10 ms).
+Create a makefile rule named `sim_debouncer_10ms` that will perform this simulation from the command line.
+Save the output to a file named `sim_debouncer_10ms.log` 
 
-Create a top-level design that instances your transmitter and hooks it up to the I/O pins of the FPGA board.
-For this assignment and throughout the class we will be using the [Nexys 4 DDR](https://reference.digilentinc.com/programmable-logic/nexys-4-ddr/start) board and the top-level ports will correspond to the port names on this board.
-Create a top-level module named `tx_top` with the following ports and parameters (the port names are derived from the nexys4 DDR XDC file):
+## Top-Level Transmitter Design
+
+Create a top-level design that instances your debouncer and transmitter and hooks it up to the I/O pins of the FPGA board.
+For this assignment and throughout the class we will be using the [Nexys4 DDR](https://reference.digilentinc.com/programmable-logic/nexys-4-ddr/start) board and the top-level ports will correspond to the port names on this board.
+Create a top-level module named `tx_top` with the following ports and parameters (the port names are derived from the Nexys4 DDR XDC file):
 
 | Port Name | Direction | Width | Function |
 | ---- | ---- | ---- | ----  |
@@ -78,8 +92,8 @@ Create your top-level design as follows:
   * Instance your transmitter component from the previous assignment (**Note**: do not copy your file into this assignment directory. Instead, use a relative path to the file in the previous assignment directory. If you need to make changes to the transmitter, make them in the previous directory. Your original submission should be properly tagged).
   * Attach the lower 8 switches on the board to the input to the UART transmitter (i.e., the value of the switches is the value to transmit over the UART). Insert a register between the switches and the transmitter input to synchronize the input to the global clock.
   * Attach the lower 8 switches on the board to the lower 8 LEDs. This way the user can more easily see the value of the switches with the LEDs
-  * Attach the `tx_busy` signal from your transmitter to the LED16_B signal. This is the "blue" color for tri-color LED 16 on the board (it should flash blue when the transmitter is busy)
-  * Attach the CPU reset so that when pressed, the system will be reset (note that the input reset polarity is negative asserted). Add two synchronizing flip-flops between the reset button and your internal reset signal to synchronize the reset signal to the global clock. We will discuss the purpose of these synchronizing flip flops later in the class
+  * Attach the `tx_busy` signal from your transmitter to the LED16_B signal. This is the "blue" color for tricolor LED 16 on the board (it should flash blue when the transmitter is busy)
+  * Attach the CPU reset so that when pressed, the system will be reset (note that the input reset polarity is negative asserted). Add two synchronizing flip-flops between the reset button and your internal reset signal to synchronize the reset signal to the global clock. We will discuss the purpose of these synchronizing flip-flops later in the class
 
 **TODO**: Put the synchrnooizer in the top level design (not the debouncer)
 
@@ -90,8 +104,14 @@ This testbench also uses the [rx_model.sv](../tx_sim/rx_model.sv) simulation mod
 Make sure your top-level design successfully passes this testbench.
 Add a makefile rule named `sim_tx_top` that will perform this simulation from the command line using the default parameters.
 In addition, make a second makefile rule named `sim_tx_top_115200_even` that performs this simulation with the parameters changed as follows: baud rate = 115200 and even parity.
-Note that the testbench has significnatly shortened the debounce delay time to shorten the simulation.
+**TODO** Note that the testbench has significantly shortened the debounce delay time to shorten the simulation.
 Do not proceed to the next step until you have successfully simulated your top-level design for both baud rates and parities.
+
+### Simulation
+
+.do file simulation
+
+Testbench simulation
 
 ## Design Implementation
 
