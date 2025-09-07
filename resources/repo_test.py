@@ -357,11 +357,18 @@ class file_regex_check(repo_test):
         with open(file_path, 'r') as file:
             file_contents = file.read()
             regex_match = re.search(self.regex_str, file_contents)
-        if regex_match and not self.error_on_match or not regex_match and self.error_on_match:
-            return self.success_result()
-        if self.error_msg is not None:
-            repo_test_suite.print_error(self.error_msg)
-        return self.error_result()
+        if self.error_on_match and regex_match:
+            # Error if there is a match
+            repo_test_suite.print_error(f'Regex \'{self.regex_str}\' matches in file {self.filename}')
+            if self.error_msg is not None:
+                repo_test_suite.print_error(self.error_msg)
+            return self.error_result()
+        if not self.error_on_match and not regex_match:
+            repo_test_suite.print_error(f'Regex \'{self.regex_str}\' does not match in file {self.filename}')
+            if self.error_msg is not None:
+                repo_test_suite.print_error(self.error_msg)
+            return self.error_result()
+        return self.success_result()
 
 class file_not_tracked_test(repo_test):
     ''' Checks to see if a given file is 'not tracked' in the repository.

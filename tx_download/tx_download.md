@@ -56,6 +56,8 @@ Name your screenshot `debounce_sim.png`
 ### Debouncer Testbench Simulation
 
 When you have created your debouncer, simulate your debouncer with the testbench `tb_debouncer.sv` until your debouncer passes all tests.
+This testbench uses a module `gen_bounce.sv` to generate a bouncy signal.
+You will need to compile this file as well as part of the testbench.
 Create a makefile rule named `sim_debouncer` that will perform this simulation from the command line using the default module parameters.
 Save the output to a file named `sim_debouncer.log` 
 
@@ -88,30 +90,34 @@ Create a top-level module named `tx_top` with the following ports and parameters
 | DEBOUNCE_TIME_US | integer | 10_000 | Specifies the minimum debounce delay in micro seconds (default 10 ms) |
 
 Create your top-level design as follows:
-  * Instance your debouncer module and hook up the `BTNC` button to the input of the debouncer. In addition, create a "one-shot" circuit on the output of the debouncer. The purpose of the one-shot circuit is to generate a single pulse when the button is pressed and to ignore any additional presses until the pulse has completed. If you do not add a one-shot circuit then the button press will be interpreted as multiple presses and multiple characters will be transmitted over the UART. The output of the debouncer plus one-shot circuits will go into the `send` input of your transmitter module.
   * Instance your transmitter component from the previous assignment (**Note**: do not copy your file into this assignment directory. Instead, use a relative path to the file in the previous assignment directory. If you need to make changes to the transmitter, make them in the previous directory. Your original submission should be properly tagged).
   * Attach the lower 8 switches on the board to the input to the UART transmitter (i.e., the value of the switches is the value to transmit over the UART). Insert a register between the switches and the transmitter input to synchronize the input to the global clock.
   * Attach the lower 8 switches on the board to the lower 8 LEDs. This way the user can more easily see the value of the switches with the LEDs
   * Attach the `tx_busy` signal from your transmitter to the LED16_B signal. This is the "blue" color for tricolor LED 16 on the board (it should flash blue when the transmitter is busy)
-  * Attach the CPU reset so that when pressed, the system will be reset (note that the input reset polarity is negative asserted). Add two synchronizing flip-flops between the reset button and your internal reset signal to synchronize the reset signal to the global clock. We will discuss the purpose of these synchronizing flip-flops later in the class
+  * Attach the CPU reset so that when pressed, the system will be reset (note that the input reset polarity is negative asserted). Add two synchronizing flip-flops between the reset button and your internal reset signal to synchronize the reset signal to the global clock.
+  * Create the 'send' signal for your tx module from the 'BTNC' on the board
+    * Add a two flip-flop synchronizer for the 'BTNC' button to synchronize the button to the global clock
+    * Instance your debouncer module and hook up the output of the synchronizer to the debouncer module
+    * Create a "one-shot" circuit on the output of the debouncer. The purpose of the one-shot circuit is to generate a single pulse when the button is pressed and to ignore any additional presses until the pulse has completed. If you do not add a one-shot circuit then the button press will be interpreted as multiple presses and multiple characters will be transmitted over the UART. The output of the one-shot circuit will go into the `send` input of your transmitter module.
 
-**TODO**: Put the synchrnooizer in the top level design (not the debouncer)
+You must follow the [Level 2](../resources/coding_standard.md#level_2) coding standards for your Verilog files.
 
-Note that you must follow the [Level 2](../resources/coding_standard.md#level_2) coding standards for your Verilog files.
+### Top-Level .do Simulation
+
+Simulate your top-level circuit with a .do file named `sim_tx_top.do`.
+In this .do file, add waveforms for signals at the top-level, your internal transmitter, and the debouncer.
+Simulate the top-level with the default baud rate and a debouncer wait time of 5us to make the simulation shorter.
+Create a screenshot of the simulation and name it `sim_tx_top.png`.
+
+### Top-Level Testbench
 
 A top-level testbench, [top_tb.sv](./top_tb.sv), has been created for you to test your top-level design.
-This testbench also uses the [rx_model.sv](../tx_sim/rx_model.sv) simulation model from the previous assignment.
+This testbench also uses the [rx_model.sv](../tx_sim/rx_model.sv) simulation model from the previous assignment and the gen_bounce.sv from this assignment.
 Make sure your top-level design successfully passes this testbench.
-Add a makefile rule named `sim_tx_top` that will perform this simulation from the command line using the default parameters.
-In addition, make a second makefile rule named `sim_tx_top_115200_even` that performs this simulation with the parameters changed as follows: baud rate = 115200 and even parity.
-**TODO** Note that the testbench has significantly shortened the debounce delay time to shorten the simulation.
+Add a makefile rule named `sim_tx_top_tb` that will perform this simulation from the command line using the default parameters.
+Save the output of this simulation to a file named `sim_tx_top_tb.log`
+In addition, make a second makefile rule named `sim_tx_top_tb_115200_even` that performs this simulation with the parameters changed as follows: baud rate = 115200 and even parity (save the output to a file named `sim_tx_top_tb_115200_even.log`).
 Do not proceed to the next step until you have successfully simulated your top-level design for both baud rates and parities.
-
-### Simulation
-
-.do file simulation
-
-Testbench simulation
 
 ## Design Implementation
 
@@ -119,8 +125,15 @@ After verifying your design, the next step in this assignment is to synthesize y
 If your design is properly verified and written in a way that synthesizes without any problems then this step can be relatively easy.
 For this class we will be using the command line tools in non-project mode for the synthesis and implementation.
 This is unlike previous classes where you might have used the Vivado GUI and used Vivado projects to manage your implementation flow.
+The following steps are needed to complete the design implementation:
 
-### XDC Constraints File
+1. Create .xdc constraints file
+2. Synthesis
+3. Implementation
+4. Bitstream generation
+5. Bitstream download
+
+### 1. XDC Constraints File
 
 The first step in this process is to create a top-level `.xdc` file that maps the top-level pins of your circuit to the appropriate FPGA pin on this board.
 The easiest way to do this is to start with the master [`.xdc`](../resources/Nexys-4-DDR-Master.xdc) file for the Nexys 4 DDR board and uncomment the appropriate pins used by your design.
@@ -134,15 +147,39 @@ set_property CFGBVS VCCO [current_design]
 ```
 Make sure you commit your `.xdc` file to your repository.
 
-### Design Implementation Tutorial
+### 2. Synthesis
 
-You will need to perform the following steps on your design within the FPGA design implementation tools:
-1. Synthesis
-2. Placement
-3. Routing
-4. Report generation
-5. Checkpoint generation
-6. Bitstream generation
+The next step is to 'synthesize' your design into a 'netlist' mappex to the FPGA logic primitives.
+Read through the following [synthesis tutorial](https://byu-cpe.github.io/ecen320/tutorials/vivado/vivado_command_line_synthesis/) to learn how to perform synthesis for your tx_top design.
+Note that in this class we are using the `xc7a100tcsg324-1` part (you will need to change your synthesis scripts accordingly).
+
+Create a makefile rule named `synth_tx_top` that does the following:
+  * generates a log file named `synth_tx_top.log` of the synthesis process
+  * generates a checkpoint file named `tx_top_synth.dcp`
+Carefully review your synthesis log and make sure there are no Warnings.
+
+<!--
+How many FDxE cells are used by the design?
+How many total LUT resources are used by the design? (add up all the LUT* resources)
+How many total IBUF and OBUF resources do you have in the design?
+-->
+
+### 3. Implementation
+
+The implementation step involves converting the FPGA netlist into a design mapped on a specific FPGA.
+The 'placement' step will place the primivites to specific sites on the FPGA.
+The 'routing' step will route the nets in the design to specific FPGA routing resources.
+You will also generate reports during these steps and generate checkpoint of your final design.
+Review the ECEN 320 [implementation tutorial](https://byu-cpe.github.io/ecen320/tutorials/vivado/vivado_command_line_implementation/) to learn how to do this in the command line.
+
+Create a makefile rule named `implement_tx_top` that does the following:
+  * generates a log file named `synth_tx_top.log` of the synthesis process
+  * generates a checkpoint file named `tx_top_synth.dcp`
+
+
+
+
+### HERE
 
 For this class, we will be using the command line version of the Vivado tools.
 The [following tutorial](../resources/vivado_implementation.md) will guide you through the steps of implementing your design with the command line tools.
