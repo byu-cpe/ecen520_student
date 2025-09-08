@@ -5,7 +5,7 @@ This page describes the mechanics of completing assignments including how to sub
 ## GitHub
 
 All assignments for this class will involve committing report files and source code to a private GitHub repository.
-If you do not have a GitHub account, you will need to [create an account](https://github.com/signup?ref_cta=Sign+up&ref_loc=header+logged+out&ref_page=%2F&source=header-home) for use in this class.
+If you do not have a GitHub account, you will need to [create an account](https://github.com/) for use in this class.
 <!--
 Send me your github username so I can add you as a user on the [ECEN_520](https://github.com/byu-cpe/ECEN_520) github repository which contains course materials, the class wiki, and assignment descriptions.
 -->
@@ -73,7 +73,7 @@ The assignment due dates are posted on learning suite.
 Each assignment submission will require a unique 'tag' where the actual tag is the same as the directory for the assignment.
 When grading your assignment, I will check the submission time of this tag. 
 If your latest commit of any file in the assignment with this tag is later than the deadline then you will be penalized for being late.
-You may change your files after the submission date but do not retag these files unless you are changing your submission.
+You may change your files after the submission date but do not re-tag these files unless you are changing your submission.
 A [submission process checklist](#assignment-submission-checklist) has been created for you to review as you submit your assignments.
 
 ## Assignment Due Dates and Late Policy
@@ -81,7 +81,7 @@ A [submission process checklist](#assignment-submission-checklist) has been crea
 Each assignment will have a due date/time published on learning suite.
 It is your responsibility to identify the due date and submit your assignment on time.
 Late assignments will be accepted and graded but will be subject to a 20% penalty.
-Late submissions can be submitted at any time but late submissions will not be graded in a timely manner and may not receive any feedback.
+Late submissions can be submitted at any tim, but late submissions will not be graded in a timely manner and may not receive any feedback.
 **No credit will be given for any assignments submitted after midnight on the last day of class (December 10th).**
 
 ## GitHub Commits
@@ -91,7 +91,7 @@ When using Git, you typically commit your code when you have something working t
 In this class we will use Git more aggressively by having you commit your code *when you encounter a problem*.
 This way I can track your progress through the assignment and see the problems you ran into.
 These commits will help me improve the labs and provide better feedback.
-Further, I plan on using your commit history as part of a training set for a machine learning project I am working on (this project will collect examples of "non working" HDL code, the error messages that were generated, and the fixes that were made to get the code working).
+Further, I plan on using your commit history as part of a training set for a machine learning project I am working on (this project will collect examples of "non-working" HDL code, the error messages that were generated, and the fixes that were made to get the code working).
 
 When committing your code after you experience a problem add a commit message with the following form: `"ERR:<error code> <Error summary>"`.
 This message is needed for me to review the various types of errors you are experiencing and see how you resolve the problem.
@@ -110,35 +110,60 @@ Each assignment will require you to include a certain number of these error comm
 
 # Assignment Submission and Grading
 
-## Assignment Submission Checklist
+All assignments are submitted through your classroom GitHub repository.
+Grading will involve checking out your repository and evaluating the files you have committed.
+This section will describe the process of submitting assignments and how your assignments are graded.
 
-Proper submissions of assignments is an involved process that must be followed carefully.
-This section provides a brief summary checklist of what you need to do to submit your assignment.
+## Assignment Submission Scripts
 
-1. Merge your repository with the latest starter code to make sure you have the latest starter code before submission.
-1. Make sure all assignment specific "makefile" rules are implemented and are working.
-    * The required makefile rules for each assignment will be summarized in the assignment instructions. You are welcome to include any others you like.
-    * You will not get any credit for the assignment if any of your makefile rules fail.
-2. Make sure all the _essential_ files needed to complete your project are committed into your repository.
-    * If any essential files are missing then your make rules will likely fail and you will not get any credit for the assignment.
-3. Make sure _non-essential_ files are **NOT** committed to your repository
-    * It is possible to inadvertently commit temporary project files.
-    * You will lose significant points if you commit large number of non-essential temporary files.
-4. Make sure you have a `.gitignore` file for your assignment directory and that all intermediate files created during the build process are ignored.
-    * You will lose points if intermediate files are generated by your make rule and are not ignored by your `.gitignore` file.
-5. Make sure you have a `make clean` rule that cleans _all_ intermediate files generated by your project.
-    * This rule needs to clean these files even if they are ignored
-    * You will lose points if your `make clean` rule does not clean all intermediate files.
-6. Each assignment will have a test script named `assignment_check.py` that will run all your rules and check your repository for compliance as described above. Run this script and clean up any problems that this script may identify.
-7. Each assignment will have a `report.md` file that you will need to complete. It will contain questions and assignment specific activities that should be included with the report.
-8. Commit, tag, and push your repository with the predetermined assignment tag.
+Each assignment will have a script named `passoff.py` that you must run to make sure your assignment is ready for submission and for performing the actual submission.
+Run the following command to check your assignment for correctness.
+```
+python3 passoff.py
+```
 
-Each assignment has a `assignment_check.py` script that you can run to check your repository for compliance with the assignment requirements.
+This script is unique for each assignment and will perform assignment-specific checks.
+This script will check your repository to make sure it meets a number of submission requirements.
+If any of these submission requirements are not met, you will not be able to submit your assignment.
+The script will check each of the following as part of the submission process:
+    * Make sure you don't have any upstream commits in your repository that are not in your local repository
+    * Make sure your repository with the latest starter code to make sure you have the latest starter code before submission.
+    * Make sure all assignment specific "makefile" rules are implemented and are working.
+        * The required makefile rules for each assignment will be summarized in the assignment instructions. You are welcome to include any others you like.
+        * You will not get any credit for the assignment if any of your makefile rules fail.
+    * Make sure all the _essential_ files needed to complete your project are committed into your repository.
+        * If any essential files are missing then your make rules will likely fail and you will not get any credit for the assignment.
+    * Make sure _non-essential_ files are **NOT** committed to your repository
+        * It is possible to inadvertently commit temporary project files.
+        * You will not be able to submit if you have too many files in your assignment directory. The default number of files allowed is 20 and may be modified for some assignments.
+    * Make sure you have a `.gitignore` file for your assignment directory and that all intermediate files created during the build process are ignored.
+        * You will not be able to submit if intermediate files are generated by your make rule and are not ignored by your `.gitignore` file.
+    * Make sure you have a `make clean` rule that cleans _all_ intermediate files generated by your project.
+        * This rule needs to clean these files even if they are ignored
+        * You will not be ablee to submit if your `make clean` rule does not clean all intermediate files.
+
+Once your assignment is correct, you can submit using the `--submit` flag.
+This flag will attempt to tag your assignment, commit the tag, and push the commit to your remote repository.
+```
+python3 passoff.py --submit
+```
+You may submit your assignment as many times as you like, but every time you submit the submission date will be updated.
+Avoid resubmitting unncessarily after the due date to avoid a late penatly on your assignment.
+
+## Assignment Reports
+
+Each assignment will have a `report.md` file that you will need to complete.
+It will contain questions and assignment specific activities that should be included with the report.
+Complete this file and commit changes to this file to your repository.
+This file is not checked by the passoff script so failure to complete the report will result in a significant loss of assignment points.
 
 ## Assignment Grading Checklist
 
+<!--
+
 This section provides a brief summary of how your assignment will be graded.
 I will run these commands on the digital lab computers using the software installed on those computers.
+
 
 1. Fetch and get tag of your submission
 ```
@@ -159,7 +184,6 @@ git log -n 1 tags/<assignment tag>
 4. Review and grade the `report.md` file and the assignment specific responses
 5. Review the code for coding standard compliance
 
-<!--
 7. Check to see if there are any files that are generated during the build process but not ignored. I will run the following command:
 `git ls-files . --exclude-standard --others`. <br>If there are any files not ignored after running the above make commands then you will lose points.
 7. Review the number of commits and the commit messages to your assignment directory: `git log --pretty=format:"%ad %s" --date=short --`. You will need to demonstrate that you have made several error commits as part of your history. `git log --pretty=format:"%ad %s" --date=format:"%m%d%y/%H:%M"`
@@ -174,18 +198,22 @@ If there are any files that remain that are not cleaned by the `make clean` then
 
 ## Assignment Grading
 
-Each assignment will be graded using the following three components:
-* **Operation** of your final assignment 
-* **Coding Standard** of your submission
-* **Assignment specific criteria**
+When grading your assignments, I will checkout your repository with the tag associated with the repository and run the `passoff.py` script.
+If your assignment fails the script, you will not receive any credit for the assignment.
+
+Once your assignment passes the script, it will be graded using the following three components:
+    * **Operation** of your final assignment 
+    * **Coding Standard** of your submission
+    * **Assignment specific criteria**
 The actual allocation of the assignment grade will be specified in the assignment page.
-Each of these will be described in more detail below.
+Each of these components will be described in more detail below.
 
 **Operation**
 
 For this portion of your grade, you will be graded on the actual functionality of submission and will depend on the requirements of the given assignment.
 This will usually include a simulation, synthesis, and actual operation on an FPGA board.
 Note that submissions that do not simulate or build (i.e., submissions with syntax or build errors) will not receive any credit for this component of your grade.
+Your assignment must perform the requirements as described by the assignment write up.
 
 **Coding Standard**
 
@@ -194,7 +222,7 @@ The coding standards are progressive meaning that additional standards will be a
 Each assignment will indicate which code standard level you will be required to follow.
 
 In addition to following coding standards, you are required to follow several git repository organization [standards](./coding_stadard.md#git-repository-standards).
-Several basic standards for organizing your github repositories are given to aid in the grading of assignments and to provide a tidy repository environment.
+Several basic standards for organizing your GitHub repositories are given to aid in the grading of assignments and to provide a tidy repository environment.
 
 You will receive full credit for this portion of your assignment grading if you conform to the coding and repository standards.
 You will receive feedback for any violations of these standards as part of your assignment grade.
@@ -203,6 +231,11 @@ You will receive feedback for any violations of these standards as part of your 
 
 This portion of your grade will be based on any assignment specific criteria you are given.
 See the assignment description for details on this portion of your grade.
+
+**Late Penalty**
+
+If your assignment is tagged with a date later than the assignment due date, your score will be reduced by 20%.
+The submission date is based on the timestamp of your last assignment submission using the `passoff.py` submission script.
 
 # Setting up your GitHub Repository
 
@@ -226,7 +259,7 @@ My GitHub username is `wirthlin`.
 
 The [ECEN 520 student repository](https://github.com/byu-cpe/ecen520_student) is a repository that contains all the template code you need to complete the assignments for this class.
 You will need to populate your classroom repository with this repository to get started on your assignments.
-The following commands will clone the student repository and push it to your classroom repository (make sure to change your github username):
+The following commands will clone the student repository and push it to your classroom repository (make sure to change your GitHub username):
 ```
 git clone --bare git@github.com:byu-cpe/ecen520_student.git
 cd ecen520_student.git/
