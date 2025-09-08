@@ -13,8 +13,8 @@ This repository contains the lecture schedule (including links to lecture summar
 | 9/5/2025   | [SystemVerilog Review](./lectures/system_verilog_overview.md) |
 | **Week 2** | |
 | 9/8/2025   | [Behavioral SystemVerilog](./lectures/system_verilog_sequential.md) |
-| 9/10/2025  | [FSM Design](./lectures/fsm_design.md) |
-| 9/12/2025  | [~~FSM Output Glitches and State Encoding~~](./lectures/glitches.md) |
+| 9/10/2025  | [FSM Design #1](./lectures/fsm_design.md) |
+| 9/12/2025  | [FSM Design #2](./lectures/fsm_design.md) |
 | **Week 3** | |
 | 9/15/2025  | [FSM Output Glitches and State Encoding](./lectures/glitches.md) |
 | 9/17/2025  | [RTL Design using ASM Diagrams](./lectures/rtl_asmd.md) |

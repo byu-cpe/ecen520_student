@@ -11,7 +11,7 @@ We will focus primarily on syntax for structural design in SystemVerilog and com
 ## Key Concepts
 * Purpose of SystemVerilog and how it differs from other programming/HDL languages
 * Module definition (ports, module naming) (chapter 8)
-* Parameterization (chapter ?)
+* Parameterization
 * Defining wires/logic (chapter 11)
 * Module instantiation/parameterization (chapter 11)
 * SystemVerilog constants (chapter 11)

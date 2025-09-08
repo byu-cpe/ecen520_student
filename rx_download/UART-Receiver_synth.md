@@ -7,11 +7,11 @@ You will also create a seven segment display controller for displaying data from
 
 ## Seven Segment Controller and Testbench
 
-For this assignment and for most future assignments you will need to display values on the seven segment display of the Nexys DDR board.
+For this assignment and for most future assignments you will need to display values on the seven segment display of the Nexys4 DDR board.
 To make this easier, you will create a seven segment display controller that will drive the seven segment display.
 
 Create a "seven segment controller" module that will drive the seven segment display of the Nexys DDR board. 
-This module can be based on the [segment sevent display](http://ecen220wiki.groups.et.byu.net/labs/lab-05/) module developed in ECEN 220.
+This module can be based on the [seven segment display](https://byu-cpe.github.io/ecen320/labs/multi-segment/) module developed in ECEN 320.
 Note that there are eight digits on the seven segment display for this board so you will need to support all eight digits with your module. 
 Include the following ports and parameters in your module:
 
