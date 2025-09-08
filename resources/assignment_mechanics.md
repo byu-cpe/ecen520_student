@@ -277,7 +277,7 @@ Once you have a remote repository that is properly populated with the starter co
 Complete the following steps every time you create a local repository for an assignment:
 ```
 # Clone your repository
-git clone git@github.com:byu-ecen520-fall2024/520-assignments-<githubusername>.git ~/ecen520
+git clone git@github.com:byu-ecen520-fall2025/520-assignments-<githubusername>.git ~/ecen520
 # Create a remote repository to the starter code
 cd ~/ecen520
 git remote add startercode git@github.com:byu-cpe/ecen520_student.git
