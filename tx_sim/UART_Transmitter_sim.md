@@ -157,7 +157,7 @@ The following makefile rule demonstrates how to elaborate the simulation model w
 ```
 sim_tx_115200_even: tx.sv
     vlog -sv tx.sv tx_tb.sv rx_model.sv
-    vsim -c work.tx_tb -l tx_sim.log -gBAUD_RATE=115200 -gPARITY=0 -do "run -all; quit"
+    vsim -c work.tx_tb -l tx_sim_115200_even.log -gBAUD_RATE=115200 -gPARITY=0 -do "run -all; quit"
 ```
 **Note**: You can't use an underscore in the parameters on the command line (i.e., -gBAUD_RATE=115_200 will not work).
 
