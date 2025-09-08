@@ -37,7 +37,7 @@ These standards are required for **all** assignments.
 Implement the standards for Level 1 and the following additional standards:
 
   * Synchronous Blocks (always/process blocks that generate synchronous circuits)
-    * Reset clause: by defaull, all synchronous blocks should have a reset clause. If a reset is not needed, provide a comment indicating why a reset is not needed.
+    * Reset clause: by default, all synchronous blocks should have a reset clause. If a reset is not needed, provide a comment indicating why a reset is not needed.
       * The reset clause must be the first clause in the block.
       * All other logic should be in the 'else' portion of the first, initial reset clause. This 'else' clause should not have any logic in it (i.e., reset logic in first clause, all other logic in else clause)
       * There should be only one reset clause in the block (if a reset is used). 

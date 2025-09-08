@@ -17,3 +17,4 @@ xdc
 Debouncer
 ECEN
 Modelsim
+Combinational

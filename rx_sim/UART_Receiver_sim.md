@@ -1,13 +1,12 @@
 
 # UART Receiver and Testbench
 
-The purpose of this assignment is to create a UART receiver module and verify that it operates correctly with a custom testbench.
+The purpose of this assignment is to create a UART receiver module and verify that it operates correctly with a your own custom testbench.
 
 ## UART Receiver Module
 
-The primary goal of this assignment is to design a UART receiver module that can receive data from a UART transmitter.
 Create a UART receiver module that actively monitors the input "data in" signal receives a single byte of data and a parity bit.
-There is a ECEN 320 lab description for the [UART Receiver](https://byu-cpe.github.io/ecen320/labs/lab-11/) but the requirements for this receiver may be slightly different.
+There is a ECEN 320 lab description for the [UART Receiver](https://byu-cpe.github.io/ecen320/labs/rx-lab/), but the requirements for this receiver may be slightly different.
 
 Create your receiver with the following ports and parameters
 
@@ -33,9 +32,9 @@ Design your receiver such that:
 * Provide a single cycle 'data_strobe' signal when you have received a new data value. The `dout` signal should have the new data value when the `data_strobe` signal is asserted.
 * When your state machine is reset, it should check to make sure the 'din' input is '1' before going to an IDLE state and accepting received data. The purpose of this is to avoid the case when the input line starts out low on reset.
 * Set the `rx_error` signal low every time you start a new transaction. When a transaction is complete, set the `rx_error` signal to '1' if any of the three conditions occur:
-  * A '0' is not sampled in the middle of the first start bit
+  * A '0' is not sampled in the _middle_ of the first start bit
   * The received parity is incorrect
-  * A stop bit is not received (i.e., you do not receive a '1' in the middle of the stop bit)
+  * A stop bit is not received (i.e., you do not receive a '1' in the _middle_ of the stop bit)
 
 <!--
     If you get a reset and the input din is a '0' then you should go to some sort of "Startup" type state that just sits there and waits until din goes high. Once din goes high you can go into an idle state to wait for din to go to 0 again. The reason for this is that you do not want to just immediately start receiveing a character upon reset. You want to start up in a known state.
@@ -43,14 +42,18 @@ Design your receiver such that:
 
 Note that you must follow the [Level 2](../resources/coding_standard.md#level-2) coding standards for your Verilog files.
 
+### Receiver .do Simulation
+
+**TODO: .do and a png **
+
 ## Receiver Testbench
 
 Create a dedicated testbench for your receiver with the following requirements:
   * Provide the parameters of BAUD_RATE and PARITY to your receiver module so you can change the baud rate and parity in your testbench
   * Provide a testbench parameter `NUMBER_OF_CHARS` with a default value of 10 that indicates the number of characters to transmit    
-  * Instance your UART transmitter from the first assignment and set the parameters of your transmitter based on the paramters of your top-level testbench
-  * Instance your receiver module and hook up the transmitter to the receiver (Again, set the parameters of your receiver)
-    * Hook up the transmit out signal from the transmitter to the receive in signal of the receiver (simulate a loop back)
+  * Instance your UART transmitter from the first assignment and set the parameters of your transmitter based on the parameters of your top-level testbench
+  * Instance your receiver module and hook up the transmitter to the receiver (set the parameters of your receiver)
+    * Hook up the 'transmit out' signal from the transmitter to the 'receive in' signal of the receiver (simulate a loop back)
   * Generate a free oscillating clock
   * Create a testbench task that takes as input an 8-bit value to send. Write this task to do the following:
     * Set the value to send based on the parameter of the task
@@ -70,7 +73,7 @@ Create a dedicated testbench for your receiver with the following requirements:
     * End the simulation with `$stop`
 
 You may want to review the [testbench](../tx_sim/tx_tb.sv) that was created for you in the previous assignment as an example to get started.
-You may refer to and model your testbench after the [ECEN 220 Transmitter testbench](http://ecen220wiki.groups.et.byu.net/resources/testbenches/tb_tx.sv) as well.
+<!-- You may refer to and model your testbench after the [ECEN 220 Transmitter testbench](http://ecen220wiki.groups.et.byu.net/resources/testbenches/tb_tx.sv) as well. -->
 When your transmitter operates correctly with the testbench, create a makefile with the `sim_rx` rule that will simulate your transmitter with the testbench from the command line.
 In addition, create a makefile rule `sim_rx_115200_even` that simulates the receiver with a baud rate of 115200 and even parity.
 
@@ -107,7 +110,7 @@ The following assignment specific items should be included in your repository:
 <!--
 Future Changes:
 * The synthesis tool couldn't extract a FSM from some students. Need to figure out what is going on. Perhaps make a requirement that it has to find it?
-* ask them to manually change the FSM encoding type when thhey synthesize to see the impact.
+* ask them to manually change the FSM encoding type when they synthesize to see the impact.
 * Any _new_ coding standards to add? It would be nice to add something for this assignment
 * Have them create a function in the testbench
 * Be more clear on what should be in the report for cells
