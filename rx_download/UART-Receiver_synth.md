@@ -166,7 +166,8 @@ Review the instructions on [adjusting the message severity level](../resources/v
 These instructions list messages that can be downgraded and those that should be upgraded. 
 You will need to make sure that you don't have *any* synthesis warnings in your implementation.
 
-Note that you should add the following to your .xdc file to get rid of the "Missing CFGBVS and CONFIG_VOLTAGE Design Properties" warning:
+Note that you should add the following to your .x  - Have them experiment with different state encoding values to see how it affects reousrce utilization.
+dc file to get rid of the "Missing CFGBVS and CONFIG_VOLTAGE Design Properties" warning:
 
 ```
 set_property CFGBVS VCCO [current_design]
@@ -205,6 +206,7 @@ Notes:
   - Teach them how to set the tools to ignore warnings and how to get rid of warnings
   - Tell them that they should not have *any* warnings during synthesis
 -- Any _new_ coding standards to add? It would be nice to add something for this assignment
+? Experiment with different encoding styles?
 
 - Future:
   - Make sure that the data displayed on the LEDs doesn't change/flicker (i.e., latch the data)

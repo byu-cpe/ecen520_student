@@ -35,8 +35,8 @@ def main():
     tester.add_Makefile_rule("implement", ["tx_top_synth.dcp"], ["implement.log", "tx_top.bit", 
                                             "tx_top.dcp", "utilization.rpt", "timing.rpt"])
     tester.add_Makefile_rule("synth_115200_even", ["tx_top.sv"], ["synth_115200_even.log", "tx_top_115200_even_synth.dcp"])
-    tester.add_Makefile_rule("implement_115200_even", ["tx_top_115200_even_synth.dcp"], ["implement_115200_even.log", "tx_top.bit", 
-                                            "tx_top.dcp", "utilization_115200_even.rpt", "timing_115200_even.rpt"])
+    tester.add_Makefile_rule("implement_115200_even", ["tx_top_115200_even_synth.dcp"], ["implement_115200_even.log", "tx_top_115200_even.bit", 
+                                            "tx_top_115200_even.dcp", "utilization_115200_even.rpt", "timing_115200_even.rpt"])
     tester.run_tests()
 
 
