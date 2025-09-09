@@ -188,7 +188,7 @@ Review the ECEN 320 [implementation tutorial](https://byu-cpe.github.io/ecen320/
 Create a makefile rule named `implement` that does the following:
   * Performs placement and routing on your top level design using the `tx_top_synth.dcp` checkpoint file from the synthesis step
   * generates a log file named `implement.log` of the synthesis process
-  * generates a dcp file named `tx_top_synth.dcp`
+  * generates a dcp file named `tx_top.dcp`
   * generates a bitfile named `tx_top.bit`
   * generates a utilization report named `utilization.rpt` and a timing report named `timing.rpt`  
 
