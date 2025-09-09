@@ -158,6 +158,18 @@ Create a makefile rule named `synth_tx_top` that does the following:
   * generates a checkpoint file named `tx_top_synth.dcp`
 Carefully review your synthesis log and make sure there are no Warnings.
 
+In addition to synthesizing your design with default parameters, create a second makefile rule named `synth_tx_top_115200_even` that synthesizes your design with the parameters changed as follows: BAUD_RATE = 115200 and PARITY=0 (even parity).
+This rule should generate:
+  * a log file named `synth_tx_top_115200_even.log`
+  * a checkpoint file named `tx_top_115200_even_synth.dcp`
+
+To change the parameters during the synthesis step, you need to add additional parameters to the `synth_design` command in your synthesis .tcl script.
+The following example demonstrates how to setup your parameters for this script:
+
+```
+synth_design -top tx_top -part xc7a100tcsg324-1 -verbose -generic {BAUD_RATE=115200} -generic {PARITY=0}
+```
+
 <!--
 How many FDxE cells are used by the design?
 How many total LUT resources are used by the design? (add up all the LUT* resources)
@@ -166,21 +178,28 @@ How many total IBUF and OBUF resources do you have in the design?
 
 ### 3. Implementation
 
-The implementation step involves converting the FPGA netlist into a design mapped on a specific FPGA.
+The implementation step involves converting the FPGA netlist into a design mapped on a specific FPGA and ultimately a bitstream.
 The 'placement' step will place the primivites to specific sites on the FPGA.
 The 'routing' step will route the nets in the design to specific FPGA routing resources.
+The 'bitgen' step will convert the routed design into a bitstream that can be downloaded to the FPGA.
 You will also generate reports during these steps and generate checkpoint of your final design.
 Review the ECEN 320 [implementation tutorial](https://byu-cpe.github.io/ecen320/tutorials/vivado/vivado_command_line_implementation/) to learn how to do this in the command line.
 
-Create a makefile rule named `implement_tx_top` that does the following:
-  * generates a log file named `synth_tx_top.log` of the synthesis process
-  * generates a checkpoint file named `tx_top_synth.dcp`
+Create a makefile rule named `implement` that does the following:
+  * Performs placement and routing on your top level design using the `tx_top_synth.dcp` checkpoint file from the synthesis step
+  * generates a log file named `implement.log` of the synthesis process
+  * generates a dcp file named `tx_top_synth.dcp`
+  * generates a bitfile named `tx_top.bit`
+  * generates a utilization report named `utilization.rpt` and a timing report named `timing.rpt`  
 
+In addition, create a makefile rule named `synth_115200_even` that generates the following files:
+  * Performs placement and routing on your top level design using the `tx_top_115200_even_synth.dcp` checkpoint file from the synthesis step
+  * generates a log file named `implement_115200_even.log` of the synthesis process
+  * generates a dcp file named `tx_top_115200_even.dcp`
+  * generates a bitfile named `tx_top_115200_even.bit`
+  * generates a utilization report named `utilization_115200_even.rpt` and a timing report named `timing_115200_even.rpt`  
 
-
-
-### HERE
-
+<!--
 For this class, we will be using the command line version of the Vivado tools.
 The [following tutorial](../resources/vivado_implementation.md) will guide you through the steps of implementing your design with the command line tools.
 
@@ -195,6 +214,7 @@ The following example demonstrates such a rule.
 gen_tx_bit:
   vivado -mode batch -source tx_top_synth.tcl
 ```
+-->
 
 ## Design Download
 
@@ -202,9 +222,12 @@ After successfully synthesizing your design and generating a bitfile, download y
 Instructions for downloading your design can be found [here](../resources/download.md).
 
 Use the "Putty" tool to send characters from your board to the computer. 
-There is a tutorial on [Putty](https://byu-cpe.github.io/ecen320/tutorials/other/01_putty_setup/) that can help you run this tool.
+There is a tutorial on [Putty](https://byu-cpe.github.io/ecen320/tutorials/lab_computers/putty/) that can help you run this tool.
 After generating a bitstream, download your bitstream and make sure your transmitter bitstream works with a terminal emulator.
 You may want to view an [ASCII Table](https://commons.wikimedia.org/wiki/File:ASCII-Table-wide.svg) to test a variety of characters.
+
+Make sure you try both bitfiles and configure putty to operate with each bitfile separately.
+Your bitfiles will be downloaded and verified as part of the grading process.
 
 <!--
 (didn't work for me)
@@ -220,19 +243,18 @@ screen /dev/ttyUSB2 115200,cs8,parenb,-parodd,-cstopb
 
 The following assignment specific items should be included in your repository:
 
-1. Required Makefile rules:
-    * `sim_debouncer`: Simulate your debouncer
+1. Implement all of the makefile rules described above
+    <!-- * `sim_debouncer`: Simulate your debouncer
     * `sim_tx_top`:
     * `sim_tx_top_115200_even`:
     * `gen_tx_bit`: Generate a bitfile for your transmitter
-    * `gen_tx_bit_115200_even`: Generate a bitfile for your transmitter with a baud rate of 115200 and even parity
+    * `gen_tx_bit_115200_even`: Generate a bitfile for your transmitter with a baud rate of 115200 and even parity -->
 2. You need to have at least 4 "Error" commits in your repository as described [here](../resources/assignment_mechanics.md#github-commits).
-3. Assignment specific Questions:
-    1. The synthesis log will summarize any state machines that it created. Provide a table listing the state and the encoding that the synthesis tool used for your transmitter state machine.
-    1. Provide a table summarizing the resources your design uses. Use the template table below. You can get this information from the implementation utilization report.
-    1. Determine the "Worst Negative Slack" (or WNS). This is found in the timing report and indicates how much timing you slack you have with the current clocking (we will discuss this later in the semester).
+3. Assignment specific Questions: see the [report.md](./report.md) for assignment specific questions.
+
+    <!-- 1. Determine the "Worst Negative Slack" (or WNS). This is found in the timing report and indicates how much timing you slack you have with the current clocking (we will discuss this later in the semester).
     1. Indicate how many times you had to synthesize your design
-    1. Indicate how many times you had to download your bitstream before your circuit worked. Note that I want two numbers: number of synthesis attempts and number of download attempts. Do not mix these together.
+    1. Indicate how many times you had to download your bitstream before your circuit worked. Note that I want two numbers: number of synthesis attempts and number of download attempts. Do not mix these together. -->
 
 
 <!--
@@ -241,16 +263,10 @@ Preparation:
 Future Changes:
 - Enforce certain warnings not showing up (CFG_Voltage, etc, parallel synthesis). Make it easier to earch for these warnings in grading.
 - Better instructions on how to download
-- add instructions in the lab instructions for how to set a parameter from the TCL script
 - Need to explain in more detail the need to carefully review the syntehsis logs. Perhaps provide a few examples of what to look for in the logs.
-- Have them save the synthesis and implementation logs as a specific file in their directory that we can look at later
-- The debounce module uses clock cycles, but tx_top uses microseconds. The need to translate wasn't clear until I was failing testbenches.
-- Several students had problems with the debouncer parameters. They would do a multiplication that resulted in a large number that didn't fit in 32 bits and then when dividing they would have an invalid number. Provide additional instructions or more exmaples on how to create this parameter without the overflow issue.
-  - Related to this, we need to have a testbench for the debouncer at the larger time scale so that we can catch this in simulation.
 - We should be adding the following attribute to all synchronier flip-flops in the download labs. Add this to the tx_download and all future download labs
    (* ASYNC_REG = "TRUE" *) logic [31:0] ssd_sync;
 * Suggestion 1 Make a note that the testbenches don't check for latches and that if your download fails but synthesis succeeds then this is a likely cause. 
 Future Ideas:
-  - Have them experiment with different state encoding values to see how it affects reousrce utilization.
 
 -->
