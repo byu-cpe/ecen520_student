@@ -33,7 +33,7 @@ module tx_top_tb ();
     assign rst = ~rst_n;
 
     // Debounce simulation generator
-    gen_bounce #(.BOUNCE_CLOCKS_LOW_RANGE(2), .BOUNCE_CLOCKS_HIGH_RANGE(20))
+    gen_bounce
     bounce_btnc(
         .clk(clk),
         .sig_in(btnc),
