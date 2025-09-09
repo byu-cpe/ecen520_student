@@ -160,7 +160,7 @@ Carefully review your synthesis log and make sure there are no Warnings.
 
 In addition to synthesizing your design with default parameters, create a second makefile rule named `synth_tx_top_115200_even` that synthesizes your design with the parameters changed as follows: BAUD_RATE = 115200 and PARITY=0 (even parity).
 This rule should generate:
-  * a log file named `synth_tx_top_115200_even.log`
+  * a log file named `synth_115200_even.log`
   * a checkpoint file named `tx_top_115200_even_synth.dcp`
 
 To change the parameters during the synthesis step, you need to add additional parameters to the `synth_design` command in your synthesis .tcl script.
