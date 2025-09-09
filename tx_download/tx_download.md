@@ -158,7 +158,7 @@ Create a makefile rule named `synth` that does the following:
   * generates a checkpoint file named `tx_top_synth.dcp`
 Carefully review your synthesis log and make sure there are no Warnings.
 
-In addition to synthesizing your design with default parameters, create a second makefile rule named `synth_tx_top_115200_even` that synthesizes your design with the parameters changed as follows: BAUD_RATE = 115200 and PARITY=0 (even parity).
+In addition to synthesizing your design with default parameters, create a second makefile rule named `synth_115200_even` that synthesizes your design with the parameters changed as follows: BAUD_RATE = 115200 and PARITY=0 (even parity).
 This rule should generate:
   * a log file named `synth_115200_even.log`
   * a checkpoint file named `tx_top_115200_even_synth.dcp`
@@ -193,7 +193,7 @@ Create a makefile rule named `implement` that does the following:
   * generates a utilization report named `utilization.rpt` and a timing report named `timing.rpt`  
 
 In addition, create a makefile rule named `implement_115200_even` that generates the following files:
-  * Performs placement and routing on your top level design using the `tx_top_115200_even_synth.dcp` checkpoint file from the synthesis step
+  * Performs placement and routing on your top level design using the `115200_even_synth.dcp` checkpoint file from the synthesis step
   * generates a log file named `implement_115200_even.log` of the synthesis process
   * generates a dcp file named `tx_top_115200_even.dcp`
   * generates a bitfile named `tx_top_115200_even.bit`
