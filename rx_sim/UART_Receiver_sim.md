@@ -1,13 +1,21 @@
 
 # UART Receiver and Testbench
 
-The purpose of this assignment is to create a UART receiver module and verify that it operates correctly with a your own custom testbench.
+The purpose of this assignment is to create and verify a UART receiver module and create and verify an 8-digit seven segment display.
+<!--
+They won't have had much experience with testbenches at this point. Change the assignment to:
+- Focus on synthesis logs and synthesis options
+- 
+-->
 
 ## UART Receiver Module
 
 Create a UART receiver module that actively monitors the input "data in" signal receives a single byte of data and a parity bit.
-There is a ECEN 320 lab description for the [UART Receiver](https://byu-cpe.github.io/ecen320/labs/rx-lab/), but the requirements for this receiver may be slightly different.
+Follow the guidelines in Exercise #1 of the ECEN 320 [UART Receiver](https://byu-cpe.github.io/ecen320/labs/rx-lab/#exercise-1---asynchronous-receiver-module) lab.
+Make sure you use the same ports and parameters. 
+Note that you must follow the [Level 2](../resources/coding_standard.md#level-2) coding standards for your SystemVerilog files.
 
+<!-- 
 Create your receiver with the following ports and parameters
 
 | Port Name | Direction | Width | Function |
@@ -34,19 +42,29 @@ Design your receiver such that:
 * Set the `rx_error` signal low every time you start a new transaction. When a transaction is complete, set the `rx_error` signal to '1' if any of the three conditions occur:
   * A '0' is not sampled in the _middle_ of the first start bit
   * The received parity is incorrect
-  * A stop bit is not received (i.e., you do not receive a '1' in the _middle_ of the stop bit)
+  * A stop bit is not received (i.e., you do not receive a '1' in the _middle_ of the stop bit) 
+  -->
 
 <!--
     If you get a reset and the input din is a '0' then you should go to some sort of "Startup" type state that just sits there and waits until din goes high. Once din goes high you can go into an idle state to wait for din to go to 0 again. The reason for this is that you do not want to just immediately start receiveing a character upon reset. You want to start up in a known state.
 -->
 
-Note that you must follow the [Level 2](../resources/coding_standard.md#level-2) coding standards for your Verilog files.
 
 ### Receiver .do Simulation
 
-**TODO: .do and a png **
+After creating your receiver module, simulate the receiving of a single byte using the guidelines listed below.
+Create a file named `sim_rx.do` that performs the following:
+  * Run the simulation for 100ns without setting any values
+  * Create a 100 MHz oscillating clock and run for a few clock cycles
+  * Set the reset to ‘1’ and default values for all inputs and run for a few clock cycles
+  * De-assert the reset signal and run for a few clock cycles
+  * Emulate the transmission of the following byte: 0x41 (ASCII ‘A’) using a baud rate of 19,200 and correct ODD parity.
+  * Run for at least 100 us after the end of the serial transmission
+  * Assert ‘ReceiveAck’ and run for 10 us
 
-## Receiver Testbench
+After your module simulates successfully, take a screenshot of the simulation and name the file sim_rx.png.
+
+### Receiver Testbench
 
 Create a dedicated testbench for your receiver with the following requirements:
   * Provide the parameters of BAUD_RATE and PARITY to your receiver module so you can change the baud rate and parity in your testbench

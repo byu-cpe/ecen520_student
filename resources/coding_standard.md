@@ -14,6 +14,9 @@ These standards are required for **all** assignments.
   * **Module File**
     * Create one file for each module you are creating. Do not put two or more modules in a single file (no matter which language you are coding in)
     * The name of the file must match the name of the module/entity you are creating (i.e., use a file named tx.sv for a module named tx)
+  * **Declarations**
+    * All signals, variables, and parameters should be declared at the beginning of the module or block.
+    * Use meaningful names for all declarations to improve code readability.x
   * **Comments**
     * File header: Every HDL file should have a file header as a comment at the top of the file that includes *each* the following:
       * Name of module
