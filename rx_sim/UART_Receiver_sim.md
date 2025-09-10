@@ -62,10 +62,17 @@ Create a file named `sim_rx.do` that performs the following:
   * Run for at least 100 us after the end of the serial transmission
   * Assert ‘ReceiveAck’ and run for 10 us
 
-After your module simulates successfully, take a screenshot of the simulation and name the file sim_rx.png.
+After your module simulates successfully, take a screenshot of the simulation and name the file `sim_rx.png`.
 
 ### Receiver Testbench
 
+Once you have demonstrated your module working with a .do file, test your module with the `tb_rx.sv` testbench.
+Create a makefile rule named `sim_rx` that will simulate your transmitter with the testbench from the command line with default parameters and save the output to the file `sim_rx.log`.
+Make sure you have no errors with your testbench.
+Next, create a rule named `sim_rx_115200_even` that will simulate your transmitter with a baud rate of 115200 and using even parity. 
+Log this simulation to a file named `sim_rx_115200_even.log`.
+
+<!-- 
 Create a dedicated testbench for your receiver with the following requirements:
   * Provide the parameters of BAUD_RATE and PARITY to your receiver module so you can change the baud rate and parity in your testbench
   * Provide a testbench parameter `NUMBER_OF_CHARS` with a default value of 10 that indicates the number of characters to transmit    
@@ -91,11 +98,9 @@ Create a dedicated testbench for your receiver with the following requirements:
     * End the simulation with `$stop`
 
 You may want to review the [testbench](../tx_sim/tx_tb.sv) that was created for you in the previous assignment as an example to get started.
-<!-- You may refer to and model your testbench after the [ECEN 220 Transmitter testbench](http://ecen220wiki.groups.et.byu.net/resources/testbenches/tb_tx.sv) as well. -->
-When your transmitter operates correctly with the testbench, create a makefile with the `sim_rx` rule that will simulate your transmitter with the testbench from the command line.
-In addition, create a makefile rule `sim_rx_115200_even` that simulates the receiver with a baud rate of 115200 and even parity.
+ -->
 
-## Receiver Synthesis
+### Receiver Synthesis
 
 Although we will not be downloading the receiver to the FPGA, you should still synthesize your receiver to make sure it is synthesizable.
 For this step, perform "out of context" synthesis on your receiver module.
@@ -104,9 +109,92 @@ The following Vivado commands demonstrate how to synthesize your receiver module
 
 ```
 read_verilog -sv rx.sv
-synth_desig -top rx -mode out_of_context
+synth_design -top rx -mode out_of_context
 ```
-Create a make rule `synth_rx` that will synthesize your receiver module and make sure to generate a log file for this step.
+Create a make rule `synth_rx` that will synthesize your receiver module and generate a log file named `synth_rx.log` for this step.
+Review the synthesis log for the state encoding and add the encoding to your report.
+
+Create a make rule `synth_rx_gray` that will synthesize your receiver using a gray code encoding.
+Add the flag `-fsm_extraction gray` to your synthesize command to force a gray encoding.
+Review the synthesis log for the state encoding and add the encoding to your report.
+
+## Seven Segment Display
+
+For this assignment and for most future assignments you will need to display values on the seven segment display of the Nexys4 DDR board.
+To make this easier, you will create a seven segment display controller that will drive the seven segment display.
+
+Create a "seven segment controller" module named `seven_segment8` in a file named `seven_segement8.sv` that will drive the seven segment display of the Nexys DDR board. 
+This module can be based on the [seven segment display](https://byu-cpe.github.io/ecen320/labs/multi-segment/) module developed in ECEN 320.
+Note that there are eight digits on the seven segment display for this board so you will need to support all eight digits with your module. 
+Include the following ports and parameters in your module:
+
+| Port Name | Direction | Width | Function |
+| ---- | ---- | ---- | ----  |
+| clk | Input | 1 | Clock |
+| rst | Input | 1 | Reset |
+| data_in | Input | 32 | 32-bit value to display |
+| dp_in | Input | 8 | Digit point (one for each segment) |
+| blank | Input | 1 | When asserted, blank the display |
+| segment | Output | 8 | The seven segment drivers (see table below) |
+| anode | Output | 8 | Anode signal for each digit |
+
+| Parameter Name | Default Value | Purpose |
+| ---- | ---- | ---- |
+| CLK_FREQUECY | 100_000_000 | The clock frequency |
+| REFRESH_RATE  | 200 | Specifies the display refresh rate in Hz  |
+ 
+<!-- 
+| Port Name | Direction | Width | Function |
+| ---- | ---- | ---- | ----  |
+| clk | Input | 1 | Clock |
+| rst | Input | 1 | Reset |
+| display_val | Input | 32 | 32-bit value to display |
+| dp | Input | 8 | Digit point (one for each segment) |
+| blank | Input | 1 | When asserted, blank the display |
+| segments | Output | 7 | The seven segment drivers (see table below) |
+| dp_out | Output | 1 | The output digit point driver signal |
+| an_out | Output | 8 | Anode signal for each segment |
+
+| Parameter Name | Default Value | Purpose |
+| ---- | ---- | ---- |
+| CLK_FREQUECY | 100_000_000 | The clock frequency |
+| MIN_SEGMENT_DISPLAY_US  | 10_000 | The amount of time to display each digit  |
+ -->
+
+The anode signals should be driven in a round-robin fashion so that each digit is displayed for a short amount of time.
+These signals are low asserted. 
+The cathode signals are also low asserted and are defined as follows:
+
+```
+    ----A----
+    |       |
+    |       |
+    F       B
+    |       |
+    |       |
+    ----G----
+    |       |
+    |       |
+    E       C
+    |       |
+    |       |
+    ----D----
+```
+
+The seven segments are organized into a multi-bit bus (segment[6:0]) where segment(6) corresponds to segment 'A' and segment(0) corresponds to segment 'G'.
+segment[7] corresponds to the digit point.
+
+### Seven Segment Display Testbench
+
+A testbench ([ssd_tb.sv](ssd_tb.sv)) is provided for you to validate your seven segment display controller.
+There is also a simulation model ([seven_segment_check.sv](seven_segment_check.sv)) of the SSD controller that you will need to compile with your testbench.
+Make sure your seven segment display controller passes this testbench before moving on to the next step.
+Create a makefile rule `make sim_ssd` for this simulation.
+
+### Seven Segment Display Synthesis
+
+After your seven segment display controller is working correctly, create a makefile rule `make synth_ssd` that will synthesize your controller in out-of-context mode.
+See the instructions from the [previous assignment](../rx_sim/UART_Receiver_sim.md#receiver-synthesis) to describe how to do this.
 
 ## Assignment Submission
 
