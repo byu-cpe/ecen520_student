@@ -49,7 +49,6 @@ Design your receiver such that:
     If you get a reset and the input din is a '0' then you should go to some sort of "Startup" type state that just sits there and waits until din goes high. Once din goes high you can go into an idle state to wait for din to go to 0 again. The reason for this is that you do not want to just immediately start receiveing a character upon reset. You want to start up in a known state.
 -->
 
-
 ### Receiver .do Simulation
 
 After creating your receiver module, simulate the receiving of a single byte using the guidelines listed below.
@@ -194,7 +193,7 @@ Create a makefile rule `make sim_ssd` for this simulation.
 ### Seven Segment Display Synthesis
 
 After your seven segment display controller is working correctly, create a makefile rule `make synth_ssd` that will synthesize your controller in out-of-context mode.
-See the instructions from the [previous assignment](../rx_sim/UART_Receiver_sim.md#receiver-synthesis) to describe how to do this.
+Create a file `synth_ssd.log` file for this synthesis process.
 
 ## Assignment Submission
 
@@ -203,10 +202,7 @@ Carefully review these steps as you submit your assignment.
 
 The following assignment specific items should be included in your repository:
 
-1. Required Makefile rules:
-    * `sim_rx`: 
-    * `sim_rx_115200_even`: 
-    * `synth_rx`:
+1. Add all of the required makefile rules and execute the `passoff.py` script
 1. You need to have at least 4 "Error" commits in your repository
 2. Assignment specific Questions:
     1. Provide a table listing the state and the encoding that the synthesis tool used for your receiver state machine.
@@ -216,8 +212,4 @@ The following assignment specific items should be included in your repository:
 <!--
 Future Changes:
 * The synthesis tool couldn't extract a FSM from some students. Need to figure out what is going on. Perhaps make a requirement that it has to find it?
-* ask them to manually change the FSM encoding type when they synthesize to see the impact.
-* Any _new_ coding standards to add? It would be nice to add something for this assignment
-* Have them create a function in the testbench
-* Be more clear on what should be in the report for cells
 -->
