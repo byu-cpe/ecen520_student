@@ -2,8 +2,10 @@
 // seven_segment_check.sv
 //
 // This simulation model is used to check the behavior of the seven segment display
+//
+// TODO:
+//  - Check for blanking
 //////////////////////////////////////////////////////////////////////////////////
-//`timescale 1ns / 1ps
 
 module seven_segment_check(clk, rst, segments, dp, anode,
     new_value, output_display_val);
@@ -16,10 +18,15 @@ module seven_segment_check(clk, rst, segments, dp, anode,
     output logic [31:0] output_display_val;
 
     parameter int CLK_FREQUENCY = 100_000_000;      // 100 MHz
-    parameter int MIN_SEGMENT_DISPLAY_US = 10_000;  // 10 ms
+    parameter int REFRESH_RATE = 200;
+    // parameter int MIN_SEGMENT_DISPLAY_US = 10_000;  // 10 ms
     parameter int VERBOSE = 1;
     parameter int WARN_ON_SIMULTANEOUS_ANODES = 1;
-    localparam int MIN_SEGMENT_CLOCKS = CLK_FREQUENCY / 1_000_000 * MIN_SEGMENT_DISPLAY_US;
+    // localparam int MIN_SEGMENT_CLOCKS = CLK_FREQUENCY / 1_000_000 * MIN_SEGMENT_DISPLAY_US;
+    localparam int MIN_SEGMENT_CLOCKS = CLK_FREQUENCY / REFRESH_RATE / 8;
+
+    // Error message for all simulation errors
+    const string ERROR_MSG = "ERROR: seven_segment_check:";
 
     // Convert standard segment settings to the corresonding hex values
     function automatic logic [3:0] segment_to_hex(input logic [6:0] segments);
@@ -47,12 +54,13 @@ module seven_segment_check(clk, rst, segments, dp, anode,
         end
     endfunction
 
-    // Check to see if more than one anode is being displayed at a time and give a warning
+    // Check to see if more than one anode is being displayed at a time and give an error message
     logic error_last_cycle = 0;
     always_ff @(posedge clk) begin
         if (WARN_ON_SIMULTANEOUS_ANODES > 0) begin
             if (anode != 8'hff && $countones(~anode) > 1 && error_last_cycle == 0) begin
-                $display("Warning: More than one anode is being displayed at a time: %b", anode);
+                $display("%s More than one anode is being displayed at a time: %b",
+                    ERROR_MSG, anode);
                 error_last_cycle <= 1;
             end
             else
@@ -160,26 +168,33 @@ module seven_segment_check(clk, rst, segments, dp, anode,
     logic [7:0] annode_collect; // Collect the anodes that are being displayed (to see if all have been displayed)
     integer anode_count = 0; // Count the number of clocks that a single anode is displayed
     integer last_anode_count = 0;
-    //logic new_value;
     logic [7:0] new_digit;
-    assign new_digit = (anode ^ anode_d) & anode; // combinatinoal
+    enum {INVALID, INITIAL_VALID, COLLECTING} anode_state = INVALID;
+    assign new_digit = (anode ^ anode_d) & anode; // combinational
     always_ff @(posedge clk) begin
         anode_d <= anode;
         new_value <= 0;
         anode_count <= anode_count + 1;
-        // TODO: Check for blanking
         // See if we are transitioning from invalid annode to valid anode
-        if (!(^anode === 1'bX) && (^anode_d === 1'bX)) begin
-            // Starting a new display cycle
-            $display("[%0t] Valid Annode values", $time);
+        if (anode_state == INVALID && !(^anode === 1'bX) && (^anode_d === 1'bX)) begin
+            // First transition from an invalid to a valid anode
+            $display("[%0t] Valid Anode values", $time);
+            anode_count <= 0;
+            annode_collect <= 8'h00;
+            anode_state <= INITIAL_VALID;
+        end
+        if (anode_state == INITIAL_VALID && anode != anode_d) begin
+            // Transitioning from first valid anode to next valid anode
+            // After this point we will check for anode on times.
+            anode_state <= COLLECTING;
             anode_count <= 0;
             annode_collect <= 8'h00;
         end
         // See if we are transitioning from one valid anode to another valid anode
-        else if(anode != anode_d) begin
+        if(anode_state == COLLECTING && anode != anode_d) begin
             if (anode_count > MIN_SEGMENT_CLOCKS + 2 || anode_count < MIN_SEGMENT_CLOCKS - 2 ) begin
-                $display("[%0t] Warning: Invalid number of segment clocks: %0d expecting %0d %h %h", $time,
-                    anode_count, MIN_SEGMENT_CLOCKS,anode,anode_d);
+                $display("[%0t] %s Invalid number of segment clocks: %0d expecting %0d %h %h", $time,
+                    ERROR_MSG, anode_count, MIN_SEGMENT_CLOCKS,anode,anode_d);
             end
             last_anode_count <= anode_count; // Save the last anode count for reportings
             anode_count <= 0;

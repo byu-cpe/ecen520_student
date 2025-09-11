@@ -16,7 +16,7 @@ def main():
     tester = test_suite_520.build_test_suite_520("rx_sim", start_date="09/17/2025", max_repo_files = 25)
     tester.add_required_tracked_files(["rx.sv","sim_rx.png", "sim_rx.do"])
 
-    tester.add_Makefile_rule("sim_rx", ["rx.sv"], ["sim_rx.log"])
+    tester.add_Makefile_rule("sim_rx", ["rx.sv"], ["sim_rx.log", "sim_rx.png"])
     tester.add_build_test(repo_test.file_regex_check("sim_rx.log", "Simulation done with 0 errors", 
                                                      "rx testbench - default parameters", error_on_match = False,
                                                      error_msg = "rx testbench failed"))
@@ -26,6 +26,11 @@ def main():
                                                      error_msg = "rx testbench failed"))
     tester.add_Makefile_rule("synth_rx", ["rx.sv"], ["rx_synth.log"])
     tester.add_Makefile_rule("synth_rx_gray", ["rx.sv"], ["rx_synth_gray.log"])
+    tester.add_Makefile_rule("sim_ssd", ["seven_segment8.sv",], ["sim_ssd.log"])
+    tester.add_build_test(repo_test.file_regex_check("sim_ssd.log", "ERROR: seven_segment_check:", 
+                                                     "SSD Test", error_on_match = True,
+                                                     error_msg = "SSD testbench failed"))    
+    tester.add_Makefile_rule("synth_ssd", ["seven_segment8.sv"], ["synth_ssd.log"])
     tester.run_tests()
 
 if __name__ == "__main__":
