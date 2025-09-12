@@ -1,6 +1,7 @@
 // Testbench for UART Receiver Lab
 
-module tb_rx #(parameter CLK_FREQUENCY=100_000_000, parameter BAUD_RATE = 19_200);
+module tb_rx #(parameter CLK_FREQUENCY=100_000_000, parameter BAUD_RATE = 19_200,
+   PARITY= 1'd1);
    logic clk, Receive, ReceiveAck, Sin, rst, parityErr;
    logic [7:0] Dout;
    int errors;
@@ -8,7 +9,7 @@ module tb_rx #(parameter CLK_FREQUENCY=100_000_000, parameter BAUD_RATE = 19_200
    int halfBitTime = bitTime/2;
 
    // Instance the DUT
-   rx #(.CLK_FREQUENCY(CLK_FREQUENCY), .BAUD_RATE(BAUD_RATE))
+   rx #(.CLK_FREQUENCY(CLK_FREQUENCY), .BAUD_RATE(BAUD_RATE), .PARITY(PARITY))
    student_rx(.clk(clk), .rst(rst), .Receive(Receive), .Dout(Dout),
       .ReceiveAck(ReceiveAck), .Sin(Sin), .parityErr(parityErr));
 
@@ -44,7 +45,7 @@ module tb_rx #(parameter CLK_FREQUENCY=100_000_000, parameter BAUD_RATE = 19_200
       end
    endfunction // incErr
 
-   task sendData(input logic [7:0] mdin);
+   task sendData(input logic [7:0] mdin, input logic send_incorrect_parity=0);
       pmsg($sformatf("Testbench is getting ready to send 0x%0x", mdin));
 
       // Wait for a few negative edges of clock and then start sending
@@ -61,7 +62,7 @@ module tb_rx #(parameter CLK_FREQUENCY=100_000_000, parameter BAUD_RATE = 19_200
       end
 
       // Send parity
-      Sin = ~^mdin;
+      Sin = ^mdin ^ PARITY ^ send_incorrect_parity;
       sdla(bitTime);
 
       // Send stop bit

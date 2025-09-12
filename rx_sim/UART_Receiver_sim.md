@@ -15,6 +15,9 @@ Follow the guidelines in Exercise #1 of the ECEN 320 [UART Receiver](https://byu
 Make sure you use the same ports and parameters. 
 Note that you must follow the [Level 2](../resources/coding_standard.md#level-2) coding standards for your SystemVerilog files.
 
+**Note**: In addition to the specifications described in this lab, add a parameter named PARITY with a default of '1' (or odd) that sets the type of parity to use for incoming bytes.
+
+
 <!-- 
 Create your receiver with the following ports and parameters
 
