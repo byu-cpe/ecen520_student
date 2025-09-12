@@ -20,7 +20,7 @@ This repository contains the lecture schedule (including links to lecture summar
 | 9/17/2025  | [SystemVerilog Testbenches](./lectures/testbenches.md)|
 | 9/19/2025  |  |
 | **Week 4** | |
-| 9/22/2025  | [Functions, Tasks, and Threads](./lectures/functions_tasks.md) |
+| 9/22/2025  | [Functions, Tasks, Threads, generate](./lectures/functions_tasks.md) |
 | 9/24/2025  | [SystemVerilog Types](./lectures/systemverilog_types.md) |
 | 9/26/2025  | [Verification with UVM](./lectures/uvm.md) |
 | **Week 5** | |
