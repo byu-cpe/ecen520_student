@@ -3,8 +3,9 @@
 # UART Receiver
 
 The purpose of this assignment is to create a top-level UART receiver/transmitter in SystemVerilog and a testbench to validate your receiver.
-You will also create a seven segment display controller for displaying data from your UART on the seven segment display.
+<!-- You will also create a seven segment display controller for displaying data from your UART on the seven segment display. -->
 
+<!-- 
 ## Seven Segment Controller and Testbench
 
 For this assignment and for most future assignments you will need to display values on the seven segment display of the Nexys4 DDR board.
@@ -60,8 +61,9 @@ Create a makefile rule `make sim_ssd` for this simulation.
 
 After your seven segment display controller is working correctly, create a makefile rule `make synth_ssd` that will synthesize your controller in out-of-context mode.
 See the instructions from the [previous assignment](../rx_sim/UART_Receiver_sim.md#receiver-synthesis) to describe how to do this.
+ -->
 
-## Create top-level design
+## Top-Level Design
 
 Create a top-level design that uses the following top-level ports:
 
@@ -71,6 +73,7 @@ Create a top-level design that uses the following top-level ports:
 | CPU_RESETN | Input | 1 | Reset (low asserted) |
 | SW | Input | 8 | Switches (8 data bits to send) |
 | BTNC | Input | 1 | Control signal to start a transmit operation |
+| BTND | Input | 1 | Blank the seven segment display |
 | LED | Output | 16 | Board LEDs (used for data and busy) |
 | UART_RXD_OUT | Output | 1 | Transmitter output signal |
 | UART_TXD_IN | Input | 1 | Receiver input signal |
@@ -86,19 +89,19 @@ Create a top-level design that uses the following top-level ports:
 | CLK_FREQUENCY  | 100_000_000 | Specify the clock frequency |
 | BAUD_RATE | 19_200 | Specify the receiver baud rate |
 | PARITY | 1 | Specify the parity bit (0 = even, 1 = odd) |
-| MIN_SEGMENT_DISPLAY_US  | 1_000 | The amount of time in microseconds to display each digit (1 ms) |
+| REFRESH_RATE  | 200 | Specifies the display refresh rate in Hz of seven segment display |
 | DEBOUNCE_TIME_US | integer | 1_000 | Specifies the minimum debounce delay in micro seconds (1 ms) |
 
 Design your top-level circuit as follows:
 * Attach the `CPU_RESETN` signal to two flip-flops to synchronize it to the clock. Use this synchronized signal for the reset in your design (note that the input reset polarity is negative asserted)
 * Hook up the center button (BTNC) to your circuit through a debouncer. Make sure you pass in the top-level debounce time parameter. Create one-shot logic for the tx_write signal from the debounce output.
 * Instance your transmitter
-  * Hook the TX output signal to the top-level `UART_RXD_OUT` pin of the board (i.e., to the host)
+  * Hook the TX output signal to a flip-flop to remove glitches. Attach the output of the flip-flop to the top-level `UART_RXD_OUT` pin of the board (i.e., to the host)
   * Attach the lower 8 switches on the board to the input to the UART transmitter (i.e., the value of the switches is the value to transmit over the UART).
   * Attach the lower 8 switches on the board to the lower 8 LEDs. This way the user can more easily see the value of the switches with the LEDs
   * Attach the tx busy signal to the LED16_B signal to provide a blue LED indicator when the transmitter is busy
 * Instance your receiver
-  * Add a two flip-flop synchronizer between the RX input signal (`UART_TXD_IN`) and the input rx signal to your receiver. This is necessary to avoid metastibilty and properly synchronize the asynchronous input.
+  * Add a two flip-flop synchronizer between the RX input signal (`UART_TXD_IN`) and the input rx signal to your receiver. This is necessary to avoid metastability and properly synchronize the asynchronous input.
   * Hook up the upper 8 LEDs to the data received by your receiver. These LEDs should display the last value received by the receiver. You should only update these LEDs when the 'data_strobe' indicates a new character has been received
   * Attach the rx busy signal to the LED17_R signal to provide a red LED indicator when the receiver is busy
   * Attach the rx error signal to the LED17_G signal to provide a green LED indicator when the receiver has an error
@@ -106,8 +109,13 @@ Design your top-level circuit as follows:
   * When the data_strobe occurs, load the value received by the receiver into the first register and shift the values in the other registers.
 * Instance your seven segment display controller as described below
   * Drive the data to display with the four 8-bit registers described above. The most recent value received should be driven on the right two digits, the second value received should be driven on the left two digits, and so on.
-  * Drive all zeros on the digit point input and tie the "blank" signal to zero. 
+  * Drive all zeros on the digit point input (no digit points should be displayed).
+  * Hook up the BTND signal through two synchronizing flip-flops and then to the "blank" signal (so you can blank the display when pressing BTND)
   * Hook up the seven segment display outputs to the top-level outputs of the design (i.e., AN, CA, CB, CC, CD, CE, CF, CG, DP)
+
+### Top-Level Do File
+
+
 
 ## Top-level testbench
 
@@ -200,8 +208,6 @@ The following assignment specific items should be included in your repository:
 
 <!--
 Notes:
-- Need to improve the ssd_check and testbench.
-- Clarify that the digit points should not be driven
 - Warnings:
   - Teach them how to set the tools to ignore warnings and how to get rid of warnings
   - Tell them that they should not have *any* warnings during synthesis
@@ -215,7 +221,5 @@ Notes:
   - seven segment display model/checker
     - Students don't know how to use it and are confused. Provide more documentation and expectations on what it does.
     - Explain how to use the "check signal" or end of line
-    - Get rid of the initial warning
-    - Sample the data every cycle instead of at the end of a segment to avoid one cycle off issue
   - Need to specify specific names for the top for ease of grading (testbench does require a name fortunately)
 -->
