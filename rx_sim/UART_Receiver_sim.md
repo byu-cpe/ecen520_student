@@ -12,11 +12,10 @@ They won't have had much experience with testbenches at this point. Change the a
 
 Create a UART receiver module that actively monitors the input "data in" signal receives a single byte of data and a parity bit.
 Follow the guidelines in Exercise #1 of the ECEN 320 [UART Receiver](https://byu-cpe.github.io/ecen320/labs/rx-lab/#exercise-1---asynchronous-receiver-module) lab.
-Make sure you use the same ports and parameters. 
 Note that you must follow the [Level 2](../resources/coding_standard.md#level-2) coding standards for your SystemVerilog files.
-
-**Note**: In addition to the specifications described in this lab, add a parameter named PARITY with a default of '1' (or odd) that sets the type of parity to use for incoming bytes.
-
+Make sure you use the same ports and parameters as this assignment with the following additions:
+  * add a parameter named `PARITY` with a default of '1' (or odd) that sets the type of parity to use for incoming bytes. This parameter is used to generate the 'parityErr' signal
+  * add an output signal named `busy` that indicates when the rx module is busy processing a byte
 
 <!-- 
 Create your receiver with the following ports and parameters
