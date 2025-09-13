@@ -77,7 +77,7 @@ module rx_model (clk, rst, rx_in, busy, dout, err);
             delay_baud();
             parity_calc = ^r_char[7:0] ^ PARITY;
             if (rx_in != parity_calc) begin
-                $display("\[%0tns] WARNING: Incorrect Parity: received=%h expecting=%h", $time/1000,
+                $display("\[%0tns] ERROR: Incorrect Parity: received=%h expecting=%h", $time/1000,
                 rx_in,parity_calc);
                 errors = errors + 1;
             end
@@ -85,7 +85,7 @@ module rx_model (clk, rst, rx_in, busy, dout, err);
             // stop bit (make sure it is a ones)
             delay_baud();
             if (rx_in != 1) begin
-                $display("\[%0tns] WARNING: stop bit does not stay high: %h", $time/1000,rx_in);
+                $display("\[%0tns] ERROR: stop bit does not stay high: %h", $time/1000,rx_in);
                 errors = errors + 1;
             end
             $display("[%0tns] RX Received 0x%h", $time/1000, r_char);

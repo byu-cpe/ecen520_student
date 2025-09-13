@@ -56,7 +56,7 @@ You will need to use the command line mode for submitting this assignment.
 
 The primary goal of this assignment is to design a UART transmitter for transmitting data over a conventional serial connection.
 You will need to create this design in *SystemVerilog* and simulate it using QuestaSim.
-There is a ECEN 320 lab description for a [UART Transceiver](https://byu-cpe.github.io/ecen320/labs/lab-09/) that you can use as a reference.
+There is a ECEN 320 lab description for a [UART Transceiver](https://byu-cpe.github.io/ecen320/labs/tx/) that you can use as a reference.
 
 Create your transmitter with the filename `tx.sv` with the following ports and parameters (you must name the ports and parameters as indicated for the testbenches to operate correctly):
 

@@ -1,6 +1,6 @@
 // Example SV ASMD multiplier with FSM
 
-module tx (clk,rst,start,a_in,b_in,ready,r);
+module asmd_mult (clk,rst,start,a_in,b_in,ready,r);
     input clk,rst,start;
     input [7:0] a_in,b_in;
     output ready;
@@ -13,8 +13,10 @@ module tx (clk,rst,start,a_in,b_in,ready,r);
 
     // FSM state register
     always @(posedge clk) begin
-        if (rst == 1'b1) state <= IDLE;
-        else state <= next_state;
+        if (rst == 1'b1)
+            state <= IDLE;
+        else
+            state <= next_state;
     end
 
     // Next state logic and outputs
@@ -55,6 +57,7 @@ module tx (clk,rst,start,a_in,b_in,ready,r);
         end
     end
 
+    // Next state logic for datapath
     always_comb begin
         a_next = a_reg;
         n_next = n_reg;
@@ -78,6 +81,8 @@ module tx (clk,rst,start,a_in,b_in,ready,r);
             end
         endcase
     end
+
+    // Outputs
     assign count_0 = (n_next == 0);
     assign r = r_reg;
 

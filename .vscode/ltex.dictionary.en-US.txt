@@ -18,3 +18,4 @@ Debouncer
 ECEN
 Modelsim
 Combinational
+metastibilty
