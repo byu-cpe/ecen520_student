@@ -22,7 +22,6 @@ module asmd_mult (clk,rst,start,a_in,b_in,ready,r);
     // Next state logic and outputs
     always_comb begin
         // Default values
-        ready = 1'b0;
         next_state = state;
         case (state)
             IDLE:
@@ -44,7 +43,7 @@ module asmd_mult (clk,rst,start,a_in,b_in,ready,r);
     // Control Path Outputs
     assign ready = (state == IDLE);
     // Data path registers
-    always @(posedge clk) begin
+    always_ff @(posedge clk) begin
         if (rst == 1'b1) begin
             a_reg <= 0;
             n_reg <= 0;
