@@ -299,14 +299,57 @@ git fetch startercode
 git merge startercode/main -m "Merging starter code"
 ```
 
-### Pull Requests
+## Pull Requests for Starter Code
 
 As you complete the assignments, you may find errors in the starter code files.
 You are encouraged to contribute [pull requests](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/about-pull-requests) to the repository to fix these errors.
 To submit a pull request, you need to do the following:
-* Create a fork of the ECEN 520 student repository to your personal GitHub account (one time only)
-  * Visit the [ECEN 520 student repository](https://github.com/byu-cpe/ecen520_student/tree/main) and click the "Fork" button
-  * Create a fork on the main branch
-* Make changes to the files in your forked repository
-* Click on "Pull Requests" and then "New Pull Request"
+1. Create a fork of the ECEN 520 student repository to your personal GitHub account (one time only)
+    * Visit the [ECEN 520 student repository](https://github.com/byu-cpe/ecen520_student/tree/main) and click the "Fork" button
+    * Create a fork on the main branch (this creates a copy under your GitHub account)
+    * Clone the fork to your local machine and create a remote to the original repository
+        `git remote add startercode git@github.com:byu-cpe/ecen520_student.git`
+2. Keep your fork in sync</br>
+It is important that your fork is in sync with the original repository before proposing changes. Follow these steps in your local forked repository to sync with the remote:
+    ```
+    git fetch upstream
+    git checkout main
+    git merge upstream/main   # or: git rebase upstream/main
+    git push origin main
+    ```
+3. Make changes to the files in your forked repository</br>
+Once you have the latest files, make changes by copying them from your classroom repository or editing the files directly in your forked repository.
+Commit your changes in your forked repository and push them to your fork on GitHub.
+4. Create a pull request</br>
+Go to your forked repository on GitHub and create a pull request to the original repository.
+    * Click on "Pull Requests" and then "New Pull Request"
 
+<!--
+3. Create a new branch for your fix
+
+Always create a branch instead of working on main.
+
+git checkout -b fix-typo-in-lab1
+
+
+Make your changes in this branch and commit them.
+
+4. Push the branch to your fork
+git push origin fix-typo-in-lab1
+
+5. Open a Pull Request
+
+Go to your fork on GitHub.
+
+Click the “Compare & Pull Request” button for your new branch.
+
+Confirm the target is the main repository (<instructor>/ecen520-student) and branch is main.
+
+Add a short description of your fix and submit.
+
+6. Keep branches focused
+
+Each bug fix or improvement should be its own branch and pull request.
+
+This makes it easier to review and merge your contributions.
+-->
