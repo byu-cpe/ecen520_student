@@ -4,7 +4,7 @@ Testbenches are an essential part of validating digital design systems.
 In this lecture we will discuss the purpose of testbenches and the general structure of a simple testbench.
 
 **Reading**
-  * Chapter 1 of [System Verilog for Verification](https://lib.byu.edu/search/byu/record/cat.3659047.item.31197227929699?holding=9mng3ggqdhk9ykw0). Download this pdf from the library as we will use it later in the semester.
+  * Chapter 1 of [System Verilog for Verification](https://lib.byu.edu/search/byu/record/cat.3659047.item.31197227929699?holding=9mng3ggqdhk9ykw0). Download this pdf from the library as we will use it later in the semester. Note that you have to authenticate to the BYU library, look to the left for "Holdings", click on one of the springer.com E-book links, then click on the springer.com link to take you to the springer.com website for the download. 
   * [Stephen Edwards Verilog Slides (48-56)](http://www.cs.columbia.edu/~sedwards/classes/2005/languages-summer/verilog.pdf)
   <!-- * Chapter 27 from Bren'ts new book -->
 
