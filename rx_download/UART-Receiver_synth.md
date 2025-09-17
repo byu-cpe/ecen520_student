@@ -1,6 +1,6 @@
 
 
-# UART Receiver
+# UART Receiver Syntehsis and Download
 
 The purpose of this assignment is to create a top-level UART receiver/transmitter in SystemVerilog and a testbench to validate your receiver.
 <!-- You will also create a seven segment display controller for displaying data from your UART on the seven segment display. -->
@@ -65,12 +65,13 @@ See the instructions from the [previous assignment](../rx_sim/UART_Receiver_sim.
 
 ## Top-Level Design
 
-Create a top-level design that uses the following top-level ports:
+Create a top-level design in a file named `rxtx_top.sv` that uses the following top-level ports:
 
 | Port Name | Direction | Width | Function |
 | ---- | ---- | ---- | ----  |
 | CLK100MHZ | Input | 1 | Clock |
-| CPU_RESETN | Input | 1 | Reset (low asserted) |
+| CPU_RESETN | Input | 1 | Reset (lo## Top-level testbench
+w asserted) |
 | SW | Input | 8 | Switches (8 data bits to send) |
 | BTNC | Input | 1 | Control signal to start a transmit operation |
 | BTND | Input | 1 | Blank the seven segment display |
@@ -113,11 +114,28 @@ Design your top-level circuit as follows:
   * Hook up the BTND signal through two synchronizing flip-flops and then to the "blank" signal (so you can blank the display when pressing BTND)
   * Hook up the seven segment display outputs to the top-level outputs of the design (i.e., AN, CA, CB, CC, CD, CE, CF, CG, DP)
 
-### Top-Level Do File
+### .xdc File
+
+Once you have created your top-level design, create a `.xdc` file that maps the top-level pins of your circuit to the appropriate FPGA pin on this board.
+Make sure all of the top-level ports have a corresponding entry in the .xdc file.s
+
+### Synthesize Top-Level Design
+
+After creating a complex top-level design like this, it is sometimes preferrable to perform synthesis before simulation just to make sure you hooked up the modules correctly and are following all synthesis rules.
+Create a makefile rule named `synth_rxtx_top` that runs the synthesis step of your design (not the implementation or bitstream generation).
+Save the output of this step into a file named `synth_rxtx_top.log`.
+You will likely need to make changes to your design to address synthesis related errors.
+At this point, don't worry about the design correctness. 
+The purpose of the synthesis step is to resolve structural design issues before simulation.
+
+## Top-Level Verification
+
+In this phase of the assignment you will be verifying your design to make sure it works before proceeding with implementation and download.
+
+### Top-level .do files
 
 
-
-## Top-level testbench
+### Top-level testbench
 
 Create testbench for your top-level rx/tx design by copying and modifying the [tx_top_tb.sv](../tx_download/tx_top_tb.sv) file from the tx download assignment and renaming to `rxtx_top_tb.sv`:
 The following adaptations should be made to the structure of this testbench:
