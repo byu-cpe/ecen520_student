@@ -2,7 +2,7 @@
 // gen_bounce: generate a bounce signal for testing a debouncer
 //////////////////////////////////////////////////////////////////////////////////
 
-module gen_bounce (clk, sig_in, bounce_out);
+module gen_bounce #(parameter BOUNCE_CLOCKS_LOW_RANGE=5000, BOUNCE_CLOCKS_HIGH_RANGE=150000) (clk, sig_in, bounce_out);
 
     input logic clk, sig_in;
     output logic bounce_out;
@@ -16,8 +16,6 @@ module gen_bounce (clk, sig_in, bounce_out);
     parameter integer VERBOSE = 0;                          // Set verbose to 1 to print debug messages
 
     localparam integer WAIT_CLOCKS = CLK_FREQUENCY / 1_000_000 * WAIT_TIME_US;
-    localparam integer BOUNCE_CLOCKS_LOW_RANGE = WAIT_CLOCKS * MIN_BOUNCE_CLOCKS_FRACTION;  // The minimum bounce in clocks
-    localparam integer BOUNCE_CLOCKS_HIGH_RANGE = WAIT_CLOCKS * MAX_BOUNCE_CLOCKS_FRACTION; // The maximum bounce in clocks
 
 
     // Random number generator for bounce clocks
