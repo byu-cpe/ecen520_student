@@ -15,8 +15,9 @@ import repo_test
 def main():
 
     tester = test_suite_520.build_test_suite_520("mmcm",  min_err_commits = 3, max_repo_files = 25)
-    #tester.add_make_test("sim_bram_top")
-    #tester.add_make_test("gen_bit")
+    tester.add_make_test("sim_mmcm")
+    tester.add_make_test("gen_bit")
+    tester.add_filegen_test(["mmcm.bit",])
     tester.run_tests()
 
 if __name__ == "__main__":

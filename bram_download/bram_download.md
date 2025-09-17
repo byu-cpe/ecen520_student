@@ -9,7 +9,7 @@ Design your top-level design to operate as follows:
 * Instance your UART transmitter and receiver and connect them to the top-level UART ports
 * When the **left** button is pressed, the _entire_ ROM contents are sent over the UART transmitter one character at a time. Ignore any button presses that may occur until the entire ROM has been sent. You will need to implement flow control so that you don't send another character until the previous character has been sent.
 * When characters are received by the UART receiver, they are placed in the BRAM FIFO.
-* When the **right** button is pressed, your circuit should send each character received in the BRAM over the UART back to the host until the BRAM FIFO is empty. Ignore any button presses that may occur until the entire FIFO has been sent. After sending the full contents of the FIFO, reset your counters so that you only send the new data received after the button has been pressed (you don't want to send the data received more than once).
+* When the **right** button is pressed, your circuit should send each character received in the BRAM over the UART back to the host until the BRAM FIFO is empty. Ignore any button presses that may occur until the entire FIFO has been sent. Once you have sent the data from the FIFO the data is gone and any new data that you send to the FIFO will be sent over the UART on the next button pressing.
 * Use `LED16_B` for the TX busy signal, `LED17_R` for the RX busy signal, and `LED17_G` for the RX error signal.
 
 ## Testbench
@@ -30,7 +30,7 @@ Feel free to change the generics to use a much faster baud rate for your UART to
 
 ## Synthesis, Implementation, and Bitstream Generation
 
-Create a makefile rule `gen_bit` that generates a bitstream for your top-level design.
+Create a makefile rule `gen_bit` that generates a bitstream named `bram_top.bit` for your top-level design.
 During the synthesis process, create a design checkpoint file (`.dcp`) for your top-level design as you will need to use it as described below.
 Set the generics for the generated bitfile as follows:
 * `BAUD_RATE` = 115200

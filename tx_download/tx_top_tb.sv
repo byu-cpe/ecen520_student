@@ -1,4 +1,3 @@
-`timescale 1ns / 1ps
 //////////////////////////////////////////////////////////////////////////////////
 // TX top-level testbench
 //////////////////////////////////////////////////////////////////////////////////
@@ -22,6 +21,7 @@ module tx_top_tb ();
 
     localparam integer CLK_FREQUENCY = 100_000_000;
     localparam integer BOUNCE_CLOCKS = CLK_FREQUENCY / 1_000_000 * DEBOUNCE_TIME_US;
+    integer errors = 0;
 
     // Clock Generator
     always begin
@@ -33,7 +33,8 @@ module tx_top_tb ();
     assign rst = ~rst_n;
 
     // Debounce simulation generator
-    gen_bounce #(.BOUNCE_CLOCKS_LOW_RANGE(2), .BOUNCE_CLOCKS_HIGH_RANGE(20))
+    gen_bounce #(.CLK_FREQUENCY(CLK_FREQUENCY), .WAIT_TIME_US(DEBOUNCE_TIME_US)
+    )
     bounce_btnc(
         .clk(clk),
         .sig_in(btnc),
@@ -76,17 +77,22 @@ module tx_top_tb ();
         repeat(BOUNCE_CLOCKS*1.1)
             @(negedge clk);
         // Wait until busy goes high
-        wait (rx_busy == 1'b1);
+        wait (tx_busy == 1'b1);
         // Print a message when the character starts to transmit
         $display("[%0tns]  Transmission started", $time/1000.0);
-
-        // Wait long enough for the zero to propagate through the debouncer
         btnc = 0;
-        repeat(BOUNCE_CLOCKS*1.2)
+        // Wait until debouncer goes low (we don't have access to the debouncer)
+        repeat(BOUNCE_CLOCKS*3)
             @(negedge clk);
-        // Wait until busy goes low
-        wait (rx_busy == 1'b0);
-
+        // Wait until busy goes low (it is probably low after the debouncer recovers)
+        wait (tx_busy == 1'b0);
+        if (char_value != rx_data) begin
+            errors++;
+            $display("[%0tns] ERROR: Transmitted 0x%h but received 0x%h", $time/1000.0, char_value, rx_data);
+        end else begin
+            $display("[%0tns]  Transmission complete, received 0x%h", $time/1000.0, rx_data);
+        end
+        repeat(1000) @(negedge clk);
     endtask
 
     //////////////////////////////////
@@ -142,6 +148,11 @@ module tx_top_tb ();
                 @(negedge clk);
         end
 
+        if (errors > 0) begin
+            $display("[%0tns] ERROR: %d errors found", $time/1000.0, errors);
+        end else begin
+            $display("[%0tns] BAUD %0d Simulation Complete - No Errors", $time/1000.0, BAUD_RATE);
+        end
         $stop;
     end
 
@@ -163,8 +174,10 @@ module tx_top_tb ();
             // Only check leds and switches when the testbench has been initialized
             // and when there are no changes on the switches (some students may register the
             // switches and others may not)
-            if (led != sw)
+            if (led != sw) begin
                 $display("[%0tns] ERROR: LEDs do not follow switches LED=%h != SW=%h", $time/1000, led, sw);
+                errors++;
+            end
         end
     end
 

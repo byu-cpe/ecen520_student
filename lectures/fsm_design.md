@@ -25,7 +25,3 @@ We will discuss several styles of FSM coding and discuss their relatively advant
     * Pros and cons of various FSM segment coding style
   * Implications of defining FSM outputs in a registered HDL block
 
-
-## Resources
-
-

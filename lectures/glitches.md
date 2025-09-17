@@ -20,3 +20,11 @@ In this lecture, we will discuss how glitches can occur in finite state machines
 ## Resources
 
 
+<!--
+The FSM sequence is currently two: FSM coding and glicthins/encoding.
+Split into three that include the following topics
+1. FSM coding styles
+2. FSM timing examples (with an emphasis on outputs)
+3. Encoding
+4. Glitches
+-->

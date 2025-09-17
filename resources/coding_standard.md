@@ -14,6 +14,9 @@ These standards are required for **all** assignments.
   * **Module File**
     * Create one file for each module you are creating. Do not put two or more modules in a single file (no matter which language you are coding in)
     * The name of the file must match the name of the module/entity you are creating (i.e., use a file named tx.sv for a module named tx)
+  * **Declarations**
+    * All signals, variables, and parameters should be declared at the beginning of the module or block.
+    * Use meaningful names for all declarations to improve code readability.x
   * **Comments**
     * File header: Every HDL file should have a file header as a comment at the top of the file that includes *each* the following:
       * Name of module
@@ -21,8 +24,9 @@ These standards are required for **all** assignments.
       * Class
       * Date 
       * Brief description (at least one sentence)
-    * A short comment is required for every always block (or process in VHDL)
-    * Provide a short comment for every module instantiated in your design
+    * A short comment is required for every `always` block (or process in VHDL) as well as `initial` blocks
+    * A short comment is required for every module instantiated in your design
+    * A short comment is required for every generate statement in your design
   * **Magic Numbers**
     * Do not use "Magic Numbers" embedded in your code. Instead, define a constant with a meaningful name and use the constant. Exceptions to this include the following:
        * Using the constant '1' or '0'.
@@ -36,7 +40,7 @@ These standards are required for **all** assignments.
 Implement the standards for Level 1 and the following additional standards:
 
   * Synchronous Blocks (always/process blocks that generate synchronous circuits)
-    * Reset clause: by defaull, all synchronous blocks should have a reset clause. If a reset is not needed, provide a comment indicating why a reset is not needed.
+    * Reset clause: by default, all synchronous blocks should have a reset clause. If a reset is not needed, provide a comment indicating why a reset is not needed.
       * The reset clause must be the first clause in the block.
       * All other logic should be in the 'else' portion of the first, initial reset clause. This 'else' clause should not have any logic in it (i.e., reset logic in first clause, all other logic in else clause)
       * There should be only one reset clause in the block (if a reset is used). 

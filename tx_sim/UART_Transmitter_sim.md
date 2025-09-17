@@ -47,7 +47,7 @@ I recommend that you install the [Verilog-HDL/SystemVerilog/Bluespec SystemVeril
 
 For this assignment you will be using QuestaSim as a simulator to simulate your design.
 QuestaSim is a commercial HDL simulator that is used in the design of large, complex ASICs and will be the simulator we use for this course.
-QuestaSim has been installed on the computers in the digital lab and the embedded systems lab (see this link for [setting up your environment](../resources/tools.md#questasim-setup) to use these tools).
+QuestaSim has been installed on the computers in the digital lab and the embedded systems lab (see this`long_sim.do` link for [setting up your environment](../resources/tools.md#questasim-setup) to use these tools).
 
 Go through the [QuestaSim Tutorial](../resources/questa_tutorial.md) to learn how to use QuestaSim in both GUI and command line mode.
 You will need to use the command line mode for submitting this assignment.
@@ -56,9 +56,9 @@ You will need to use the command line mode for submitting this assignment.
 
 The primary goal of this assignment is to design a UART transmitter for transmitting data over a conventional serial connection.
 You will need to create this design in *SystemVerilog* and simulate it using QuestaSim.
-There is a ECEN 320 lab description for a [UART Transceiver](https://byu-cpe.github.io/ecen320/labs/lab-09/) that you can use as a reference.
+There is a ECEN 320 lab description for a [UART Transceiver](https://byu-cpe.github.io/ecen320/labs/tx/) that you can use as a reference.
 
-Create your transmitter with the following ports and parameters (you must name the ports and parameters as indicated for the testbenches to operate correctly):
+Create your transmitter with the filename `tx.sv` with the following ports and parameters (you must name the ports and parameters as indicated for the testbenches to operate correctly):
 
 | Port Name | Direction | Width | Function |
 | ---- | ---- | ---- | ---- |
@@ -89,10 +89,33 @@ Design your transmitter to operate as follows:
   * Use asynchronous resets for the synchronous elements of your design
 * Add a synchronizing flip-flop on the output of the TX signal so there are no glitches on your output tx signal
 * You do not need to implement handshaking as described by the 320 lab assignment.
-
+* Make sure you have a reset clause on all of your 'always_ff' blocks.
 Note that you must follow the [Level 1](../resources/coding_standard.md#level_1) coding standards for your Verilog files.
 
-## Verifying Transmitter and Testbench
+## Simulating Transmitter with '.do' files
+
+Simulate the transmitter in Modelsim with the GUI to see if your module operates properly.
+Simulation `.do` files can be used to interactively simulate your file.
+The [sim_tx.do](sim_tx.do) file can be used to simulate a simple single byte transmission.
+Use this simulation file to make sure your module properly simulates a full byte.
+After properly simulating your module, take a [screen shot](https://byu-cpe.github.io/ecen320/tutorials/lab_computers/screen_capture/) of your modelsim waveform and make sure your state machine variables are included in the waveform.
+Name your screenshot file `tx_sim.png` and include it in your repository.
+
+<!--
+After debugging your module and creating a simulation file, create a Makefile rule named `sim_tx_do` that will compile your tx module and simulate the module using the 'sim_tx.do' file.
+```
+sim_tx_do: tx.sv sim_tx.do
+    vlog tx.sv
+    vsim -c work.tx -do "run -all; quit"
+```
+-->
+
+After verifying that your module can properly simulate a single byte, create a new simulation file named `long_sim.do` that simulates the transfer of four bytes.
+Make sure there is at least 50 us of delay between the transmissions. 
+Transmit two bytes that have an odd number of bits and two bytes with an even number of bits to verify the operation of your parity generation circuit.
+Create a screen shot named `tx_sim_long.png` that captures the four byte transfer.
+
+## Transmitter Testbench
 
 An essential part of digital design is properly _verifying_ your design.
 For this design and all designs you create in this class you will be carefully verifying with a design testbench.
@@ -115,25 +138,28 @@ This will involve creating a `makefile` with a number of rules for simulating an
 A resource page with instructions for using the Vivado [command line](../resources/vivado_command_line.md) is available for you.
 -->
 When your transmitter operates correctly with the testbench, create a makefile with the `sim_tx` rule that will simulate your transmitter with the testbench from the command line.
+Your makefile rule should generate a file named `tx_sim.log` with the simulation output.
 Here is a sample makefile rule that will run the testbench simulation from the command line (you may need to adapt this to the names used by your design files):
 ```
 sim_tx: tx.sv
     vlog tx.sv tx_tb.sv rx_model.sv
-    vsim -c work.tx_tb -do "run -all; quit"
+    vsim -c work.tx_tb -l tx_sim.log -do "run -all; quit"
 ```
 **Note** the use of the `quit` command in the `vsim` command.
 This is necessary to exit the simulation after the simulation is complete so you can go on to the next makefile rule.
 
 You will need to verify that your transmitter works correctly with multiple baud rates and clock frequencies.
 Further, you need to verify that your transmitter works with both even and odd parity.
-You will need to create a makefile rule named `sim_tx_115200_even` that command line simulation of tx testbench with a baud rate of 115200 and even parity.
+You will need to create a makefile rule named `sim_tx_115200_even` that performs a command line simulation of the tx testbench with a baud rate of 115200 and even parity.
+The output of this simulation should be saved in a file named `tx_sim_115200_even.log`.
 The following makefile rule demonstrates how to elaborate the simulation model with different top-level parameters:
 
 ```
 sim_tx_115200_even: tx.sv
     vlog -sv tx.sv tx_tb.sv rx_model.sv
-    vsim -c work.tx_tb -gBAUD_RATE=115200 -gPARITY=0 -do "run -all; quit"
+    vsim -c work.tx_tb -l tx_sim_115200_even.log -gBAUD_RATE=115200 -gPARITY=0 -do "run -all; quit"
 ```
+**Note**: You can't use an underscore in the parameters on the command line (i.e., -gBAUD_RATE=115_200 will not work).
 
 After your module passes both testbenches you are ready to submit your assignment.
 
@@ -147,8 +173,9 @@ The following assignment specific items should be included in your repository:
 1. Required Makefile rules:
     * `sim_tx`: performs command line simulation of tx testbench using the default parameters
     * `sim_tx_115200_even`: performs command line simulation of tx testbench with a baud rate of 115200 and even parity
-1. You need to have at least 3 "Error" commits in your repository as described [here](../resources/assignment_mechanics.md#github-commits).
-2. Assignment specific Questions:
-    1. Provide a short summary of how much HDL review you had to do to complete the assignment. Also, rate your HDL designs skills from 1-10.
-    2. Indicate the simulation time of the two different simulations and suggest why the simulation times are different
-    3. Add the following statement to your report: "I have read the ECEN 520 assignment submission process and have resolved any questions I have with this process"
+1. Make sure you have committed your `tx_sim.png` and `tx_sim_long.png` waveform simulation file. Also, make sure you have committed the `long_sim.do` simulation file.
+2. Complete the [report.md](report.md) file in your assignment directory.
+
+<!-- Notes:
+- Need to have a way for the testbench to generate an error when there is a problem so the python file catches the error.
+-->

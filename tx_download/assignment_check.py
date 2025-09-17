@@ -19,7 +19,7 @@ def main():
     tester.add_make_test("sim_tx_top_115200_even")
     tester.add_make_test("gen_tx_bit")
     tester.add_make_test("gen_tx_bit_115200_even")
-    tester.add_build_test(repo_test.file_exists_test(["tx_top.bit", "tx_top_115200_even.bit",]))
+    tester.add_filegen_test(["tx_top.bit", "tx_top_115200_even.bit",])
     tester.run_tests()
 
 if __name__ == "__main__":

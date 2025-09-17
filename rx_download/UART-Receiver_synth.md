@@ -1,17 +1,18 @@
 
 
-# UART Receiver
+# UART Receiver Syntehsis and Download
 
 The purpose of this assignment is to create a top-level UART receiver/transmitter in SystemVerilog and a testbench to validate your receiver.
-You will also create a seven segment display controller for displaying data from your UART on the seven segment display.
+<!-- You will also create a seven segment display controller for displaying data from your UART on the seven segment display. -->
 
+<!-- 
 ## Seven Segment Controller and Testbench
 
-For this assignment and for most future assignments you will need to display values on the seven segment display of the Nexys DDR board.
+For this assignment and for most future assignments you will need to display values on the seven segment display of the Nexys4 DDR board.
 To make this easier, you will create a seven segment display controller that will drive the seven segment display.
 
 Create a "seven segment controller" module that will drive the seven segment display of the Nexys DDR board. 
-This module can be based on the [segment sevent display](http://ecen220wiki.groups.et.byu.net/labs/lab-05/) module developed in ECEN 220.
+This module can be based on the [seven segment display](https://byu-cpe.github.io/ecen320/labs/multi-segment/) module developed in ECEN 320.
 Note that there are eight digits on the seven segment display for this board so you will need to support all eight digits with your module. 
 Include the following ports and parameters in your module:
 
@@ -60,17 +61,20 @@ Create a makefile rule `make sim_ssd` for this simulation.
 
 After your seven segment display controller is working correctly, create a makefile rule `make synth_ssd` that will synthesize your controller in out-of-context mode.
 See the instructions from the [previous assignment](../rx_sim/UART_Receiver_sim.md#receiver-synthesis) to describe how to do this.
+ -->
 
-## Create top-level design
+## Top-Level Design
 
-Create a top-level design that uses the following top-level ports:
+Create a top-level design in a file named `rxtx_top.sv` that uses the following top-level ports:
 
 | Port Name | Direction | Width | Function |
 | ---- | ---- | ---- | ----  |
 | CLK100MHZ | Input | 1 | Clock |
-| CPU_RESETN | Input | 1 | Reset (low asserted) |
+| CPU_RESETN | Input | 1 | Reset (lo## Top-level testbench
+w asserted) |
 | SW | Input | 8 | Switches (8 data bits to send) |
 | BTNC | Input | 1 | Control signal to start a transmit operation |
+| BTND | Input | 1 | Blank the seven segment display |
 | LED | Output | 16 | Board LEDs (used for data and busy) |
 | UART_RXD_OUT | Output | 1 | Transmitter output signal |
 | UART_TXD_IN | Input | 1 | Receiver input signal |
@@ -86,19 +90,19 @@ Create a top-level design that uses the following top-level ports:
 | CLK_FREQUENCY  | 100_000_000 | Specify the clock frequency |
 | BAUD_RATE | 19_200 | Specify the receiver baud rate |
 | PARITY | 1 | Specify the parity bit (0 = even, 1 = odd) |
-| MIN_SEGMENT_DISPLAY_US  | 1_000 | The amount of time in microseconds to display each digit (1 ms) |
+| REFRESH_RATE  | 200 | Specifies the display refresh rate in Hz of seven segment display |
 | DEBOUNCE_TIME_US | integer | 1_000 | Specifies the minimum debounce delay in micro seconds (1 ms) |
 
 Design your top-level circuit as follows:
 * Attach the `CPU_RESETN` signal to two flip-flops to synchronize it to the clock. Use this synchronized signal for the reset in your design (note that the input reset polarity is negative asserted)
 * Hook up the center button (BTNC) to your circuit through a debouncer. Make sure you pass in the top-level debounce time parameter. Create one-shot logic for the tx_write signal from the debounce output.
 * Instance your transmitter
-  * Hook the TX output signal to the top-level `UART_RXD_OUT` pin of the board (i.e., to the host)
+  * Hook the TX output signal to a flip-flop to remove glitches. Attach the output of the flip-flop to the top-level `UART_RXD_OUT` pin of the board (i.e., to the host)
   * Attach the lower 8 switches on the board to the input to the UART transmitter (i.e., the value of the switches is the value to transmit over the UART).
   * Attach the lower 8 switches on the board to the lower 8 LEDs. This way the user can more easily see the value of the switches with the LEDs
   * Attach the tx busy signal to the LED16_B signal to provide a blue LED indicator when the transmitter is busy
 * Instance your receiver
-  * Add a two flip-flop synchronizer between the RX input signal (`UART_TXD_IN`) and the input rx signal to your receiver. This is necessary to avoid metastibilty and properly synchronize the asynchronous input.
+  * Add a two flip-flop synchronizer between the RX input signal (`UART_TXD_IN`) and the input rx signal to your receiver. This is necessary to avoid metastability and properly synchronize the asynchronous input.
   * Hook up the upper 8 LEDs to the data received by your receiver. These LEDs should display the last value received by the receiver. You should only update these LEDs when the 'data_strobe' indicates a new character has been received
   * Attach the rx busy signal to the LED17_R signal to provide a red LED indicator when the receiver is busy
   * Attach the rx error signal to the LED17_G signal to provide a green LED indicator when the receiver has an error
@@ -106,12 +110,34 @@ Design your top-level circuit as follows:
   * When the data_strobe occurs, load the value received by the receiver into the first register and shift the values in the other registers.
 * Instance your seven segment display controller as described below
   * Drive the data to display with the four 8-bit registers described above. The most recent value received should be driven on the right two digits, the second value received should be driven on the left two digits, and so on.
-  * Drive all zeros on the digit point input and tie the "blank" signal to zero. 
+  * Drive all zeros on the digit point input (no digit points should be displayed).
+  * Hook up the BTND signal through two synchronizing flip-flops and then to the "blank" signal (so you can blank the display when pressing BTND)
   * Hook up the seven segment display outputs to the top-level outputs of the design (i.e., AN, CA, CB, CC, CD, CE, CF, CG, DP)
 
-## Top-level testbench
+### .xdc File
 
-Create testbench for your top-level rx/tx design by copying and modifying the [tx_top_tb.sv](../tx_download/tx_top_tb.sv) file from the tx download assignment and renaming to rxtx_top_tb.sv:
+Once you have created your top-level design, create a `.xdc` file that maps the top-level pins of your circuit to the appropriate FPGA pin on this board.
+Make sure all of the top-level ports have a corresponding entry in the .xdc file.s
+
+### Synthesize Top-Level Design
+
+After creating a complex top-level design like this, it is sometimes preferrable to perform synthesis before simulation just to make sure you hooked up the modules correctly and are following all synthesis rules.
+Create a makefile rule named `synth_rxtx_top` that runs the synthesis step of your design (not the implementation or bitstream generation).
+Save the output of this step into a file named `synth_rxtx_top.log`.
+You will likely need to make changes to your design to address synthesis related errors.
+At this point, don't worry about the design correctness. 
+The purpose of the synthesis step is to resolve structural design issues before simulation.
+
+## Top-Level Verification
+
+In this phase of the assignment you will be verifying your design to make sure it works before proceeding with implementation and download.
+
+### Top-level .do files
+
+
+### Top-level testbench
+
+Create testbench for your top-level rx/tx design by copying and modifying the [tx_top_tb.sv](../tx_download/tx_top_tb.sv) file from the tx download assignment and renaming to `rxtx_top_tb.sv`:
 The following adaptations should be made to the structure of this testbench:
 * Add a parameter MIN_SEGMENT_DISPLAY_US to the testbench with a default of 200. The defaults for the testbench should be a baud rate of 19200, a clock frequency of 100 MHz, and odd parity.
 * Remove the rx_model simulation model
@@ -143,6 +169,11 @@ You will need to add the command line option to change the baud rate of your top
 ## Implementation and Download
 
 At this point you are ready to implement your design, generate a bitfile and download it to your board.
+Ideally, you will just synthesize your design, generate a bitfile, and it will work the first time you download it.
+In reality, most people will have to go through this process a few times to resolve synthesis and implementation issues.
+**Make sure you keep track of the number of times you 'synthesize' and the number of times you 'download' your bitstream.** 
+This will be required for your assignment report.
+
 Create a new makefile rule named `gen_bit` that will generate a bitfile named `rxtx_top.bit` for your top-level design with the default top-level parameters.
 Download your design to your board and use 'putty' to make sure the UART receiver is working correctly using Putty or some other terminal emulator. You will need to transmit signals from 'putty' to your board, you can do this by pressing 'ctrl+j' in the 'putty' emulator, and then using your keyboard to send char values.
 
@@ -161,7 +192,8 @@ Review the instructions on [adjusting the message severity level](../resources/v
 These instructions list messages that can be downgraded and those that should be upgraded. 
 You will need to make sure that you don't have *any* synthesis warnings in your implementation.
 
-Note that you should add the following to your .xdc file to get rid of the "Missing CFGBVS and CONFIG_VOLTAGE Design Properties" warning:
+Note that you should add the following to your .x  - Have them experiment with different state encoding values to see how it affects reousrce utilization.
+dc file to get rid of the "Missing CFGBVS and CONFIG_VOLTAGE Design Properties" warning:
 
 ```
 set_property CFGBVS VCCO [current_design]
@@ -189,7 +221,7 @@ The following assignment specific items should be included in your repository:
        * Summarize the `no_input_delay` and `no_output_delay` section of the report.
        * How many total endpoints are there on your clock signal?
        * Find the first net in the `Max Delay Paths` section and indicate the source and destination of this maximum path.
-    1. Indicate how many times you had to synthesize and download your bitstream before your circuit worked.
+    1. Indicate how many times you had to synthesize and download your bitstream before your circuit worked. Provide two numbers: one for synthesis attempts and one for download attempts.
 
 
 <!--
@@ -198,9 +230,14 @@ Notes:
   - Teach them how to set the tools to ignore warnings and how to get rid of warnings
   - Tell them that they should not have *any* warnings during synthesis
 -- Any _new_ coding standards to add? It would be nice to add something for this assignment
+? Experiment with different encoding styles?
 
 - Future:
   - Make sure that the data displayed on the LEDs doesn't change/flicker (i.e., latch the data)
   - Note that many studens struggled debugging their receiver and the transmitter model at the same time. It wasn't clear which one has the problem.
      - Suggestion: create a top-level testbench that just hooks up my receiver model to their transmitter model and is used to validate their transmitter model. This way, they can have a known good transmitter model to test their receiver.
+  - seven segment display model/checker
+    - Students don't know how to use it and are confused. Provide more documentation and expectations on what it does.
+    - Explain how to use the "check signal" or end of line
+  - Need to specify specific names for the top for ease of grading (testbench does require a name fortunately)
 -->

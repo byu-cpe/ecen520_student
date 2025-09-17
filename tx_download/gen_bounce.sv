@@ -1,6 +1,5 @@
-`timescale 1ns / 1ps
 //////////////////////////////////////////////////////////////////////////////////
-// gen_bounce: generate a bounce signal for simulating a debouncer
+// gen_bounce: generate a bounce signal for testing a debouncer
 //////////////////////////////////////////////////////////////////////////////////
 
 module gen_bounce (clk, sig_in, bounce_out);
@@ -8,11 +7,18 @@ module gen_bounce (clk, sig_in, bounce_out);
     input logic clk, sig_in;
     output logic bounce_out;
 
-    parameter integer BOUNCE_CLOCKS_LOW_RANGE = 10;         // The minimum bounce in clocks
-    parameter integer BOUNCE_CLOCKS_HIGH_RANGE = 1000;      // The maximum bounce in clocks
+    parameter integer CLK_FREQUENCY     = 100_000_000;
+    parameter integer WAIT_TIME_US      = 5000;
+    parameter real MIN_BOUNCE_CLOCKS_FRACTION = 0.01;      // Minimum bounce as a fraction of WAIT_CLOCKS
+    parameter real MAX_BOUNCE_CLOCKS_FRACTION = 0.3;       // Maximum bounce as a fraction of WAIT_CLOCKS
     parameter integer NUM_BOUNCES_LOW_RANGE = 2;            // The minimum number of bounces per transition
-    parameter integer NUM_BOUNCES_HIGH_RANGE = 5;           // The maximum number of bounces per transition
+    parameter integer NUM_BOUNCES_HIGH_RANGE = 6;           // The maximum number of bounces per transition
     parameter integer VERBOSE = 0;                          // Set verbose to 1 to print debug messages
+
+    localparam integer WAIT_CLOCKS = CLK_FREQUENCY / 1_000_000 * WAIT_TIME_US;
+    localparam integer BOUNCE_CLOCKS_LOW_RANGE = WAIT_CLOCKS * MIN_BOUNCE_CLOCKS_FRACTION;  // The minimum bounce in clocks
+    localparam integer BOUNCE_CLOCKS_HIGH_RANGE = WAIT_CLOCKS * MAX_BOUNCE_CLOCKS_FRACTION; // The maximum bounce in clocks
+
 
     // Random number generator for bounce clocks
     function int get_bounce_clocks;
@@ -24,7 +30,7 @@ module gen_bounce (clk, sig_in, bounce_out);
         get_bounce_number = $urandom_range(NUM_BOUNCES_LOW_RANGE, NUM_BOUNCES_HIGH_RANGE);
     endfunction
 
-    // Task for generating a bounce delay. 
+    // Task for generating a bounce delay.
     task bounce_delay(input expected_sig_in);
         integer bounce_delay_clocks;
         bounce_delay_clocks = get_bounce_clocks();
@@ -70,7 +76,7 @@ module gen_bounce (clk, sig_in, bounce_out);
             bounce_out = end_result;
             // Delay before changing back away from end result
             if (i < bounces - 1) // Do not delay if this is the last bounce
-                bounce_delay(end_result); 
+                bounce_delay(end_result);
         end
     endtask
 
