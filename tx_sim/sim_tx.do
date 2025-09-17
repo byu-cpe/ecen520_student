@@ -6,6 +6,9 @@ force rst 0
 force send 0
 force din 8'h00
 run 100 ns
+force rst 1
+run 20 ns
+force rst 0
 # Setup clock (100 MHz)
 force clk 1 0, 0 {5 ns} -r 10
 run 400 ns
