@@ -648,7 +648,7 @@ class check_for_ignored_files(repo_test):
         repo_test_suite.print(f'Checking for ignored files at {self.check_path}')
         ignored_files = repo_test_suite.repo.git.ls_files(self.check_path, "--others", "--ignored", "--exclude-standard")
         if ignored_files:
-            repo_test_suite.print_error('Ignored files found in repository:')
+            repo_test_suite.print_error('Ignored files found in repository (update your \'clean\' rule):')
             files = ignored_files.splitlines()
             for file in files:
                 repo_test_suite.print_error(f'  {file}')
