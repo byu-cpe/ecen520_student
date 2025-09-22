@@ -261,6 +261,7 @@ The following assignment specific items should be included in your repository:
 Preparation:
 - Make sure students can use putty on the lab machines. Try it out on the labs ahead of time.
 Future Changes:
+ Modify the gen_bounce.sv to provide a signal saying when the debouncer "should" have propagated. This helps with testbenches.
 - Enforce certain warnings not showing up (CFG_Voltage, etc, parallel synthesis). Make it easier to earch for these warnings in grading.
 - Better instructions on how to download
 - Need to explain in more detail the need to carefully review the syntehsis logs. Perhaps provide a few examples of what to look for in the logs.
