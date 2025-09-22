@@ -116,37 +116,41 @@ Design your top-level circuit as follows:
 
 ### .xdc File
 
-Once you have created your top-level design, create a `.xdc` file that maps the top-level pins of your circuit to the appropriate FPGA pin on this board.
+Once you have created your top-level design, create a `rxtx_top.xdc` file that maps the top-level pins of your circuit to the appropriate FPGA pin on this board.
 Make sure all of the top-level ports have a corresponding entry in the .xdc file.s
 
 ### Synthesize Top-Level Design
 
 After creating a complex top-level design like this, it is sometimes preferrable to perform synthesis before simulation just to make sure you hooked up the modules correctly and are following all synthesis rules.
 Create a makefile rule named `synth_rxtx_top` that runs the synthesis step of your design (not the implementation or bitstream generation).
-Save the output of this step into a file named `synth_rxtx_top.log`.
+Save the output of this step into a file named `synth_rxtx_top.log` and generate a .dcp file named `rxtx_top_synth.dcp`.
 You will likely need to make changes to your design to address synthesis related errors.
 At this point, don't worry about the design correctness. 
-The purpose of the synthesis step is to resolve structural design issues before simulation.
+The purpose of the synthesis step is to resolve structural design issues and synthesis problems before simulation.
 
-## Top-Level Verification
+## Top-Level Testbench
 
 In this phase of the assignment you will be verifying your design to make sure it works before proceeding with implementation and download.
+Create testbench for your top-level rx/tx design named `rxtx_top_tb.sv`.
+Refer to the [tx_top_tb.sv](../tx_download/tx_top_tb.sv) file from the tx download assignment as an example.
+Add the following parameters to your testbench:
 
-### Top-level .do files
+| Parameter Name | Default Value | Purpose |
+| ---- | ---- | ---- |
+| CLK_FREQUENCY  | 100_000_000 | Specify the clock frequency |
+| BAUD_RATE | 19_200 | Specify the receiver baud rate |
+| PARITY | 1 | Specify the parity bit (0 = even, 1 = odd) |
+| REFRESH_RATE  | 200 | Specifies the display refresh rate in Hz of seven segment display |
+| DEBOUNCE_TIME_US | integer | 10 | Specifies the minimum debounce delay in micro seconds (10 us) |
+| NUMBER_OF_CHARS | integer | 8 | Specifies the number of characters to simulate |
+<!-- | BOUNCE_CLOCKS_HIGH_RANGE | integer | 6 | Specifies the maximum number of bounces to simulate |
+| BOUNCE_CLOCKS_LOW_RANGE | integer | 2 | Specifies the minimum number of bounces to simulate | -->
 
-
-### Top-level testbench
-
-Create testbench for your top-level rx/tx design by copying and modifying the [tx_top_tb.sv](../tx_download/tx_top_tb.sv) file from the tx download assignment and renaming to `rxtx_top_tb.sv`:
-The following adaptations should be made to the structure of this testbench:
-* Add a parameter MIN_SEGMENT_DISPLAY_US to the testbench with a default of 200. The defaults for the testbench should be a baud rate of 19200, a clock frequency of 100 MHz, and odd parity.
-* Remove the rx_model simulation model
+Organize your testbench as follows:
 * Instance your rxtx_top design instead of the tx_top design
   * Pass the testbench parameters down to the rxtx_top design
   * Attach the `UART_RXD_OUT` output of your top-level design (i.e., transmitter output) to the `UART_TXD_IN` input of your top-level design (i.e., receiver input). This way when you transmit a character from your transmit module, it will be received by your receiver module.
-* Hook up the seven_segment_check model to your top-level design so you can see the output of the seven segment display (see ssd_tb.sv)
-
-This testbench should be designed as follows:
+* Hook up the seven_segment_check model to your top-level design so you can see the output of the seven segment display
 * Perform the following sequence of events for your testbench:
   * Execute the simulation for a few clock cycles without setting any of the inputs
   * Set default values for the inputs (reset, buttons, and switchces)
@@ -154,17 +158,24 @@ This testbench should be designed as follows:
   * Perform at least 8 character transfers as follows:
     * Choose a random value for the character you want to send
     * Set the switch values to this value
-    * Press btnc long enough to make it through your debouncer
+    * Press btnc long enough to make it through your debouncer and 
+      * Print a message with the following text when you assert btnc: "Pressing BTNC to transmit 0x%h"
     * Wait until the tx_busy and rx_busy LED values are both zero
-    * Check to make sure the upper LEDs match the value you sent
-    * Check to make sure there is no error
+      * Check to make sure the upper LEDs match the value you sent
+      * Print a message with the following text when the received value matches the sent value: "Successful receive of 0x%h by receiver"
+      * Print an error message if the characters do not match up and increment an error counter
+    * Check to make sure there is no parity or other error
+      * Print an error message if there is a receive error and increment the error counter
+* At the end of the simulation, print a message indicating the number of errors: "Simulation Complete: %d errors"
+    * Feel free to print any other messages during your simulation to help you with your debugging.
 
-Make sure your top-level design successfully passes this testbench.
-Add a makefile rule named `sim_rxtop` that will perform this simulation from the command line.
+Simulate your top-level design with your testbench and resolve any design or testbench issues.
+Add a makefile rule named `sim_rxtx_top` that will perform this simulation from the command line.
 
 When simulating, you can [change the top-level parameters](../resources/vivado_command_line.md#setting-parameters-for-simulation) of your testbench or module to simulate different conditions of your system.
 Create another makefile rule named `sim_rxtop_115200_even` that will simulate your top-level design with a baud rate of 115200 and even parity.
 You will need to add the command line option to change the baud rate of your top-level design as described [here](../resources/vivado_command_line.md#setting-parameters-for-simulation).
+
 
 ## Implementation and Download
 
@@ -174,12 +185,25 @@ In reality, most people will have to go through this process a few times to reso
 **Make sure you keep track of the number of times you 'synthesize' and the number of times you 'download' your bitstream.** 
 This will be required for your assignment report.
 
-Create a new makefile rule named `gen_bit` that will generate a bitfile named `rxtx_top.bit` for your top-level design with the default top-level parameters.
-Download your design to your board and use 'putty' to make sure the UART receiver is working correctly using Putty or some other terminal emulator. You will need to transmit signals from 'putty' to your board, you can do this by pressing 'ctrl+j' in the 'putty' emulator, and then using your keyboard to send char values.
+### Implementation
 
-After demonstrating that your uart works properly, create a new makefile rule named `gen_bit_115200_even` that will generate a bitfile operating with a baud rate of 115200 and even parity and named `rxtx_top_115200_even.bit`.
-To generate such a bitfile you will need to change the top-level BAUD_RATE parameter to 115200 during the logic synthesis.
-Instructions for setting top-level parameters during synthesis can be found [here](../resources/vivado_command_line.md#setting-parameters-for-synthesis).
+Create a makefile rule named `implement_rxtx_top` that does the following:
+  * Performs placement and routing on your top level design using the `rxtx_top_synth.dcp` checkpoint file from the previously defined synthesis step
+  * generates a log file named `implement_rxtx_top.log` of the synthesis process
+  * generates a dcp file named `rxtx_top.dcp`
+  * generates a bitfile named `rxtx_top.bit`
+  * generates a utilization report named `utilization_rxtx_top.rpt` and a timing report named `timing_rxtx_top.rpt`  
+
+We also want to create a bitfile that operates at the 115200 baud rate and uses even parity instead of odd parity.
+  * Create a makefile rule named `synth_rxtx_top` that performs the synthesis step using a 115200 baud rate and even parity. This rule should generate a log file named `synth_rxtx_top.log` and a dcp file name `synth_rxtx_top.dcp`.
+  * Create a make file rule named `implement_rxtx_top` that performs the implementation step from the previously generatd .dcp file. Generate the following files: `implement_rxtx_top_115200_even.log`, `rxtx_top_115200_even.dcp`, `rxtx_top_115200_even.bit`, `utilization_rxtx_top_115200_even.rpt` and a timing report named `timing_rxtx_top_115200_even.rpt`  
+
+### Download
+
+Once you have generated your bitfiles, download your designs to your board and use 'putty' to make sure the UART receiver is working correctly using Putty or some other terminal emulator. 
+<!-- You will need to transmit signals from 'putty' to your board, you can do this by pressing 'ctrl+j' in the 'putty' emulator, and then using your keyboard to send char values. -->
+
+
 Download this different bitfile with a different baud rate and make sure it is operating correctly in Putty.
 
 The synthesis step is a very important part of the implementation process and you should always check the logs for warnings that are generated during this step.
@@ -195,13 +219,7 @@ You will need to make sure that you don't have *any* synthesis warnings in your 
 Note that you should add the following to your .x  - Have them experiment with different state encoding values to see how it affects reousrce utilization.
 dc file to get rid of the "Missing CFGBVS and CONFIG_VOLTAGE Design Properties" warning:
 
-```
-set_property CFGBVS VCCO [current_design]
-set_property CONFIG_VOLTAGE 3.3 [current_design]
-```
-
 ## Submission and Grading
-
 
 The following assignment specific items should be included in your repository:
 
