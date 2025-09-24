@@ -18,14 +18,14 @@ This repository contains the lecture schedule (including links to lecture summar
 | **Week 3** | |
 | 9/15/2025  | [RTL Design using ASM Diagrams](./lectures/rtl_asmd.md)|
 | 9/17/2025  | [SystemVerilog Testbenches](./lectures/testbenches.md)|
-| 9/19/2025  |  |
+| 9/19/2025  | [Functions, Tasks, Threads, generate](./lectures/functions_tasks.md) |
 | **Week 4** | |
-| 9/22/2025  | [Functions, Tasks, Threads, generate](./lectures/functions_tasks.md) |
-| 9/24/2025  | [SystemVerilog Types](./lectures/systemverilog_types.md) |
-| 9/26/2025  | [Verification with UVM](./lectures/uvm.md) |
+| 9/22/2025  | [SystemVerilog Types](./lectures/systemverilog_types.md) |
+| 9/24/2025  | [SystemVerilog Types continued](./lectures/systemverilog_types.md) |
+| 9/26/2025  | [HDL Synthesis](./lectures/hd_synthesis.md) |
 | **Week 5** | |
-| 9/29/2025  | [SystemVerilog Types continued - no quiz](./lectures/systemverilog_types.md) |
-| 10/1/2025  | [SPI Controller](./lectures/spi.md)  |
+| 9/29/2025  | [SPI Controller](./lectures/spi.md) |
+| 10/1/2025  |   |
 | 10/3/2025  | **Exam #1** |
 | **Week 6** | |
 | 10/6/2025  | [Memories](./lectures/memories.md)  |
@@ -41,7 +41,7 @@ This repository contains the lecture schedule (including links to lecture summar
 | 10/24/2025 | [Handshaking and Data Transfer](./lectures/handshaking.md) |
 | **Week 9** | |
 | 10/27/2025 | [Poor Design Practice](./lectures/poor_practice.md) |
-| 10/29/2025 | No Class (catch up) |
+| 10/29/2025 |  |
 | 10/31/2025  | [Pipelining and Retiming](./lectures/pipelining.md) |
 | **Week 10**| |
 | 11/3/2025  | [VHDL Part 1](./lectures/vhdl1.md) |
@@ -54,9 +54,9 @@ This repository contains the lecture schedule (including links to lecture summar
 | **Week 12**| |
 | 11/17/2025 | [DDR](./lectures/ddr.md) |
 | 11/19/2025 | [IO Resources](./lectures/io.md)  |
-| 11/21/2025 | No Class |
+| 11/21/2025 |  |
 | **Week 13**| |
-| 11/24/2025 | No Class |
+| 11/24/2025 | **No Class** |
 | 11/26/2025 | No Class - Thanksgiving Break |
 | 11/28/2025 | No Class - Thanksgiving Break |
 | **Week 14**| |
@@ -71,6 +71,7 @@ This repository contains the lecture schedule (including links to lecture summar
 | 12/16/2025 | Final Exam in class |
 
 <!--
+[Verification with UVM](./lectures/uvm.md)
 Other Lectures: 
 * ILA (Integrated Logic Analyzer)
 * Simulation Coverage
