@@ -28,9 +28,11 @@ These standards are required for **all** assignments.
     * A short comment is required for every module instantiated in your design
     * A short comment is required for every generate statement in your design
   * **Magic Numbers**
-    * Do not use "Magic Numbers" embedded in your code. Instead, define a constant with a meaningful name and use the constant. Exceptions to this include the following:
-       * Using the constant '1' or '0'.
+    * Do not use "Magic Numbers" embedded in your code. If a number in your code has a meaning, define a constant or localparam with an appropriate name that conveys the meaning and use the constant. Exceptions to this include the following:
+       * Using the constant '1' or '0' (including incrementing “+1” and decrementing  or “-1”, which is common and sufficiently clear on its own)
        * Using constants with a delay value (i.e., #10)
+       * Fixed port widths (i.e. [7:0]). If the port widths are parameterizable then constant variables should be used.
+       * Other situations where the meaning of a fixed constant is very clear and the use of a named constant will only clutter the code. Follow your instinct: if you provide reasonable justification in an acompanying comment, you will not lose points for your choice as a designer to not use a named constant.
   * **Formatting**
     * Indentation. Your module should be properly formatted such that the indentation matches the proper scope. 
     * Sometimes editors will insert a mix of tabs/spaces. Make sure that your code is properly indented when viewed within GitHub
