@@ -48,7 +48,7 @@ Implement the standards for Level 1 and the following additional standards:
     * Synchronous always blocks should be limited to related signals. Do not create one big synchronous block with all synchronous signals of the module.
     * Use non-blocking assignment statements in synchronous blocks
     * Sensitivity Lists:
-      * The only signals in the sensitivity list should be clocks and rests (and no resets for synchronous resets)
+      * The only signals in the sensitivity list should be clocks and resets (and no resets for synchronous resets)
  * Combinational process blocks (VHDL): only place the sensitive signals in the sensitivity list
   * Combinational always_comb: Use blocking statements in always_ff
   * Case statements: cover all cases in a case statement
