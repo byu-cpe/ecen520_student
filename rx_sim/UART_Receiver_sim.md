@@ -213,5 +213,6 @@ The following assignment specific items should be included in your repository:
 
 <!--
 Future Changes:
+* Have them read through the testbench in some detail and answer questions about the testbench. They are not writing testbenches but I should ask them to read through it and understand it.
 * The synthesis tool couldn't extract a FSM from some students. Need to figure out what is going on. Perhaps make a requirement that it has to find it?
 -->
