@@ -2,7 +2,7 @@
 
 module tb_rx #(parameter CLK_FREQUENCY=100_000_000, parameter BAUD_RATE = 19_200,
    PARITY= 1'd1);
-   logic clk, Receive, ReceiveAck, Sin, rst, parityErr;
+   logic clk, Receive, ReceiveAck, Sin, rst, parityErr, busy;
    logic [7:0] Dout;
    int errors;
    int bitTime = CLK_FREQUENCY / BAUD_RATE;
@@ -11,7 +11,7 @@ module tb_rx #(parameter CLK_FREQUENCY=100_000_000, parameter BAUD_RATE = 19_200
    // Instance the DUT
    rx #(.CLK_FREQUENCY(CLK_FREQUENCY), .BAUD_RATE(BAUD_RATE), .PARITY(PARITY))
    student_rx(.clk(clk), .rst(rst), .Receive(Receive), .Dout(Dout),
-      .ReceiveAck(ReceiveAck), .Sin(Sin), .parityErr(parityErr));
+      .ReceiveAck(ReceiveAck), .Sin(Sin), .parityErr(parityErr), .busy(busy));
 
    // Clock
    initial begin
@@ -51,9 +51,13 @@ module tb_rx #(parameter CLK_FREQUENCY=100_000_000, parameter BAUD_RATE = 19_200
       // Wait for a few negative edges of clock and then start sending
       sdla(4);
 
-      // Start bit
+      // Start bit: Check for busy
+      if (busy == 1)
+        incErr($sformatf("*** ERROR: 'busy' should be a '0' before start bit but it is a %0d", busy));
       Sin = 0;
       sdla(bitTime);
+      if (busy != 1)
+        incErr($sformatf("*** ERROR: 'busy' should be a '1' after start bit but it is a %0d", busy));
 
       // Send bits
       for (int i=0;i<8;i++) begin
