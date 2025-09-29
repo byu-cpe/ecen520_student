@@ -54,7 +54,7 @@ Your controller should generate the `/CS`, `SCLK`, and `MOSI` signals as shown i
 The reading/writing of a byte will require multiple phases as follows:
   1. `/CS` is driven low and valid data (MSB) is driven by the Main on to `MOSI`. If the subunit is sending data, it will drive the MSB of its data.
   2. `CLK` is driven high. The subunit will sample `MOSI` on this low to high transition and the controller will sample the `MISO` signal. 
-  3. `CLK` is driven low. Both the controller and the subunit change the valus on the `MOSI` and `MISO` signals to make sure that the setup and hold times are met for the next transition of `CLK`.
+  3. `CLK` is driven low. Both the controller and the subunit change the values on the `MOSI` and `MISO` signals to make sure that the setup and hold times are met for the next transition of `CLK`.
   4. The controller performs steps 2 and 3 for the remaining 7 bits of the byte.
   5. In the final phase, drives `/CS` high to end the transaction. 
 
@@ -201,6 +201,14 @@ This testbench should be designed as follows:+
 
 Make sure your design successfully passes this testbench.
 Add the makefile rules named `sim_adxl362` and `sim_adxl362_100` that will perform this simulation from the command line (the `sim_adxl362_100` rule should be used to set the `SCLK_FREQUENCY` parameter to 100_000).
+
+## Synthesis of SPI Controller Modules
+
+Before proceeding with the top-level SPI design, it is important to make sure that your SPI controller and adxl362 controller from the previous assignment are properly synthesizable.
+Create a makefile rule named `synth_adxl362_cntrl` that performs "out of context" synthesis of the adxl362 controller module from the preivous assignment (see the [instructions](../rx_sim/UART_Receiver_sim.md#receiver-synthesis) on how to do this).
+Make sure all synthesis warnings and errors are resolved before proceeding with the top-level design.
+If you made any changes to your modules to resolve synthesis errors, rerun the testbenches from the previous assignment to make sure they operate correctly.
+
 
 <!--
 ## Preliminary Synthesis

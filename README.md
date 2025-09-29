@@ -26,8 +26,8 @@ This repository contains the lecture schedule (including links to lecture summar
 | 9/24/2025  | [SystemVerilog Types continued](./lectures/systemverilog_types.md) |
 | 9/26/2025  | [HDL Synthesis](./lectures/hd_synthesis.md) |
 | **Week 5** | |
-| 9/29/2025  | [SPI Controller](./lectures/spi.md) |
-| 10/1/2025  | [Memories](./lectures/memories.md) |
+| 9/29/2025  | [Memories](./lectures/memories.md) |
+| 10/1/2025  | [SPI Controller](./lectures/spi.md) |
 | 10/3/2025  |  |
 | **Week 6** | |
 | 10/6/2025  | **Exam #1** |
@@ -75,6 +75,8 @@ This repository contains the lecture schedule (including links to lecture summar
 <!--
 * Move synthesis lecture before testbench/types lectures
 * Dedicated lecture on Verilog vs. SystemVerilog (how to code in Verilog)
+  (this seemed to be weak and skipped this time)
+* Dedicated lecture on implementation, constraints, and timing analysis
 
 [Verification with UVM](./lectures/uvm.md)
 Other Lectures: 
