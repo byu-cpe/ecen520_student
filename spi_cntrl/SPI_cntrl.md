@@ -83,7 +83,7 @@ The following notes provide more details for the ASMD diagram:
   * `spi_cs` is a single-bit register that is used for the SPI chip select output. It should be reset into the high state. It is set when transitioning between states. It is a register to avoid glitches.
 * Outputs:
   * `busy` indicates that the controller is busy and is asserted in the non-IDLE states.
-  * `spi_mosi` is driven from the MSB or LSB of the shift register depending on the `MSB_FIRST` parameter. Since it is derived from a shift register it will not have glitches.
+  * `spi_mosi` is driven from the MSB or LSB of the shift register depending on the `MSB_FIRST` parameter. Since it is derived from a shift register it will not have glitches
 
 <!-- 
 Your controller should generate the `/CS`, `SCLK`, and `MOSI` signals as shown in the following SPI transaction diagram:
