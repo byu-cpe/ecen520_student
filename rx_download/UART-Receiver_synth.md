@@ -91,7 +91,7 @@ w asserted) |
 | BAUD_RATE | 19_200 | Specify the receiver baud rate |
 | PARITY | 1 | Specify the parity bit (0 = even, 1 = odd) |
 | REFRESH_RATE  | 200 | Specifies the display refresh rate in Hz of seven segment display |
-| DEBOUNCE_TIME_US | integer | 1_000 | Specifies the minimum debounce delay in micro seconds (1 ms) |
+| DEBOUNCE_TIME_US | integer | 10_000 | Specifies the minimum debounce delay in micro seconds (1 ms) |
 
 Design your top-level circuit as follows:
 * Attach the `CPU_RESETN` signal to two flip-flops to synchronize it to the clock. Use this synchronized signal for the reset in your design (note that the input reset polarity is negative asserted)

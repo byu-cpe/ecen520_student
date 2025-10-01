@@ -22,7 +22,7 @@ Other terminology has been proposed, and it can sometimes be difficult to reconc
 
 ## SPI Controller
 
-The first task for this assignment is to create an SPI controller (or SPI "Main").
+The first task for this assignment is to create a generic SPI controller that can be used to support a variety of application specific controllers.
 The SPI controller is responsible for communicating with SPI "Subnode" sharing the SPI bus.
 Review online resources to become intimately familiar with the SPI protocol ([wikipedia](https://en.wikipedia.org/wiki/Serial_Peripheral_Interface),
 [Analog Devices](https://www.analog.com/en/analog-dialogue/articles/introduction-to-spi-interface.html), and
@@ -47,9 +47,50 @@ Your controller will need to generate the desired `SPI_SCLK` frequency based on 
 Like the UART, you will need to have a state that is multiple clock cycles long for each phase of the `SPI_SCLK` signal.
 You will determine the number of clock cycles for each phase of `SPI_SCLK` by the `SCLOCK_FREQUENCY` and `CLK_FREQUENCY` module parameters.
 
-Your controller should generate the `/CS`, `SCLK`, and `MOSI` signals as shown in the following SPI transaction diagram:
+Create a controller with the name `spi_cntrl.sv` that has following top-level ports and parameters:
 
-![SPI Transaction](./spi_transaction.jpg)
+| Port Name | Direction | Width | Function |
+| ---- | ---- | ---- | ----  |
+| clk | Input | 1 | Clock |
+| rst | Input | 1 | Reset |
+| start| Input | 1 | start a transfer |
+| load | Input | 1 | Load a new value into the shift register |
+| data_to_send | Input | SHIFT_REG_WIDTH | Data to send to subunit |
+| spi_miso | Input | 1 | SPI MISO signal |
+| data_received | Output | SHIFT_REG_WIDTH | Data received on the last transfer |
+| busy | Output | 1 | Controller is busy |
+| sample | Output | 1 | Indicates that a new sample is ready |
+| spi_clk | Output | 1 | SCLK output signal |
+| spi_mosi | Output | 1 | MOSI output signal |
+| spi_cs | Output | 1 | CS output signal |
+
+| Parameter Name | Default Value | Purpose |
+| ---- | ---- | ---- |
+| CLK_FREQUENCY | 100_000_000 | Specify the clock frequency of the board |
+| SCLK_FREQUENCY  | 500_000 | Specify the frequency of the SCLK |
+| SHIFT_REG_WIDTH  | 8 | Specify the width of the shift register |
+| MSB_FIRST  | 1 | Specify the bit order (1 = MSB first, 0 = LSB first) |
+
+Create your SPI controller from the following ASMD diagram:
+
+![SPI Transaction](./spi_cntrl_asmd.png)
+
+The following notes provide more details for the ASMD diagram:
+* Internal Registers:
+  * The internal counter `sclk_cnt` counts the number of clock cycles for each phase of the `SPI_SCLK` signal. A constant `PHASE_CNT` determines how many clock cycles are needed and are based on the `CLK_FREQUENCY` and `SCLK_FREQUENCY` parameters.
+  * The internal register `data_o_sr` is a shift register used to shift data from the controller to the sub-node. It is loaded when `start` is asserted in the IDLE state and when `load` is asserted in the SCLK_HIGH state. 
+  * `spi_clk` is a single-bit register that is used for the SPI clock output. It should be reset into the low state. It is set when transitioning between states. It is a register to avoid glitches.
+  * `spi_cs` is a single-bit register that is used for the SPI chip select output. It should be reset into the high state. It is set when transitioning between states. It is a register to avoid glitches.
+* Outputs:
+  * `busy` indicates that the controller is busy and is asserted in the non-IDLE states.
+  * `spi_mosi` is driven from the MSB or LSB of the shift register depending on the `MSB_FIRST` parameter. Since it is derived from a shift register it will not ahve glitches
+* States:
+* A new transaction is initiated when the `start` signal is asserted. The internal registers are loaded as described in the diagram.
+* 
+
+<!-- 
+Your controller should generate the `/CS`, `SCLK`, and `MOSI` signals as shown in the following SPI transaction diagram:
+![SPI Transaction](./spi_transaction.jpg) 
 
 The reading/writing of a byte will require multiple phases as follows:
   1. `/CS` is driven low and valid data (MSB) is driven by the Main on to `MOSI`. If the subunit is sending data, it will drive the MSB of its data.
@@ -60,6 +101,7 @@ The reading/writing of a byte will require multiple phases as follows:
 
 When the transaction is over, the controller will have received an 8-bit value that it received from the subunit.
 Note that this description assumes the control signal `CPHA` = 0 meaning that data is sampled by the subunit on the rising edge and sampled by the Main controller on the falling edge.
+-->
 
 <!--
 Two control bits determine the operating mode of the procotol: `CPOL` and `CPHA`.
@@ -75,27 +117,6 @@ In this figure three single byte transfers are performed with `/CS` held low for
 
 ![Multi Byte Transaction](./adxl362_spi_read.jpg)
 
-Create a controller the name `spi_cntrl.sv` that has following top-level ports and parameters:
-
-| Port Name | Direction | Width | Function |
-| ---- | ---- | ---- | ----  |
-| clk | Input | 1 | Clock |
-| rst | Input | 1 | Reset |
-| start| Input | 1 | start a transfer |
-| data_to_send | Input | 8 | Data to send to subunit |
-| hold_cs | Input | 1 | Hold CS signal for multi-byte transfers |
-| SPI_MISO | Input | 1 | SPI MISO signal |
-| data_received | Output | 8 | Data received on the last transfer |
-| busy | Output | 1 | Controller is busy |
-| done | Output | 1 | One clock cycle signal indicating that the transfer is done and the received data is valid |
-| SPI_SCLK | Output | 1 | SCLK output signal |
-| SPI_MOSI | Output | 1 | MOSI output signal |
-| SPI_CS | Output | 1 | CS output signal |
-
-| Parameter Name | Default Value | Purpose |
-| ---- | ---- | ---- |
-| CLK_FREQUENCY | 100_000_000 | Specify the clock frequency of the board |
-| SCLK_FREQUENCY  | 500_000 | Specify the frequency of the SCLK |
 
 When building your controller make sure you put flip-flops on the output signals `SPI_SCLK`, `SPI_MOSI`, and `SPI_CS` to remove any glitches from the signal.
 
