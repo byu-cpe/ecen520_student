@@ -83,10 +83,7 @@ The following notes provide more details for the ASMD diagram:
   * `spi_cs` is a single-bit register that is used for the SPI chip select output. It should be reset into the high state. It is set when transitioning between states. It is a register to avoid glitches.
 * Outputs:
   * `busy` indicates that the controller is busy and is asserted in the non-IDLE states.
-  * `spi_mosi` is driven from the MSB or LSB of the shift register depending on the `MSB_FIRST` parameter. Since it is derived from a shift register it will not ahve glitches
-* States:
-* A new transaction is initiated when the `start` signal is asserted. The internal registers are loaded as described in the diagram.
-* 
+  * `spi_mosi` is driven from the MSB or LSB of the shift register depending on the `MSB_FIRST` parameter. Since it is derived from a shift register it will not have glitches
 
 <!-- 
 Your controller should generate the `/CS`, `SCLK`, and `MOSI` signals as shown in the following SPI transaction diagram:
@@ -107,9 +104,7 @@ Note that this description assumes the control signal `CPHA` = 0 meaning that da
 Two control bits determine the operating mode of the procotol: `CPOL` and `CPHA`.
 The `CPOL` determines the polarity of the clock during the IDLE phase and the `CPHA` determines the clock phase for data transfers.
 Design your controller to operate with `CPOL` = 0 and 
--->
 
-<!-- back to back transactions -->
 Your controller should also support multi-byte transfers by initiating a new transaction immediately after the previous transaction.
 An input signal named `hold_cs` will be used to determine whether you should continue the transaction with another byte or end the transaction and return `/CS` to high.
 Multi-byte transfers within a single transaction will be required for the accelerometer as shown in the figure below.
@@ -119,6 +114,7 @@ In this figure three single byte transfers are performed with `/CS` held low for
 
 
 When building your controller make sure you put flip-flops on the output signals `SPI_SCLK`, `SPI_MOSI`, and `SPI_CS` to remove any glitches from the signal.
+-->
 
 <!--
 **Note:** We have not talked about ASMD diagrams yet so you can ignore the instructions for creating ASMD diagrams.
@@ -145,7 +141,7 @@ Design your testbench to do the following:
   * Generate a free oscillating clock and run the clock for several cycles before setting any inputs to your receiver.
   * Provide initial values for the inputs to your receiver (without starting a transaction)
   * Issue a reset by waiting a few clock cycles, issuing the reset for a few clock cycles, and then deasserting the reset
-  * Send at least 10 bytes over SPI as single byte transfers. You should create a task to perform this transer.
+  * Send at least 10 bytes over SPI as single byte transfers. You should create a task to perform this transfer.
     * Transmit a random 8-bit value for each transaction and print the value you are transmitting
     * Print the value of the data received from the transaction from the subnode
     * Check to make sure the character you sent is the character you received. Print a message that you correctly received the character you sent or print that an error occurred.
