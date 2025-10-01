@@ -28,7 +28,7 @@ This repository contains the lecture schedule (including links to lecture summar
 | **Week 5** | |
 | 9/29/2025  | [Memories](./lectures/memories.md) |
 | 10/1/2025  | [SPI Controller](./lectures/spi.md) |
-| 10/3/2025  |  |
+| 10/3/2025  | [Verification with UVM](./lectures/uvm.md) |
 | **Week 6** | |
 | 10/6/2025  | **Exam #1** |
 | 10/8/2025  | [Timing overview and review](./lectures/timing_overview.md) |
@@ -78,7 +78,6 @@ This repository contains the lecture schedule (including links to lecture summar
   (this seemed to be weak and skipped this time)
 * Dedicated lecture on implementation, constraints, and timing analysis
 
-[Verification with UVM](./lectures/uvm.md)
 Other Lectures: 
 * ILA (Integrated Logic Analyzer)
 * Simulation Coverage
