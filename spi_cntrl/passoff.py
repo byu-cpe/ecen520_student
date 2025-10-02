@@ -19,9 +19,9 @@ def main():
                                                      "SPI Control Testbench", error_on_match = True,
                                                      error_msg = "spi_ctrl testbench failed"))    
     tester.add_Makefile_rule("sim_adxl362", ["adxl362_cntrl.sv", "adxl362_cntrl_tb.sv"], ["sim_adxl362.log"])
-    tester.add_Makefile_rule("synth_adxl362_cntrl", [], ["synth_adxl362_cntrl.log"])
+    tester.add_Makefile_rule("synth_adxl362_cntrl", [], ["synth_adxl362_cntrl.log","adxl362_cntrl_synth.dcp"])
+    tester.add_required_tracked_files(["spi_cntrl.png","adxl362_cntrl.png"])
     tester.run_tests()
-
 
 if __name__ == "__main__":
     main()
