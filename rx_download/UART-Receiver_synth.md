@@ -215,7 +215,6 @@ set_property CONFIG_VOLTAGE 3.3 [current_design]
 
 ## Submission and Grading
 
-
 The following assignment specific items should be included in your repository:
 
 1. Required Makefile rules:

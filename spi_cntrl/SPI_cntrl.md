@@ -42,7 +42,7 @@ When there is no transaction, the signal should be low.
 There is a control bit `CPOL` that determines the polarity of the idle `SPI_SCLK`.
 We will assume `CPOL` = 0 meaning that SCLK is low when no transactions are in process.
 The `SPI_SCLK` signal will toggle at a much slower rate than our input 100 MHz clock.
-For the [accelerometer](https://www.analog.com/media/en/technical-documentation/data-sheets/ADXL362.pdf) we are using, the maximum frequency of the `SPI_SCLK` is 10 MHz (the clock low and clock high phases must be 50 ns or longer for a minimum clock period of 100 ns).  
+For the [accelerometer](https://www.analog.com/media/en/technical-documentation/data-sheets/ADXL362.pdf) we are using, the maximum frequency of the `SPI_SCLK` is 8 MHz (the clock low and clock high phases must be 50 ns or longer for a minimum clock period of 100 ns).  
 Your controller will need to generate the desired `SPI_SCLK` frequency based on a parameter, `SCLK_FREQUENCY`.
 Like the UART, you will need to have a state that is multiple clock cycles long for each phase of the `SPI_SCLK` signal.
 You will determine the number of clock cycles for each phase of `SPI_SCLK` by the `SCLOCK_FREQUENCY` and `CLK_FREQUENCY` module parameters.
@@ -228,11 +228,19 @@ Add the makefile rules named `sim_adxl362` that will perform this simulation fro
 
 ### Synthesis of SPI Controller Modules
 
-Before proceeding with the top-level SPI design, it is important to make sure that your SPI controller and adxl362 controller from the previous assignment are properly synthesizable.
-Create a makefile rule named `synth_adxl362_cntrl` that performs "out of context" synthesis of the adxl362 controller module from the preivous assignment (generate a log file named `synth_adxl362_cntrl.log`)
+Before proceeding with the top-level SPI design, it is important to make sure that your SPI controller and adxl362 controller from the previous assignment are properly synthesize.
+Create a makefile rule named `synth_adxl362_cntrl` that performs "out of context" synthesis of the adxl362 controller module from the previous assignment.
+Generate a log file named `synth_adxl362_cntrl.log` and a .dcp file named `adxl362_cntrl_synth.dcp`.
 Make sure all synthesis warnings and errors are resolved before proceeding with the top-level design.
 If you made any changes to your modules to resolve synthesis errors, rerun the testbenches from the previous assignment to make sure they operate correctly.
 
+Once you have synthesized your design, open the .dcp file in Vivado to view the schematic of the synthesized design.
+You can view the schematic by running `vivado` in GUI mode and typing the following command in the Tcl console: ```open_checkpoint adxl362_cntrl_synth.dcp```
+At this point the device view is shown.
+Select Tools->Schematic to view the schematic of the design.
+Take a screenshot of the schematic and name the file `adxl362_cntrl.png`.
+Double click on the 'spi_cntrl' instance to view the schematic of the SPI controller.
+Take a screenshot of the schematic and name the file `spi_cntrl.png`.
 
 <!--
 ## Preliminary Synthesis
@@ -249,14 +257,11 @@ Make sure all synthesis warnings and errors are resolved before submitting your 
 
 ## Submission and Grading
 
+1. Add all required makefile rules described above (see `passoff.py` for details):
+4. Complete the `report.md` file with the required information
+
 <!--
 - Come up with some "discussion" or exploration exercise as part of the readme.md
 - It is hard to follow their testbenches. Need to provide more constraints so that I can follow and see that what was recieved is what was sent
   (prehaps have them provide such a statement in the testbench output)
-- Perhaps I provide a detailed module test bench and they create the top-level testbench
-  (trade off between learning testenches and testing their circuits properly)
-
-- Does it make sense to break this up into two pieces: one 8-bit controller and one 3-byte controller? Perhaps make a single controller for the ADXL that is general.  FOrcing a 8-bit repreaed controller isn't that general.
-  - Probably have them just create a design that does the full 24-bit transfer as one step. Perhaps make the number of bits for a transfer a parameter.
-- Move the synthesis step from the next assignment back to this assignment (the out of context synthesis step)
 -->
