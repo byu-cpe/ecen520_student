@@ -31,15 +31,17 @@ Create a top-level design in a file named `adxl362_top.sv` that uses the followi
 | SCLK_FREQUENCY | 1_000_000 | ADXL SPI SCLK rate |
 | DISPLAY_RATE | 2 | How many times a second the accelerometer values should be updated on the seven segment display |
 
-Create a top-level circuit that includes the following:
+Include the following in your top-level design:
 * Instance your ADXL362 SPI controller and attach it to the top-level SPI pins on the Nexys4 board. 
   * The accelerometer provides two interrupt pins (`ACL_INT[1]` and `ACL_INT[2]`) that you do not need to use for this assignment (do not hook up these pins).
-  * Turn on LED16_B when your ADXL362 SPI controller unit is busy.
+  * Turn on `LED16_B` when your ADXL362 SPI controller unit is busy.
   * Create a state machine that reads the X, Y, and Z accelerator values periodically and continuously write the values to the seven segment display (see below for details on now to display the values).
-  * The `DISPLAY_RATE` parameter that indicates how many times a second these values should be updated.
+    * The `DISPLAY_RATE` parameter that indicates how many times a second these values should be updated.
 * Switches
   * The lower 8 switches should be used to specify the 8-bit address of the adxl362 register to read/write
   * The upper 8 switches should be used to specify the 8-bit data used for adxl362 register writes
+  * Use a register for the switches to synchronize the switches to the clock
+* LEDs
   * The 16 LEDs should follow the value of the switches to allow the user can easily verify that the address/data is properly set.
 * Buttons
   * The left button (BTNL) should be used to initiate a write operation to the accelerometer (where the address and data to write are specified by the switches)
@@ -53,6 +55,11 @@ Create a top-level circuit that includes the following:
     * The X-Axis (register 0x08) should be displayed on the digits 2 and 3 (where digit 0 is the rightmost digit)
     * The Y-Axis (register 0x09) should be displayed on the digits 4 and 5
     * The Z-Axis (register 0x0A) should be displayed on the digits 6 and 7
+
+<!-- Note that your adxl362 controller will be accessed by two different parts of your top-level design.
+First, you can read and write to the adxl362 controller using the buttons and switches.
+Second, you will need a timer state machine that continuously reads the X, Y, and Z accelerometer values based on the `DISPLAY_RATE` parameter.
+-->
 
 ### SPI Top-Level Testbench
 
@@ -111,7 +118,7 @@ set_false_path -to [get_ports { LED16_B } ]
 Once you have created your constraints file, create a makefile rule named `synth_adxl362_top` that synthesizes your top-level design using the default parameters.
 This makefile rule should generate a log file named `synth_adxl362_top.log` and a .dcp file named `adxl362_top_synth.dcp`.
 Make sure all synthesis warnings and errors are resolved before proceeding with the implementation of your design.
-Carefully track the number of times you synthesize your design as this number will be required in the report section of this assignment.
+Carefully track the number of times you synthesize your design to complete this assignment as this number will be required in the report section of this assignment.
 
 ### Implementation
 
@@ -126,19 +133,15 @@ report_drc -file drc_adxl362_top.rpt
 
 After implementation is complete, open Vivado in GUI mode and open the implemented checkpoint file `adxl362_top.dcp`.
 Create the following screenshots of your implemented design (see the 320 [design layout tutorial](https://byu-cpe.github.io/ecen320/tutorials/vivado/vivado_design_layout/)): 
-* Clock pin
-* bufg for the clock
-* btnc synchronizer flip-flop
-
+* Clock pin (`clock_pin.png`)
+* bufg for the clock (`bufg.png`). Enable the routing when taking this screenshot to see the nets come in and out of the bufg.
+* btnr synchronizer flip-flop (`btnr_sync.png`)
 
 ## Download
 
-and track the number of times you had to download your design on the board.
-These numbers will be required in the report section of this assignment.
+After generating a bitstream for your design, download the bitstream to the Nexys4 board to make sure your circuit is working properly.
+Track the number of times you had to download your design on the board as this will be required in the report section of this assignment.
 
-
-
-Once you have created your design and downloaded it to the board.
 Test the board by running the commands listed below on the switches and buttons.
 Note that the part may not be in the state as described below as the state may have been modified by a previous student.
 Make sure the board is working properly by doing the following:
@@ -165,20 +168,15 @@ Other operations:
   
 ## Submission and Grading
 
-1. Required Makefile rules:
-  * `synth_adxl362_cntrl`
+1. Implement all the required makefile rules and make sure your `passoff.py` script runs without errors.
+2. Complete and commit the [report.md](report.md) file for this assignment.
+
+  <!-- * `synth_adxl362_cntrl`
   * `sim_top`:
   * `sim_top_100`:
   * `gen_bit`: generates `spi_adxl362.bit`
-  * `gen_bit_100`: generates `spi_adxl362_100.bit`
-2. Assignment specific Questions:
-    1. Provide a table summarizing the resources your design uses from the implementation utilization report.
-    1. Review the timing report and summarize the following:
-       * Determine the "Worst Negative Slack" (or WNS). 
-       * Summarize the `no_input_delay` and `no_output_delay` section of the report.
-       * How many total endpoints are there on your clock signal?
-       * Find the first net in the `Max Delay Paths` section and indicate the source and destination of this maximum path.
-    1. Indicate how many times you had to (1) synthesize your design and (2) download your bitstream before your circuit worked. Note that two different numbers are needed for this response.
+  * `gen_bit_100`: generates `spi_adxl362_100.bit` -->
+
 
 <!--
 - Add an exercise where the students do one of the following:
