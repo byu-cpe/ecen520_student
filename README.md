@@ -74,9 +74,9 @@ This repository contains the lecture schedule (including links to lecture summar
 
 <!--
 * Move synthesis lecture before testbench/types lectures
+* Dedicated lecture on implementation, constraints, and timing analysis
 * Dedicated lecture on Verilog vs. SystemVerilog (how to code in Verilog)
   (this seemed to be weak and skipped this time)
-* Dedicated lecture on implementation, constraints, and timing analysis
 
 Other Lectures: 
 * ILA (Integrated Logic Analyzer)

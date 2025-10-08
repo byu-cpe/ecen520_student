@@ -11,6 +11,15 @@
   * Suggestion 1 (List 'None' for the bullet item if you are not providing suggestions)
 
 ## Assignment Specific Responses
+  x. Timing Report Review
+    * What is the "Worst Negative Slack" (WNS) of this design?: **X.Xns**
+    * How many "THS Total Endpoints" are there for this design? **X**
+    * What is the "Source" netname of the "Max Delay Paths" worst case net? **<netname>>**
+    * What is the "Destination" netname of the "Max Delay Paths" worst case net? **<netname>>**
+    * What is the "Source" netname of the "Min Delay Paths" worst case net? **<netname>>**
+    * What is the "Destination" netname of the "Min Delay Paths" worst case net? **<netname>>**
+
+
   1. How many state machines were inferred for your ADXL362 controller? (review the synthesis report)
   2. Complete the RTL Components table listed [below](#rtl-components-table)
   3. Fill in the Resource Utilization table listed [below](#resource-utilization-table)

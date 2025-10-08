@@ -126,7 +126,9 @@ report_drc -file drc_adxl362_top.rpt
 
 After implementation is complete, open Vivado in GUI mode and open the implemented checkpoint file `adxl362_top.dcp`.
 Create the following screenshots of your implemented design (see the 320 [design layout tutorial](https://byu-cpe.github.io/ecen320/tutorials/vivado/vivado_design_layout/)): 
-* 
+* Clock pin
+* bufg for the clock
+* btnc synchronizer flip-flop
 
 
 ## Download
@@ -181,7 +183,6 @@ Other operations:
 <!--
 - Add an exercise where the students do one of the following:
   1. Open the fpga layout tool and browse around the design. Find the I/O and logic resources.
-  2. Start going through the timing report in more detail.
   3. Have a constraint that requires the SPICLK and MOSI/MISO flip flps to be very close to the I/O. Need to make sure the a the timing delay between CLK/MISO/MOSI is as small as possible.
     set_property IOB TRUE [get_cells <register_name>]
 - Provide instructions for putting board in a known state. Many boards are "locked" based on previous student user. Provide instructions on how to "unlock" and put the board in an initial state.

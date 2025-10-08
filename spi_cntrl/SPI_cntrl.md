@@ -261,6 +261,7 @@ Make sure all synthesis warnings and errors are resolved before submitting your 
 4. Complete the `report.md` file with the required information
 
 <!--
+- Need to be consistent on 'cntrl' vs. 'ctrl' in file names
 - Come up with some "discussion" or exploration exercise as part of the readme.md
 - It is hard to follow their testbenches. Need to provide more constraints so that I can follow and see that what was recieved is what was sent
   (prehaps have them provide such a statement in the testbench output)
