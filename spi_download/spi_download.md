@@ -161,6 +161,13 @@ Make sure the board is working properly by doing the following:
     * Register 0x0A for ZDATA
       * The z-axis goes through the board (i.e., gravitational direction). The way to get this value to change is to lift or drop the board (i.e., accelerate in Z direction)
 
+This is just a heads up, if you do a soft reset on the accelerometer it needs to be cleared in order to start reporting data again. 
+If you only do the soft reset like I did, it will display zeros for all the data and this state will persist after shutdown. 
+It will still accept reads and writes to particular registers, but it won't start reporting the x, y, and z data until you complete all the steps for a reset:
+  1. Write the value 0x52 to register 0x1F for a soft reset
+  2. Write the value 0x00 to register 0x1F to clear the soft reset
+  3. Write the value 0x02 to register 0x2D to set "enable measure command"
+
 Other operations:
   * Write the value 0x52 to register 0x1F for a soft reset
   * Write the value 0x00 to register 0x1F to clear the soft reset
