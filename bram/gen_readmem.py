@@ -66,6 +66,9 @@ def main():
     if args.length:
         for i in range(args.length-values):
             write_char(write_file,'\0',args.binary)
+    print(f" Wrote {values} values from {args.input_filename} to {args.output_filename}")
+    if args.length:
+        print(f" Wrote {args.length-values} default values to {args.output_filename}")
 
     write_file.close()
 
