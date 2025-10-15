@@ -40,16 +40,16 @@ Your FIFO should be created by as follows:
 
 ### BRAM FIFO Testbench 
 
-Create a simple testbench named  `bram_fifo_tb.sv` that demonstrates writing a few bytes, reading/writing a few bytes, and the full/empty signals working properly.
+Create a simple testbench named `bram_fifo_tb.sv` that demonstrates writing a few bytes, reading/writing a few bytes, and the full/empty signals working properly.
 Use a SystemVerilog 'queue' to store the values of the FIFO so you can check that the order you write is the order that you read.
 Print a message each time an element is written to or read from the FIFO.
 
 To simulate the `RAMB36E1` primitive you will need to include the 'unisim' library in your simulation.
 This precompiled library contains all the simulation models of the Xilinx primitives.
 Follow these steps to include this library in your simulation environment:
-* Add the following line to your `modelsim.ini` file: `unisim = /tools/Xilinx/Vivado/2024.1/data/questa/unisim`. Note that the path for this library is based on the computers in the digital lab. You may need to adjust this path if you are using a different computer.
+* Add the following line to your `modelsim.ini` file: `unisim = /tools/Xilinx/Vivado/2024.1/data/questa/unisim`. Note that the path for this library is based on the computers in the digital lab. You may need to adjust this path if you are using a different computer. Commit this file to your repository.
 * Add the flag `-L unisim` to your `vsim` command in your simulation script.
-Create a makefile rule named `sim_bram_fifo` that runs this simulation from the command line.
+Create a makefile rule named `sim_bram_fifo` that runs this simulation from the command line and generates a log file named `sim_bram_fifo.log`.
 
 <!--
 * `vlib unisim`
@@ -57,7 +57,8 @@ Create a makefile rule named `sim_bram_fifo` that runs this simulation from the 
 -->
 ### BRAM FIFO Synthesis
 
-After verifying that your FIFO works properly, create a makefile rule named `synth_bram_fifo` that synthesizes your FIFO design in the out of context synthesis mode (see the [instructions](../rx_sim/UART_Receiver_sim.md#receiver-synthesis) on how to do this).
+After verifying that your FIFO works properly, create a makefile rule named `synth_bram_fifo` that synthesizes your FIFO design in the out of context synthesis mode.
+This synthesis step should create a .dcp file named `synth_bram_fifo.dcp` and a log file named `synth_bram_fifo.log`
 Resolve any synthesis errors or warnings before proceeding with the next module.
 Make sure the synthesis log shows that one RAMB36E1 was allocated for your module.
 If you made any changes to your modules to resolve synthesis errors, rerun the testbench to make sure the module operates correctly.
@@ -95,40 +96,39 @@ Create a testbench in a file named `bram_rom_tb.sv`that demonstrates the ability
 Provide a couple of clock cycles between each read.
 
 You will need to populate your ROM with a text message.
-Two text messages have been provided for you: [fight_song.txt](fight_song.txt) and [declaration_of_independence.txt](declaration_of_independence.txt).
+Two text messages have been provided for you: [fight_song.txt](fight_song.txt) and [moroni_10.txt](moroni_10.txt).
+<!-- [declaration_of_independence.txt](declaration_of_independence.txt). -->
 These text files cannot be directly loaded into the memory using the `readmemh` command because they are ASCII files.
 I have created a python script, [gen_readmem.py](gen_readmem.py), that will convert these files into a format that can be read by the `readmemh` command.
 The following example demonstrates how to create a memory file that is readable by the `readmemh` command:
 
 `python3 gen_readmem.py fight_song.txt fight_song.mem -l 4096 -r`
 
+The `-l 4096` option specifies the length of the memory (in bytes) and will zero fill the memory if the file is shorter than this length.
+The `-r` option indicates that a carriage return should be added to the end of each line.
+
 Create a memory file for both text files and add a parameter to your testbench to specify the default ROM contents.
 Configure your testbench to use the `fight_song.mem` file by default.
-Create a makefile rule named `sim_bram_rom` that runs your testbench with the `fight_song.mem` from the command line.
-Also, create a makefile rule named `sim_bram_rom_declaration` that runs your testbench with the `declaration_of_independence.mem` file.
+Create a makefile rule named `sim_bram_rom` that runs your testbench with the `fight_song.mem` from the command line and generates a log file named `sim_bram_rom.log`.
+Also, create a makefile rule named `sim_bram_rom_moroni_10` that runs your testbench with the `moroni_10.mem` file and generates a file named `sim_bram_rom_moroni_10.log`.
 
 ### BRAM ROM Synthesis 
 
 After verifying that your FIFO works properly, create a makefile rule for synthesizing your BRAM ROM in the out of context synthesis mode.
 The makefile rule should be named: `synth_bram_rom` and should synthesize the ROM with the `fight_song` file contents.
+This synthesis step should create a .dcp file named `synth_bram_rom.dcp` and a log file named `synth_bram_rom.log`
+
 Resolve any synthesis errors or warnings before proceeding with the next module.
-**Make sure** the synthesis log shows that one RAMB36E1 was allocated for your module.
+Review your synthesis log to **make sure** the synthesis log shows that one RAMB36E1 was allocated for your module.
 If you made any changes to your modules to resolve synthesis errors, rerun the testbench to make sure the module operates correctly.
 
-## Submission
+  
+## Submission and Grading
 
-The assignment submission steps are described in the [assignment mechanics checklist](../resources/assignment_mechanics.md#assignment-submission-checklist) page.
-Carefully review these steps as you submit your assignment.
+1. Implement all the required makefile rules and make sure your `passoff.py` script runs without errors.
+2. Complete and commit the [report.md](report.md) file for this assignment.
 
-The following assignment specific items should be included in your repository:
 
-1. Required Makefile rules:
-  * `sim_bram_fifo`
-  * `sim_bram_rom`
-  * `sim_bram_rom_declaration`
-  * `synth_bram_fifo`
-  * `synth_bram_rom`
-2. You need to have at least 4 "Error" commits in your repository
 3. Assignment specific Questions:
     1. Create a table in your report that indicates the total number of primitives for each design based on the synthesis reports. The table listed below is an example of what you should include in your report. You will need to include all cells used in each of the two designs.
 
@@ -139,7 +139,7 @@ The following assignment specific items should be included in your repository:
 
 
 <!--
-- Need to have check script copy the modelsim.ini file to the student's directory for grading outside of the repo OR have them commit the modelsim.ini file
+- Need to have check script copy the modelsim.ini file to the student's directory for grading outside of the repo OR have them commit the modelsim.ini file (done)
 - Use the description from Chu section 9.3.2 for creating a FIFO (have them read this and implement this)
 
 They use glbl.v file for simulation. Need to include in their repository.
