@@ -160,11 +160,11 @@ In addition, create a makefile named `sim_spi_cntrl_100` that runs the same test
 
 ## ADXL362 Controller
 
-You will create another module that instances your SPI controller and adds additiona logic to control the accelerometer on the Nexys4 board. 
+You will create another module that instances your SPI controller and adds additional logic to control the accelerometer on the Nexys4 board. 
 Links to the accelerometer are listed below for your convenience. 
 
 The ADXL362 accelerometer uses a three byte transfer to perform a read or a write to/from its registers (see figures 36 and 37 of the [data sheet](https://www.analog.com/media/en/technical-documentation/data-sheets/ADXL362.pdf)). 
-You will need to support both the write and read register operation as described below.
+You will need to support both write and read register operation as described below.
 Create your controller module in a file named `adxl362_cntrl.sv` and create the following top-level ports:
 
 | Port Name | Direction | Width | Function |
@@ -188,6 +188,7 @@ Create your controller module in a file named `adxl362_cntrl.sv` and create the 
 | CLK_FREQUENCY | 100_000_000 | Specify the clock frequency of the board |
 | SCLK_FREQUENCY  | 500_000 | Specify the frequency of the SCLK |
 
+Your controller will instance the generic SPI controller you developed earlier.
 You will need to create a state machine in your controller design to implement the three byte transfer using the SPI controller (i.e., send one byte, send second byte, and so on for three bytes). 
 When the `start` signal is asserted read the `write` signal to determine what type of operation to perform.
 If `write` is asserted, perform a write sequence.
