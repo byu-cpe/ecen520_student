@@ -185,6 +185,10 @@ The cathode signals are also low asserted and are defined as follows:
 The seven segments are organized into a multi-bit bus (segment[6:0]) where segment(6) corresponds to segment 'A' and segment(0) corresponds to segment 'G'.
 segment[7] corresponds to the digit point.
 
+**Note**: The seven segment ordering for the 320 lab instructions are different for this board.
+For the ECEN 320 lab, segment(0) corresponds to segment 'A' and segment(6) corresponds to segment 'G'.
+For this board, segment(6) corresponds to segment 'A' and segment(0) corresponds to segment 'G'.
+
 ### Seven Segment Display Testbench
 
 A testbench ([ssd_tb.sv](ssd_tb.sv)) is provided for you to validate your seven segment display controller.
