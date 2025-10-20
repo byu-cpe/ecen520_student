@@ -42,7 +42,7 @@ This repository contains the lecture schedule (including links to lecture summar
 | 10/22/2025 | [Clock domain crossing](./lectures/clock_crossing.md) |
 | 10/24/2025 | [Handshaking and Data Transfer](./lectures/handshaking.md) |
 | **Week 9** | |
-| 10/27/2025 | ASIC Design (Tomoo) |
+| 10/27/2025 | ASIC Design (Tomoo) - no reading |
 | 10/29/2025 | [Poor Design Practice](./lectures/poor_practice.md)|
 | 10/31/2025  | [Pipelining and Retiming](./lectures/pipelining.md) |
 | **Week 10**| |
