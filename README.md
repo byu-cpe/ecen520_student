@@ -42,8 +42,8 @@ This repository contains the lecture schedule (including links to lecture summar
 | 10/22/2025 | [Clock domain crossing](./lectures/clock_crossing.md) |
 | 10/24/2025 | [Handshaking and Data Transfer](./lectures/handshaking.md) |
 | **Week 9** | |
-| 10/27/2025 | [Poor Design Practice](./lectures/poor_practice.md) |
-| 10/29/2025 |  |
+| 10/27/2025 | ASIC Design (Tomoo) |
+| 10/29/2025 | [Poor Design Practice](./lectures/poor_practice.md)|
 | 10/31/2025  | [Pipelining and Retiming](./lectures/pipelining.md) |
 | **Week 10**| |
 | 11/3/2025  | [VHDL Part 1](./lectures/vhdl1.md) |
@@ -56,7 +56,7 @@ This repository contains the lecture schedule (including links to lecture summar
 | **Week 12**| |
 | 11/17/2025 | [DDR](./lectures/ddr.md) |
 | 11/19/2025 | [IO Resources](./lectures/io.md)  |
-| 11/21/2025 |  |
+| 11/21/2025 | TBD |
 | **Week 13**| |
 | 11/24/2025 | **No Class** |
 | 11/26/2025 | No Class - Thanksgiving Break |
@@ -66,7 +66,7 @@ This repository contains the lecture schedule (including links to lecture summar
 | 12/3/2025  | [AXI Bus](./lectures/axi.md) |
 | 12/5/2025  | [IP Integration](./lectures/ip_integration.md)  |
 | **Week 15**|  |
-| 12/8/2025  | Review for Exam |
+| 12/8/2025  | TBD |
 | 12/10/2025  | Review for Exam |
 | 12/12/2025  | No Class - Final's Week |
 | **Week 16**|  |

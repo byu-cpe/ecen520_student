@@ -178,4 +178,9 @@ The following assignment specific items should be included in your repository:
 
 <!-- Notes:
 - Need to have a way for the testbench to generate an error when there is a problem so the python file catches the error.
+- more instructions on makefiles and 'clean' (links to resources)
+- More instructions on using and setting up ModelSim/QuestaSim (links to resources). .do file tutorial
+- Testbench: check where busy drops (doesnt drop until stop is done)
+- More instructions for remote access
+- UART instructions (link to 320 was broken)
 -->
