@@ -30,6 +30,19 @@
   4. Complete the Utilization Report table listed [below](#utilization-report-table) from your implementation utilization report.
   5. How many times did you have to download your design to the Nexys4 board before it worked correctly? **X**
 
+### Clock Domain Timing Table
+
+| Clock Domain | Frequency | Period | Setup Slack | Hold Slack |
+| ---- | ---- | ---- | ---- | ---- |
+| Input Clock | 100 MHz | 10.00 ns | | |
+| CLKOUT0 |  |  |  |  |
+| CLKOUT1 |  |  |  |  |
+| CLKOUT2 |  |  |  |  |
+| CLKOUT3 |  |  |  |  |
+| CLKOUT4 |  |  |  |  |
+| CLKOUT5 |  |  |  |  |
+| CLKOUT6 |  |  |  |  |
+
 ### Utilization Report Table
 
 See the "Primitives" section of your utilization report for the values to fill in the table below.

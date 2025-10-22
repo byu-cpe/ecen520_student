@@ -41,30 +41,30 @@ This repository contains the lecture schedule (including links to lecture summar
 | 10/20/2025 | [Metastability & Synchronizer design](./lectures/metastability.md) |
 | 10/22/2025 | [Clock domain crossing](./lectures/clock_crossing.md) |
 | 10/24/2025 | [Handshaking and Data Transfer](./lectures/handshaking.md) |
-| **Week 9** | |
-| 10/27/2025 | ASIC Design (Tomoo) - no reading |
-| 10/29/2025 | [Poor Design Practice](./lectures/poor_practice.md)|
-| 10/31/2025  | [Pipelining and Retiming](./lectures/pipelining.md) |
+| **Week 9** |  |
+| 10/27/2025 | ASIC Design (Tomoo)(./lectures/asic-design.md)  |
+| 10/29/2025 | [Pipelining and Retiming](./lectures/pipelining.md) |
+| 10/31/2025 | [Poor Design Practice](./lectures/poor_practice.md) |
 | **Week 10**| |
-| 11/3/2025  | [VHDL Part 1](./lectures/vhdl1.md) |
-| 11/5/2025  | [VHDL Part 2](./lectures/vhdl2.md) |
+| 11/3/2025  | [AXI Bus](./lectures/axi.md) |
+| 11/5/2025  | [AXI Bus part 2](./lectures/axi.md) |
 | 11/7/2025  | **Exam #2** |
 | **Week 11**|  |
-| 11/10/2025 | [Digital Arithmetic #1](./lectures/arith1.md)  |
-| 11/12/2025 | [Digital Arithmetic #2](./lectures/arith2.md) |
-| 11/14/2025 | [DSP Blocks](./lectures/dsp.md)  |
+| 11/10/2025 | [IP Integration](./lectures/ip_integration.md) |
+| 11/12/2025 | [Digital Arithmetic #1](./lectures/arith1.md) |
+| 11/14/2025 | [Digital Arithmetic #2](./lectures/arith2.md)  |
 | **Week 12**| |
-| 11/17/2025 | [DDR](./lectures/ddr.md) |
-| 11/19/2025 | [IO Resources](./lectures/io.md)  |
-| 11/21/2025 | TBD |
+| 11/17/2025 | [DSP Blocks](./lectures/dsp.md) |
+| 11/19/2025 | [DDR](./lectures/ddr.md) |
+| 11/21/2025 | [IO Resources](./lectures/io.md) |
 | **Week 13**| |
 | 11/24/2025 | **No Class** |
 | 11/26/2025 | No Class - Thanksgiving Break |
 | 11/28/2025 | No Class - Thanksgiving Break |
 | **Week 14**| |
 | 12/1/2025  | [CLB Blocks](./lectures/clb.md) |
-| 12/3/2025  | [AXI Bus](./lectures/axi.md) |
-| 12/5/2025  | [IP Integration](./lectures/ip_integration.md)  |
+| 12/3/2025  | TBD |
+| 12/5/2025  | TBD  |
 | **Week 15**|  |
 | 12/8/2025  | TBD |
 | 12/10/2025  | Review for Exam |
@@ -84,6 +84,10 @@ Other Lectures:
 * Assertions
 * [Alternative HDLs](./lectures/alt_hdl.md)
 * [Wishbone Bus](./lectures/wishbone.md)
+
+[VHDL Part 1](./lectures/vhdl1.md)
+[VHDL Part 2](./lectures/vhdl2.md)
+
 -->
 
 ## Assignments
