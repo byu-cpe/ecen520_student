@@ -27,17 +27,18 @@ Enter the "Manage IP" task by creating a new location for the IP.
 Create a new location for the IP by going to `File -> IP -> New Location`.
 
 In the "New IP Location" dialog box, enter the following information:
-* Change the part to "xc7a100tcsg324-1"
-* Leave the target language the same
-* Select the "Questa Advanced Simulator" as the simulator
-* Simulator language: leave as 'mixed'
-* Choose your `ddr/ip` assignment directory as the location of the IP. 
-
-Select "OK" to create the directory.
-You will then enter the "Manage IP" window.
-Creating this IP directory will create `managed_ip_project` subdirectory.
+* "Create a New Customized IP Location" page. Click Next
+* "Manage IP Settings" page
+  * Change the part to "xc7a100tcsg324-1"
+  * Leave the target language the same
+  * Select the "Questa Advanced Simulator" as the simulator
+  * Simulator language: leave as 'mixed'
+  * Choose your `ddr/ip` assignment directory as the location of the IP. 
+  * Click Finish
+Creating this IP directory will create the `managed_ip_project` and `ip_user_files` subdirectory.
 This directory contains the global settings for the IP management window.
 
+You will then enter the "Manage IP" window.
 You can always return to the IP management window by selecting `Tools -> Open Location` and selecting the directory you just created.
 Once you create the IP you will not need to go back to the GUI.
 
@@ -47,7 +48,7 @@ The next step is to create the DDR controller from within the "Manage IP" window
 This is all done through the GUI as described in the instructions below.
 Enter the "Manage IP" window as described above.
 In the "IP Catalog" tab, enter "MiG" in the search box.
-Scroll through the entries and select/double click the "Memory Interface Generator (MIG 7 Series)" IP to open the Memory Interface Generator (MIG) dialog box.
+Scroll through the entries and select/double-click the "Memory Interface Generator (MIG 7 Series)" IP to open the Memory Interface Generator (MIG) dialog box.
 This dialog box will guide you through multiple pages of options to configure the DDR controller.
 Carefully follow the instructions below to properly configure the DDR controller.
 You can move back and forth between these pages by pressing the "Back" and "Next" buttons.
@@ -56,8 +57,8 @@ You can move back and forth between these pages by pressing the "Back" and "Next
   * Review to make sure the part number is correct
   * You can access the "User Guide" by pressing the button in the lower left-hand corner
   * Press "Next" to continue (for all subsequent pages press "Next" to continue unless otherwise instructed)
-* "MIG output Options"
-  * Leave the default settings
+* "MIG Output Options"
+  * Select the 'AXI4' interface <!-- Remove this option if you are not using AXI -->
 * "Pin Compatible FPGAs"
   * When you get to this screen a navigator will show up on the left that allows you to jump to different pages without clicking through Next/Back
   * Select the "xc7a100ti-csg324" part
@@ -67,10 +68,13 @@ You can move back and forth between these pages by pressing the "Back" and "Next
   * Clock Period: 3333 (300 MHz)
   * Memory Part: `MT47H64M16HR-25E` (second from the bottom)
   * Width: 16
+  * Number of Bank Machines: 2 <!-- Change from default of 4 to 2. We don't need a complicated core. -->
   * Leave all other settings at the default value
   <!-- * Data Mask: selected
   * Nmber of Bank Machines (leave at default 4)
   * Ordering: leave at strict -->
+* "AXI Parameter" 
+  * Leave all default settings <!-- Keep the data width at 128 for consistency with previous assignment -->
 * "Memory Options" (Memory Options C0 - DDR2 SDRAM)
   * Input Clock Period: 5000 ps (200 MHz)
   * RTT: 50 ohms
@@ -88,7 +92,6 @@ You can move back and forth between these pages by pressing the "Back" and "Next
   * Press "Read XDC/UCF" to load a UCF file
     * Select the [`nexys4_ddr.ucf`](./nexys4_ddr.ucf) file (this file is preconfigured to describe the DDR pins for the Nexys 4 DDR board)
   * Press the "Validate" button to validate the pinout
-  * Press "Next" to continue
 * "System Signals Selection"
   * Leave everything the same (no changes)
 * "Summary"
@@ -99,22 +102,20 @@ You can move back and forth between these pages by pressing the "Back" and "Next
 * "PCB Information"
   * Select "Next"
 * "Design Notes"
-  * Select "Generate"
+  * Select "Generate". This will perform the generation process.
 
-At this point the IP source files have been "generated" and you can start using the IP.
 A new dialog box will open up that will allow you to synthesize the DDR controller IP.
 Click "Skip" to skip this process of running the synthesis tool on this IP (synthesis will be done later as part of your top-level design).
+There is a button in the lower left corner named "User Guide" that provides a link to the IP user guide (this link didn't work for me).
+The public link to this IP is: https://docs.amd.com/r/en-US/ug586_7Series_MIS
 
 Two additional directories are added to your directory:
 * `mig_7series_0`: This is the main directory for the mig DDR contro9ller
 * `ip_user_files`: This is an empty directory
 
-There is a button in the lower left corner named "User Guide" that provides a link to the IP user guide.
-This link didn't work for me.
-The public link to this IP is: https://docs.amd.com/r/en-US/ug586_7Series_MIS
-
 After completing the IP generation process, generate a Tcl script that you can use to recreate your project at a later time.
-The following TCL command will generate a file named `make_ip.tcl` that you can run to recreate the IP and avoicd the GUI steps described above:
+This will allow you skip the GUI steps described above when you recreate the IP.
+The following TCL command will generate a file named `make_ip.tcl` that you can run to recreate the IP and avoid the GUI steps described above:
 `write_project_tcl make_ip.tcl`
 
 Exit the GUI.
@@ -134,29 +135,31 @@ Create a `.gitignore` file in your assignment directory that ignores the followi
 
 Further, create a `makefile` that includes the following rules:
 * A `ipclean` rule that deletes the `mig_7series_0`, `managed_ip_project`, and `ip_user_files` directories.
-* A rule that builds the IP from the `make_ip.tcl` file
+* A `make_ip` rule that builds the IP from the `make_ip.tcl` file
    * Create the `mig_7series_0` directory
    * Copy the files `mig_a.prj` and `mig_7series_0.xci` to the `mig_7series_0` directory
    * Run the following command in the `mig_7series_0` directory to recreate the IP from these copied files: `vivado -mode batch -source make_ip.tcl`
 
 Experiment with your clean and build rules to make sure you can easily remove and recreate the IP from your repository.
-You should make sure your IP is cleaned as part of your top-level assignment clean process.
+You should make sure your IP directory is cleaned as part of your top-level assignment clean process described later.
 
 ## Generate the Example Design project
 
 The DDR controller IP comes with an example project that demonstrates how to use the DDR controller.
-This particular project is not designed for the Nexys4 DDR board we are using but we need several files from this project to simulate and build the DDR controller.
+This particular project is not designed for the Nexys4 DDR board we are using.
+However, we need several files from this project to simulate and build the DDR controller for the Nexsys4 DDR board.
 
 A TCL script, [create_example_project](./create_example_project.tcl), has been created to generate the example project in a directory named `example_design`.
 Run the following command to generate the example project using this TCL script:
 ```
 vivado -mode batch -source create_example_project.tcl -nojournal -notrace
 ```
-Include a makefile rule to create this project and make sure you delete this directory as part of your clean process.
+This command generates a directory `example_design` that contains all the example project files.
+The top-level file is located at `./example_design/mig_7series_0_ex/imports/example_top.v`.
 
 ## Example DDR Project
 
-A sample DDR project has been created for you to demonstrate how to use the DDR controller on the Nexys4 DDR board.
+A sample DDR project targeted to the Nexys4 DDR board has been created for you as a demonstration.
 You will go through the process of simulating and building a bitstream to demonstrate the DDR controller.
 This section will describe how to build and simulate this example project.
 You will likely refer to this design as part of your assignment.

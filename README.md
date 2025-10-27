@@ -44,13 +44,13 @@ This repository contains the lecture schedule (including links to lecture summar
 | **Week 9** |  |
 | 10/27/2025 | ASIC Design (Tomoo)(./lectures/asic-design.md)  |
 | 10/29/2025 | [Pipelining and Retiming](./lectures/pipelining.md) |
-| 10/31/2025 | [Poor Design Practice](./lectures/poor_practice.md) |
+| 10/31/2025 | [AXI Bus](./lectures/axi.md) |
 | **Week 10**| |
-| 11/3/2025  | [AXI Bus](./lectures/axi.md) |
-| 11/5/2025  | [AXI Bus part 2](./lectures/axi.md) |
+| 11/3/2025  | [AXI Bus part 2](./lectures/axi.md)|
+| 11/5/2025  | [IP Integration](./lectures/ip_integration.md) |
 | 11/7/2025  | **Exam #2** |
 | **Week 11**|  |
-| 11/10/2025 | [IP Integration](./lectures/ip_integration.md) |
+| 11/10/2025 |  |
 | 11/12/2025 | [Digital Arithmetic #1](./lectures/arith1.md) |
 | 11/14/2025 | [Digital Arithmetic #2](./lectures/arith2.md)  |
 | **Week 12**| |
@@ -87,6 +87,7 @@ Other Lectures:
 
 [VHDL Part 1](./lectures/vhdl1.md)
 [VHDL Part 2](./lectures/vhdl2.md)
+[Poor Design Practice](./lectures/poor_practice.md)
 
 -->
 

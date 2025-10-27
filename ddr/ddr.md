@@ -10,7 +10,7 @@ Instructions for completing this portion of the assignment can be found in the [
 All the files needed for this part of the assignment can be found in the [ip](ip) directory.
 You should create the DDR IP in this directory and then use this generated IP for your assignment submission.
 
-Note that you do not need to complete any new makefile rules for this portion of the assignment but there are a number of questions that you need to complete as part of the report for this part of the assignment.
+Note that you do not need to complete any new makefile rules for this portion of the assignment, but there are a number of questions that you need to complete as part of the report for this part of the assignment.
 Make sure you go through this exercise carefully as the understanding you develop during this exercise will be important for the second part of the assignment.
 
 ## DDR UART FIFO
