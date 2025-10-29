@@ -107,7 +107,11 @@ Review the [assignment mechanics](./resources/assignment_mechanics.md) page to l
 | 7 | [BRAM](./bram/bram.md) | `bram` |
 | 8 | [BRAM-Download](./bram_download/bram_download.md) | `bram_download` |
 | 9 | [MMCM Clocking](./mmcm/mmcm.md) | `mmcm` |
-| 10 | [VGA Controller (VHDL)](./vga/vga.md) | `vga` |
+| 10 | [AXI](./axi/axi.md) | `axi` |
 | 11 | [DDR](./ddr/ddr.md) | `ddr` |
-| 11 | [Project](./project/project.md) | `project` |
+| 12 |  |  |
 
+<!--
+[VGA Controller (VHDL)](./vga/vga.md) `vga`
+[Project](./project/project.md) `project`
+-->
