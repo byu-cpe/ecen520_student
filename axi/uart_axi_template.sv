@@ -1,5 +1,5 @@
 
-module uart_axi_sv #(
+module uart_axi #(
     parameter integer CLK_FREQUENCY = 100_000_000,
     parameter logic PARITY = 1'd1,
     parameter integer BAUD_RATE = 115_200,
