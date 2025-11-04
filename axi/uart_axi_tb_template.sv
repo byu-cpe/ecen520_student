@@ -2,7 +2,7 @@
 import axi_vip_pkg::*;
 import axi_vip_0_pkg::*;
 
-module axi_uart_tb #(
+module uart_axi_tb #(
     parameter integer CLK_FREQUENCY = 100_000_000,
     parameter logic PARITY = 1'd1,
     parameter integer BAUD_RATE = 115_200)
@@ -63,7 +63,7 @@ module axi_uart_tb #(
     );
 
   // Instance the UART AXI module
-  uart_axi_sv #(.CLK_FREQUENCY(CLK_FREQUENCY), .PARITY(PARITY), .BAUD_RATE(BAUD_RATE))
+  uart_axi #(.CLK_FREQUENCY(CLK_FREQUENCY), .PARITY(PARITY), .BAUD_RATE(BAUD_RATE))
       design_1_uart_axi_0_0
       (.rx_in(rx_in),
         .s_axi_aclk(clk_wiz_clk_out1),

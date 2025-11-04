@@ -32,12 +32,14 @@ Design your fifo with the following specifications:
 ### FIFO Testbench
 
 Create a testbench named `fifo_tb.sv` that instantiates your fifo and simulates the fifo.
+This testbench will be very similar to the bram fifo testbench so feel free to reuse as much of your testbench code as you like.
 Include the following tests in your testbench:
 * Write a few bytes of data and read them back out (without overflow or underflow)
 * Write enough bytes to fill up the FIFO and verify that the full signal is asserted
 * Attempt to write one more byte and verify that the overflow signal is asserted
 * Issue the 'clear' signal and verify that the fifo error is cleared.
 * Attempt to read from an empty fifo and verify that the underflow signal is asserted
+* Issue the 'clear' signal and verify that the fifo error is cleared.
 
 Create a makefile rule `sim_fifo` that performs this simulation from the command line and generates a log file named `sim_fifo.log`.
 
@@ -50,9 +52,10 @@ Review the synthesis report and verify that your fifo was implemented using dist
 
 Create a new module named `uart_axi.sv` that implements an AXI4-Lite subordinate/slave interface to your UART transmitter and receiver modules.
 Base your new module on the module template file named `uart_axi_template.sv`.
-This file includes the port definitions and parameters for your module.
+This file includes the port definitions and parameters for your module to help you get started.
+Follow the instructions below for building your AXI UART.
 
-**Transmitter**
+### Transmitter
 
 Instance your transmitter module from the previous UART transmitter assignment using the parameters of this module.
 Instance your fifo module designed above for the transmit path. 
@@ -60,7 +63,7 @@ The input to the transmit FIFO comes from the AXI bus write data (discussed in m
 The output of the transmit FIFO goes to your UART transmitter module.
 Create a state machine that transmits data from the transmit FIFO to the UART transmitter whenever the transmit FIFO is not empty and the UART transmitter is not busy.
 
-**Receiver**
+### Receiver
 
 Instance your receiver module from the previous UART receiver assignment using the parameters of this module.
 Instance another fifo module for the receiver path.
@@ -68,7 +71,7 @@ The input to the receiver FIFO comes from your UART receiver module.
 The output of the receiver FIFO goes to the AXI bus read data (discussed in more detail below).
 Create some logic/state machine that writes a byte to the receiver FIFO whenever the UART receiver indicates that a byte has been received.
 
-**AXI4-Lite Bus Interface**
+### AXI4-Lite Bus Interface
 
 Implement the AXI4-Lite subordinate/slave interface to support reading and writing data to/from the UART transmitter and receiver.
 You will also need to implement a status register that indicates the status of the FIFOs and a control register that allows clearing the FIFOs.
@@ -101,10 +104,12 @@ The address map for your AXI interface is as follows:
 | 0 | Clear TX FIFO |
 | 1 | Clear RX FIFO |
 
+<!-- 
 ### Synthesis
 
 After creating your AXI UART module, create a makefile rule named `synth_axi` that synthesizes your `uart_axi.sv` module and generates a synthesis log file named `synth_axi.log`.
-Don't worry whether the implementation works at this point - the purpose of the synthesis is to verify that your design can be synthesized without errors.
+Don't worry whether the implementation works at this point - the purpose of the synthesis is to verify that your design can be synthesized without errors. 
+-->
 
 ## AXI UART Simulation
 
@@ -122,28 +127,55 @@ You will need to 'generate' this IP from the Vivado IP tool in order to access t
 
 A scripted named `create_vip_files.tcl` is provided in this assignment directory that will generate the AXI VIP files for you.
 This script when run within the Vivado Tcl console will create a new Vivado IP project and generate the VIP files you need to include in your simulation.
-Create a makefile rule that executes the following command `vivado -mode batch -source create_vip_files.tcl` to generate the VIP files.
-This command will generate a directory named `ip` that contains the AXI VIP source files you need for simulation.
+Create a makefile rule named `build_vip` that executes the following command `vivado -mode batch -source create_vip_files.tcl` to generate the VIP files.
+This command will generate a directory named `ip` that contains the following AXI VIP source files you need for simulation:
+  * `./ip/axi_vip_0/sim/axi_vip_0_pkg.sv`
+  * `./ip/axi_vip_0/sim/axi_vip_0.sv`
 Add this directory to your `.gitignore` file and clean this directory as part of your assignment clean makefile rule.
+
 
 ### Testbench
 
-Rename the axi testbench template file to `uart_axi_tb.sv` and complete the testbench.
-* Instance a transmitter module into your testbench and attach it to the output of your AXI UART module (so your testbench can send data to your AXI UART)
-* Instance a receiver module into your and attach it to the output of your AXI UART module (so your testbench can receive data from your AXI UART)
-* Create a 'queue' object in SystemVerilog that represents a queue of bytes that need to be transmitted from your testbench tx module and to the receiver of your uart_axi module. Create logic within your testbench that will send a byte from this queue whenever the queue is not empty and the transmitter is not busy. Print a message every time a new byte is sent.
+Copy the axi testbench template file `uart_axi_tb_template.sv` to `uart_axi_tb.sv` and create a testbench with the following steps:
+* Instance a transmitter module into your testbench and attach it to the output of your AXI UART module. This transmitter is used in the testbench to send data to your AXI UART.
+* Instance a receiver module into your and attach it to the output of your AXI UART module. This receiver is use in the testbench to receive data from your AXI UART.
+* Create a SystemVerilog 'queue' object that represents a queue of bytes that need to be transmitted from your testbench tx module and to the receiver of your uart_axi module. Create logic within your testbench that will send a byte from this queue whenever the queue is not empty and the testbench transmitter is not busy. Print a message every time a new byte is sent.
 * Add logic into your testbench that prints a message every time a new byte is received by your testbench rx module (i.e., sent by your uart_axi module).
-* Add the following to your 'initial' block testbench procedure
+* Add the following to your 'initial' block testbench procedure:
     * Create a clock running at 100 MHz
     * Issue the axi reset signal
-    * Perform a read over the axi bus to read the status register
-    * Send a few bytes to the uart_axi module over the axi bus
+    * Perform a read over the axi bus to read the status register (verify that the value is correct)
+    * Send a few bytes to the uart_axi module over the axi bus to be transmitted by your module
+    * Read the status register to make sure the tx FIFO is not empty
     * Add a few bytes to the transmit queue to be sent by the transmitter module
-    * Wait for these bytes to be transferred
-    * Perform a read over the axi bus to read the status register (it should be different with the internal fifo state changed)
+    * Wait for these bytes to be transferred to your module
+    * Read the status register to make sure the rx FIFO is not empty
     * Perform a few reads over the axi bus to read the received bytes from the receiver fifo.
     * Perform a write to the control register to reset the internal FIFOs.
-    
+
+To simulate your testbench and the VIP files, you will need to compile the files in modelsim as follows:
+  * Compile the `axi_vip_0_pkg.sv` file generated by the `build_ip` rule using the `-L xilinx_vip` flag: `vlog -sv -L xilinx_vip ./ip/axi_vip_0/sim/axi_vip_0_pkg.sv`
+  * Compile the `axi_vip_0.sv` file generated by the `build_ip` rule using the `-L xilinx_vip` flag: `vlog -sv -L xilinx_vip ./ip/axi_vip_0/sim/axi_vip_0.sv`
+  * Add the `-L xilinx_vip` flag when running `vlog` on your testbench
+  * Add the following libraries when you run the `vsim` commnad: `-L xilinx_vip` and `-L axi_vip_v1_1_17`
+  * Add the following lines to your modelsim.ini
+
+```
+axi_vip_v1_1_17 = /tools/Xilinx/Vivado/2024.1/data/questa/axi_vip_v1_1_17
+xilinx_vip = /tools/Xilinx/Vivado/2024.1/data/questa/xilinx_vip
+```
+
+Create a makefile rule `sim_uart_axi` that performs this simulation from the command line and generates a log file named `sim_uart_axi.log`.
+Make sure you have messages in your simulation output that indicate each of the steps described above.
+
+## AXI UART Synthesis
+
+Once your AXI UART IP is simulating properly, synthesize the module to resolve any synthesis errors.
+It is important to make sure that it is synthesizable before trying to integrate it in a future project.
+
+Create a makefile rule named `synth_uart_axi` that synthesizes your module and generates a synthesis log file named `synth_uart_axi.log`.
+Review the synthesis report to identify any potential problems.
+
 ## Submission and Grading
 
 1. Implement all the required makefile rules and make sure your `passoff.py` script runs without errors.
