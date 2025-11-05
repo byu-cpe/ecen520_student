@@ -41,7 +41,7 @@ This repository contains the lecture schedule (including links to lecture summar
 | 10/20/2025 | [Metastability & Synchronizer design](./lectures/metastability.md) |
 | 10/22/2025 | [Clock domain crossing](./lectures/clock_crossing.md) |
 | 10/24/2025 | [Handshaking and Data Transfer](./lectures/handshaking.md) |
-| **Week 9** |  |
+| **Week 9** | |
 | 10/27/2025 | [ASIC Design (Tomoo)](./lectures/asic-design.md)  |
 | 10/29/2025 | [Pipelining and Retiming](./lectures/pipelining.md) |
 | 10/31/2025 | [AXI Bus](./lectures/axi.md) |
@@ -54,9 +54,9 @@ This repository contains the lecture schedule (including links to lecture summar
 | 11/12/2025 | [Digital Arithmetic #2](./lectures/arith2.md) |
 | 11/14/2025 | [DSP Blocks](./lectures/dsp.md)|
 | **Week 12**| |
-| 11/17/2025 | [IO Resources](./lectures/io.md)|
-| 11/19/2025 | [DDR](./lectures/ddr.md) |
-| 11/21/2025 |  |
+| 11/17/2025 | [CLB](./clb.md) |
+| 11/19/2025 | [IO Resources](./lectures/io.md) |
+| 11/21/2025 | [DDR](./lectures/ddr.md) |
 | **Week 13**| |
 | 11/24/2025 | **No Class** |
 | 11/26/2025 | No Class - Thanksgiving Break |
