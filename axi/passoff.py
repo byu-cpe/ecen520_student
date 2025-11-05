@@ -20,6 +20,7 @@ def main():
                                                "./ip/axi_vip_0/sim/axi_vip_0_pkg.sv",
                                                "./ip/axi_vip_0/sim/axi_vip_0.sv"])
     tester.add_Makefile_rule("sim_uart_axi", ["uart_axi.sv", "uart_axi_tb.sv"], ["sim_uart_axi.log"])
+    tester.add_Makefile_rule("synth_uart_axi", ["uart_axi.sv", "fifo.sv"], ["synth_uart_axi.log"])
     tester.run_tests()
 
 if __name__ == "__main__":
