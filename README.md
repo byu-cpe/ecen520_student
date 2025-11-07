@@ -108,8 +108,8 @@ Review the [assignment mechanics](./resources/assignment_mechanics.md) page to l
 | 8 | [BRAM-Download](./bram_download/bram_download.md) | `bram_download` |
 | 9 | [MMCM Clocking](./mmcm/mmcm.md) | `mmcm` |
 | 10 | [AXI](./axi/axi.md) | `axi` |
-| 11 | [DDR](./ddr/ddr.md) | `ddr` |
-| 12 |  |  |
+| 11 | [MicroBlaze](./microblaze/microblaze.md) | `microblaze` |
+| 12 | [DDR](./ddr/ddr.md) | `ddr` |
 
 <!--
 [VGA Controller (VHDL)](./vga/vga.md) `vga`

@@ -127,6 +127,8 @@ To make this easier, you will create a seven segment display controller that wil
 Create a "seven segment controller" module named `seven_segment8` in a file named `seven_segement8.sv` that will drive the seven segment display of the Nexys DDR board. 
 This module can be based on the [seven segment display](https://byu-cpe.github.io/ecen320/labs/multi-segment/) module developed in ECEN 320.
 Note that there are eight digits on the seven segment display for this board so you will need to support all eight digits with your module. 
+**NOTE**: The segment ordering is different from the ECEN 320 lab. See the notes below for details.
+
 Include the following ports and parameters in your module:
 
 | Port Name | Direction | Width | Function |
@@ -219,4 +221,5 @@ The following assignment specific items should be included in your repository:
 Future Changes:
 * Have them read through the testbench in some detail and answer questions about the testbench. They are not writing testbenches but I should ask them to read through it and understand it.
 * The synthesis tool couldn't extract a FSM from some students. Need to figure out what is going on. Perhaps make a requirement that it has to find it?
+* sort of eash: 3-5 hours
 -->

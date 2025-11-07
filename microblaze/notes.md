@@ -1,22 +1,29 @@
 # Notes for IP Integrator assignment
 
-This page provides the instructions for completing the MicroBlaze IP Integrator assignment.
+This page provides the instructions for completing the simple demonstrations using the MicroBlaze and the IP Integrator.
+You will be required to include several of the resulting files into your assignment submission including makefile rules to build these demonstrations.
+The demonstrations include the following:
+* [Demo 1](./notes.md#demo-1): Basic MicroBlaze system with UART
 
-## Demo1
+## Demo 1
 
-This demo involves the creation of a basic MicroBlaze system with a UART.
+This first demo involves the creation of a basic MicroBlaze system with a UART.
+You will be using the GUI to create the Vivado project and the Vitis tool to create the software application.
+You will also learn how to recreate the Vivado project using Tcl scripts.
 
 ### Vivado Project
 
-The first step is to create a hardware design of the microblaze system.
-This project will be created in the `demo1` directory.
+The first step is to create a hardware design of the MicroBlaze system using the Vivado GUI using the IP Integrator block diagram tool.
+This project will be created in the `demo1` directory of your assignment.
 This is done exclusively in the Vivado tool and the result is a bitstream and a .xsa hardware platform project.
-You will use the IP Integrator block diagram tool to create this system.
-When you are done you will also create .tcl files that will allow you to recreate your system with much less effort.
+These instructions assume you are using Vivado 2024.1 but other versions should be similar.
 
-* Create Project
-    * Source Vitis settings.sh
-    * vivado &
+* Start the Vivado GUI:
+    * source the vitis settings: `source /toolchain/Xilinx/Vitis/2024.1/settings.sh`
+        * Note that we are sourcing the Vitis settings since Vivado is included in the Vitis toolchain and we need additional tools for the Vitis step later.
+    * Start Vivado in your assignment directory: `vivado &`
+        * Running the vivado tool from the command line will generate a number of temporary files. You will need to 'ignore' these files in your git repository and clean them as part of your clean process.
+* Create the `demo1` project
     * Create new project in sub directory
     * xc7a100tcsg324-1
     * The following command can be used to do this without the GUI: 
@@ -71,7 +78,6 @@ When you are done you will also create .tcl files that will allow you to recreat
         * After generating the bitstream you need to generate an .xsa platform project for use by vitis. This tells vitis what type of platform you are programming for. 
         * File->Export, Export Hardware, include bitstream, select directory (default is ok). 
         * Change the name to `demo1`. This will create the file `./demo1/demo1.xsa` that you will use for the Vitis programming step
-
 
 ### Rebuilding Vivado Project from Tcl
 
@@ -141,7 +147,7 @@ Successfully ran Hello World application
     * Vivado
         * Select: Tools->Associate ELF Files
         * Click on the three dots by the "mb_bootloop_le.elf under the "Design sources". Navigate to the .elf file and select it.
-        * Everytime you generate a bitstream the bitstream will be patched with your source code.
+        * Every time you generate a bitstream the bitstream will be patched with your source code.
 
 To Do:
 * Add instructions for using `xil_printf()`
