@@ -7,3 +7,5 @@ You will also create a system that integrates your custom IP core from the previ
 
 The first part of this assignment is to complete the MicroBlaze IP Integrator demos described [here](./microblaze/notes.md).
 
+* Demo 1:
+    * Makefile rules: `make demo1`

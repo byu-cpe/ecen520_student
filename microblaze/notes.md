@@ -1,4 +1,7 @@
 # Notes for IP Integrator assignment
+<!-- This file is modified from the ECEN_620 repository, assignments/ip_integrator/notes.md file
+-->
+
 
 This page provides the instructions for completing the simple demonstrations using the MicroBlaze and the IP Integrator.
 You will be required to include several of the resulting files into your assignment submission including makefile rules to build these demonstrations.
@@ -20,101 +23,135 @@ These instructions assume you are using Vivado 2024.1 but other versions should 
 
 * Start the Vivado GUI:
     * source the vitis settings: `source /toolchain/Xilinx/Vitis/2024.1/settings.sh`
-        * Note that we are sourcing the Vitis settings since Vivado is included in the Vitis toolchain and we need additional tools for the Vitis step later.
+        * Note that we are sourcing the Vitis settings instead of the vivado settings since Vivado is included in the Vitis toolchain and we need additional tools for the Vitis step later.
     * Start Vivado in your assignment directory: `vivado &`
         * Running the vivado tool from the command line will generate a number of temporary files. You will need to 'ignore' these files in your git repository and clean them as part of your clean process.
 * Create the `demo1` project
-    * Create new project in sub directory
-    * xc7a100tcsg324-1
-    * The following command can be used to do this without the GUI: 
-        * `create_project demo1 ./demo1 -part xc7a100tcsg324-1`
-    * Copy default NEXYS DDR .xdc file to `demo1.xdc` and add to project
+    * Create new project from GUI: File->Project->New
+        * Project name: `demo1`
+        * Make sure the directory created is in your `microblaze` assignment directory
+        * RTL project (default)
+        * Click "Next" for the "Add Sources" and "Add Constraints" pages
+        * Select the target part: `xc7a100tcsg324-1`
+        * Click Finish
+    * Copy default NEXYS DDR .xdc file to `demo1.xdc`
+        * `cp ../resources/Nexys-4-DDR-Master.xdc ./demo1.xdc`
+    * Add the .xdc file to the project
+        * Click on "add Sources" in the Flow Navigator
+        * Select "Add or create constraints", press Next
+        * Select "Add Files", navigate to the `demo1.xdc` file that you copied and select it. Click Finish
 * Block Diagram Creation
-    * Create new block diagram (`demo1_bd`) (click on IP Integrator->Create Block Design)
-    * Add microblaze block
+    * Create new block diagram
+        * Click "Create Block Diagram" under "IP Integrator" in the Flow Navigator 
+        * Type `demo1_bd` for the block diagram name and click OK
+        * The block diagram editor should be open
+    * Add MicroBlaze block
+        * Click the "+" button to open the IP dialog box
+        * Type "MicroBlaze" in the box and select the "MicroBlaze" IP (not any of the other MicroBlaze options).
+        * The block should appear in the block diagram
     * Run Block Automation
-        * Change size to 32 KB ram
+        * Click on the "Run Block Automation" link in the 'Designer Assistance' box that appears. A new dialog box will open up.
+        * Change "Local Memory" to 32 KB ram
         * Make sure AXI interface is enabled
         * Make sure debug module is enabled (Debug Only)
         * Make sure clock connection is set to New clocking wizard
-    * Configure Clock Module (clock pin and reset polarity)
-        * Double click clock wizard block and make the following changes:
-            * change input clock from differential to single ended
-            * Go to the next "output clocks" page, change reset to "active Low"
-    * Hook up Clock and Reset
-        * Run connection automation
-        * select clk_in1 and ok
-        * Select reset and ext_reset_in and select reset source (new external port active low)
-        * Modify the XDC file to include the clock and rename the clock to match the name given in the block design (`clk_100MHz`)
-        * Modify the .xdc file to match the port name (`reset_rtl_0`)
-    * Make sure there are no errors (click check box to check)
-    * Add UART
-        * Add IP and select UARTLite
-        * Run connection automation to hook it up
+        * Click "OK" 
+        * A bunch of new blocks will be added to the canvas and connections will be made
+    * Configure Clock Module
+        * Double click 'clocking wizard' block and make the following changes:
+            * At the bottom of the page in the "Input Clock Information" table, change input clock from differential to single ended
+            * Go to the next "output clocks" page, change 'reset type' to "active Low" (to reflect the fact that our reset is active low)
+        * Click ok to finalize the changes
+    * Hook up external Clock and Reset
+        * Click on the "Run Connection Automation" link in the 'Designer Assistance' box that appears. A new dialog box will open up.
+            * Click the box next to "clk_in1" and press "ok"
+            * This should hook up a port to the clock with the name `clk_100MHz`
+        * Click on the "Run Connection Automation" link again.
+            * Check the box next to `resetn` and `ext_reset_in` and press "ok"
+            * This should hook up a reset port with the name `reset_rtl_0`
+    * Finalize the MicroBlaze configuration
+        * Click on the "Run Block Automation" link in the 'Designer Assistance' box that appears.
+        * Select "Keep Classic MicroBlaze" in the new dialog box.
+    * Add a UART
+        * Add another IP named "AXI UARTLite" (Click plus button, type "AXI UARTLite", select it). The uart will be added but not connected.
+        * Select "Run connection automation" to hook it up. Select "All Automation"
+            * This will add a AXI interconnect module between the MicroBlaze and the Uart. It will also add a port named `uart_rtl_0` for the top-level uart signals.
         * Default baud rate is 9600
-    * Make sure there are no errors
-    * Save block diagram (you can close it if you like)
+    * Check for errors
+        * Click the icon that looks like a check in a box to perform a validationcheck.
+    * Save block diagram
+        * Close the block diagram editor and save the block diagram when prompted.
         * This will create a file `./demo1.srcs/sources_1/bd/demo1_bd/demo1_bd.bd` in the project and is currently the only source of the project
-        * Create tcl file for recreating the block diagram in the future: 
-            * select `demo1_bd.bd` from the sources and right click 
-            * File->Export->Export Block Diagram. Save the file: `.demo1/demo1_bd.tcl` (you may want to move this to a higher level directory outside the project)
-    * Generate the IP output products for the block diagram
-        * This step runs synthesis on all the blocks in the system to generate the hdl sources needed for the IP
-        * It creates a verilog file for the block diagram (that instances all the IP)
-        * Right click over the block diagram in the sources view and select "Generate Output Products". Defaults are sufficient
-        * This only needs to be done once
-* Finalize Project
-    * Generate the top-level wrapper for the block diagram (right click and select "generate HDL wrapper").
-        * This is a top-level verilog file that can be edited and instances the block diagram. This is different from the block diagram verilog file.
-        * Note that this should become the "black" top-level design (instead of the block diagram)
-    * Update the .xdc file to include the UART signals
-        * `uart_rtl_0_rxd` (in place of the `UART_TXD_IN` pin)
+        * At this point you have a block diagram that describes a basic MicroBlaze system with a UART.
+    * Create tcl file for recreating the block diagram in the future: 
+        * select `demo1_bd.bd` from the sources and right click 
+        * File->Export->Export Block Diagram. Save the file: `./demo1/demo1_bd.tcl` (you may want to move this to a higher level directory outside the project)
+* Modify the `demo1.xdc` file to match the block diagram
+    * Set the clock constraint
+        * Uncomment the two clock lines in the original xdc file
+        * Rename the clock to match the name given in the block design (`clk_100MHz`)
+    * Set the reset constraint
+        * Uncomment the line for the reset pin and rename it to match the name given in the block design (`reset_rtl_0`)
+    * Set the UART constraints
+        * Uncomment the two UART lines in the original xdc file and rename them as follows:
+        * `uart_rtl_0_rxd` (in place of the `UART_TXD_IN` pin). Note that the naming swap is counter-intuitive here.
         * `uart_rtl_0_txd` (in place of the `UART_RXD_OUT` pin)
-    * Run synthesis on the design to make sure everything is hooked up correctly and named properly in the xdc file
-        * Most problems involve incorrect pin names or not providing pin constraints
-    * Run Implementation and bitstream generation once all the issues have been resolved.
-        * The bitfile will be located at `./demo1/demo1.runs/impl_1/demo1_bd_wrapper.bit`
+* Generate IP output products
+    * At this point you have a "block diagram" which is just a graphical representation of your system. You need to generate a variety of files including Verilog files before synthesizing your design
+    * Generate the IP output products for the block diagram
+        * This step generates the HDL on all the blocks in the system to generate the HDL sources needed for the IP. It also generates the simulation, synthesis, and implementation files needed to use the IP in your design.
+        * Right click over the block diagram in the sources view and select "Generate Output Products". The defaults are sufficient. Click "Generate". The tool will generate all the IP files including a Verilog file that describes the block diagram. This may take a few minutes to complete.
+        * Review the files **TODO** to see what was generated.
+    * Generate the top-level wrapper for the block diagram (right click and select "generate HDL wrapper").
+        * This is a top-level Verilog file that can be edited and instances the block diagram. This is different from the block diagram Verilog file.
+        * Note that this should become the "black" top-level design (instead of the block diagram)
+    * Create HDL wrapper
+        * Create a top-level HDL wrapper for the block diagram
+        * Select the block diagram and right click and select "Create HDL Wrapper". Leave the option "Let Vivado Manage wrapper and auto-update" selected and click OK.
     * Generate hardware platform for Vitis
-        * After generating the bitstream you need to generate an .xsa platform project for use by vitis. This tells vitis what type of platform you are programming for. 
-        * File->Export, Export Hardware, include bitstream, select directory (default is ok). 
-        * Change the name to `demo1`. This will create the file `./demo1/demo1.xsa` that you will use for the Vitis programming step
+        * You need to generate an .xsa platform project for use by Vitis. This tells vitis what type of platform you are programming for. 
+        * File->Export, Export Hardware, keep "pre-synthesis" selected.
+        * Change the .xsa name to `demo1`. This will create the file `./demo1/demo1.xsa` that you will use for the Vitis programming step
+    * Run implementation to generate the bitstream
+        * Run synthesis on the design to make sure everything is hooked up correctly and named properly in the xdc file. Most problems involve incorrect pin names or not providing pin constraints        
+        * Clock "Run Implementation" on the Flow Navigator. This will run the implementation tools and generate a bitstream for your design. Click OK as needed to get the process started.
+        * Click "Generate Bitstream" when implementation is complete to generate the bitstream.
+        * The bitfile will be located at `./demo1/demo1.runs/impl_1/demo1_bd_wrapper.bit`
+
 
 ### Rebuilding Vivado Project from Tcl
 
-The purpose of this step is to demonstrate how to recreate the Vivado project using the project build tcl script.
-This step is optional and can be skipped if you want to go straight to the Vitis programming.
+The purpose of this step is to demonstrate how to recreate the Vivado project using the project build Tcl script.
+You will need to build this project from a makefile and cannot do it without a Tcl script.
 
 * Close the project in vivado if you are in it
-* Clean the old project: 
-    * `rm -rf ./demo1`
-* Open vivado and create a new project:
-    * `create_project demo1 ./demo1 -part xc7a100tcsg324-1`
-* Create the block diagram: 
-    * `source demo1_bd.tcl` (`source demo1_bd_2022_2.tcl`)
-* Add the constraints file: 
-    * `add_files -fileset constrs_1 -norecurse demo1.xdc`
-* Generate the output products:
-    * `generate_target all [get_files  demo1/demo1.srcs/sources_1/bd/demo_bd/demo_bd.bd]` (not sure if this command works)
-* Create the top-level HDL wrapper:
-    * `make_wrapper -files [get_files ./demo1/demo1.srcs/sources_1/bd/demo_bd/demo_bd.bd] -top`
-    * `add_files -norecurse ./demo1/demo1.gen/sources_1/bd/demo_bd/hdl/demo_bd_wrapper.v`
-* Generate the bitfile
-* Create the hardware platform file
-    * `write_hw_platform -fixed -include_bit -force -file ./demo1/demo1.xsa`
+* Clean the old project: `rm -rf ./demo1`
+* Open Vivado and execute the following commands (you can use these commands as part of a build script within a Makefile):
+```
+create_project demo1 ./demo1 -part xc7a100tcsg324-1
+add_files -fileset constrs_1 -norecurse demo1.xdc
+source demo1_bd.tcl
+#close_bd_design [get_bd_designs demo1_bd]
+make_wrapper -files [get_files ./demo1/demo1.srcs/sources_1/bd/demo1_bd/demo1_bd.bd] -top
+add_files -norecurse ./demo1/demo1.gen/sources_1/bd/demo1_bd/hdl/demo1_bd_wrapper.v
+launch_runs impl_1 -to_step write_bitstream -jobs 4
+wait_on_run impl_1
+write_hw_platform -fixed -include_bit -force -file ./demo1/demo1.xsa
+```
 
 ### Vitis Software Project
 
-In this phase of the demo you will run the Vitis tools and create a software program that runs on the microblaze system.
+In this phase of the demo you will run the Vitis tools and create a software program that runs on the Microblaze system.
 You will run a program template and not do any code editing for this particular demo.
 
 * Open Vitis
-    * Open from Vivado (Tools->Launch Vitis IDE)
-    * Open from command line
+    * Vitis is the software development environment for Xilinx embedded processors including the MicroBlaze. Vitis operates within a 'workspace' and you will need to specify the workspace for your vitis project. For this demo, we will create the workspace within the `demo1\vitis` directory within your microblaze assignment.
+    * Open from command line (in `microblaze` directory): `vitis -w ./demo1/vitis`
 * Select workspace
-    * Vitis uses the Eclipse IDE and operates in the context of a workspace. For this set of demonstrations we will use a single workspace. I selected `vitis` directory in my `ip_integrator` assignment directory for the workspace.
+    * Vitis uses the VSCode IDE and operates in the context of a workspace. For this set of demonstrations we will use a single workspace. Select 'Open Workspace' and navigate to your `microblaze/demo1` directory. Create a new directory named `vitis` and select this as your workspace.
 * Create Application Project
     * The workspace will be empty so you need to populate it with something. Select 'Create Application Project' from the initial Vitis menu
-    * You need to have a platform for your project. Your platform will be based on the .xsa file you created in the Vivado step
+    * You need to have a platform for your project. Your platform will be based on the `.xsa` file you created in the Vivado step
     * Select the tab "Create a new platform from hardware (xsa)". You will need to navigate to your .xsa file (the base file it gives you is way off). The file is in your demo1 project
     * Select a name for the application ("hello"). Note that when you give the application name "hello" it is auto creating a "system project" with the name "hello_system". 
     * Select all of the defaults (including the "Hello World" template)
@@ -384,9 +421,54 @@ It is based on the 427 template and demo.
     * [Xilinx Embedded code repository](https://github.com/Xilinx/embeddedsw/blob/master/XilinxProcessorIPLib/drivers/uartlite/examples/xuartlite_polled_example.c)
 * https://digilent.com/reference/vivado/getting-started-with-ipi/2018.2
 
-# To Do
+## TCL Commands
 
-* Figure out how to create the full project from a script (not just the block diagram)
-    * Including custom IP from HDL
-* What is the best way to organize Vitis workspaces? Are they in parallel with the project directory? Should they be inside of the proejct directory?
-* What is the difference between a system project and an application project?
+### demo1 tutorial
+
+```
+# Create project. Key file created is the demo1 projeject file: ./demo1/demo1.xpr
+create_project demo1 ./demo1 -part xc7a100tcsg324-1
+# Add constraints file to the project (modifies project file)
+add_files -fileset constrs_1 -norecurse ./demo1.xdc
+# Create block diagram. Creates .bd file: .demo1/demo1.srcs/sources_1/bd/demo1_bd/demo1_bd.bd
+create_bd_design "demo1_bd"
+# Add microblaze IP
+#  (When IP is added to the block diagram, new directories with the IP XML are stored
+#  in the project directory: ./demo1/demo1.srcs/sources_1/bd/demo1_bd/ip/)
+create_bd_cell -type ip -vlnv xilinx.com:ip:microblaze:11.0 microblaze_0
+# Results from Run Block Automation
+apply_bd_automation -rule xilinx.com:bd_rule:microblaze -config { all {1} axi_intc {0} axi_periph {Enabled} cache {None} clk {New Clocking Wizard} compress {1} cores {1} debug_module {Debug Only} disable {0} ecc {None} local_mem {32KB} preset {None}}  [get_bd_cells microblaze_0]
+# Configure clock wizard
+set_property -dict [list \
+  CONFIG.PRIM_SOURCE {Single_ended_clock_capable_pin} \
+  CONFIG.RESET_PORT {resetn} \
+  CONFIG.RESET_TYPE {ACTIVE_LOW} \
+] [get_bd_cells clk_wiz_1]
+# Automate clock and reset connection
+apply_bd_automation -rule xilinx.com:bd_rule:board -config { Clk {New External Port} Manual_Source {Auto}}  [get_bd_pins clk_wiz_1/clk_in1]
+apply_bd_automation -rule xilinx.com:bd_rule:board -config { Manual_Source {Auto}}  [get_bd_pins rst_clk_wiz_1_100M/ext_reset_in]
+# finalize microblaze configuration
+apply_bd_automation -rule xilinx.com:bd_rule:microblaze -config { all {1} axi_intc {0} axi_periph {Disabled} cache {None} clk {/clk_wiz_1/clk_out1 (100 MHz)} compress {1} cores {1} debug_module {Debug Only} disable {1} ecc {None} local_mem {32KB} preset {None}}  [get_bd_cells microblaze_0]
+# Add UART
+create_bd_cell -type ip -vlnv xilinx.com:ip:axi_uartlite:2.0 axi_uartlite_0
+apply_bd_automation -rule xilinx.com:bd_rule:axi4 -config { Clk_master {/clk_wiz_1/clk_out1 (100 MHz)} Clk_slave {Auto} Clk_xbar {Auto} Master {/microblaze_0 (Periph)} Slave {/axi_uartlite_0/S_AXI} ddr_seg {Auto} intc_ip {New AXI Interconnect} master_apm {0}}  [get_bd_intf_pins axi_uartlite_0/S_AXI]
+apply_bd_automation -rule xilinx.com:bd_rule:board -config { Manual_Source {Auto}}  [get_bd_intf_pins axi_uartlite_0/UART]
+# validate
+validate_bd_design
+save_bd_design
+close_bd_design [get_bd_designs demo1_bd]
+generate_target all [get_files  ./demo1/demo1.srcs/sources_1/bd/demo1_bd/demo1_bd.bd]
+export_ip_user_files -of_objects [get_files /home/wirthlin/ee620/vivado/demo1/demo1.srcs/sources_1/bd/demo1_bd/demo1_bd.bd] -no_script -sync -force -quiet
+create_ip_run [get_files -of_objects [get_fileset sources_1] /home/wirthlin/ee620/vivado/demo1/demo1.srcs/sources_1/bd/demo1_bd/demo1_bd.bd]
+launch_runs demo1_bd_axi_uartlite_0_0_synth_1 demo1_bd_clk_wiz_1_0_synth_1 demo1_bd_dlmb_bram_if_cntlr_0_synth_1 demo1_bd_dlmb_v10_0_synth_1 demo1_bd_ilmb_bram_if_cntlr_0_synth_1 demo1_bd_ilmb_v10_0_synth_1 demo1_bd_lmb_bram_0_synth_1 demo1_bd_mdm_1_0_synth_1 demo1_bd_microblaze_0_0_synth_1 demo1_bd_rst_clk_wiz_1_100M_0_synth_1 -jobs 4
+export_simulation -of_objects [get_files /home/wirthlin/ee620/vivado/demo1/demo1.srcs/sources_1/bd/demo1_bd/demo1_bd.bd] -directory /home/wirthlin/ee620/vivado/demo1/demo1.ip_user_files/sim_scripts -ip_user_files_dir /home/wirthlin/ee620/vivado/demo1/demo1.ip_user_files -ipstatic_source_dir /home/wirthlin/ee620/vivado/demo1/demo1.ip_user_files/ipstatic -lib_map_path [list {modelsim=/home/wirthlin/ee620/vivado/demo1/demo1.cache/compile_simlib/modelsim} {questa=/home/wirthlin/ee620/vivado/demo1/demo1.cache/compile_simlib/questa} {xcelium=/home/wirthlin/ee620/vivado/demo1/demo1.cache/compile_simlib/xcelium} {vcs=/home/wirthlin/ee620/vivado/demo1/demo1.cache/compile_simlib/vcs} {riviera=/home/wirthlin/ee620/vivado/demo1/demo1.cache/compile_simlib/riviera}] -use_ip_compiled_libs -force -quiet
+# Wrapper
+make_wrapper -files [get_files .demo1/demo1.srcs/sources_1/bd/demo1_bd/demo1_bd.bd] -top
+add_files -norecurse ./demo1/demo1.gen/sources_1/bd/demo1_bd/hdl/demo1_bd_wrapper.v
+# Generate .xsa file
+write_hw_platform -fixed -force -file /home/wirthlin/ee620/vivado/demo1/demo1.xsa
+# Export block diagram tcl
+write_bd_tcl -force ./demo1/demo1_bd.tcl
+# Launch implementation
+launch_runs impl_1 -jobs 4
+```
