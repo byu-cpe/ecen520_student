@@ -58,7 +58,7 @@ This repository contains the lecture schedule (including links to lecture summar
 | 11/19/2025 | [IO Resources](./lectures/io.md) |
 | 11/21/2025 | [DDR](./lectures/ddr.md) |
 | **Week 13**| |
-| 11/24/2025 | **No Class** |
+| 11/24/2025 | Cliff Cummings, Sunburst (UVM/SV) |
 | 11/26/2025 | No Class - Thanksgiving Break |
 | 11/28/2025 | No Class - Thanksgiving Break |
 | **Week 14**| |
