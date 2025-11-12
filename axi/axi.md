@@ -11,7 +11,7 @@ Design your fifo with the following specifications:
   * DATA_WIDTH: Width of the data bus (default 8)
   * DEPTH: Depth of the FIFO in number of entries (default 32)
 * Create a 'write pointer' used to control the address of the write/in port and a 'read pointer' that controls the address of the read/out port.
-* Design your FIFO to take advantage of the "distributed RAM" feature of the FPGA (see the synthesis guide).
+* Design your FIFO to take advantage of the "distributed RAM" feature of the FPGA (see the [synthesis guide](https://docs.amd.com/r/en-US/ug901-vivado-synthesis), search for the title "Distributed RAM Examples").
   * Allocate an array of data of size DATA_WIDTH x DEPTH to implement the fifo storage.
   * The writes should be synchronous to the clock
   * Reads should be asynchronous to the clock
