@@ -12,20 +12,3 @@
 
 ## Assignment Specific Responses
   1. Discuss any unique warning messages you received in your synthesis log and justify them.
-  2. How many FSMs were inferred in your design?
-  3. Complete the Utilization Report table listed [below](#utilization-report-table) from your implementation utilization report.
-
-### Utilization Report Table
-
-See the "Primitives" section of your utilization report for the values to fill in the table below.
-
-| Resource | Utilization |
-| ---- | ---- |
-| BUFG   |  |
-| CARRY4 |  |
-| LUTx   |  |
-| FDxE   |  |
-| RAM32x   |  |
-| IBUF   |  |
-| OBUF   |  |
-| RAMB36E1   |  |
