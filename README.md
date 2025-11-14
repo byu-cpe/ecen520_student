@@ -52,18 +52,18 @@ This repository contains the lecture schedule (including links to lecture summar
 | **Week 11**|  |
 | 11/10/2025 | **Exam #2** |
 | 11/12/2025 | [Digital Arithmetic #2](./lectures/arith2.md) |
-| 11/14/2025 | [DSP Blocks](./lectures/dsp.md)|
+| 11/14/2025 | Digital Arithmetic & Exam Review |
 | **Week 12**| |
-| 11/17/2025 | [CLB](./clb.md) |
-| 11/19/2025 | [IO Resources](./lectures/io.md) |
-| 11/21/2025 | [DDR](./lectures/ddr.md) |
+| 11/17/2025 | MicroBlaze Assignment Preparation |
+| 11/19/2025 | [DSP Blocks](./lectures/dsp.md) |
+| 11/21/2025 | [CLB Blocks](./lectures/clb.md) |
 | **Week 13**| |
 | 11/24/2025 | Cliff Cummings, Sunburst (UVM/SV) |
 | 11/26/2025 | No Class - Thanksgiving Break |
 | 11/28/2025 | No Class - Thanksgiving Break |
 | **Week 14**| |
-| 12/1/2025  | [CLB Blocks](./lectures/clb.md) |
-| 12/3/2025  | TBD |
+| 12/1/2025  | [IO Resources](./lectures/io.md) |
+| 12/3/2025  | [DDR](./lectures/ddr.md) |
 | 12/5/2025  | TBD  |
 | **Week 15**|  |
 | 12/8/2025  | TBD |
