@@ -64,9 +64,9 @@ This repository contains the lecture schedule (including links to lecture summar
 | **Week 14**| |
 | 12/1/2025  | [IO Resources](./lectures/io.md) |
 | 12/3/2025  | [DDR](./lectures/ddr.md) |
-| 12/5/2025  | TBD  |
+| 12/5/2025  | VHDL #1  |
 | **Week 15**|  |
-| 12/8/2025  | TBD |
+| 12/8/2025  | VHDL #2 |
 | 12/10/2025  | Review for Exam |
 | 12/12/2025  | No Class - Final's Week |
 | **Week 16**|  |
