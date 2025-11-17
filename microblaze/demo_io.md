@@ -55,7 +55,9 @@ These instructions assume you are using Vivado 2024.1 but other versions should 
             * Go to the next "output clocks" page, change 'reset type' to "active Low" (to reflect the fact that our reset is active low)
         * Click ok to finalize the changes
     * Hook up the external Clock and Reset
-        * Click on the "Run Connection Automation" link in the 'Designer Assistance' box that appears. A new dialog box will open up.
+        * Click on the "Run Connection Automation" link in the 'Designer Assistance' box that appears. A new dialog box ### Rebuilding Vitis Project from the command line
+
+will open up.
             * Click the box next to "clk_in1" and press "ok"
             * This should hook up a port to the clock with the name `clk_100MHz`
         * Click on the "Run Connection Automation" link again.
@@ -70,19 +72,25 @@ These instructions assume you are using Vivado 2024.1 but other versions should 
         * Click "Connection Automation", select "All Automation" and click OK. 
             * This will hook up the block to the AXI bus and generate new output ports for the module
         * Configure the block to match the LED ports
-            * Double click the box to open the "re-customize IP" box
+            * Double click the box to open the "re-customize IP" box### Rebuilding Vitis Project from the command line
+
+
             * Select "All Outputs" 
             * Change GPIO Width from 32 to 16
         * Select the gpio_rtl_0 output port, right click "External Interface Properties"
             * Change the name of the output port to "gpio_LED" in the "External Interface Properties" box.
     * Add the AXI GPIO module for the switches
-        * Follow the same procedure as above with the following changes
+        * Follow the same procedure as above with the following changes### Rebuilding Vitis Project from the command line
+
+
             * Rename the module "axi_gpio_SW"
             * Rename the ouptput pins to "gpio_SW"
             * Select "All Inputs"
             * Sete width to 16
     * Check for errors
-        * Click the icon that looks like a check in a box to perform a validationcheck.
+        * Click the icon that looks like a check in a box to perform a validationcheck.### Rebuilding Vitis Project from the command line
+
+
     * Create tcl file for recreating the block diagram in the future: 
         * File->Export->Export Block Diagram. Save the file in your assignment directory: `./demo_io_bd.tcl`
     * Save block diagram
@@ -136,18 +144,24 @@ source demo_io_bd.tcl
 make_wrapper -files [get_files ./demo_io/demo_io.srcs/sources_1/bd/demo_io_bd/demo_io_bd.bd] -top
 add_files -norecurse ./demo_io/demo_io.gen/sources_1/bd/demo_io_bd/hdl/demo_io_bd_wrapper.v
 launch_runs impl_1 -to_step write_bitstream -jobs 4
-wait_on_run impl_1
+wait_on_run impl_1### Rebuilding Vivado Project from Tcl
+
 write_hw_platform -fixed -include_bit -force -file ./demo_io/demo_io.xsa
 ```
+
+Create a makefile step named `build_demo_io` that will create the demo_io project and generate a bitstream and a the `./demo_io/demo_io.xsa` file.
+Also, make sure your 'clean' rule will clean up the project completely.
 
 ## Vitis Software Project
 
 In this phase of the demo you will run the Vitis tools and create a software program that runs on the Microblaze system.
 You will run a program template and not do any code editing for this particular demo.
-**Note**: These instructions are  for the 2024 version of Vitis. Older versions of vitis are much different.
+**Note**: These instructions are  for the 2024 version of Vitis.
+Older versions of vitis are much different.
 
 * Open Vitis
-    * Vitis is the software development environment for Xilinx embedded processors including the MicroBlaze. Vitis operates within a 'workspace' and you will need to specify the workspace for your vitis project. For this demo, we will create the workspace within the `demo_io\vitis` directory within your microblaze assignment.
+    * Vitis is the software development environment for Xilinx embedded processors including the MicroBlaze. Vitis operates within a 'workspace' and you will need to specify the workspace for your vitis project. For this demo, we will create the workspace within the `demo_io\vitis` directory within your microblaze assignment.### Rebuilding Vivado Project from Tcl
+
     * Make sure the vitis environment is setup: `source /tools/Xilinx/Vitis/2024.1/settings.sh` 
     * Open from command line (in `microblaze` assignment directory): `vitis -w ./demo_io/vitis`
 * Create Platform Component
@@ -179,31 +193,72 @@ collect (PROJECT_LIB_SOURCES demo_io.c)
 collector_list (_sources PROJECT_LIB_SOURCES)
 # End add
 ```
+        * Save a copy of your modified `CMakeLists.txt` file in your assignment directory (i.e., something like CMakeLists.txt.demo_io). You will need to save this file and copy it over to the Vitis project as part of your automated project building step described below.
     * Build the application project
         * Click on the 'demo_io' component to make it active and clilck on the hammer in the bottom pain to build the application
         * The build window will show the compile process. Note if there are any errors.
-
+        * The executable should be located at : `./demo_io/vitis/demo_io/build/demo_io.elf` (you will need this for a later step)
 * Download the project to the board
     * Make sure your board is hooked into your computer
-    * Open a terminal emulator wit hthe 9600 baud rate and point to the uart device on your system
-    * Select the application program and right click: Run as -> Launch Hardware
-    * You should see the following text on your terminal emulator:
-
+    * Click the 'Run' button. 
     * You can rerun the program by pressing the "CPU Reset" button
-* Generate bitstream with the program inserted. 
-    * The bitstream generated by Vivado does not have the compiled .elf file inserted into the BRAMs. If you want a bitstream with the memory loaded then you need to complete an additional step to patch the bitstream. This can be done in Vitis or Vivado. Note that the .elf file needs to be compiled before completing this step.
-    * Vitis
+
+### Rebuilding Vitis Project from the command line
+
+Creating a Vitis project by hand is cumbersome in a source control system.
+You can perform these steps manually using a custom Python script run within vitis.
+The script [`demo_io_vitis.py`](./demo_io_vitis.py) is an example can be run to create the Vitis project and build the platform and executable.
+Carefully review this script and its contents.
+This script may need to be edited to match the filenames you have chosen for your `CMakeLists.txt` file.
+This script will copy the files from your project directory and place them in the vitis workspace.
+Note that this script assumes that the hardware project has already been created.
+
+You can run this script in vitis interactively as follows: `vitis -s demo_io_vitis.py`
+
+After verifying that you can create a vitis project and the corresponding .elf file, create a makefile step named `build_demo_io_vitis` that will create the vitis project and build the following file:  `./demo_io/vitis/demo_io/build/demo_io.elf`
+Also, make sure your 'clean' rule will clean up the vitis project completely.
+
+### Running from the command line
+
+You can also download your bitfile and the elf file to your board interactively outside of the vitis gui using the `xsdb` debugger tool.
+Run the debugger in interactive mode by executing the following command:
+
+`xsdb`
+
+Once in the interactive tool, execute the following commands to download the bitfile and elf file.
+
+```
+# Connect to local xsdb server
+connect
+# Connect to NEXYS board
+targets -filter {name =~ "xc7a100t"} -set
+# Download fpga
+fpga ./demo_io/vitis/microblaze_io/export/microblaze_io/hw/sdt/demo_io.bit
+# Select microblaze
+targets -filter {name =~ "MicroBlaze #0"} -set 
+# Download elf file
+dow ./demo_io/vitis/demo_io/build/demo_io.elf
+# Start execute ("con"tinue)
+con
+```
+
+<!-- 
+## Generate bitstream with the program inserted. 
+
+The bitstream generated by Vivado does not have the compiled .elf file inserted into the BRAMs. 
+If you want a bitstream with the memory loaded then you need to complete an additional step to patch the bitstream. 
+Note that the .elf file needs to be compiled before completing this step.
+
+    * Open up Vivado and select the `demo_io` project
+        * Select: Tools->Associate ELF Files
+        * Click on the three dots by the "mb_bootloop_le.elf under the "Design sources". Navigate to the .elf file and select it.
+        * Every time you generate a bitstream the bitstream will be patched with your source code.
+    <!-- * Vitis
         * Select the system program associated with your project. Right click and select "Program Device". 
         * In the "Software Configuration" box, select "bootloop" (i.e. ,you need to change the program to insert from the bootloop to something else)
         * Select down arrow and "browse", navigate to "hello->Debug->hello.elf"
         * Click "Generate" (you can click on "Program" but we don't need to program but only generate the bitfile)
-        * This should generate a new file `vitis/hello/_ide/bitstream/download.bit`. Program this using the hardware manager or something other than vitis to make sure it works.
-    * Vivado
-        * Select: Tools->Associate ELF Files
-        * Click on the three dots by the "mb_bootloop_le.elf under the "Design sources". Navigate to the .elf file and select it.
-        * Every time you generate a bitstream the bitstream will be patched with your source code.
+        * This should generate a new file `vitis/hello/_ide/bitstream/download.bit`. Program this using the hardware manager or something other than vitis to make sure it works. -->
 
-## Makefile commands
 
-Once you have created the project and downloaded it to the board, create makefile rules and clean rules to build the project, the bitfile, the software, and the bitfile with the program.
-
+ -->
