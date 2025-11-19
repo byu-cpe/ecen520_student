@@ -5,7 +5,7 @@ You will also create a system that integrates your custom IP core from the previ
 
 ## IP Integrator and MicroBlaze Demos
 
-The first part of this assignment is to complete the MicroBlaze IP Integrator demo described [here](./microblaze/demo_io.md).
+The first part of this assignment is to complete the MicroBlaze IP Integrator demo described [here](./demo_io.md).
 This demonstration walks you through the steps of creating a MicroBlaze system with basic IO peripherals.
 This demo also describe how to create a simple C application that runs on your processor.
 
