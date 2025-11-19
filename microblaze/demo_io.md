@@ -55,9 +55,7 @@ These instructions assume you are using Vivado 2024.1 but other versions should 
             * Go to the next "output clocks" page, change 'reset type' to "active Low" (to reflect the fact that our reset is active low)
         * Click ok to finalize the changes
     * Hook up the external Clock and Reset
-        * Click on the "Run Connection Automation" link in the 'Designer Assistance' box that appears. A new dialog box ### Rebuilding Vitis Project from the command line
-
-will open up.
+        * Click on the "Run Connection Automation" link in the 'Designer Assistance' box that appears. A new dialog box will open up.
             * Click the box next to "clk_in1" and press "ok"
             * This should hook up a port to the clock with the name `clk_100MHz`
         * Click on the "Run Connection Automation" link again.
@@ -72,17 +70,13 @@ will open up.
         * Click "Connection Automation", select "All Automation" and click OK. 
             * This will hook up the block to the AXI bus and generate new output ports for the module
         * Configure the block to match the LED ports
-            * Double click the box to open the "re-customize IP" box### Rebuilding Vitis Project from the command line
-
-
+            * Double click the box to open the "re-customize IP" box#
             * Select "All Outputs" 
             * Change GPIO Width from 32 to 16
         * Select the gpio_rtl_0 output port, right click "External Interface Properties"
             * Change the name of the output port to "gpio_LED" in the "External Interface Properties" box.
     * Add the AXI GPIO module for the switches
-        * Follow the same procedure as above with the following changes### Rebuilding Vitis Project from the command line
-
-
+        * Follow the same procedure as above with the following changes
             * Rename the module "axi_gpio_SW"
             * Rename the ouptput pins to "gpio_SW"
             * Select "All Inputs"
@@ -183,7 +177,18 @@ Older versions of vitis are much different.
         * Expand the 'Sources' folder. This is the folder that contains the source code. 
         * Copy the file [`demo_io.c`](./demo_io.c) to the directory `demo_io/vitis/demo_io/src/demo_io.c`. This file is the code that will run on your MicroBlaze. This file should show up under the 'Sources' folder. Review the code to familiarize yourself on what it does.
     * Modify the `CMakeLists.txt` file in the 'Settings' Folder to include the new `demo_io.c` file. Add the two lines to specify the project sources as shown in the example below.
+    * Save a copy of your modified `CMakeLists.txt` file in your assignment directory (i.e., something like CMakeLists.txt.demo_io). You will need to save this file and copy it over to the Vitis project as part of your automated project building step described below.
+    * Build the application project
+        * Click on the 'demo_io' component to make it active and clilck on the hammer in the bottom pain to build the application
+        * The build window will show the compile process. Note if there are any errors.
+        * The executable should be located at : `./demo_io/vitis/demo_io/build/demo_io.elf` (you will need this for a later step)
+* Download the project to the board
+    * Make sure your board is hooked into your computer
+    * Click the 'Run' button. 
+    * You can rerun the program by pressing the "CPU Reset" button
+
 ```
+# CMakeLists.txt edits
 collect(PROJECT_LIB_DEPS xil)
 collect(PROJECT_LIB_DEPS gcc)
 collect(PROJECT_LIB_DEPS c)
@@ -193,15 +198,7 @@ collect (PROJECT_LIB_SOURCES demo_io.c)
 collector_list (_sources PROJECT_LIB_SOURCES)
 # End add
 ```
-        * Save a copy of your modified `CMakeLists.txt` file in your assignment directory (i.e., something like CMakeLists.txt.demo_io). You will need to save this file and copy it over to the Vitis project as part of your automated project building step described below.
-    * Build the application project
-        * Click on the 'demo_io' component to make it active and clilck on the hammer in the bottom pain to build the application
-        * The build window will show the compile process. Note if there are any errors.
-        * The executable should be located at : `./demo_io/vitis/demo_io/build/demo_io.elf` (you will need this for a later step)
-* Download the project to the board
-    * Make sure your board is hooked into your computer
-    * Click the 'Run' button. 
-    * You can rerun the program by pressing the "CPU Reset" button
+
 
 ### Rebuilding Vitis Project from the command line
 
@@ -253,12 +250,12 @@ Note that the .elf file needs to be compiled before completing this step.
         * Select: Tools->Associate ELF Files
         * Click on the three dots by the "mb_bootloop_le.elf under the "Design sources". Navigate to the .elf file and select it.
         * Every time you generate a bitstream the bitstream will be patched with your source code.
-    <!-- * Vitis
+* Vitis
         * Select the system program associated with your project. Right click and select "Program Device". 
         * In the "Software Configuration" box, select "bootloop" (i.e. ,you need to change the program to insert from the bootloop to something else)
         * Select down arrow and "browse", navigate to "hello->Debug->hello.elf"
         * Click "Generate" (you can click on "Program" but we don't need to program but only generate the bitfile)
-        * This should generate a new file `vitis/hello/_ide/bitstream/download.bit`. Program this using the hardware manager or something other than vitis to make sure it works. -->
+        * This should generate a new file `vitis/hello/_ide/bitstream/download.bit`. Program this using the hardware manager or something other than vitis to make sure it works
+        -->
 
 
- -->
