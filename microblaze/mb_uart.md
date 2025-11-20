@@ -45,12 +45,22 @@ Follow these steps to build the MicroBlaze system:
             * Right clilck on the canvas and select "Create Port". Name the port "AN", indicate it is an output, and leave the type as "Other" (you do not need to set its size).
                 * Wire the anode output of your seven segment display module to this port.
             * Create a port for the cathodes named 'C' and wire it to the Cathode outputs of your module.
+        * Update the xdc file to match the names of the top-level ports
+            * The Anode signals (`AN`) should not require any changes.
+            * The cathode signals (`Cx`) are all single bit named ports. You will need to change the name of each signal to be part of a vector. Assign your signals as follows:
+                * CA = C[6]
+                * CB = C[5]
+                * CC = C[4]
+                * CD = C[3]
+                * CE = C[2]
+                * CF = C[1]
+                * DP = C[7]
     * Add your UART axi module
         * Right click on the canvas and select "Add Module". Select your uart_axi.
         * Rename your module `uart_axi` (From the default uart_axi_wrapper_0)
         * Run the Connection Automation to wire it up
-        * Create an output port for the tx output (named `UART_RXD_OUT`) and hook it up to the tx output of your module
-        * Create an input port for the rx input (named `UART_TXD_IN`) and hook it up to the rx input of your module
+        * Create an output port for the tx output (named `UART_RXD_OUT`) and hook it up to the tx output of your module (this is the name in the .xdc file so you don't have to update the xdc)
+        * Create an input port for the rx input (named `UART_TXD_IN`) and hook it up to the rx input of your module (again, this is the name in the .xdc file)
     * Validate and save your block diagram
         * Click the "validate" box to make sure everything is hooked up correctly
         * Export your block diagram file
@@ -67,11 +77,27 @@ Follow these steps to build the MicroBlaze system:
         * Wire the input reset to the input of this module.
         * You will hook up the output of this module to your seven seegment display and uart AXI -->
 
+Once you have a platform that compiles, create a makefile step named `build_mb_uart` that will create the demo_io project and generate a bitstream and a the `./mb_uart/mb_uart.xsa` file.
+Also, make sure your 'clean' rule will clean up the project completely.
 
 ## Vitis Project
 
-Create a vitis workspace within your `mb_uart` vivado project directory.
-Create a component platform based on the `mb_uart` design.
+Like the `demo_io` example, you need to create a vitis platform component based on your `mb_uart` design.
+Create a vitis workspace within your `mb_uart` vivado project directory and create the vitis platform component.
+
+After creating
+
+### `mb_uart.c`
+
+The first application 
+
+
+
+* Create a component platform based on the `mb_uart` design.
+* Create an empty application component and add the [`mb_uart.c`](./mb_uart.c) source file.
+* Modify the the `CMakeLists.txt` file to include this new source file.
+    * Compile this file to make sure 
+* 
 
 
 
