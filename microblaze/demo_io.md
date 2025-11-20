@@ -199,7 +199,6 @@ collector_list (_sources PROJECT_LIB_SOURCES)
 # End add
 ```
 
-
 ### Rebuilding Vitis Project from the command line
 
 Creating a Vitis project by hand is cumbersome in a source control system.

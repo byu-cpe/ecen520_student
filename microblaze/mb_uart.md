@@ -83,24 +83,18 @@ Also, make sure your 'clean' rule will clean up the project completely.
 ## Vitis Project
 
 Like the `demo_io` example, you need to create a vitis platform component based on your `mb_uart` design.
-Create a vitis workspace within your `mb_uart` vivado project directory and create the vitis platform component.
-
-After creating
-
-### `mb_uart.c`
-
-The first application 
-
-
-
-* Create a component platform based on the `mb_uart` design.
-* Create an empty application component and add the [`mb_uart.c`](./mb_uart.c) source file.
+Follow these steps to create a working project and test it on your platform.
+* Create a vitis workspace within your `mb_uart` vivado project directory named `vitis` and create the vitis platform component.
+* Create an empty application in your project.
+* Add the file [`mb_uart.c`](./mb_uart.c) to your project
 * Modify the the `CMakeLists.txt` file to include this new source file.
-    * Compile this file to make sure 
-* 
+* Compile your project and make sure there are no errors
+* Download the project to the board and make sure it works as you expect.
 
+Once you have a working system, automate the process for building the elf file.
+Create a python script for creating and building the project from scratch such that you have a file `./mb_uart/vitis/mb_uart/build/mb_uart.elf`
+Create a makefile rule named `build_mb_uart_vitis` that will create the vitis project and build the elf file in the path described above.
+As in the previous example, you will need to copy the .c file into the project and the modified `CMakeLists.txt`
+Also, make sure your 'clean' rule will clean up the vitis project completely.
 
-
-Program:
-- 
 
