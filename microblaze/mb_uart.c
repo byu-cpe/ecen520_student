@@ -81,15 +81,17 @@ int main() {
     // Initialize the seven segment display with zero
     XGpio_DiscreteWrite(&SSD_gpio, CHANNEL_1, 0);        
     // Turn on all the segments and turn off all of the digit points
-    //XGpio_DiscreteWrite(&BTN_gpio, CHANNEL_2, 0x0);        
-
+    //XGpio_DiscreteWrite(&BTN_gpio, CHANNEL_2, 0x0); 
+    // Clear the FIFOs       
+    Xil_Out32(XPAR_UART_AXI_BASEADDR+4, switches & 0x3);
     while(1) {
+        // Read UART status
+        uart_status = Xil_In32(XPAR_UART_AXI_BASEADDR+4);
         // read the value of the switches
         switches = XGpio_DiscreteRead(&SW_gpio, CHANNEL_1);
-        // write the value of the switches to the LEDs
-
         // read the value of the buttons
         buttons = XGpio_DiscreteRead(&BTN_gpio, CHANNEL_1);
+        //
         if (buttons & BTND)
             //  If BTND is pressed, invert LEDs
             leds = ~switches;
@@ -105,17 +107,17 @@ int main() {
             leds = switches;
         // Write the corresponding value to the LEDs
         XGpio_DiscreteWrite(&LED_gpio, CHANNEL_1, leds);        
-
-        // check to see if there is a byte in the receive fifo
-        uart_status = Xil_In32(XPAR_UART_AXI_BASEADDR+4);
-        if ((uart_status & RX_EMPTY_MASK) != 0) {
+        // Read a value from the uart if the RX fifo is not empty
+        if ((uart_status & RX_EMPTY_MASK) == 0) {
             //  If there is a byte, read it from the fifo
             unsigned char received_char = Xil_In32(XPAR_UART_AXI_BASEADDR);
             //  Write the received character to the TX fifo
-            //Xil_Out32(XPAR_UART_AXI_BASEADDR, received_char);
-            //  Increment the seven segment display counter
-            //rx_received += 1;
+            Xil_Out32(XPAR_UART_AXI_BASEADDR, received_char);
+            //  Increment the counters
+            rx_received += 1;
+            tx_sent += 1;
         }
+
         //  BTNC debounce state machine in software
         btnc_pressed = (buttons & BTNC)  > 0;
         switch(btnc_state) {
@@ -153,12 +155,10 @@ int main() {
                 break;
         }
 
-        // Lower two digits of SSD display the value of the lower 8 switches
-        //  next two digits display the uart status register
-        //  next two digits display the number of tx from button c
-        //  next two digits display the number of characters received over rx
+
         ssd_value = ((rx_received & 0xff) << 24) | ((tx_sent & 0xff) << 16) | ((uart_status & 0xff) << 8) | (switches & 0xff);
         XGpio_DiscreteWrite(&SSD_gpio, CHANNEL_1, ssd_value);        
+
     }
     return 0;
 }
