@@ -5,7 +5,7 @@ This lecture reviews the details of the 7 Series CLB and describes how a variety
 
 **Reading**
 
-  * [CLB Guide](https://docs.amd.com/v/u/en-US/ug474_7Series_CLB)
+  * [CLB Guide](https://docs.amd.com/r/en-US/ug474_7Series_CLB)
 
 **Reference**
 
