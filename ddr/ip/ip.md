@@ -225,7 +225,7 @@ This synthesis script will read in the top-level design file as well as the file
 Familiarize yourself with script as you will need to make a similar script for your assignment design.
 Run the script as follows:
 ```
-	vivado -mode batch -source ddr_top_synth.tcl -log ./logs/ddr_top_implement.log -nojournal -notrace
+vivado -mode batch -source ddr_top_synth.tcl -log ./logs/ddr_top_implement.log -nojournal -notrace
 ```
 
 Add the following rules in the `ip/makefile`:
