@@ -184,7 +184,7 @@ You will need to create your own custom simulation environment for your DDR desi
 
 The generic example design includes the testbench file `./example_design/mig_7series_0_ex/imports/sim_tb_top.v`.
 This testbench has been adapted for the Nexys4 DDR board and is provided as the file [`example_nexys4_top_tb.v`](./example_nexys4_top_tb.v).
-This testbench is written in verilog so it has less features than a systemverilog testbench.
+This testbench is written in verilog so it has less features than a SystemVerilog testbench.
 The testbench includes the following features:
 * It generates the top-level 100 MHz clock
 * It generates a reset signal
@@ -194,7 +194,8 @@ The testbench includes the following features:
 Before running the simulation, you will need to modify your `modelsim.ini` file to include three libraries that are needed to simulate the DDR controller.
 These libraries include the `unisim`, `secureip`, and `unisims_ver` libraries.
 The following lines can be added to your `modelsim.ini` file:
- ```unisim = /tools/Xilinx/Vivado/2024.1/data/questa/unisim
+ ```
+unisim = /tools/Xilinx/Vivado/2024.1/data/questa/unisim
 secureip = /tools/Xilinx/Vivado/2024.1/data/questa/secureip
 unisims_ver = /tools/Xilinx/Vivado/2024.1/data/questa/unisims_ver
 ```
@@ -209,10 +210,10 @@ You can run the simulation in GUI mode by executing the following command: `sour
 You will manually need to execute `run` to run the simulation.
 Run the simulation to answer the following questions.
 Put your answers under the heading: "DDR Controller Simulation". **TODO:check questions**
-* What time does the `init_calib_complete` signal go high?
-* What are the values of the `ddr2_dq` signals during the first write caused by the `BTNL` button press?
+* What time does the top-level `init_calib_complete` signal go high?
+* What is the clock period of the top-level `clk` clock signal?
 * What is the clock period of the `ddr2_ck_p` clock signal?
-* What is the clock period of the `clk_ui` clock signal?
+* What are the values of the `ddr2_dq` signals during the first write caused by the `BTNL` button press?
 
 No makefile rules are required to simluate this design.
 
