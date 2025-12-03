@@ -35,7 +35,7 @@ This design will be similar to the example design created in the previous exerci
 
 A top-level design named [`ddr_top_template.sv`](./ddr_top_template.sv) has been provided to you to help you get started.
 This design template provides the top-level ports and instantiates the DDR memory controller IP to save you some time.
-You will need to modify this design to implement the functionality described in the next section.
+Rename this file to `ddr_top.sv` and place your logic within this file.
 This section wil describe several important details about this top-level design template.
 
 **Clocks and Resets**
@@ -73,6 +73,11 @@ You will need to design your logic to drive this interface to read and write dat
 
 
 ## Top-Level Design
+
+For this top-level design, implement a UART FIFO like was done in the BRAM assignment.
+Specifically, accept characters from your UART RX and when received write them sequentially into the DDR.
+
+**TODO**
 
 * BTNC: stream FIFO out over tx
 * BTND: reset the FIFOs
