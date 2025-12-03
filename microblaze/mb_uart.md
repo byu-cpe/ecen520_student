@@ -54,6 +54,7 @@ Follow these steps to build the MicroBlaze system:
                 * CD = C[3]
                 * CE = C[2]
                 * CF = C[1]
+                * CG = C[0]
                 * DP = C[7]
     * Add your UART axi module
         * Right click on the canvas and select "Add Module". Select your uart_axi.
