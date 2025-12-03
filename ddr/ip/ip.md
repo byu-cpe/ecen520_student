@@ -213,7 +213,13 @@ Put your answers under the heading: "DDR Controller Simulation". **TODO:check qu
 * What time does the top-level `init_calib_complete` signal go high?
 * What is the clock period of the top-level `clk` clock signal?
 * What is the clock period of the `ddr2_ck_p` clock signal?
-* What are the values of the `ddr2_dq` signals during the first write caused by the `BTNL` button press?
+* Describe the first five DDR commands that occur *after* the `init_calib_complete` signal go high. Indicate what addresses are involved with each transaction
+  * Transaction 1:
+  * Transaction 2:
+  * Transaction 3:
+  * Transaction 4:
+  * Transaction 5:
+
 
 No makefile rules are required to simluate this design.
 
@@ -236,6 +242,6 @@ Add the following rules in the `ip/makefile`:
 ### Running the Design
 
 After generating the bitfile, program the Nexys4 DDR board with the bitfile.
-Run the design and make sure the calibration LED lights up indicating that the DDR controller has been properly calibrated.
+Run the design and make sure the calibration LED lights up (LED 0) indicating that the DDR controller has been properly calibrated.
 
 At this point you have all the files you need to generate your own custom DDR design.

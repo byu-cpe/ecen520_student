@@ -20,9 +20,9 @@ Add the following rules in the `ip/makefile`:
 * A `make_example_bit` rule that creates a bitfile for the example design.
 * A `clean` rule that cleans everything in the `ip` directory.
 
-**HERE**
 
-**TODO** there are a number of questions that you need to complete as part of the report for this part of the assignment.
+There are a number of questions that you need to complete as part of the report for this part of the assignment.
+Add these responses to your report file.
 
 Make sure you go through this exercise carefully as the understanding you develop during this exercise will be important for the second part of the assignment.
 
@@ -33,7 +33,7 @@ This design will be similar to the example design created in the previous exerci
 
 ### DDR Top-Level Template
 
-A top-level design named [`ddr_top.sv`](./ddr_top.sv) has been provided to you to help you get started.
+A top-level design named [`ddr_top_template.sv`](./ddr_top_template.sv) has been provided to you to help you get started.
 This design template provides the top-level ports and instantiates the DDR memory controller IP to save you some time.
 You will need to modify this design to implement the functionality described in the next section.
 This section wil describe several important details about this top-level design template.
