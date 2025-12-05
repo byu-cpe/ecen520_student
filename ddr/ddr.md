@@ -20,7 +20,6 @@ Add the following rules in the `ip/makefile`:
 * A `make_example_bit` rule that creates a bitfile for the example design.
 * A `clean` rule that cleans everything in the `ip` directory.
 
-
 There are a number of questions that you need to complete as part of the report for this part of the assignment.
 Add these responses to your report file.
 
@@ -103,19 +102,27 @@ The details of this design are as follows:
   * Create an empty flag that is asserted when the write address is equal to the read address (including the most significant bit).
   * Create an full flag that is asserted when the write address is equal to the read address and the most significant bit is different.
 * BTNU should be used to reset your write address and read address so that the FIFO is empty
+* Drive the 16 LEDs with the value of the "depth" of the FIFO (i.e., the number of entries currently loaded in the FIFO). The 16 bits cannot fully encode the possible depth.
 
-## DDR UART FIFO Simulation
+### DDR UART FIFO Simulation
 
-A top-level testbench has been created for you named `ddr_top_tb.sv` (this will save you a lot of time!).
-Simulate your design to make sure that it properly writes characters received from the testbench and then reads them and retransmits them when BTNC is pressed.
-Create a makefile rule `sim_ddr_uart_top` that performs this simulation.
+A top-level testbench has been created for you named `ddr_top_tb.sv`.
+This testbench instances your design and the DDR memory model much like what was done with the ddr example design.
+You will need to create a simulation script similar to the [example_nexys4_top_sim.do](./ip/example_nexys4_top_sim.do) script to simulate your design in Modelsim.
+You can copy this script and make the various changes needed to simulate your top-level design.
+Simulate your design in the GUI to make sure that it properly writes characters received from the testbench and then reads them and retransmits them when BTNC is pressed.
 
-## DDR UART FIFO Bitfile Generation
+Create a makefile rule `sim_ddr_uart_top` that performs this simulation without the GUI and generates a log file named `sim_ddr_uart_top.log`.
+
+## Top-level Implementation and Download
 
 Create a synthesis script that will synthesis your design and generate a bitfile named `ddr_fifo_top.bit`.
 Create a makefile rule `gen_bit` that performs this task.
 
+### Download and Testing
+
 Make sure your bitstream operates correctly on the board.
+
 
 ## Submission
 
