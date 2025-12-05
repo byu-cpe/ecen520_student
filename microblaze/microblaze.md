@@ -28,3 +28,6 @@ Name your C code `custom.c` and create a makefile rule `build_custom_vitis` that
 1. Implement all the required makefile rules and make sure your `passoff.py` script runs without errors.
 2. Complete and commit the [report.md](report.md) file for this assignment.
 
+<!-- Future
+- Ask for resource utiliztion in report
+-->

@@ -209,7 +209,8 @@ vmap unisims_ver /tools/Xilinx/Vivado/2024.1/data/questa/unisims_ver
 You can run the simulation in GUI mode by executing the following command: `source example_nexys4_top_sim.do`
 You will manually need to execute `run` to run the simulation.
 Run the simulation to answer the following questions.
-Put your answers under the heading: "DDR Controller Simulation". **TODO:check questions**
+Put your answers under the heading: "IP DDR Controller Simulation". 
+
 * What time does the top-level `init_calib_complete` signal go high?
 * What is the clock period of the top-level `clk` clock signal?
 * What is the clock period of the `ddr2_ck_p` clock signal?

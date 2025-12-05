@@ -117,12 +117,26 @@ Create a makefile rule `sim_ddr_uart_top` that performs this simulation without 
 ## Top-level Implementation and Download
 
 Create a synthesis script that will synthesis your design and generate a bitfile named `ddr_fifo_top.bit`.
-Create a makefile rule `gen_bit` that performs this task.
+
+During the bitstream generation process generate a log file named `ddr_fifo_top.log`, a timing report named `timing_ddr_fifo_top.rpt`, and a utilization report named `utilization_ddr_fifo_top.rpt`.
 
 ### Download and Testing
 
-Make sure your bitstream operates correctly on the board.
+Download your design to your board and perform a few manual tests with a terminal to verify it is working. 
+Make sure the initialization LED is asserted.
 
+Once you have verified the design operates with simple terminal tests, verify it by sending large amounts of text using the command shown below.
+This command allows you to transfer one byte at a time from a text file and specify the serial port paramters.
+
+`python3 ../resources/send_file_serial.py --port /dev/ttyUSB1 --baud 19200 ../bram/declaration_of_independence.txt --parity=odd`
+
+After sending the text, run the following command to extract the data from the serial port and store it in a file.
+Run this command and then press Enter to start hte process. 
+Press BTNC soon after pressing enter and then wait for hte transfer to finish.
+
+```python3 ../resources/read_file_serial.py --port /dev/ttyUSB1 --baud 19200 temp.txt --parity=odd```
+
+Compare the data received in your file to the data that was sent.
 
 ## Submission
 
@@ -139,15 +153,8 @@ The following assignment specific items should be included in your repository:
 Changes:
 - Use an AXI interface instead of this odd "UI" interface that is hard to understand and difficult to use (it forces students to learn about AXI)
 - Figure out a way to build the project using an envhiroinment variable pointing to the simulation libraries. I was forced to build this on the digital labs because these libraries were hard coded
-- Adrianna and Michael's designs didn't work. Odd behvaior that I couldn't figure out. Need more debuggging experience to help with these problems.
 - Provide more discussion about the clock domains and approaches for handling the clock domains (which clock is Tx/rx? need to know clocks of these)
 - Need to provide a template for the quyestios so it is easier to grade
-- Is there a way we can reduce the number of warnings?
 - Need to be more clear on what should be printed for the simulation and testbench for grading. Perhaps a header for ease of grading and finding results.
 
-- Student comments:
-* If you could put in the ddr.md that `[0:0]` has to be included before some of the ports in our top module that would be great. As it appears to be redundant so multiple of us have removed it, but it has to be there or it causes a lot of weird issues.
-* took a very long time figuring out the file structures and getting the IP to implement together
-* The disparity between simulation and implementation, where my first printed character would be replaced by the most recent character in its same column number (despite being if a different row), caused many additional hours of debugging with little to go on.
-  * It may be helpful to give a more in dept explainaiton in the lab write up of the DDR
 -->

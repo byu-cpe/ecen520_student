@@ -20,7 +20,8 @@ def main():
     tester.add_Makefile_rule("make_example_bit", [], ["./ip/example_nexys4_top.bit"])
     # DDR directory rules
     tester.add_Makefile_rule("sim_ddr_uart_top", [], ["sim_ddr_uart_top.log"])
-    tester.add_Makefile_rule("gen_bit", [], ["ddr_fifo_top.bit"])
+    tester.add_Makefile_rule("gen_bit", [], ["ddr_fifo_top.bit","ddr_fifo_top.log",
+                                             "timing_ddr_fifo_top.rpt","utilization_ddr_fifo_top.rpt"])
     tester.run_tests()
 
 if __name__ == "__main__":
