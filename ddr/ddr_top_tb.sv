@@ -516,8 +516,7 @@ module ddr_top_tb;
   logic [7:0] tx_data_queue[$];
   // Always block to send data from the queue
   always @(negedge sys_clk_i) begin
-    if (~tb_tx_busy && (tx_data_queue.sisim:/ddr_top_tb/u_ip_top/rx_fifo_out_data
-ze() > 0)) begin
+    if (~tb_tx_busy && (tx_data_queue.size() > 0)) begin
       // Blocking used because I need to assign it immediately
       repeat(200) @(negedge sys_clk_i);
       tb_rx_data = tx_data_queue.pop_front();
