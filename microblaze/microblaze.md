@@ -29,5 +29,10 @@ Name your C code `custom.c` and create a makefile rule `build_custom_vitis` that
 2. Complete and commit the [report.md](report.md) file for this assignment.
 
 <!-- Future
-- Ask for resource utiliztion in report
+- Ask for resource utiliztion in report.
+- Make the report more interesting and involved
+- Adding instructions on the debugging flow for this assignment would be helpful, as well as some tips on what how to identify and correct common issues.
+- Vitis GUI instructions
+-  * Suggestion 1 - A complete list of deliverables for passoff. Many of the steps require a specific name or file structure, the instructions should list these things explicitly. The passoff scripts takes long enough to run that an error will only show up after a significant amount of time.
+  * Suggestion 2 - Common Vivado errors. While it's not possible to cover every source of error, many of us ran into the same issues with Vivado while synthesizing, implementing, and generating the bitstream. The issue with the .xdc file and top level module is one of them. IO port naming (gpio_LED"_tri_o", etc.) was another which didn't have much explanation and many of us debugged independently.
 -->

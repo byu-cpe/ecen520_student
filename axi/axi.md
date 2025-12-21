@@ -181,3 +181,9 @@ Review the synthesis report to identify any potential problems.
 1. Implement all the required makefile rules and make sure your `passoff.py` script runs without errors.
 2. Complete and commit the [report.md](report.md) file for this assignment.
 
+<!--
+- A diagram or something to refer to in the instructions. The one in class helped to grasp it better.  (the diagram could show the axi bus interface, the FIOs and the Rx/RX like I did in class.)
+- Make the report more interesting and involved
+- Clarify the process for simulating
+- A step-by-step description of one of the AXI-UART transactions would have helped me get started much more easily. I understand we talked about it the structure and broadly described what we wanted in class, and I took notes on what was discussed. However, without a resource I could trust to be accurate I spent a lot of time writing something that was incorrect. For example, it was unclear that writing to the RX FIFO over UART and reading from AXI were meant to operate independently, so I assumed that it was one transaction. A detailed explanation of the process would have helped me avoid that pitfall.
+-->

@@ -152,6 +152,7 @@ The following assignment specific items should be included in your repository:
 <!--
 Changes:
 - Use an AXI interface instead of this odd "UI" interface that is hard to understand and difficult to use (it forces students to learn about AXI)
+-  Be more specific about which Makefiles you want and where, because the instructions say to put it in the ip directory, but passoff wants it at the top level
 - Figure out a way to build the project using an envhiroinment variable pointing to the simulation libraries. I was forced to build this on the digital labs because these libraries were hard coded
 - Provide more discussion about the clock domains and approaches for handling the clock domains (which clock is Tx/rx? need to know clocks of these)
 - Need to provide a template for the quyestios so it is easier to grade

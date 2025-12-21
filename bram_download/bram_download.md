@@ -91,3 +91,8 @@ Here are some ideas for verifying your design is working:
 1. Implement all the required makefile rules and make sure your `passoff.py` script runs without errors.
 2. Complete and commit the [report.md](report.md) file for this assignment.
 
+<!--
+- A short rom for testing transmit could be helpful, since the fight song took a long time to transmit in the simulation.
+- I think it would've been much easier to implement some parts of this lab (or help in writing testbenches) if there were more status signals coming up out of the top module. For example, 'rom_end' would be useful. These signals can also just be tied to LEDs.
+- Writing the testbench is a good excersize, but it would help to have some sort of working testbench available to help us debug our design before writing our own testbench.
+-->

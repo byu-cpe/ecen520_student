@@ -139,6 +139,9 @@ If you made any changes to your modules to resolve synthesis errors, rerun the t
 
 
 <!--
+- Easy lab. COuld be combined with download if the instantiation insturciotns are provided (a waste of time to look it up)
+- Add a little more help on how to use the bram primitives and where in the docs to look.
+  Add an instruction in GitHub to add the modelsim.ini to the bram directory, and to run vsim from the terminal as <vsim -L unisim &>.
 - Need to have check script copy the modelsim.ini file to the student's directory for grading outside of the repo OR have them commit the modelsim.ini file (done)
 - Use the description from Chu section 9.3.2 for creating a FIFO (have them read this and implement this)
 

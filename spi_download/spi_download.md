@@ -186,6 +186,7 @@ Other operations:
 
 
 <!--
+- More reusable code. It was super nice that there were sections of code that we could reuse from the testbench we wrote last week. That made it a lot faster to develop my testbench. It's unlikely, but if the future labs give me any chance to reuse some of testbench code I'd be very happy.
 - Add an exercise where the students do one of the following:
   1. Open the fpga layout tool and browse around the design. Find the I/O and logic resources.
   3. Have a constraint that requires the SPICLK and MOSI/MISO flip flps to be very close to the I/O. Need to make sure the a the timing delay between CLK/MISO/MOSI is as small as possible.

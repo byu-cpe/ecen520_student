@@ -207,6 +207,7 @@ Download your design and make sure it operates as expected.
 
 
 <!--
+- In futrure have them create one graph with all of the waveforms rather than 6. Include markers on each waveform.
 - Need to figure out how to maek the simulation libraries more platform independent (currenlty the siulation libraries for modelsim are hard coded fof the digital lab)
 - The build makefiles had hard coded paths for the glbl.v file. Need to modify the instructions so that the make will work on any computer (have them copy it to their repo?)
 - Have them figure out the TCL commands for printing the simulation files to an image

@@ -262,6 +262,9 @@ Make sure all synthesis warnings and errors are resolved before submitting your 
 4. Complete the `report.md` file with the required information
 
 <!--
+- Fix the  ASM diagram to show high being able to move to the idle state if start is 0.
+- Rename the spi_ctrl module to spi_cntrl so that it is consistent with everything else
+- I think a text description of an SPI transaction would've been helpful. The explanations for each of the signals was very brief and didn't provide much information on what the signal was supposed to do. Because of my lack of exposure to protocols like this, it made it hard to know what data was being loaded when load was asserted, for example. Have a resource of what was supposed to happen in the system would've been helpful, since all I had to go off of was code that I wrote.
 - Need to be consistent on 'cntrl' vs. 'ctrl' in file names
 - Come up with some "discussion" or exploration exercise as part of the readme.md
 - It is hard to follow their testbenches. Need to provide more constraints so that I can follow and see that what was recieved is what was sent

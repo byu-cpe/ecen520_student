@@ -245,7 +245,13 @@ Notes:
 ? Experiment with different encoding styles?
 
 - Future:
+  - Update the seven segment display testbench:
+    - Only display the output when the data has changed (rather than every cycling of anode)
   - Make sure that the data displayed on the LEDs doesn't change/flicker (i.e., latch the data)
+  * Suggestion 1 - The specification stated that the cathode signals (CA,...,CG) were [6:0] wide and DP 1 wide. I realize it's probably just to save space, but it was a little confusing working out if that meant each was 7 bits wide or if they were all addressed together. Maybe noting them like an array {CA,...,CG} or stating that DP,CA,...,CG corresponded to our segments output would make it more clean, it took me a while to wrap my head around what was being requested.
+  * Suggestion 2 - The makefile rules in the assignment spec were different than what the passoff script required.
+  * Suggestion 3 - The passoff script required the same file name for the synth log and implement log. It would be nice to change them so they aren't overwriting each other.
+  - I really struggled with the seven_segment_check module. Initially I didn't understand how to connect it (this is largely due to CA-CG being listed as 7-bit wires rather than 1-bit wires in the assignment page),
   - Note that many studens struggled debugging their receiver and the transmitter model at the same time. It wasn't clear which one has the problem.
      - Suggestion: create a top-level testbench that just hooks up my receiver model to their transmitter model and is used to validate their transmitter model. This way, they can have a known good transmitter model to test their receiver.
   - seven segment display model/checker
