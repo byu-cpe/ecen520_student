@@ -19,9 +19,9 @@ def main():
     tester.add_Makefile_rule("synth_rxtx_top", ["rxtx_top.sv"], ["synth_rxtx_top.log", "rxtx_top_synth.dcp"])
     tester.add_Makefile_rule("synth_rxtx_top_115200_even", ["rxtx_top.sv"], ["synth_rxtx_top_115200_even.log",
                                                                             "rxtx_top_115200_even_synth.dcp"])
-    tester.add_Makefile_rule("implement_rxtx_top", ["rxtx_top_synth.dcp"], ["synth_rxtx_top.log", "rxtx_top.dcp"])
+    tester.add_Makefile_rule("implement_rxtx_top", ["rxtx_top_synth.dcp"], ["synth_rxtx_top.log", "rxtx_top.dcp", "rxtx_top.bit"])
     tester.add_Makefile_rule("implement_rxtx_top_115200_even", ["rxtx_top_115200_even_synth.dcp"], 
-                             ["synth_rxtx_top_115200_even.log", "rxtx_top_115200_even.dcp"])
+                             ["synth_rxtx_top_115200_even.log", "rxtx_top_115200_even.dcp", "rxtx_top_115200_even.bit"])
     tester.run_tests()
 
 

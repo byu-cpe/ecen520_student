@@ -16,7 +16,8 @@ def main():
     tester.add_required_tracked_files(["clock_pin.png", "bufg.png", "btnr_sync.png"])
     tester.add_Makefile_rule("sim_adxl362_top", ["adxl362_top.sv","adxl362_top_tb.sv"], ["sim_adxl362_top.log"])
     tester.add_Makefile_rule("synth_adxl362_top", [], ["synth_adxl362_top.log", "adxl362_top_synth.dcp"])
-    tester.add_Makefile_rule("implement_adxl362_top", ["adxl362_top_synth.dcp"], ["implement_adxl362_top.log", "adxl362_top.dcp", "adxl362_top.dcp",
+    tester.add_Makefile_rule("implement_adxl362_top", ["adxl362_top_synth.dcp"], ["implement_adxl362_top.log", 
+                            "adxl362_top.dcp", "adxl362_top.dcp","adxl362_top.bit",
                             "timing_adxl362_top.rpt", "utilization_adxl362_top.rpt", "drc_adxl362_top.rpt"])
     tester.run_tests()
 
