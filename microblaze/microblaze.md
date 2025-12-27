@@ -29,6 +29,7 @@ Name your C code `custom.c` and create a makefile rule `build_custom_vitis` that
 2. Complete and commit the [report.md](report.md) file for this assignment.
 
 <!-- Future
+- I don't have a good way of grading this. I need to figure out how to create a bitfile that has the elf integrated into it. This bitfile should bre required.
 - Ask for resource utiliztion in report.
 - Make the report more interesting and involved
 - Adding instructions on the debugging flow for this assignment would be helpful, as well as some tips on what how to identify and correct common issues.
