@@ -20,6 +20,7 @@ Students may use AI tools for the following purposes:
 - Syntax assistance & autocomplete (GitHub Copilot, IDE autocomplete). 
 - Pseudocode usage, provided that students independently translate it into real code. 
 - Automatically create comments and check formatting
+- Understand error messages or tool output
 
 ## Prohibited Uses of AI 
 

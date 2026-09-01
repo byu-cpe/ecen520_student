@@ -80,8 +80,8 @@ A [submission process checklist](#assignment-submission-checklist) has been crea
 
 Each assignment will have a due date/time published on learning suite.
 It is your responsibility to identify the due date and submit your assignment on time.
-Late assignments will be accepted and graded but will be subject to a 20% penalty.
-Late submissions can be submitted at any tim, but late submissions will not be graded in a timely manner and may not receive any feedback.
+Late assignments will be accepted and graded but will be subject to a 30% penalty.
+Late submissions can be submitted at any time, but late submissions will not be graded in a timely manner and may not receive any feedback.
 **No credit will be given for any assignments submitted after midnight on the last day of class (December 10th).**
 
 ## GitHub Commits
@@ -126,6 +126,7 @@ This script is unique for each assignment and will perform assignment-specific c
 This script will check your repository to make sure it meets a number of submission requirements.
 If any of these submission requirements are not met, you will not be able to submit your assignment.
 The script will check each of the following as part of the submission process:
+
     * Make sure you don't have any upstream commits in your repository that are not in your local repository
     * Make sure your repository with the latest starter code to make sure you have the latest starter code before submission.
     * Make sure all assignment specific "makefile" rules are implemented and are working.
