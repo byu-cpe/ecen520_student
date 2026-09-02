@@ -35,7 +35,7 @@ Cliff Cummings, Sunburst (UVM/SV)
 | --- | --- | --- |
 | 1 | 9/2/2026   | [Class Overview](./lectures/class_overview.md) |
 |   | 9/4/2026   | [SystemVerilog Review](./lectures/system_verilog_overview.md) |
-| 2 | 9/7/2026   | | Holiday - No Class |
+| 2 | 9/7/2026   | Holiday - No Class |
 |   | 9/9/2026   | [Behavioral SystemVerilog](./lectures/system_verilog_sequential.md) |
 |   | 9/11/2026  | [FSM Design](./lectures/fsm_design.md) |
 | 3 | 9/14/2026  | [FSM Output Glitches and State Encoding](./lectures/glitches.md) |
