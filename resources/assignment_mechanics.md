@@ -246,9 +246,12 @@ These instructions summarize how to setup your GitHub repository for this class.
 
 ## GitHub Classroom Repository
 
-You will need to create a GitHub classroom repository for this class.
-Visit the following [URL](https://classroom.github.com/a/Z81XcTBg) to create your classroom repository.
-I will have access to your repository for grading purposes.
+I will need to create a github classroom repository for you for this class.
+
+**Instructions for doing this are currently being updated**
+
+<!-- Visit the following [URL](https://classroom.github.com/a/Z81XcTBg) to create your classroom repository.
+I will have access to your repository for grading purposes. -->
 
 <!--
 Create a private personal repository for this class. 
