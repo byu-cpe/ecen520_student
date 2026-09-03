@@ -230,8 +230,8 @@ See the assignment description for details on this portion of your grade.
 If your assignment is tagged with a date later than the assignment due date, your score will be reduced by 30%.
 The submission date is based on the timestamp of your last assignment submission using the `passoff.py` submission script.
 
-<!-- # Setting up your GitHub Repository
-
+# Setting up your GitHub Repository
+<!-- 
 These instructions summarize how to setup your GitHub repository for this class.
 
 ## GitHub Classroom Repository -->
@@ -248,10 +248,9 @@ After creating the repository, [add me as a collaborator](https://docs.github.co
 My GitHub username is `wirthlin`. 
 -->
 
-# ECEN 520 Student Template Code
-
 A repository should be created for you for this class that contains all the starter code and assignment instructions.
 The starter code is based on the [ECEN 520 student repository](https://github.com/byu-cpe/ecen520_student) and includes all the template code you will need to complete the assignments for this class.
+This section describes how to setup a local repository for this class and how to update your repository with the latest starter code.
 
 <!-- You will need to populate your classroom repository with this repository to get started on your assignments.
 The following commands will clone the student repository and push it to your classroom repository (make sure to change your GitHub username):
@@ -283,7 +282,7 @@ git remote add startercode git@github.com:byu-cpe/ecen520_student.git
 <!-- See Steps 4-5 of the [ECEN 323 web page](https://byu-cpe.github.io/ecen323/tutorials/git_setup/) for more details of this process. -->
 
 
-### Updating Your Starter Code
+## Updating Your Starter Code
 
 The class starter code will be continually updated throughout the semester.
 You are responsible for updating your local repository with the latest starter code.
