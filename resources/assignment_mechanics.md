@@ -14,26 +14,16 @@ You will be responsible for learning how to use 'git' and 'GitHub' for creating 
 If you are not familiar with using these tools you are encouraged to complete the BYU bootcamp tutorials for [git](https://byu-cpe.github.io/ComputingBootCamp/tutorials/git/) and [GitHub](https://byu-cpe.github.io/ComputingBootCamp/tutorials/github/). 
 There are many other tutorials online you can follow to sharpen your git/GitHub skills.
 
-You will need to create a custom repository for this class that includes 'startercode' to help you get started.
-The instructions for creating this repository are described in the [Setting up your GitHub Repository](#setting-up-your-github-repository) section below.
+A repository will be created for you for this class that will contain all the starter code and assignment instructions.
+The instructor will reach out to you for your GitHub username so a custom repository can be created.
 
-<!--
-## Generative AI & GPTs
-
-Generative AI tools like chatbots and Co-Pilot can be helpful in completing assignments.
-You are welcome to use co-pilot within VSCode to help you write your HDL code but you are strongly encouraged to type the code in yourself until you are comfortable with the syntax and structure of the code.
-You will be responsible for understanding the syntax and structure of SystemVerilog (and the other languages we use in this class) and you will be tested on this knowledge in the exams.
-If you rely exclusively on Co-Pilot to write your code you will likely not understand the syntax as well as you should for exams and for designing on your own.
-
-I have created a custom chatbot for this class that is accessible at the following URL: [https://ecen-digital-tutor.byu.edu/](https://ecen-digital-tutor.byu.edu/).
-This chatbot is based on OpenAI's 4.0 large language model but has been modified to provide specific help in completing these lab assignments.
-Specifically, this chatbot will be trained with improved answers to questions about the assignments and has access to the reference manuals for the tools we use in this class.
-This chatbot will be constantly updated and trained throughout the semester to improve the learning environment for the class.
-
-For this class I would like you to use this chatbot to help you with your assignments and **NOT** to use other chatbots to complete the assignments.
-If you feel that the class chatbot is insufficient, please contact me to help me improve it.
-
+<!-- I created a MS teams form that has their netid and github username. 
+I then ran a script in the ECEN_620_wirthlin/repos directory that created all of the student repos.
 -->
+
+<!-- You will need to create a custom repository for this class that includes 'startercode' to help you get started.
+The instructions for creating this repository are described in the [Setting up your GitHub Repository](#setting-up-your-github-repository) section below. -->
+
 
 ## Assignment Reports
 
@@ -240,15 +230,12 @@ See the assignment description for details on this portion of your grade.
 If your assignment is tagged with a date later than the assignment due date, your score will be reduced by 30%.
 The submission date is based on the timestamp of your last assignment submission using the `passoff.py` submission script.
 
-# Setting up your GitHub Repository
+<!-- # Setting up your GitHub Repository
 
 These instructions summarize how to setup your GitHub repository for this class.
 
-## GitHub Classroom Repository
+## GitHub Classroom Repository -->
 
-I will need to create a github classroom repository for you for this class.
-
-**Instructions for doing this are currently being updated**
 
 <!-- Visit the following [URL](https://classroom.github.com/a/Z81XcTBg) to create your classroom repository.
 I will have access to your repository for grading purposes. -->
@@ -261,10 +248,12 @@ After creating the repository, [add me as a collaborator](https://docs.github.co
 My GitHub username is `wirthlin`. 
 -->
 
-## ECEN 520 Student Template Code
+# ECEN 520 Student Template Code
 
-The [ECEN 520 student repository](https://github.com/byu-cpe/ecen520_student) is a repository that contains all the template code you need to complete the assignments for this class.
-You will need to populate your classroom repository with this repository to get started on your assignments.
+A repository should be created for you for this class that contains all the starter code and assignment instructions.
+The starter code is based on the [ECEN 520 student repository](https://github.com/byu-cpe/ecen520_student) and includes all the template code you will need to complete the assignments for this class.
+
+<!-- You will need to populate your classroom repository with this repository to get started on your assignments.
 The following commands will clone the student repository and push it to your classroom repository (make sure to change your GitHub username):
 ```
 git clone --bare git@github.com:byu-cpe/ecen520_student.git
@@ -275,23 +264,23 @@ rm -rf ecen520_student.git
 ```
 More details on this process can be found at Step 3 of the [ECEN 320 web page](https://byu-cpe.github.io/ecen320/tutorials/git/git_classroom_setup/).
 
-At this point you should have a remote repository that contains all the starter code for the class.
+At this point you should have a remote repository that contains all the starter code for the class. -->
 
-### Creating a Local Repository
+## Creating a Local Repository
 
-Once you have a remote repository that is properly populated with the starter code, you will need to clone this repository to your local machine.
-Complete the following steps every time you create a local repository for an assignment:
+<!-- Once you have a remote repository that is properly populated with the starter code, you will need to clone this repository to your local machine. -->
+
+Once your remote repository is set up, you will need to clone this repository to your local machine.
+Complete the following steps every time you create a local repository:
 ```
-# Clone your repository
-git clone git@github.com:byu-ecen520-fall2025/520-assignments-<githubusername>.git ~/ecen520
+# Clone your repository to ~/ecen520 (or wherever you want to put it)
+git clone git@github.com:byu-ecen520-classroom/520-<githubusername>.git ~/ecen520
 # Create a remote repository to the starter code
 cd ~/ecen520
 git remote add startercode git@github.com:byu-cpe/ecen520_student.git
 ```
-<!-- https://github.com/byu-cpe/ecen520_student -->
 
-
-See Steps 4-5 of the [ECEN 323 web page](https://byu-cpe.github.io/ecen323/tutorials/git_setup/) for more details of this process.
+<!-- See Steps 4-5 of the [ECEN 323 web page](https://byu-cpe.github.io/ecen323/tutorials/git_setup/) for more details of this process. -->
 
 
 ### Updating Your Starter Code
