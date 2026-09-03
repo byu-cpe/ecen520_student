@@ -231,11 +231,6 @@ If your assignment is tagged with a date later than the assignment due date, you
 The submission date is based on the timestamp of your last assignment submission using the `passoff.py` submission script.
 
 # Setting up your GitHub Repository
-<!-- 
-These instructions summarize how to setup your GitHub repository for this class.
-
-## GitHub Classroom Repository -->
-
 
 <!-- Visit the following [URL](https://classroom.github.com/a/Z81XcTBg) to create your classroom repository.
 I will have access to your repository for grading purposes. -->
