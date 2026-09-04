@@ -15,16 +15,20 @@ Carefully review these guidelines before proceeding with this assignment.
 ### Create a GitHub Repository
 
 As described in the [assignment mechanics](../resources/assignment_mechanics.md#github) page, you will need to submit your laboratory assignments using GitHub. 
-When you have created your repository, add me as a collaborator as instructed in the mechanics web page.
+Your GitHub repository should have been created for you by the instructor (contact the instructor if you have any questions about your respository).
+
+<!-- When you have created your repository, add me as a collaborator as instructed in the mechanics web page. -->
 
 You must place your assignment code within a specific assignment directory as described in the [assignments overview](../Readme.md) page.
 Make sure your add this directory to your repository and place all assignment specific code in this directory.
 You will also need to tag your repository when you are ready to submit.
 
+<!--
 ### Perform Regular GitHub commits
 
 As described in the [assignment mechanics](../resources/assignment_mechanics.md#github-commits) page, you will need to make regular commits to your repository as you complete your assignment.
 Assignments submitted with only a single commit and no error examples will be penalized.
+-->
 
 ## Tools for this Assignment
 
