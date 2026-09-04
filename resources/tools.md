@@ -4,12 +4,17 @@ These instructions describe how to access and run the tools we will be using for
 
 ## Department Computers
 
-These tools are installed in the digital lab (EB 423) and the embedded systems lab (EB 438).
+The tools used in this class are installed in the digital lab (EB 423) and the embedded systems lab (EB 438).
 You can access these computers in person or remotely with your CAEDM account.
+
+These labs can be very busy during the semester and many hours during the week are reserved for other classes, so please plan accordingly.
+Check the [lab schedule](https://ecelabschedule.byu.edu/) to see when each lab is open.
+You should **not** use the labs during closed lab sessions.
+You may use the lab during "overflow" sessions but you may need to give up your seat if the lab fills up with students from the class that has reserved the lab.
 
 ### Digital Lab Computers
 
-There are 61 computers in the digital lab (room EB 423).
+There are 61 computers in the digital lab (room EB 423) ([EB 423 schedule](https://ecelabschedule.byu.edu/#eb-423)).
 These computers can be accessed as `digital-XX.et.byu.edu` where `XX` is the number of the computer
 (Note that the number is two digits, so computer 1 is `digital-01.et.byu.edu`).
 Computers 1-60 are student stations and computer 61 is the TA station in the back.
@@ -18,6 +23,10 @@ Computers 1-60 are student stations and computer 61 is the TA station in the bac
 
 There are 24 computers in the embedded lab (room EB 438).
 These computers can be accessed as `embed-XX.ee.byu.edu` where `XX` is the number of the computer (note that the number is two digits, so computer 1 is `embed-01.ee.byu.edu`).
+
+### Nexys4 DDR Boards
+
+The Nexys4 DDR boards are available on select computers in the embedded lab (EB 438).
 
 ## Xilinx Vivado
 

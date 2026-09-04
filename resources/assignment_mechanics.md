@@ -2,6 +2,12 @@
 
 This page describes the mechanics of completing assignments including how to submit your assignments for the class. 
 
+## Lab Computers
+
+The digital lab and embedded lab computers are available for you to use to complete your assignments.
+The boards for the class are located in the embedded lab.
+Review the [tools](./tools.md) page to learn how to access and use the lab computers (including restrictions on times to access the labs).
+
 ## GitHub
 
 All assignments for this class will involve committing report files and source code to a private GitHub repository.

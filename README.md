@@ -84,21 +84,22 @@ Cliff Cummings, Sunburst (UVM/SV)
 
 All assignments must be submitted on a classroom GitHub repository. 
 Review the [assignment mechanics](./resources/assignment_mechanics.md) page to learn how to properly submit your assignments.
+Assignments are due at midnight the day they are listed in the table below (unless otherwise noted).
 
-| # | Name | Directory/Lab Tag | 
-| ---- | ----| ----|
-| 1 | [UART Transmitter-Simulation](./tx_sim/UART_Transmitter_sim.md) | `tx_sim` |
-| 2 | [UART Transmitter-Synthesis and Download](./tx_download/tx_download.md) | `tx_download` |
-| 3 | [UART Receiver Simulation](./rx_sim/UART_Receiver_sim.md) | `rx_sim` |
-| 4 | [UART Synthesis and Download](./rx_download/UART-Receiver_synth.md) | `rx_download` |
-| 5 | [SPI Controller-Simulation](./spi_cntrl/SPI_cntrl.md) | `spi_cntrl` |
-| 6 | [SPI Controller-Download](./spi_download/spi_download.md) | `spi_download` |
-| 7 | [BRAM](./bram/bram.md) | `bram` |
-| 8 | [BRAM-Download](./bram_download/bram_download.md) | `bram_download` |
-| 9 | [MMCM Clocking](./mmcm/mmcm.md) | `mmcm` |
-| 10 | [AXI](./axi/axi.md) | `axi` |
-| 11 | [MicroBlaze](./microblaze/microblaze.md) | `microblaze` |
-| 12 | [DDR](./ddr/ddr.md) | `ddr` |
+| # | Due Date | Name | Directory/Lab Tag | 
+| ---- | --- | ----| ----|
+| 1 | 9/10/2026 | [UART Transmitter-Simulation](./tx_sim/UART_Transmitter_sim.md) | `tx_sim` |
+| 2 | 9/17/2026 | [UART Transmitter-Synthesis and Download](./tx_download/tx_download.md) | `tx_download` |
+| 3 | 9/24/2026 | [UART Receiver Simulation](./rx_sim/UART_Receiver_sim.md) | `rx_sim` |
+| 4 | | [UART Synthesis and Download](./rx_download/UART-Receiver_synth.md) | `rx_download` |
+| 5 | | [SPI Controller-Simulation](./spi_cntrl/SPI_cntrl.md) | `spi_cntrl` |
+| 6 | | [SPI Controller-Download](./spi_download/spi_download.md) | `spi_download` |
+| 7 | | [BRAM](./bram/bram.md) | `bram` |
+| 8 | | [BRAM-Download](./bram_download/bram_download.md) | `bram_download` |
+| 9 | | [MMCM Clocking](./mmcm/mmcm.md) | `mmcm` |
+| 10 | | [AXI](./axi/axi.md) | `axi` |
+| 11 | | [MicroBlaze](./microblaze/microblaze.md) | `microblaze` |
+| 12 | | [DDR](./ddr/ddr.md) | `ddr` |
 
 <!--
 [VGA Controller (VHDL)](./vga/vga.md) `vga`
