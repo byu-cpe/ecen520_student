@@ -12,10 +12,10 @@ Assignments play an important part of this class and much of your learning and s
 To complete and submit your assignments, you will need to follow the [assignment mechanics](../resources/assignment_mechanics.md) for the class.
 Carefully review these guidelines before proceeding with this assignment.
 
-### Create a GitHub Repository
+### GitHub Repository
 
 As described in the [assignment mechanics](../resources/assignment_mechanics.md#github) page, you will need to submit your laboratory assignments using GitHub. 
-Your GitHub repository should have been created for you by the instructor (contact the instructor if you have any questions about your respository).
+Your GitHub repository should have been created for you by the instructor (contact the instructor if you have any questions about your repository).
 
 <!-- When you have created your repository, add me as a collaborator as instructed in the mechanics web page. -->
 
@@ -30,7 +30,11 @@ As described in the [assignment mechanics](../resources/assignment_mechanics.md#
 Assignments submitted with only a single commit and no error examples will be penalized.
 -->
 
-## Tools for this Assignment
+## Computers and Tools for this Assignment
+
+The software needed to complete this and all assignments has been installed on the digital lab and embedded systems lab computers.
+More details about these computers and the software tools are provided on the [tools](../resources/tools.md) page.
+You may access these computers remotely.
 
 Throughout this class you will learn to use a variety of tools to complete the assignments.
 In this assignment you will need to use the following tools: [VSCode](https://code.visualstudio.com/) for text entry and QuestaSim for simulation.
@@ -185,6 +189,4 @@ The following assignment specific items should be included in your repository:
 - more instructions on makefiles and 'clean' (links to resources)
 - More instructions on using and setting up ModelSim/QuestaSim (links to resources). .do file tutorial
 - Testbench: check where busy drops (doesnt drop until stop is done)
-- More instructions for remote access
-- UART instructions (link to 320 was broken)
 -->

@@ -6,7 +6,7 @@ This page describes the mechanics of completing assignments including how to sub
 
 The digital lab and embedded lab computers are available for you to use to complete your assignments.
 The boards for the class are located in the embedded lab.
-Review the [tools](./tools.md) page to learn how to access and use the lab computers (including restrictions on times to access the labs).
+Review the [tools](./tools.md) page to learn how to access and use the lab computers (including restrictions on times to access the labs and accessing the computers remotely).
 
 ## GitHub
 

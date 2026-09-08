@@ -5,7 +5,7 @@ For this assignment you will create a top-level design for your UART transmitter
 
 **Assignment reminders**
 
-As with the previous assignment, you must place your assignment code within a specific assignment directory as described in the [assignments overview](../README.md) page.
+As with the previous assignment, you must place your assignment code within a specific assignment directory as described in the [assignments overview](../resources/assignment_mechanics.md) page.
 Make sure your add this directory to your repository and place all assignment specific code in this directory.
 <!-- * You will also need to tag your repository when you are ready to submit.
 * You are required to make frequent commits when you have design failures as described [here](../resources/assignment_mechanics.md#github-commits) -->
@@ -264,10 +264,8 @@ Future Changes:
  Modify the gen_bounce.sv to provide a signal saying when the debouncer "should" have propagated. This helps with testbenches.
 - Enforce certain warnings not showing up (CFG_Voltage, etc, parallel synthesis). Make it easier to earch for these warnings in grading.
 - Better instructions on how to download
-- Need to explain in more detail the need to carefully review the syntehsis logs. Perhaps provide a few examples of what to look for in the logs.
+- Need to explain in more detail the need to carefully review the synthesis logs. Perhaps provide a few examples of what to look for in the logs.
 - We should be adding the following attribute to all synchronier flip-flops in the download labs. Add this to the tx_download and all future download labs
    (* ASYNC_REG = "TRUE" *) logic [31:0] ssd_sync;
 * Suggestion 1 Make a note that the testbenches don't check for latches and that if your download fails but synthesis succeeds then this is a likely cause. 
-Future Ideas:
-
 -->

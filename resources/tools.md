@@ -12,6 +12,9 @@ Check the [lab schedule](https://ecelabschedule.byu.edu/) to see when each lab i
 You should **not** use the labs during closed lab sessions.
 You may use the lab during "overflow" sessions but you may need to give up your seat if the lab fills up with students from the class that has reserved the lab.
 
+You are welcome to access these computers remotely using SSH.
+Instructions for accessing the computers remotely are provided [here](https://byu-cpe.github.io/ecen320/documentation/remote-lab-access/).
+
 ### Digital Lab Computers
 
 There are 61 computers in the digital lab (room EB 423) ([EB 423 schedule](https://ecelabschedule.byu.edu/#eb-423)).
