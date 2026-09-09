@@ -13,7 +13,7 @@ import test_suite_520
 import repo_test
 
 def main():
-    tester = test_suite_520.build_test_suite_520("tx_sim", start_date="09/03/2025", max_repo_files = 20)
+    tester = test_suite_520.build_test_suite_520("tx_sim", start_date="09/04/2026", max_repo_files = 20)
     tester.add_required_tracked_files(["tx.sv","tx_sim.png", "tx_sim_long.png"])
     tester.add_Makefile_rule("sim_tx", ["tx.sv"], ["tx_sim.log"])
     tester.add_build_test(repo_test.file_regex_check("tx_sim.log", "Test Passed", 
