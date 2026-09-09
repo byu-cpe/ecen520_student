@@ -91,8 +91,8 @@ Assignments are due at midnight the day they are listed in the table below (unle
 | 1 | 9/10/2026 | [UART Transmitter-Simulation](./tx_sim/UART_Transmitter_sim.md) | `tx_sim` |
 | 2 | 9/17/2026 | [UART Transmitter-Synthesis and Download](./tx_download/tx_download.md) | `tx_download` |
 | 3 | 9/24/2026 | [UART Receiver Simulation](./rx_sim/UART_Receiver_sim.md) | `rx_sim` |
-| 4 | | [UART Synthesis and Download](./rx_download/UART-Receiver_synth.md) | `rx_download` |
-| 5 | | [SPI Controller-Simulation](./spi_cntrl/SPI_cntrl.md) | `spi_cntrl` |
+| 4 | 10/1/2026 | [UART Synthesis and Download](./rx_download/UART-Receiver_synth.md) | `rx_download` |
+| 5 | 10/8/2026 | [SPI Controller-Simulation](./spi_cntrl/SPI_cntrl.md) | `spi_cntrl` |
 | 6 | | [SPI Controller-Download](./spi_download/spi_download.md) | `spi_download` |
 | 7 | | [BRAM](./bram/bram.md) | `bram` |
 | 8 | | [BRAM-Download](./bram_download/bram_download.md) | `bram_download` |
