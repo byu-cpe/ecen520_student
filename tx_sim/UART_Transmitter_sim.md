@@ -19,7 +19,7 @@ Your GitHub repository should have been created for you by the instructor (conta
 
 <!-- When you have created your repository, add me as a collaborator as instructed in the mechanics web page. -->
 
-You must place your assignment code within a specific assignment directory as described in the [assignments overview](../Readme.md) page.
+You must place your assignment code within a specific assignment directory as described in the [assignments overview](../README.md) page.
 Make sure your add this directory to your repository and place all assignment specific code in this directory.
 You will also need to tag your repository when you are ready to submit.
 
