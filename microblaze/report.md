@@ -7,6 +7,11 @@
 * Challenge 1 (Submit at least one challenge for your assignment report)
 * Challenge 2 (If you don't have a second challenge, remove this bullet)
 
+## Use of AI
+
+Describe how you used AI for this assignment (indicate none if applicable).
+See the class [AI policy](../ai_policy.md) for a summary of acceptable use.
+
 ## Provide suggestions for improving this assignment (optional)
   * Suggestion 1 (List 'None' for the bullet item if you are not providing suggestions)
 
