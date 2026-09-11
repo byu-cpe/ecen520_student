@@ -35,7 +35,7 @@ Create a module named `debounce` with the following top-level ports and paramete
 | ---- | ---- | ---- | ---- |
 | DEBOUNCE_CLKS | integer | 1_000| Number of clocks for debounce delay |
 
-There is a [lab description](https://byu-cpe.github.io/ecen320/labs/lab-08/) of a debouncer that you can use as a reference.
+There is a [lab description](https://byu-cpe.github.io/ecen320/labs/uart-tx/) of a debouncer that you can use as a reference.
 Your debouncer will need to have a parameter that specifies the number of clocks needed for the debounce delay.
 This way you can simulate your debouncer with relatively short debounce times but synthesize your debouncer with a longer debounce time.
 
@@ -100,7 +100,7 @@ Create your top-level design as follows:
     * Instance your debouncer module and hook up the output of the synchronizer to the debouncer module
     * Create a "one-shot" circuit on the output of the debouncer. The purpose of the one-shot circuit is to generate a single pulse when the button is pressed and to ignore any additional presses until the pulse has completed. If you do not add a one-shot circuit then the button press will be interpreted as multiple presses and multiple characters will be transmitted over the UART. The output of the one-shot circuit will go into the `send` input of your transmitter module.
 
-You must follow the [Level 2](../resources/coding_standard.md#level_2) coding standards for your Verilog files.
+You must follow the [Level 2](../resources/coding_standard.md#level-2) coding standards for your Verilog files.
 
 ### Top-Level .do Simulation
 
@@ -111,7 +111,7 @@ Create a screenshot of the simulation and name it `sim_tx_top.png`.
 
 ### Top-Level Testbench
 
-A top-level testbench, [top_tb.sv](./top_tb.sv), has been created for you to test your top-level design.
+A top-level testbench, [tx_top_tb.sv](./tx_top_tb.sv), has been created for you to test your top-level design.
 This testbench also uses the [rx_model.sv](../tx_sim/rx_model.sv) simulation model from the previous assignment and the gen_bounce.sv from this assignment.
 Make sure your top-level design successfully passes this testbench.
 Add a makefile rule named `sim_tx_top_tb` that will perform this simulation from the command line using the default parameters.
@@ -150,7 +150,7 @@ Make sure you commit your `.xdc` file to your repository.
 ### 2. Synthesis
 
 The next step is to 'synthesize' your design into a 'netlist' mappex to the FPGA logic primitives.
-Read through the following [synthesis tutorial](https://byu-cpe.github.io/ecen320/tutorials/vivado/vivado_command_line_synthesis/) to learn how to perform synthesis for your tx_top design.
+Read through the following [synthesis tutorial](https://byu-cpe.github.io/ecen320/documentation/vivado-command-line-synthesis/) to learn how to perform synthesis for your tx_top design.
 Note that in this class we are using the `xc7a100tcsg324-1` part (you will need to change your synthesis scripts accordingly).
 
 Create a makefile rule named `synth_tx_top` that does the following:
@@ -183,7 +183,7 @@ The 'placement' step will place the primivites to specific sites on the FPGA.
 The 'routing' step will route the nets in the design to specific FPGA routing resources.
 The 'bitgen' step will convert the routed design into a bitstream that can be downloaded to the FPGA.
 You will also generate reports during these steps and generate checkpoint of your final design.
-Review the ECEN 320 [implementation tutorial](https://byu-cpe.github.io/ecen320/tutorials/vivado/vivado_command_line_implementation/) to learn how to do this in the command line.
+Review the ECEN 320 [implementation tutorial](https://byu-cpe.github.io/ecen320/documentation/vivado-command-line-implementation/) to learn how to do this in the command line.
 
 Create a makefile rule named `implement` that does the following:
   * Performs placement and routing on your top level design using the `tx_top_synth.dcp` checkpoint file from the synthesis step
@@ -222,7 +222,7 @@ After successfully synthesizing your design and generating a bitfile, download y
 Instructions for downloading your design can be found [here](../resources/download.md).
 
 Use the "Putty" tool to send characters from your board to the computer. 
-There is a tutorial on [Putty](https://byu-cpe.github.io/ecen320/tutorials/lab_computers/putty/) that can help you run this tool.
+There is a tutorial on [Putty](https://byu-cpe.github.io/ecen320/documentation/putty/) that can help you run this tool.
 After generating a bitstream, download your bitstream and make sure your transmitter bitstream works with a terminal emulator.
 You may want to view an [ASCII Table](https://commons.wikimedia.org/wiki/File:ASCII-Table-wide.svg) to test a variety of characters.
 

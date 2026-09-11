@@ -132,7 +132,7 @@ report_drc -file drc_adxl362_top.rpt
 ```
 
 After implementation is complete, open Vivado in GUI mode and open the implemented checkpoint file `adxl362_top.dcp`.
-Create the following screenshots of your implemented design (see the 320 [design layout tutorial](https://byu-cpe.github.io/ecen320/tutorials/vivado/vivado_design_layout/)): 
+Create the following screenshots of your implemented design (see the 320 [design layout tutorial](https://byu-cpe.github.io/ecen320/documentation/vivado-design-layout/)): 
 * Clock pin (`clock_pin.png`)
 * bufg for the clock (`bufg.png`). Enable the routing when taking this screenshot to see the nets come in and out of the bufg.
 * btnr synchronizer flip-flop (`btnr_sync.png`)

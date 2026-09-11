@@ -173,11 +173,11 @@ Create an initial block and other testbench logic that does the following:
 Make sure your top-level design successfully passes this testbench.
 Add a makefile rule named `sim_rxtx_top` that will perform this simulation from the command line and save the results to a file named `sim_rxtx_top.log`.
 
-<!-- When simulating, you can [change the top-level parameters](../resources/vivado_command_line.md#setting-parameters-for-simulation) of your testbench or module to simulate different conditions of your system. -->
+<!-- When simulating, you can [change the top-level parameters](../resources/vivado_command_line.md#setting-parameters-for-synthesis) of your testbench or module to simulate different conditions of your system. -->
 
 Create another makefile rule named `sim_rxtx_top_115200_even` that will simulate your top-level design with a baud rate of 115200 and even parity and generate a log file named `sim_rxtx_top_115200_even.log`.
 
-<!-- You will need to add the command line option to change the baud rate of your top-level design as described [here](../resources/vivado_command_line.md#setting-parameters-for-simulation). -->
+<!-- You will need to add the command line option to change the baud rate of your top-level design as described [here](../resources/vivado_command_line.md#setting-parameters-for-synthesis). -->
 
 ## Implementation and Download
 

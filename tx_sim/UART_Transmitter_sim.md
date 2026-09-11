@@ -98,7 +98,7 @@ Design your transmitter to operate as follows:
 * Add a synchronizing flip-flop on the output of the TX signal so there are no glitches on your output tx signal
 * You do not need to implement handshaking as described by the 320 lab assignment.
 * Make sure you have a reset clause on all of your 'always_ff' blocks.
-Note that you must follow the [Level 1](../resources/coding_standard.md#level_1) coding standards for your Verilog files.
+Note that you must follow the [Level 1](../resources/coding_standard.md#level-1) coding standards for your Verilog files.
 
 ## Simulating Transmitter with '.do' files
 
@@ -106,7 +106,7 @@ Simulate the transmitter in Modelsim with the GUI to see if your module operates
 Simulation `.do` files can be used to interactively simulate your file.
 The [sim_tx.do](sim_tx.do) file can be used to simulate a simple single byte transmission.
 Use this simulation file to make sure your module properly simulates a full byte.
-After properly simulating your module, take a [screen shot](https://byu-cpe.github.io/ecen320/tutorials/lab_computers/screen_capture/) of your modelsim waveform and make sure your state machine variables are included in the waveform.
+After properly simulating your module, take a [screen shot](https://byu-cpe.github.io/ecen320/documentation/screen-capture/) of your modelsim waveform and make sure your state machine variables are included in the waveform.
 Name your screenshot file `tx_sim.png` and include it in your repository.
 
 <!--
@@ -131,12 +131,12 @@ For this design and all designs you create in this class you will be carefully v
 TCL command tutorial?
 
 You may want to simulate your design using a `.tcl` file during the early stages of your design process.
-There are tutorials for using TCL on the 320 page [here](https://byu-cpe.github.io/ecen320/tutorials/lab_03/04_tcl_tutorial/) and [here](https://byu-cpe.github.io/ecen320/tutorials/lab_04/00_tcl_tutorial_2/).
+There is a tutorial for using TCL on the 320 page [here](https://byu-cpe.github.io/ecen320/documentation/vivado-command-line-simulation/).
 Note that you are not required to simulate with `.tcl` files and such files will not be graded as part of this assignment.
 -->
 We will be using and writing testbenches through the semester to help aid in your verification efforts.
 A testbench, [tx_tb.sv](./tx_tb.sv), has been created for you to test your transmitter.
-This testbench also includes a behavioral model of a simple UART "receiver", [rx_model.sv](./rx_modelsv).
+This testbench also includes a behavioral model of a simple UART "receiver", [rx_model.sv](./rx_model.sv).
 You will need to test your transmitter with this testbench (and associated model) and make sure it operates without any warnings or errors.
 
 Although you are free to use the GUI version of the ModelSim tools during the development process, you will be required to build your project using the command line.
@@ -173,7 +173,7 @@ After your module passes both testbenches you are ready to submit your assignmen
 
 ## Assignment Submission
 
-The assignment submission steps are described in the [assignment mechanics checklist](../resources/assignment_mechanics.md#assignment-submission-checklist) page.
+The assignment submission steps are described in the [assignment mechanics checklist](../resources/assignment_mechanics.md#assignment-grading-checklist) page.
 Carefully review these steps as you submit your assignment.
 
 The following assignment specific items should be included in your repository:

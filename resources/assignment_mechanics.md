@@ -53,7 +53,7 @@ Reports with misspellings or sloppy formatting will be penalized.
 Your assignment submission will involve adding a variety of files into your repository as described in the assignment instructions.
 More details on what files are needed will be included in the instructions of each assignment.
 These files will be reviewed as part of your assignment grade. 
-You will be required to follow several [Git repository standards](./coding_standard#git_repository_standards) as you maintain your repository and your assignment grade will be based in part on how these standards are followed.
+You will be required to follow several [Git repository standards](./coding_standard.md#git-repository-standards) as you maintain your repository and your assignment grade will be based in part on how these standards are followed.
 
 ## Makefiles
 
@@ -70,7 +70,7 @@ Each assignment submission will require a unique 'tag' where the actual tag is t
 When grading your assignment, I will check the submission time of this tag. 
 If your latest commit of any file in the assignment with this tag is later than the deadline then you will be penalized for being late.
 You may change your files after the submission date but do not re-tag these files unless you are changing your submission.
-A [submission process checklist](#assignment-submission-checklist) has been created for you to review as you submit your assignments.
+A [submission process checklist](#assignment-grading-checklist) has been created for you to review as you submit your assignments.
 
 ## Assignment Due Dates and Late Policy
 
@@ -220,7 +220,7 @@ All of your submissions should conform to the class [coding standards](./coding_
 The coding standards are progressive meaning that additional standards will be added gradually throughout the class.
 Each assignment will indicate which code standard level you will be required to follow.
 
-In addition to following coding standards, you are required to follow several git repository organization [standards](./coding_stadard.md#git-repository-standards).
+In addition to following coding standards, you are required to follow several git repository organization [standards](./coding_standard.md#git-repository-standards).
 Several basic standards for organizing your GitHub repositories are given to aid in the grading of assignments and to provide a tidy repository environment.
 
 You will receive full credit for this portion of your assignment grading if you conform to the coding and repository standards.
@@ -262,7 +262,7 @@ git push --mirror git@github.com:byu-ecen520-fall2025/520-assignments-<githubuse
 cd ..
 rm -rf ecen520_student.git
 ```
-More details on this process can be found at Step 3 of the [ECEN 320 web page](https://byu-cpe.github.io/ecen320/tutorials/git/git_classroom_setup/).
+More details on this process can be found at Step 3 of the [ECEN 320 web page](https://byu-cpe.github.io/ecen320/documentation/git-classroom-setup/).
 
 At this point you should have a remote repository that contains all the starter code for the class. -->
 

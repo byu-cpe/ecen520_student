@@ -11,7 +11,7 @@ They won't have had much experience with testbenches at this point. Change the a
 ## UART Receiver Module
 
 Create a UART receiver module that actively monitors the input "data in" signal receives a single byte of data and a parity bit.
-Follow the guidelines in Exercise #1 of the ECEN 320 [UART Receiver](https://byu-cpe.github.io/ecen320/labs/rx-lab/#exercise-1---asynchronous-receiver-module) lab.
+Follow the guidelines in Exercise #1 of the ECEN 320 [UART Receiver](https://byu-cpe.github.io/ecen320/labs/uart-rx/#exercise-1-asynchronous-receiver-module) lab.
 Note that you must follow the [Level 2](../resources/coding_standard.md#level-2) coding standards for your SystemVerilog files.
 Make sure you use the same ports and parameters as this assignment with the following additions:
   * add a parameter named `PARITY` with a default of '1' (or odd) that sets the type of parity to use for incoming bytes. This parameter is used to generate the 'parityErr' signal
@@ -205,7 +205,7 @@ Create a file `synth_ssd.log` file for this synthesis process.
 
 ## Assignment Submission
 
-The assignment submission steps are described in the [assignment mechanics checklist](../resources/assignment_mechanics.md#assignment-submission-checklist) page.
+The assignment submission steps are described in the [assignment mechanics checklist](../resources/assignment_mechanics.md#assignment-grading-checklist) page.
 Carefully review these steps as you submit your assignment.
 
 The following assignment specific items should be included in your repository:

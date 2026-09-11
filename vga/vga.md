@@ -123,7 +123,7 @@ The makefile rule should be named: `gen_bit` and should generate a bitstream nam
 
 ## Submission
 
-The assignment submission steps are described in the [assignment mechanics checklist](../resources/assignment_mechanics.md#assignment-submission-checklist) page.
+The assignment submission steps are described in the [assignment mechanics checklist](../resources/assignment_mechanics.md#assignment-grading-checklist) page.
 Carefully review these steps as you submit your assignment.
 
 The following assignment specific items should be included in your repository:
