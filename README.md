@@ -39,9 +39,9 @@ Cliff Cummings, Sunburst (UVM/SV)
 | 2 | 9/7/2026   | Holiday - No Class |
 |   | 9/9/2026   | [Behavioral SystemVerilog](./lectures/system_verilog_sequential.md) | <!-- pptx=sv_behavioral.pptx -->
 |   | 9/11/2026  | [FSM Design](./lectures/fsm_design.md)  | <!-- pptx=sv_fsm.pptx -->
-| 3 | 9/14/2026  | [FSM Output Glitches and State Encoding](./lectures/glitches.md) |
-|   | 9/16/2026  | [RTL Design using ASM Diagrams](./lectures/rtl_asmd.md)|
-|   | 9/18/2026  | [HDL Synthesis](./lectures/hd_synthesis.md) |
+| 3 | 9/14/2026  | [FSM Output Glitches and State Encoding](./lectures/glitches.md) | <!-- pptx=sv_fsm_glitch_encoding.pptx -->
+|   | 9/16/2026  | [RTL Design using ASM Diagrams](./lectures/rtl_asmd.md)| <!-- pptx=asmd.pptx -->
+|   | 9/18/2026  | [HDL Synthesis](./lectures/hd_synthesis.md) | <!-- pptx=synthesis.pptx -->
 | 4 | 9/21/2026  | [SystemVerilog Testbenches](./lectures/testbenches.md)|
 |   | 9/23/2026  | [Functions, Tasks, Threads, generate](./lectures/functions_tasks.md) |
 |   | 9/25/2026  | [SystemVerilog Types](./lectures/systemverilog_types.md) |

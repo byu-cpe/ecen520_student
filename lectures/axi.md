@@ -6,7 +6,7 @@ This lecture summarizes the AXI bus and reviews the basic transactions of an AXI
 
 **Reading**
 
-  * [AXI Spec](http://www.gstitt.ece.ufl.edu/courses/fall15/eel4720_5721/labs/refs/AXI4_specification.pdf)
+  * [AXI Spec](https://developer.arm.com/-/media/Arm%20Developer%20Community/PDF/IHI0022H_amba_axi_protocol_spec.pdf) (ARM IHI 0022H, AMBA AXI and ACE Protocol Specification)
   * [AXI Stream Spec](https://zipcpu.com/doc/axi-stream.pdf)
 
 **Reference**
