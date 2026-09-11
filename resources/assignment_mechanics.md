@@ -280,9 +280,6 @@ cd ~/ecen520
 git remote add startercode git@github.com:byu-cpe/ecen520_student.git
 ```
 
-<!-- See Steps 4-5 of the [ECEN 323 web page](https://byu-cpe.github.io/ecen323/tutorials/git_setup/) for more details of this process. -->
-
-
 ## Updating Your Starter Code
 
 The class starter code will be continually updated throughout the semester.
