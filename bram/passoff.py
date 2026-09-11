@@ -13,7 +13,7 @@ import test_suite_520
 import repo_test
 
 def main():
-    tester = test_suite_520.build_test_suite_520("bram", start_date="10/17/2025", max_repo_files = 30)
+    tester = test_suite_520.build_test_suite_520("bram", max_repo_files = 30)
     tester.add_Makefile_rule("sim_bram_fifo", ["bram_fifo.sv", "bram_fifo_tb.sv"], ["sim_bram_fifo.log"])
     tester.add_Makefile_rule("sim_bram_rom", ["bram_rom.sv", "bram_rom_tb.sv"], ["sim_bram_rom.log", "fight_song.mem"])
     tester.add_Makefile_rule("sim_bram_rom_moroni_10", ["bram_rom.sv", "bram_rom_tb.sv"], 

@@ -13,7 +13,7 @@ import test_suite_520
 import repo_test
 
 def main():
-    tester = test_suite_520.build_test_suite_520("axi", start_date="11/6/2025", max_repo_files = 30)
+    tester = test_suite_520.build_test_suite_520("axi", max_repo_files = 30)
     tester.add_Makefile_rule("sim_fifo", ["fifo.sv", "fifo_tb.sv"], ["sim_fifo.log"])
     tester.add_Makefile_rule("synth_fifo", ["fifo.sv"], ["synth_fifo.log",])
     tester.add_Makefile_rule("build_vip", [], ["build_ip.log",

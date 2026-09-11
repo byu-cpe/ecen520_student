@@ -13,7 +13,7 @@ import test_suite_520
 import repo_test
 
 def main():
-    tester = test_suite_520.build_test_suite_520("spi_cntrl", start_date="10/03/2025", max_repo_files = 30)
+    tester = test_suite_520.build_test_suite_520("spi_cntrl", max_repo_files = 30)
     tester.add_Makefile_rule("sim_spi_cntrl", ["spi_ctrl.sv"], ["sim_spi_cntrl.log"])
     tester.add_build_test(repo_test.file_regex_check("sim_spi_cntrl.log", "Error:<spi_ctrl_tb>", 
                                                      "SPI Control Testbench", error_on_match = True,

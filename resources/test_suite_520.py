@@ -7,7 +7,12 @@ import time
 
 import repo_test
 from repo_test_suite import repo_test_suite
+from start_dates import START_DATES
 from datetime import datetime
+
+# Sentinel used to tell "caller did not provide a start_date" (look it up in
+# start_dates.py) apart from "caller explicitly passed None" (no date check).
+_START_DATE_FROM_TABLE = object()
 
 # ToDo:
 # - Lab check script:
@@ -298,12 +303,14 @@ class test_suite_520(repo_test_suite):
             self.print_warning(f"Github Submission commit file '{file_path}' not yet created - waiting")
         return False
 
-def build_test_suite_520(assignment_name, max_repo_files = 20, start_date = None):
+def build_test_suite_520(assignment_name, max_repo_files = 20, start_date = _START_DATE_FROM_TABLE):
     """ A helper function used by 'main' functions to build a test suite based on command line arguments.
         assignment_name: the name of the assignment used for taggin (e.g. 'lab01')
         max_repo_files: the maximum number of files allowed in the lab directory of the repository
         start_date: the date when the lab officialy starts (used to prevent early submissions and to enforce startercode updating)
-           This parameter is a string and is in the format "MM/DD/YYYY". If no parameter is given, None is used.
+           This parameter is a string and is in the format "MM/DD/YYYY".
+           If no parameter is given, the date is looked up by 'assignment_name' in resources/start_dates.py
+           (edit that file to change start dates each semester). Pass None to skip the start date check.
     """
     parser = argparse.ArgumentParser(description=f"Test suite for 520 Assignment: {assignment_name}")
     parser.add_argument("--submit",  action="store_true", help="Submit the assignment to the remote repository (tag and push)")
@@ -330,6 +337,13 @@ def build_test_suite_520(assignment_name, max_repo_files = 20, start_date = None
     summary_log_filename = None
     if args.log is not None:
         summary_log_filename = args.log
+
+    # Look up the assignment start date unless the caller provided one
+    if start_date is _START_DATE_FROM_TABLE:
+        start_date = START_DATES.get(assignment_name)
+        if start_date is None:
+            print(f"Warning: no start date for '{assignment_name}' in resources/start_dates.py - "
+                  "skipping starter code date check")
 
     # Create datetime object for starter code check if date is given
     if start_date is not None:

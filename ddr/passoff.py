@@ -13,7 +13,7 @@ import test_suite_520
 import repo_test
 
 def main():
-    tester = test_suite_520.build_test_suite_520("ddr", start_date="12/5/2025", max_repo_files = 40)
+    tester = test_suite_520.build_test_suite_520("ddr", max_repo_files = 40)
     # IP directory rules:
     tester.add_Makefile_rule("make_ip", [], ["./ip/mig_7series_0/mig_7series_0.xci"])
     tester.add_Makefile_rule("make_example", [], ["./ip/example_design/mig_7series_0_ex/mig_7series_0_ex.xpr"])

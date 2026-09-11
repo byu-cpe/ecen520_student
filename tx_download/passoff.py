@@ -13,7 +13,7 @@ import test_suite_520
 import repo_test
 
 def main():
-    tester = test_suite_520.build_test_suite_520("tx_download", start_date="09/10/2026", max_repo_files = 30)
+    tester = test_suite_520.build_test_suite_520("tx_download", max_repo_files = 30)
     tester.add_required_tracked_files(["debounce.sv", "debounce_sim.do", "debounce_sim.png",])
     tester.add_Makefile_rule("sim_debouncer", ["debounce.sv"], ["sim_debouncer.log"])
     tester.add_build_test(repo_test.file_regex_check("sim_debouncer.log", "WAIT_TIME_US=50 with 0 errors", 

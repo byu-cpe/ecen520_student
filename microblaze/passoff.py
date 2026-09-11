@@ -13,7 +13,7 @@ import test_suite_520
 import repo_test
 
 def main():
-    tester = test_suite_520.build_test_suite_520("microblaze", start_date="11/21/2025", max_repo_files = 50)
+    tester = test_suite_520.build_test_suite_520("microblaze", max_repo_files = 50)
     tester.add_Makefile_rule("build_demo_io", [], ["./demo_io/demo_io.xsa"])
     tester.add_Makefile_rule("build_demo_io_vitis", [], ["./demo_io/vitis/demo_io/build/demo_io.elf"])
     tester.add_Makefile_rule("build_mb_uart", [], ["./mb_uart/mb_uart.xsa"])
