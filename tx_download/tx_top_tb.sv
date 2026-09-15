@@ -9,6 +9,7 @@ module tx_top_tb ();
     logic [7:0] led;
     logic tx_out;
     logic rx_busy;
+    logic rx_err;
     logic tx_busy;
     logic [7:0] rx_data;
     logic [7:0] char_to_send = 0;
@@ -59,6 +60,7 @@ module tx_top_tb ();
         .clk(clk),
         .rst(rst),
         .rx_in(tx_out),
+        .err(rx_err),
         .busy(rx_busy),
         .dout(rx_data)
     );
