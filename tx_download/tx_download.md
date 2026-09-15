@@ -96,7 +96,10 @@ Create your top-level design as follows:
   * Attach the `tx_busy` signal from your transmitter to the LED16_B signal. This is the "blue" color for tricolor LED 16 on the board (it should flash blue when the transmitter is busy)
   * Attach the CPU reset so that when pressed, the system will be reset (note that the input reset polarity is negative asserted). Add two synchronizing flip-flops between the reset button and your internal reset signal to synchronize the reset signal to the global clock.
   * Create the 'send' signal for your tx module from the 'BTNC' on the board
-    * Add a two flip-flop synchronizer for the 'BTNC' button to synchronize the button to the global clock
+    * Add a two flip-flop synchronizer for the 'BTNC' button to synchronize the button to the global clock. Add the following attribute to the synchronizer flip-flops to help with the timing analysis:
+    ```
+    (* ASYNC_REG = "TRUE" *) logic [1:0] btnc_sync;
+    ```
     * Instance your debouncer module and hook up the output of the synchronizer to the debouncer module
     * Create a "one-shot" circuit on the output of the debouncer. The purpose of the one-shot circuit is to generate a single pulse when the button is pressed and to ignore any additional presses until the pulse has completed. If you do not add a one-shot circuit then the button press will be interpreted as multiple presses and multiple characters will be transmitted over the UART. The output of the one-shot circuit will go into the `send` input of your transmitter module.
 
@@ -238,6 +241,7 @@ screen /dev/ttyUSB2 115200,cs8,parenb,-parodd,-cstopb
 
 * Incorrectly set the terminal settings. In particularly, not setting "parity = odd". If you leave parity to none then you may get incorrect results.
 * `PuTTY: unable to load font "server:fixed"`. Go into 'fonts', click 'Change', and select a font such as 'Ubuntu Mono'.
+* Latches are synthesized in your design. If your design synthesizes but does not download correctly, then it is possible that there is a latch in your design. Check the synthesis log for any warnings about latches.
 
 ## Assignment Submission
 
@@ -264,8 +268,4 @@ Future Changes:
  Modify the gen_bounce.sv to provide a signal saying when the debouncer "should" have propagated. This helps with testbenches.
 - Enforce certain warnings not showing up (CFG_Voltage, etc, parallel synthesis). Make it easier to earch for these warnings in grading.
 - Better instructions on how to download
-- Need to explain in more detail the need to carefully review the synthesis logs. Perhaps provide a few examples of what to look for in the logs.
-- We should be adding the following attribute to all synchronier flip-flops in the download labs. Add this to the tx_download and all future download labs
-   (* ASYNC_REG = "TRUE" *) logic [31:0] ssd_sync;
-* Suggestion 1 Make a note that the testbenches don't check for latches and that if your download fails but synthesis succeeds then this is a likely cause. 
 -->
