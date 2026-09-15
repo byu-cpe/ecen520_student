@@ -55,7 +55,7 @@ Name your screenshot `debounce_sim.png`
 
 ### Debouncer Testbench Simulation
 
-When you have created your debouncer, simulate your debouncer with the testbench `tb_debouncer.sv` until your debouncer passes all tests.
+When you have created your debouncer, simulate your debouncer with the testbench `tb_debounce.sv` until your debouncer passes all tests.
 This testbench uses a module `gen_bounce.sv` to generate a bouncy signal.
 You will need to compile this file as well as part of the testbench.
 Create a makefile rule named `sim_debouncer` that will perform this simulation from the command line using the default module parameters.
