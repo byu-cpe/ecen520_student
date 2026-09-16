@@ -18,7 +18,8 @@ See the class [AI policy](../ai_policy.md) for a summary of acceptable use.
 ## Assignment Specific Responses
   1. Fill in the State Machine Encoding table listed [below](#state-machine-encoding) for both the default synthesis and your gray code encoding
   2. Fill in the Resource Utilization table listed [below](#resource-utilization-table) for both the default and gray code synthesis
-
+  3. Provide a detailed list of steps that the testbench follows to test your receiver. Consult the [testbench](./tb_rx.sv) for details. You can use a bulleted list or a numbered list.
+  4. Summarize the purpose of each 'task' in the testbench.
 
 ### State Machine Encoding
 
