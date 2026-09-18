@@ -10,8 +10,8 @@ None:
 
 **Reference**
 
-* [slides](https://github.com/byu-cpe/ECEN_620/blob/main/docs/lecture_slides/hdl_varients.pdf)
-* [Language Survey](https://nachiket.github.io/publications/rc-dsl-survey_fpl2016.pdf)
+* [slides](https://github.com/byu-cpe/ECEN_520/blob/main/docs/lecture_slides/hdl_varients.pdf)
+* [Language Survey](https://nachiket.github.io/publications/rc-dsl-survey_fpl-2016.pdf)
 * [Google TPU Edge in Chisel](https://www.youtube.com/watch?v=x85342Cny8c)
 <!--
 * [](https://www.sciencedirect.com/science/article/pii/S0950584923000502)

@@ -19,5 +19,5 @@ In this lecture we will discuss the purpose of testbenches and the general struc
 **Resources**
   * [ECEN 220 Testbench Review](http://ecen220wiki.groups.et.byu.net/resources/tool_resources/testbenches/)
   * ChipVerify summary of [display](https://www.chipverify.com/verilog/verilog-display-tasks), 
-  * [Verilog 95 Testbench Lecture Slides](https://github.com/byu-cpe/ECEN_620/blob/main/docs/lecture_slides/verilog95_testbench.pdf)
+  * [Verilog 95 Testbench Lecture Slides](https://github.com/byu-cpe/ECEN_520/blob/main/docs/lecture_slides/verilog95_testbench.pdf)
  

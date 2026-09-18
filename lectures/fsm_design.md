@@ -11,7 +11,7 @@ We will discuss several styles of FSM coding and discuss their relatively advant
     * Don't worry about 10.3. We will discuss timing in greater detail in another unit.
     * 10.4: Make sure you understand the difference between Mealy and Moore machines
     * 10.5: There is a lot of VHDL in this section that you can ignore. The key point to understand is what a "segment" is how to code a four segment FSM, a two segment FSM (10.5.2), and a one segment FSM (10.5.4). Understand the problems with a one segment FSM. Ignore 10.5.5.
-  * Review chapters 21-23 from [Dr. Nelson's](https://www.amazon.com/Designing-Digital-Systems-SystemVerilog-v2-1-ebook/dp/B091BBVG4C/ref=sr_1_1?crid=3TUDSUSI1BURK&keywords=Designing+Digital+Systems+With+SystemVerilog+%28v2.1%29&qid=1662573889&s=digital-text&sprefix=designing+digital+systems+with+systemverilog+v2.1+%2Cdigital-text%2C89&sr=1-1) ECEN 220 textbook (this is not required but will help review how to code a FSM in Verilog)
+  * Review chapters 21-23 from [Dr. Nelson's](https://www.amazon.com/Designing-Digital-Systems-SystemVerilog-v4-0/dp/B0F4421795) ECEN 220 textbook (this is not required but will help review how to code a FSM in Verilog)
 
 ## Key Concepts
   * Three different components of an FSM (IFL, OFL, Current State)

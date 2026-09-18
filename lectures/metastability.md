@@ -19,7 +19,7 @@ This lecture will summarize the causes of metastability and techniques for addre
 
 ## Reference
 
-  * [Chu, chapter 16 slides (Timing/Clock Skew)](https://github.com/byu-cpe/ECEN_620/blob/main/docs/chu/chap16_1.pdf)
+  * [Chu, chapter 16 slides (Timing/Clock Skew)](https://github.com/byu-cpe/ECEN_520/blob/main/docs/chu/chap16_1.pdf)
   * [Clock Synchronization Approaches](https://www.embedded.com/asynchronous-reset-synchronization-and-distribution-challenges-and-solutions/)
   * [Understanding Metastability in FPGAs, Intel/Altera](https://www.intel.com/content/dam/www/programmable/us/en/pdfs/literature/wp/wp-01082-quartus-ii-metastability.pdf)
 

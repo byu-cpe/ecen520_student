@@ -14,7 +14,7 @@ This allows devices to communicate without agreeing ahead of time on the baud ra
 Many technical protocols including SPI were originally defined using the terms "master" and "slave" to represent the relationship between different devices in the protocol.
 "Master" devices are usually in control of an operation or communication protocol and "slave" devices are designed to respond to the master.
 There is a growing effort to replace this master/slave terminology due to its reference to human slavery
-(see [here](https://www.allaboutcircuits.com/news/how-master-slave-terminology-reexamined-in-electrical-engineering/), [here](https://www.sparkfun.com/spi_signal_names), and [here](https://en.wikipedia.org/wiki/Master/slave_(technology))).
+(see [here](https://www.allaboutcircuits.com/news/how-master-slave-terminology-reexamined-in-electrical-engineering/), [here](https://learn.sparkfun.com/tutorials/serial-peripheral-interface-spi/all), and [here](https://en.wikipedia.org/wiki/Master/slave_(technology))).
 Several proposed alternatives have been made for these terms in the context of SPI.
 For the purposes of this assignment, the term "Main" will be used for the term "Master" and the term "Subnode" will be used for the term "Slave" as described by the [Analog Devices](https://www.analog.com/en/analog-dialogue/articles/introduction-to-spi-interface.html) SPI overview (since we will be talking to an Analog Devices device).
 While these terms are not perfect, they retain the "M" letter and the "S" letter from the original terms and thus are consistent with the pin names of the SPI protocol.

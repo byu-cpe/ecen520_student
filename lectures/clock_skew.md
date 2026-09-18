@@ -20,5 +20,5 @@ Clock skew introduces subtle timing problems that must be understood and address
   * Interpret Vivado timing reports for clock skew
 
 ## Reference
-  * [Clock skew paper](https://github.com/byu-cpe/ECEN_620/blob/main/docs/reference/clockskew_hatamiancash.pdf)
+  * [Clock skew paper](https://github.com/byu-cpe/ECEN_520/blob/main/docs/reference/clockskew_hatamiancash.pdf)
 

@@ -25,4 +25,4 @@ We will learn about the global clock routing and how to use the MMCM and PLL pri
 
 **Reference**
   * [Artix 7 Data Sheet (timing)](https://docs.amd.com/v/u/en-US/ds181_Artix_7_Data_Sheet) (See table 37 for MMCM timing)
-  * [Spartan 3 DCM App Note](./docs/reference/xapp462.pdf)
+  * [Spartan 3 DCM App Note](https://docs.amd.com/v/u/en-US/xapp462)
