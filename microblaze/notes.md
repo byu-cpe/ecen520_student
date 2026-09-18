@@ -1,6 +1,4 @@
 # Notes for IP Integrator assignment
-<!-- This file is modified from the ECEN_620 repository, assignments/ip_integrator/notes.md file
--->
 
 
 This page provides the instructions for completing the simple demonstrations using the MicroBlaze and the IP Integrator.

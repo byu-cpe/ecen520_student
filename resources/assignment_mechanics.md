@@ -12,9 +12,6 @@ Review the [tools](./tools.md) page to learn how to access and use the lab compu
 
 All assignments for this class will involve committing report files and source code to a private GitHub repository.
 If you do not have a GitHub account, you will need to [create an account](https://github.com/) for use in this class.
-<!--
-Send me your github username so I can add you as a user on the [ECEN_520](https://github.com/byu-cpe/ECEN_520) github repository which contains course materials, the class wiki, and assignment descriptions.
--->
 It is essential that you become proficient with using Git and GitHub for this class.
 You will be responsible for learning how to use 'git' and 'GitHub' for creating repositories, committing code, managing Markdown files, and maintaining your projects. 
 If you are not familiar with using these tools you are encouraged to complete the BYU bootcamp tutorials for [git](https://byu-cpe.github.io/ComputingBootCamp/tutorials/git/) and [GitHub](https://byu-cpe.github.io/ComputingBootCamp/tutorials/github/). 

@@ -95,8 +95,3 @@ set_property INCREMENTAL false [get_filesets sim_1]
 # Set the initial simulation runtime when you open the simulator to zero
 set_property -name {xsim.simulate.runtime} -value 0ns -objects [get_filesets sim_1]
 ```
-
-<!--
-INFO: [Synth 8-155] case statement is not full and has no default [/home/wirthlin/ee620/ECEN_620_wirthlin/grading/fall2023/ECEN_620_Hesl
-ington/uart_receiver/tx.sv:88]
--->

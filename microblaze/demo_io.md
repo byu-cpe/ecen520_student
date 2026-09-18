@@ -1,6 +1,5 @@
 # MicroBlaze IO Demonstration
-<!-- This file is modified from the ECEN_620 repository, assignments/ip_integrator/notes.md file
--->
+
 
 This demo involves the creation of a basic MicroBlaze system with a UART.
 You will be using the GUI to create the Vivado project and the Vitis tool to create the software application.
