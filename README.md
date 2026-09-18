@@ -43,7 +43,7 @@ Cliff Cummings, Sunburst (UVM/SV)
 |   | 9/16/2026  | [RTL Design using ASM Diagrams](./lectures/rtl_asmd.md)| <!-- pptx=asmd.pptx -->
 |   | 9/18/2026  | [HDL Synthesis](./lectures/hd_synthesis.md) | <!-- pptx=synthesis.pptx -->
 | 4 | 9/21/2026  | [SystemVerilog Testbenches](./lectures/testbenches.md)| <!-- pptx=testbenches.pptx -->
-|   | 9/23/2026  | [Functions, Tasks, Threads, generate](./lectures/functions_tasks.md) | <!-- pptx=function_task_threads.pptx -->
+|   | 9/23/2026  | [Functions, Tasks, Threads, generate](./lectures/functions_tasks.md) | <!-- pptx=function_tasks_threads.pptx -->
 |   | 9/25/2026  | [SystemVerilog Types](./lectures/systemverilog_types.md) | <!-- pptx=sv_types.pptx -->
 | 5 | 9/28/2026  | [Memories](./lectures/memories.md) |
 |   | 9/30/2026  | [SPI Controller](./lectures/spi.md) |
