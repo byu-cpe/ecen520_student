@@ -42,9 +42,9 @@ Cliff Cummings, Sunburst (UVM/SV)
 | 3 | 9/14/2026  | [FSM Output Glitches and State Encoding](./lectures/glitches.md) | <!-- pptx=sv_fsm_glitch_encoding.pptx -->
 |   | 9/16/2026  | [RTL Design using ASM Diagrams](./lectures/rtl_asmd.md)| <!-- pptx=asmd.pptx -->
 |   | 9/18/2026  | [HDL Synthesis](./lectures/hd_synthesis.md) | <!-- pptx=synthesis.pptx -->
-| 4 | 9/21/2026  | [SystemVerilog Testbenches](./lectures/testbenches.md)|
-|   | 9/23/2026  | [Functions, Tasks, Threads, generate](./lectures/functions_tasks.md) |
-|   | 9/25/2026  | [SystemVerilog Types](./lectures/systemverilog_types.md) |
+| 4 | 9/21/2026  | [SystemVerilog Testbenches](./lectures/testbenches.md)| <!-- pptx=testbenches.pptx -->
+|   | 9/23/2026  | [Functions, Tasks, Threads, generate](./lectures/functions_tasks.md) | <!-- pptx=function_task_threads.pptx -->
+|   | 9/25/2026  | [SystemVerilog Types](./lectures/systemverilog_types.md) | <!-- pptx=sv_types.pptx -->
 | 5 | 9/28/2026  | [Memories](./lectures/memories.md) |
 |   | 9/30/2026  | [SPI Controller](./lectures/spi.md) |
 |   | 10/2/2026  | [Timing overview and review](./lectures/timing_overview.md) |
