@@ -5,64 +5,6 @@
 The purpose of this assignment is to create a top-level UART receiver/transmitter in SystemVerilog and a testbench to validate your receiver.
 <!-- You will also create a seven segment display controller for displaying data from your UART on the seven segment display. -->
 
-<!-- 
-## Seven Segment Controller and Testbench
-
-For this assignment and for most future assignments you will need to display values on the seven segment display of the Nexys4 DDR board.
-To make this easier, you will create a seven segment display controller that will drive the seven segment display.
-
-Create a "seven segment controller" module that will drive the seven segment display of the Nexys DDR board. 
-This module can be based on the [seven segment display](https://byu-cpe.github.io/ecen320/labs/multi-segment/) module developed in ECEN 320.
-Note that there are eight digits on the seven segment display for this board so you will need to support all eight digits with your module. 
-Include the following ports and parameters in your module:
-
-| Port Name | Direction | Width | Function |
-| ---- | ---- | ---- | ----  |
-| clk | Input | 1 | Clock |
-| rst | Input | 1 | Reset |
-| display_val | Input | 32 | 32-bit value to display |
-| dp | Input | 8 | Digit point (one for each segment) |
-| blank | Input | 1 | When asserted, blank the display |
-| segments | Output | 7 | The seven segment drivers (see table below) |
-| dp_out | Output | 1 | The output digit point driver signal |
-| an_out | Output | 8 | Anode signal for each segment |
-
-| Parameter Name | Default Value | Purpose |
-| ---- | ---- | ---- |
-| CLK_FREQUECY | 100_000_000 | The clock frequency |
-| MIN_SEGMENT_DISPLAY_US  | 10_000 | The amount of time to display each digit  |
- 
-The anode signals should be driven in a round-robin fashion so that each digit is displayed for a short amount of time.
-These signals are low asserted. 
-The cathode signals are also low asserted and are defined as follows:
-
-```
-    ----A----
-    |       |
-    |       |
-    F       B
-    |       |
-    |       |
-    ----G----
-    |       |
-    |       |
-    E       C
-    |       |
-    |       |
-    ----D----
-```
-
-The seven segments are organized into a multi-bit bus (segments[6:0]) where segments(6) corresponds to segment 'A' and segments(0) corresponds to segment 'G'.
-
-A testbench ([ssd_tb.sv](ssd_tb.sv)) is provided for you to validate your seven segment display controller.
-There is also a simulation model ([seven_segment_check.sv](seven_segment_check.sv)) of the SSD controller that you will need to compile with your testbench.
-Make sure your seven segment display controller passes this testbench before moving on to the next step.
-Create a makefile rule `make sim_ssd` for this simulation.
-
-After your seven segment display controller is working correctly, create a makefile rule `make synth_ssd` that will synthesize your controller in out-of-context mode.
-See the instructions from the [previous assignment](../rx_sim/UART_Receiver_sim.md#receiver-synthesis) to describe how to do this.
- -->
-
 ## Top-Level Design
 
 Create a top-level design in a file named `rxtx_top.sv` that uses the following top-level ports:
