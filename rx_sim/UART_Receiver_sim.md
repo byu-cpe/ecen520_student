@@ -127,7 +127,6 @@ To make this easier, you will create a seven segment display controller that wil
 Create a "seven segment controller" module named `seven_segment8` in a file named `seven_segment8.sv` that will drive the seven segment display of the Nexys DDR board. 
 This module can be based on the [seven segment display](https://byu-cpe.github.io/ecen320/labs/multi-segment/) module developed in ECEN 320.
 Note that there are eight digits on the seven segment display for this board so you will need to support all eight digits with your module. 
-**NOTE**: The segment ordering is different from the ECEN 320 lab. See the notes below for details.
 
 Include the following ports and parameters in your module:
 
@@ -137,36 +136,23 @@ Include the following ports and parameters in your module:
 | rst | Input | 1 | Reset |
 | data_in | Input | 32 | 32-bit value to display |
 | dp_in | Input | 8 | Digit point (one for each segment) |
-| blank | Input | 1 | When asserted, blank the display |
-| segment | Output | 8 | The seven segment drivers (see table below) |
+| blank | Input | 8 | When asserted, blank the corresponding digit/digit point |
+| CA,CB,CC,CD,CE,CF,CG | Output | 1 | Seven segment cathode signals (1 bit each) |
+| DP | Output | 1 | Seven  digit point cathode signal |
 | anode | Output | 8 | Anode signal for each digit |
 
 | Parameter Name | Default Value | Purpose |
 | ---- | ---- | ---- |
 | CLK_FREQUENCY | 100_000_000 | The clock frequency |
 | REFRESH_RATE  | 200 | Specifies the display refresh rate in Hz  |
- 
-<!-- 
-| Port Name | Direction | Width | Function |
-| ---- | ---- | ---- | ----  |
-| clk | Input | 1 | Clock |
-| rst | Input | 1 | Reset |
-| display_val | Input | 32 | 32-bit value to display |
-| dp | Input | 8 | Digit point (one for each segment) |
-| blank | Input | 1 | When asserted, blank the display |
-| segments | Output | 7 | The seven segment drivers (see table below) |
-| dp_out | Output | 1 | The output digit point driver signal |
-| an_out | Output | 8 | Anode signal for each segment |
 
-| Parameter Name | Default Value | Purpose |
-| ---- | ---- | ---- |
-| CLK_FREQUENCY | 100_000_000 | The clock frequency |
-| MIN_SEGMENT_DISPLAY_US  | 10_000 | The amount of time to display each digit  |
- -->
+The `dp_in`, `blank`, and `anode` signals are 8-bit signals such that each bit corresponds to a specific digit of the display.
+Bit 0 of this multi-bit signalcorresponds to the rightmost digit and bit 7 corresponds to the leftmost digit.
 
-The anode signals should be driven in a round-robin fashion so that each digit is displayed for a short amount of time.
-These signals are low asserted. 
-The cathode signals are also low asserted and are defined as follows:
+The `anode` signals should be driven in a round-robin fashion so that each digit is displayed for a short amount of time.
+These signals are low asserted.
+
+The `CA,CB,CC,CD,CE,CF,CG` (cathode) signals are also low asserted and each cathode coresponds to a specific segment of the seven segment display as follows:
 
 ```
     ----A----
@@ -184,12 +170,8 @@ The cathode signals are also low asserted and are defined as follows:
     ----D----
 ```
 
-The seven segments are organized into a multi-bit bus (segment[6:0]) where segment(6) corresponds to segment 'A' and segment(0) corresponds to segment 'G'.
-segment[7] corresponds to the digit point.
-
-**Note**: The seven segment ordering for the 320 lab instructions are different for this board.
-For the ECEN 320 lab, segment(0) corresponds to segment 'A' and segment(6) corresponds to segment 'G'.
-For this board, segment(6) corresponds to segment 'A' and segment(0) corresponds to segment 'G'.
+<!-- **Note**: The seven segment ordering for the 320 lab instructions are different for this board.
+For the ECEN 320 lab, segment(0) corresponds to segment 'A' and segment(6) corresponds to segment 'G'. -->
 
 ### Seven Segment Display Testbench
 

@@ -4,31 +4,35 @@
 // This simulation model is used to check the behavior of the seven segment display
 //
 // TODO:
-//  - Check for blanking
+//  - Change way values are extracted by allowing an anode to blank a digit.
 //////////////////////////////////////////////////////////////////////////////////
 
-module seven_segment_check(clk, rst, segments, dp, anode,
-    new_value, output_display_val);
+module seven_segment_check(clk, rst, CA, CB, CC, CD, CE, CF, CG, DP, anode,
+    print, blanked, new_value, output_display_val);
 
     input clk, rst;
-    input logic [6:0] segments;
-    input logic dp;
+    input logic CA, CB, CC, CD, CE, CF, CG;
+    input logic DP;
     input logic [7:0] anode;
+    input logic print; // Indicates that the segments should be printed to the console
+    output logic [7:0] blanked; // Indicates which digits are blanked (1 = blanked, 0 = not blanked)
     output logic new_value;
     output logic [31:0] output_display_val;
 
+    logic [6:0] segments; // The current segment values (7 bits)
+
     parameter int CLK_FREQUENCY = 100_000_000;      // 100 MHz
-    parameter int REFRESH_RATE = 200;
-    // parameter int MIN_SEGMENT_DISPLAY_US = 10_000;  // 10 ms
+    parameter int REFRESH_RATE = 200;               // Expected refresh rate in Hz
     parameter int VERBOSE = 1;
     parameter int WARN_ON_SIMULTANEOUS_ANODES = 1;
-    // localparam int MIN_SEGMENT_CLOCKS = CLK_FREQUENCY / 1_000_000 * MIN_SEGMENT_DISPLAY_US;
     localparam int MIN_SEGMENT_CLOCKS = CLK_FREQUENCY / REFRESH_RATE / 8;
 
     // Error message for all simulation errors
     const string ERROR_MSG = "ERROR: seven_segment_check:";
 
-    // Convert standard segment settings to the corresonding hex values
+    assign segments = {CA, CB, CC, CD, CE, CF, CG};
+
+    // Convert standard cathode segment settings to the corresonding hex values
     function automatic logic [3:0] segment_to_hex(input logic [6:0] segments);
         begin
             case(segments)
@@ -76,8 +80,12 @@ module seven_segment_check(clk, rst, segments, dp, anode,
         for (int i = 0; i < 8; i = i + 1) begin
             if (anode[i] == 0) begin
                 display_segments[i] <= segments;
-                display_dp[i] <= dp;
+                display_dp[i] <= DP;
                 output_display_val[4*i +: 4] <= segment_to_hex(segments);
+                if (segments == 7'b1111111)
+                    blanked[i] <= 1;
+                else
+                    blanked[i] <= 0;
             end
         end
     end
