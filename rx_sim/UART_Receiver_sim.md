@@ -11,24 +11,21 @@ They won't have had much experience with testbenches at this point. Change the a
 ## UART Receiver Module
 
 Create a UART receiver module that actively monitors the input "data in" signal receives a single byte of data and a parity bit.
-Follow the guidelines in Exercise #1 of the ECEN 320 [UART Receiver](https://byu-cpe.github.io/ecen320/labs/uart-rx/#exercise-1-asynchronous-receiver-module) lab.
+Review the guidelines in ECEN 320 [UART Receiver](https://byu-cpe.github.io/ecen320/labs/uart-rx/#exercise-1-asynchronous-receiver-module) lab.
 Note that you must follow the [Level 2](../resources/coding_standard.md#level-2) coding standards for your SystemVerilog files.
-Make sure you use the same ports and parameters as this assignment with the following additions:
-  * add a parameter named `PARITY` with a default of '1' (or odd) that sets the type of parity to use for incoming bytes. This parameter is used to generate the 'parityErr' signal
-  * add an output signal named `busy` that indicates when the rx module is busy processing a byte
 
-<!-- 
 Create your receiver with the following ports and parameters
 
 | Port Name | Direction | Width | Function |
 | ---- | ---- | ---- | ----  |
 | clk | Input | 1 | Clock |
 | rst | Input | 1 | Reset |
-| din | Input | 1 | RX input signal |
-| dout | Output | 8 | Received data values |
+| Sin | Input | 1 | RX input signal |
+| ReceiveAck | Input | 1 | Host has accepted the byte |
+| Dout | Output | 8 | Received data values |
 | busy | Output | 1 | Indicates that the transmitter is in the middle of a transmit |
-| data_strobe | Output | 1 | Indicates that a new data value has been received |
-| rx_error | Output | 1 | Indicates that there was an error when receiving |
+| Receive | Output | 1 | Indicates that a new data value has been received |
+| parityErr | Output | 1 | Indicates that there was a parity error when receiving |
 
 | Parameter Name | Default Value | Purpose |
 | ---- | ---- | ---- |
@@ -39,16 +36,23 @@ Create your receiver with the following ports and parameters
 Design your receiver such that:
 * The 'busy' signal is asserted whenever you are in the middle of a transmission
 * The 'rst' signal will initialize the internal state machine to idle
-* Provide a single cycle 'data_strobe' signal when you have received a new data value. The `dout` signal should have the new data value when the `data_strobe` signal is asserted.
-* When your state machine is reset, it should check to make sure the 'din' input is '1' before going to an IDLE state and accepting received data. The purpose of this is to avoid the case when the input line starts out low on reset.
-* Set the `rx_error` signal low every time you start a new transaction. When a transaction is complete, set the `rx_error` signal to '1' if any of the three conditions occur:
+* When your state machine is reset, it should check to make sure the 'Sin' input is '1' before going to an IDLE state and accepting received data. The purpose of this is to avoid the case when the input line starts out low on reset.
+* Set the `parityErr` signal low every time you start a new transaction. When a transaction is complete, set the `parityErr` signal to '1' if any of the three conditions occur:
   * A '0' is not sampled in the _middle_ of the first start bit
   * The received parity is incorrect
   * A stop bit is not received (i.e., you do not receive a '1' in the _middle_ of the stop bit) 
+
+<!--
+* Provide a single cycle 'data_strobe' signal when you have received a new data value. The `dout` signal should have the new data value when the `data_strobe` signal is asserted.
   -->
 
 <!--
     If you get a reset and the input din is a '0' then you should go to some sort of "Startup" type state that just sits there and waits until din goes high. Once din goes high you can go into an idle state to wait for din to go to 0 again. The reason for this is that you do not want to just immediately start receiveing a character upon reset. You want to start up in a known state.
+
+Make sure you use the same ports and parameters as this assignment with the following additions:
+  * add a parameter named `PARITY` with a default of '1' (or odd) that sets the type of parity to use for incoming bytes. This parameter is used to generate the 'parityErr' signal
+  * add an output signal named `busy` that indicates when the rx module is busy processing a byte
+
 -->
 
 ### Receiver .do Simulation
