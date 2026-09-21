@@ -135,10 +135,10 @@ Include the following ports and parameters in your module:
 | clk | Input | 1 | Clock |
 | rst | Input | 1 | Reset |
 | data_in | Input | 32 | 32-bit value to display |
-| dp_in | Input | 8 | Digit point (one for each segment) |
+| dp_in | Input | 8 | Digit point (one for each digit) |
 | blank | Input | 8 | When asserted, blank the corresponding digit/digit point |
 | CA,CB,CC,CD,CE,CF,CG | Output | 1 | Seven segment cathode signals (1 bit each) |
-| DP | Output | 1 | Seven  digit point cathode signal |
+| DP | Output | 1 | The digit point cathode signal |
 | anode | Output | 8 | Anode signal for each digit |
 
 | Parameter Name | Default Value | Purpose |
@@ -146,8 +146,11 @@ Include the following ports and parameters in your module:
 | CLK_FREQUENCY | 100_000_000 | The clock frequency |
 | REFRESH_RATE  | 200 | Specifies the display refresh rate in Hz  |
 
+The `REFRESH_RATE` parameter specifies how often the display should be refreshed.
+The refresh rate is the number of times per second that the complete display is updated (i.e., all 8 digits).
+
 The `dp_in`, `blank`, and `anode` signals are 8-bit signals such that each bit corresponds to a specific digit of the display.
-Bit 0 of this multi-bit signalcorresponds to the rightmost digit and bit 7 corresponds to the leftmost digit.
+Bit 0 of this multi-bit signal corresponds to the rightmost digit and bit 7 corresponds to the leftmost digit.
 
 The `anode` signals should be driven in a round-robin fashion so that each digit is displayed for a short amount of time.
 These signals are low asserted.
@@ -182,7 +185,7 @@ Create a makefile rule `sim_ssd` for this simulation that saves the simulation o
 
 ### Seven Segment Display Synthesis
 
-After your seven segment display controller is working correctly, create a makefile rule `make synth_ssd` that will synthesize your controller in out-of-context mode.
+After your seven segment display controller is working correctly, create a makefile rule `synth_ssd` that will synthesize your controller in out-of-context mode.
 Create a file `synth_ssd.log` file for this synthesis process.
 
 ## Assignment Submission
