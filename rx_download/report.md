@@ -18,13 +18,17 @@ See the class [AI policy](../ai_policy.md) for a summary of acceptable use.
 ## Assignment Specific Responses
   1. Fill in the State Machine Encoding table listed [below](#state-machine-encoding)
   2. Fill in the Resource Utilization table listed [below](#resource-utilization-table)
-  3. Indicate the "Worst Negative Slack" of your design. This is found in the timing report and indicates how much timing you slack you have with the current clocking (we will discuss this later in the semester): **X.Xns**
-  4. Indicate how many times you had to synthesize your design:
-  5. Indicate how many times you had to download your bitstream before your circuit worked. Note that I want two numbers: number of synthesis attempts (X) and number of download attempts (Y). Do not mix these together. **X/Y**
-
-? How many state machines were inferred for your top-level design? (review the synthesis report)
+  3. Review the timing report (`timing.rpt`) and summarize the following:
+       * Determine the "Worst Negative Slack" (or WNS). 
+       * Summarize the `no_input_delay` and `no_output_delay` section of the report.
+       * How many total endpoints are there on your clock signal?
+       * Find the first net in the `Max Delay Paths` section and indicate the source and destination of this maximum path. 
+  4. Indicate how many times you had to download your bitstream before your circuit worked. Note that I want two numbers: number of synthesis attempts (X) and number of download attempts (Y). Do not mix these together. **X/Y**
 
 ### State Machine Encoding
+
+Provide a table summarizing _each_ state machine encoding used in your design.
+If you have more than one state machine, provide a separate table for each state machine.
 
 | State | Encoding |
 | ---- | ---- |

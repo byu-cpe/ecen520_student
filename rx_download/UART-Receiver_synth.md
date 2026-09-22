@@ -7,13 +7,12 @@ The purpose of this assignment is to create a top-level UART receiver/transmitte
 
 ## Top-Level Design
 
-Create a top-level design in a file named `rxtx_top.sv` that uses the following top-level ports:
+Create a top-level module named `rxtx_top` in a file named `rxtx_top.sv` that uses the following top-level ports:
 
 | Port Name | Direction | Width | Function |
 | ---- | ---- | ---- | ----  |
 | CLK100MHZ | Input | 1 | Clock |
-| CPU_RESETN | Input | 1 | Reset (lo## Top-level testbench
-w asserted) |
+| CPU_RESETN | Input | 1 | Reset (low asserted) |
 | SW | Input | 8 | Switches (8 data bits to send) |
 | BTNC | Input | 1 | Control signal to start a transmit operation |
 | BTND | Input | 1 | Blank the seven segment display |
@@ -23,8 +22,8 @@ w asserted) |
 | LED16_B | Output | 1 | Used for TX busy signal |
 | LED17_R | Output | 1 | Used for RX busy signal |
 | LED17_G | Output | 1 | Used for RX error signal |
-| AN | [7:0] | Output | Anode signals for the seven segment display |
-| CA, CB, CC, CD, CE, CF, CG | [6:0] | Output | Seven segment display cathode signals |
+| AN | Output | 8 | Anode signals for the seven segment display |
+| CA, CB, CC, CD, CE, CF, CG | Output | 1 bit each | Seven segment display cathode signals |
 | DP | Output | 1 | Seven segment display digit point signal |
 
 | Parameter Name | Default Value | Purpose |
@@ -33,7 +32,7 @@ w asserted) |
 | BAUD_RATE | 19_200 | Specify the receiver baud rate |
 | PARITY | 1 | Specify the parity bit (0 = even, 1 = odd) |
 | REFRESH_RATE  | 200 | Specifies the display refresh rate in Hz of seven segment display |
-| DEBOUNCE_TIME_US | integer | 10_000 | Specifies the minimum debounce delay in micro seconds (1 ms) |
+| DEBOUNCE_TIME_US | 10_000 | Specifies the minimum debounce delay in micro seconds (10 ms) |
 
 Design your top-level circuit as follows:
 * Attach the `CPU_RESETN` signal to two flip-flops to synchronize it to the clock. Use this synchronized signal for the reset in your design (note that the input reset polarity is negative asserted)
@@ -60,7 +59,7 @@ Design your top-level circuit as follows:
 ### .xdc File
 
 Once you have created your top-level design, create a `.xdc` file that maps the top-level pins of your circuit to the appropriate FPGA pin on this board.
-Make sure all of the top-level ports have a corresponding entry in the .xdc file.s
+Make sure all of the top-level ports have a corresponding entry in the .xdc file.
 
 ### Synthesize Top-Level Design
 
@@ -84,13 +83,13 @@ In this phase of the assignment you will be verifying your design to make sure i
 
 ### Top-level testbench
 
-Create testbench for your top-level rx/tx design by creating a file named `rxtx_top_tb.sv`.
+Create testbench for your top-level rx/tx design named `rxtx_top_tb` in a file named `rxtx_top_tb.sv`.
 You may model this testbench after the [tx_top_tb.sv](../tx_download/tx_top_tb.sv) file from the tx download assignment.
 Include each of the following in your top-level testbench:
 * Parameters for all parameters of your top-level design. Modify the testbench parameters as follows:
   * DEBOUNCE_TIME_US = 10
   * REFRESH_RATE = 2_000
-* Create a parameter named NUMBER_OF_CHARS with a default of 8 that indicates how many characters to test
+* Create a parameter named `NUMBER_OF_CHARS` with a default of 8 that indicates how many characters to test
 * Generate a free running clock
 * Instance the [gen_bounce.sv](../tx_download/gen_bounce.sv) module to simulate button bouncing and pass in the DEBOUNCE_TIME_US parameter to the WAIT_TIME_US parameter
 * Instance your top-level design and hook up testbench signals to the ports
@@ -139,7 +138,9 @@ This rule should generate the following files:
   * a bitfile named `rxtx_top.bit`
   * a utilization report named `utilization.rpt` and a timing report named `timing.rpt`
 
-Download your design to your board and use 'putty' to make sure the UART receiver is working correctly using Putty or some other terminal emulator. You will need to transmit signals from 'putty' to your board, you can do this by pressing 'ctrl+j' in the 'putty' emulator, and then using your keyboard to send char values.
+Download your design to your board and use 'putty' to make sure the UART receiver is working correctly using Putty or some other terminal emulator.
+You will need to transmit signals from 'putty' to your board, you can do this by pressing 'ctrl+j' in the 'putty' emulator, and then using your keyboard to send char values.
+**Note**: Make sure your seven segment display operates correctly and does not flicker (you will lose points if your display is not working correctly).
 
 After demonstrating that your uart works properly, create a bitfile that operates with a baud rate of 115200 and even parity.
 To generate such a bitfile you will need to change the top-level BAUD_RATE parameter to 115200 and the PARITY parameter to 0 during the logic synthesis.
@@ -166,8 +167,7 @@ Review the instructions on [adjusting the message severity level](../resources/v
 These instructions list messages that can be downgraded and those that should be upgraded. 
 You will need to make sure that you don't have *any* synthesis warnings in your implementation.
 
-Note that you should add the following to your .x  - Have them experiment with different state encoding values to see how it affects reousrce utilization.
-dc file to get rid of the "Missing CFGBVS and CONFIG_VOLTAGE Design Properties" warning:
+Note that you should add the following to your .xdc file to get rid of the "Missing CFGBVS and CONFIG_VOLTAGE Design Properties" warning:
 
 ```
 set_property CFGBVS VCCO [current_design]
@@ -185,36 +185,18 @@ The following assignment specific items should be included in your repository:
     * `synth_rxtx_top_115200_even`: synthesizes `rxtx_top.sv` at 115200 baud with even parity and generates `synth_rxtx_top_115200_even.log` and `rxtx_top_115200_even_synth.dcp`
     * `implement_rxtx_top`: implements `rxtx_top_synth.dcp` and generates `implement_rxtx_top.log`, `rxtx_top.dcp`, `rxtx_top.bit`, `utilization.rpt`, and `timing.rpt`
     * `implement_rxtx_top_115200_even`: implements `rxtx_top_115200_even_synth.dcp` and generates `implement_rxtx_top_115200_even.log`, `rxtx_top_115200_even.dcp`, `rxtx_top_115200_even.bit`, `utilization_115200_even.rpt`, and `timing_115200_even.rpt`
-2. You need to have at least 5 "Error" commits in your repository
 3. Tag your repo 'rx_download'
-4. Assignment specific Questions:
-    1. Provide a table summarizing the resources your design uses from the implementation utilization report (`utilization.rpt`).
-    1. Review the timing report (`timing.rpt`) and summarize the following:
-       * Determine the "Worst Negative Slack" (or WNS). 
-       * Summarize the `no_input_delay` and `no_output_delay` section of the report.
-       * How many total endpoints are there on your clock signal?
-       * Find the first net in the `Max Delay Paths` section and indicate the source and destination of this maximum path.
-    1. Indicate how many times you had to synthesize and download your bitstream before your circuit worked. Provide two numbers: one for synthesis attempts and one for download attempts.
+4. Complete the assignment specific questions in your report
 
+<!-- 2. You need to have at least 5 "Error" commits in your repository -->
 
 <!--
 Notes:
-- Warnings:
-  - Teach them how to set the tools to ignore warnings and how to get rid of warnings
-  - Tell them that they should not have *any* warnings during synthesis
 -- Any _new_ coding standards to add? It would be nice to add something for this assignment
-? Experiment with different encoding styles?
+  ? Experiment with different encoding styles?
+  - Note that many studens struggled debugging their receiver and the transmitter model at the same time. It wasn't clear which one has the problem.
+     - Suggestion: create a top-level testbench that just hooks up my receiver model to their transmitter model and is used to validate their transmitter 
 
 - Future:
-  - Update the seven segment display testbench:
-    - Only display the output when the data has changed (rather than every cycling of anode)
-  - Make sure that the data displayed on the LEDs doesn't change/flicker (i.e., latch the data)
-  * Suggestion 1 - The specification stated that the cathode signals (CA,...,CG) were [6:0] wide and DP 1 wide. I realize it's probably just to save space, but it was a little confusing working out if that meant each was 7 bits wide or if they were all addressed together. Maybe noting them like an array {CA,...,CG} or stating that DP,CA,...,CG corresponded to our segments output would make it more clean, it took me a while to wrap my head around what was being requested.
-  - I really struggled with the seven_segment_check module. Initially I didn't understand how to connect it (this is largely due to CA-CG being listed as 7-bit wires rather than 1-bit wires in the assignment page),
-  - Note that many studens struggled debugging their receiver and the transmitter model at the same time. It wasn't clear which one has the problem.
-     - Suggestion: create a top-level testbench that just hooks up my receiver model to their transmitter model and is used to validate their transmitter model. This way, they can have a known good transmitter model to test their receiver.
-  - seven segment display model/checker
-    - Students don't know how to use it and are confused. Provide more documentation and expectations on what it does.
-    - Explain how to use the "check signal" or end of line
-  - Need to specify specific names for the top for ease of grading (testbench does require a name fortunately)
+  - Describe how to use seven segmetn checker model. This way, they can have a known good transmitter model to test their receiver.
 -->

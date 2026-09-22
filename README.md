@@ -94,7 +94,7 @@ Assignments are due at midnight the day they are listed in the table below (unle
 | 3 | 9/24/2026 | [UART Receiver Simulation](./rx_sim/UART_Receiver_sim.md) | `rx_sim` |
 | 4 | 10/1/2026 | [UART Synthesis and Download](./rx_download/UART-Receiver_synth.md) | `rx_download` |
 | 5 | 10/8/2026 | [SPI Controller-Simulation](./spi_cntrl/SPI_cntrl.md) | `spi_cntrl` |
-| 6 | | [SPI Controller-Download](./spi_download/spi_download.md) | `spi_download` |
+| 6 | 10/15/2026 | [SPI Controller-Download](./spi_download/spi_download.md) | `spi_download` |
 | 7 | | [BRAM](./bram/bram.md) | `bram` |
 | 8 | | [BRAM-Download](./bram_download/bram_download.md) | `bram_download` |
 | 9 | | [MMCM Clocking](./mmcm/mmcm.md) | `mmcm` |
