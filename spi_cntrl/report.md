@@ -31,7 +31,7 @@ For the 'Total Bits' column, indicate the total number of bits used by that comp
 | ---- | ---- | ---- |
 | Adders   |  |  |
 | Registers   |  |  |
-| Muxese   |  |  |
+| Muxes   |  |  |
  
 ### Resource Utilization Table
 
@@ -41,7 +41,5 @@ For the 'Total Bits' column, indicate the total number of bits used by that comp
 | CARRY4 |  |
 | LUTx   |  |
 | FDRE   |  |
-| IBUF   |  |
-| OBUF   |  |
 
 (For LUTx, add up the total number of LUTs of all sizes)

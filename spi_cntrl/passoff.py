@@ -14,10 +14,10 @@ import repo_test
 
 def main():
     tester = test_suite_520.build_test_suite_520("spi_cntrl", max_repo_files = 30)
-    tester.add_Makefile_rule("sim_spi_cntrl", ["spi_ctrl.sv"], ["sim_spi_cntrl.log"])
-    tester.add_build_test(repo_test.file_regex_check("sim_spi_cntrl.log", "Error:<spi_ctrl_tb>", 
+    tester.add_Makefile_rule("sim_spi_cntrl", ["spi_cntrl.sv"], ["sim_spi_cntrl.log"])
+    tester.add_build_test(repo_test.file_regex_check("sim_spi_cntrl.log", "Error:<spi_cntrl_tb>", 
                                                      "SPI Control Testbench", error_on_match = True,
-                                                     error_msg = "spi_ctrl testbench failed"))    
+                                                     error_msg = "spi_cntrl testbench failed"))    
     tester.add_Makefile_rule("sim_adxl362", ["adxl362_cntrl.sv", "adxl362_cntrl_tb.sv"], ["sim_adxl362.log"])
     tester.add_Makefile_rule("synth_adxl362_cntrl", [], ["synth_adxl362_cntrl.log","adxl362_cntrl_synth.dcp"])
     tester.add_required_tracked_files(["spi_cntrl.png","adxl362_cntrl.png"])

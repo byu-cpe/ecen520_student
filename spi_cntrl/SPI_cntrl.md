@@ -60,7 +60,7 @@ Create a controller with the name `spi_cntrl.sv` that has following top-level po
 | data_received | Output | SHIFT_REG_WIDTH | Data received on the last transfer |
 | busy | Output | 1 | Controller is busy |
 | sample | Output | 1 | Indicates that a new sample is ready |
-| spi_clk | Output | 1 | SCLK output signal |
+| spi_sclk | Output | 1 | SCLK output signal |
 | spi_mosi | Output | 1 | MOSI output signal |
 | spi_cs | Output | 1 | CS output signal |
 
@@ -79,7 +79,7 @@ The following notes provide more details for the ASMD diagram:
 * Internal Registers:
   * The internal counter `sclk_cnt` counts the number of clock cycles for each phase of the `SPI_SCLK` signal. A constant `PHASE_CNT` determines how many clock cycles are needed and are based on the `CLK_FREQUENCY` and `SCLK_FREQUENCY` parameters.
   * The internal register `data_o_sr` is a shift register used to shift data from the controller to the sub-node. It is loaded when `start` is asserted in the IDLE state and when `load` is asserted in the SCLK_HIGH state. 
-  * `spi_clk` is a single-bit register that is used for the SPI clock output. It should be reset into the low state. It is set when transitioning between states. It is a register to avoid glitches.
+  * `spi_sclk` is a single-bit register that is used for the SPI clock output. It should be reset into the low state. It is set when transitioning between states. It is a register to avoid glitches.
   * `spi_cs` is a single-bit register that is used for the SPI chip select output. It should be reset into the high state. It is set when transitioning between states. It is a register to avoid glitches.
 * Outputs:
   * `busy` indicates that the controller is busy and is asserted in the non-IDLE states.
@@ -133,7 +133,8 @@ When designing yoru controller, use the following Verilog 2001/SystemVerilog con
 
 ### SPI Testbench
 
-A testbench named `spi_ctrl_tb.sv` has been created for you to test your controller.
+A testbench named [spi_cntrl_tb.sv](spi_cntrl_tb.sv) has been created for you to test your controller.
+This testbench also instances the SPI subnode simulation model ([spi_subunit.sv](spi_subunit.sv)), so you will need to compile this file with your testbench.
 Create a makefile rule named `sim_spi_cntrl` that generates a log file named `sim_spi_cntrl.log`.
 Make sure there are no errors in your controller before proceeding.
 
@@ -263,9 +264,7 @@ Make sure all synthesis warnings and errors are resolved before submitting your 
 
 <!--
 - Fix the  ASM diagram to show high being able to move to the idle state if start is 0.
-- Rename the spi_ctrl module to spi_cntrl so that it is consistent with everything else
 - I think a text description of an SPI transaction would've been helpful. The explanations for each of the signals was very brief and didn't provide much information on what the signal was supposed to do. Because of my lack of exposure to protocols like this, it made it hard to know what data was being loaded when load was asserted, for example. Have a resource of what was supposed to happen in the system would've been helpful, since all I had to go off of was code that I wrote.
-- Need to be consistent on 'cntrl' vs. 'ctrl' in file names
 - Come up with some "discussion" or exploration exercise as part of the readme.md
 - It is hard to follow their testbenches. Need to provide more constraints so that I can follow and see that what was recieved is what was sent
   (prehaps have them provide such a statement in the testbench output)

@@ -1,10 +1,10 @@
 //////////////////////////////////////////////////////////////////////////////////
-// spi_ctrl_tb.sv
+// spi_cntrl_tb.sv
 //
-//  Testbench for the spi_ctrl.sv file
+//  Testbench for the spi_cntrl.sv file
 //////////////////////////////////////////////////////////////////////////////////
 
-module spi_ctrl_tb ();
+module spi_cntrl_tb ();
 
     parameter CLK_FREQUENCY = 100000000;
     parameter SCLK_FREQUENCY = 1000000;
@@ -30,7 +30,7 @@ module spi_ctrl_tb ();
     //  Instantiate Desgin Under Test (DUT)
     //////////////////////////////////////////////////////////////////////////////////
 
-    spi_ctrl #(.CLK_FREQUENCY(CLK_FREQUENCY), .SCLK_FREQUENCY(SCLK_FREQUENCY),
+    spi_cntrl #(.CLK_FREQUENCY(CLK_FREQUENCY), .SCLK_FREQUENCY(SCLK_FREQUENCY),
         .SHIFT_REG_WIDTH(SHIFT_REG_WIDTH),.MSB_FIRST(1))
     dut(
         .clk(clk),
@@ -99,14 +99,14 @@ module spi_ctrl_tb ();
         if (su_received_value == main_byte_to_send)
             $display("\[%0t]  Sub unit correctly received byte 0x%h", $time, su_received_value);
         else
-            $display("\[%0t]  Error:<spi_ctrl_tb> Sub unit Received byte 0x%h, expected 0x%h", $time,
+            $display("\[%0t]  Error:<spi_cntrl_tb> Sub unit Received byte 0x%h, expected 0x%h", $time,
             su_received_value, main_byte_to_send);
         // Wait until the transaction is done
         wait (busy == 1'b0);
         if (spi_cntrl_data_received == subunit_byte_to_send)
             $display("\[%0t]  Main unit correctly received byte 0x%h", $time, subunit_byte_to_send);
         else
-            $display("\[%0t]  Error:<spi_ctrl_tb> Main unit Received byte 0x%h, expected 0x%h", $time,
+            $display("\[%0t]  Error:<spi_cntrl_tb> Main unit Received byte 0x%h, expected 0x%h", $time,
             spi_cntrl_data_received, subunit_byte_to_send);
     endtask
 
@@ -132,12 +132,12 @@ module spi_ctrl_tb ();
             if (su_received_value == spi_cntrl_data_to_send)
                 $display("\[%0t]  Sub unit correctly received byte 0x%h", $time, su_received_value);
             else
-                $display("\[%0t]  Error:<spi_ctrl_tb> Sub unit Received byte 0x%h, expected 0x%h", $time,
+                $display("\[%0t]  Error:<spi_cntrl_tb> Sub unit Received byte 0x%h, expected 0x%h", $time,
                 su_received_value, spi_cntrl_data_to_send);
             if (spi_cntrl_data_received == su_send_value)
                 $display("\[%0t]  Main unit correctly received byte 0x%h", $time, su_send_value);
             else
-                $display("\[%0t]  Error:<spi_ctrl_tb> Main unit Received byte 0x%h, expected 0x%h", $time,
+                $display("\[%0t]  Error:<spi_cntrl_tb> Main unit Received byte 0x%h, expected 0x%h", $time,
                 spi_cntrl_data_received, su_send_value);
             // Provide control signals for next byte or end
             if (i < num_transfers - 1) begin
