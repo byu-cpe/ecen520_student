@@ -11,7 +11,7 @@
 
 **Resources**
   * ChipVerify summary of [display](https://www.chipverify.com/verilog/verilog-display-tasks), [tasks](https://www.chipverify.com/verilog/verilog-task), and [functions](https://www.chipverify.com/verilog/verilog-functions),
-  * ChipVerify summary of [threads](https://www.chipverify.com/systemverilog/systemverilog-threads)
+  * ChipVerify summary of [threads](https://chipverify.com/systemverilog/systemverilog-fork-join)
   * ChipVerify summary of [generate statements](https://www.chipverify.com/verilog/verilog-generate-block)
 <!--
 This lecture was a bit thin. Consider adding more content and exmaples of testbenches that use functions/tasks
