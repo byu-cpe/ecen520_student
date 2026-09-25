@@ -7,28 +7,6 @@ This repository contains the lecture schedule (including links to lecture summar
 
 ## Lecture Schedule
 
-<!--
-* Lecture on double data rate and serializer/deserializer (LVDS) - see Brigham's shift register design
-* Dedicated lecture on implementation, constraints, and timing analysis
-* Dedicated lecture on Verilog vs. SystemVerilog (how to code in Verilog)
-  (this seemed to be weak and skipped this time)
-
-Other Lectures: 
-* ILA (Integrated Logic Analyzer)
-* Simulation Coverage
-* Assertions
-* [Alternative HDLs](./lectures/alt_hdl.md)
-* [Wishbone Bus](./lectures/wishbone.md)
-
-Other Assignments:
-* Use a serializer and LVDS for (double data rate? - See Brigham's shift register design)
-
-[VHDL Part 1](./lectures/vhdl1.md)
-[VHDL Part 2](./lectures/vhdl2.md)
-[Poor Design Practice](./lectures/poor_practice.md)
-[Verification with UVM](./lectures/uvm.md)
-Cliff Cummings, Sunburst (UVM/SV)
--->
 
 <!-- The pptx tags are for linking power point files to lecture mapping. A claude skill will use this to create a schedule page on canvas with the power point linked. -->
 
@@ -45,9 +23,9 @@ Cliff Cummings, Sunburst (UVM/SV)
 | 4 | 9/21/2026  | [SystemVerilog Testbenches](./lectures/testbenches.md)| <!-- pptx=testbenches.pptx -->
 |   | 9/23/2026  | [Functions, Tasks, Threads, generate](./lectures/functions_tasks.md) | <!-- pptx=function_tasks_threads.pptx -->
 |   | 9/25/2026  | [SystemVerilog Types](./lectures/systemverilog_types.md) | <!-- pptx=sv_types.pptx -->
-| 5 | 9/28/2026  | [Memories](./lectures/memories.md) |
-|   | 9/30/2026  | [SPI Controller](./lectures/spi.md) |
-|   | 10/2/2026  | [Timing overview and review](./lectures/timing_overview.md) |
+| 5 | 9/28/2026  | [Memories](./lectures/memories.md) | <!-- pptx=memories.pptx -->
+|   | 9/30/2026  | [SPI Controller](./lectures/spi.md) | <!-- pptx=spi_overview.pptx -->
+|   | 10/2/2026  | [Timing overview and review](./lectures/timing_overview.md) | <!-- pptx=basic_timing.pptx -->
 | 6 | 10/5/2026  | [Clock Skew](./lectures/clock_skew.md) |
 |   | 10/7/2026  | [Xilinx Clock Resources (MMCM)](./lectures/xilinx_clocking.md) |
 |   | 10/9/2026  | [Xilinx Clock Timing reports](./lectures/xilinx_timing.md) |
@@ -79,6 +57,33 @@ Cliff Cummings, Sunburst (UVM/SV)
 |   | 12/9/2026  | Review for Exam (last day of class) |
 | **Week 16**|  |
 | 16 | 12/16/2026 | Final Exam in class (Wed, 11:00 AM - 2:00 PM) |
+
+<!--
+Suggested changes to schedule:
+* Teach SV types before the testbenches and functions/tasks (it is longer and can bleed over to the shorter lectures)
+
+Possible lectures
+* Lecture on double data rate and serializer/deserializer (LVDS) - see Brigham's shift register design
+* Dedicated lecture on implementation, constraints, and timing analysis
+* Dedicated lecture on Verilog vs. SystemVerilog (how to code in Verilog)
+  (this seemed to be weak and skipped this time)
+
+Other Lectures: 
+* ILA (Integrated Logic Analyzer)
+* Simulation Coverage
+* Assertions
+* [Alternative HDLs](./lectures/alt_hdl.md)
+* [Wishbone Bus](./lectures/wishbone.md)
+
+Other Assignments:
+* Use a serializer and LVDS for (double data rate? - See Brigham's shift register design)
+
+[VHDL Part 1](./lectures/vhdl1.md)
+[VHDL Part 2](./lectures/vhdl2.md)
+[Poor Design Practice](./lectures/poor_practice.md)
+[Verification with UVM](./lectures/uvm.md)
+Cliff Cummings, Sunburst (UVM/SV)
+-->
 
 
 ## Assignments
