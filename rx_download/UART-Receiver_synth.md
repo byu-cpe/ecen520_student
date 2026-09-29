@@ -194,9 +194,6 @@ The following assignment specific items should be included in your repository:
 Notes:
 -- Any _new_ coding standards to add? It would be nice to add something for this assignment
   ? Experiment with different encoding styles?
-  - Note that many studens struggled debugging their receiver and the transmitter model at the same time. It wasn't clear which one has the problem.
-     - Suggestion: create a top-level testbench that just hooks up my receiver model to their transmitter model and is used to validate their transmitter 
-
 - Future:
-  - Describe how to use seven segmetn checker model. This way, they can have a known good transmitter model to test their receiver.
+  - Describe how to use seven segment checker model. This way, they can have a known good transmitter model to test their receiver.
 -->

@@ -42,10 +42,25 @@ When there is no transaction, the signal should be low.
 There is a control bit `CPOL` that determines the polarity of the idle `SPI_SCLK`.
 We will assume `CPOL` = 0 meaning that SCLK is low when no transactions are in process.
 The `SPI_SCLK` signal will toggle at a much slower rate than our input 100 MHz clock.
-For the [accelerometer](https://www.analog.com/media/en/technical-documentation/data-sheets/ADXL362.pdf) we are using, the maximum frequency of the `SPI_SCLK` is 8 MHz (the clock low and clock high phases must be 50 ns or longer for a minimum clock period of 100 ns).  
+For the [accelerometer](https://www.analog.com/media/en/technical-documentation/data-sheets/ADXL362.pdf) we are using, the maximum frequency of the `SPI_SCLK` is 8 MHz (a minimum clock period of 125 ns, with the clock low and clock high phases each 50 ns or longer).  
 Your controller will need to generate the desired `SPI_SCLK` frequency based on a parameter, `SCLK_FREQUENCY`.
 Like the UART, you will need to have a state that is multiple clock cycles long for each phase of the `SPI_SCLK` signal.
-You will determine the number of clock cycles for each phase of `SPI_SCLK` by the `SCLOCK_FREQUENCY` and `CLK_FREQUENCY` module parameters.
+You will determine the number of clock cycles for each phase of `SPI_SCLK` by the `SCLK_FREQUENCY` and `CLK_FREQUENCY` module parameters
+(`PHASE_CNT = CLK_FREQUENCY / (2 * SCLK_FREQUENCY)`).
+For example, with the default parameters (100 MHz clock, 500 kHz `SCLK`) each phase is 100 clock cycles long.
+
+A transaction with the controller proceeds as follows (this assumes `CPHA` = 0):
+  1. The user asserts `start` in the IDLE state. The controller drives `/CS` low and places the first data bit on `MOSI`.
+  2. `SCLK` is held low for one phase and then driven high. The subnode samples `MOSI` and the controller samples `MISO` on this rising edge of `SCLK`.
+  3. `SCLK` is held high for one phase and then driven low. On this falling edge the controller shifts the next bit onto `MOSI` (and the subnode shifts the next bit onto `MISO`). The `sample` output is asserted for one clock cycle at the end of each high phase to indicate that one bit has been transferred.
+  4. Steps 2 and 3 repeat for as long as `start` remains asserted.
+  5. If `start` is low at the end of a low phase, the controller drives `/CS` high and returns to IDLE.
+
+**Important:** the controller does *not* count bits.
+The user of the controller is responsible for holding `start` high and counting the `sample` pulses to determine when a byte has been transferred (i.e., 8 `sample` pulses for an 8-bit transfer).
+To end the transaction after the last bit, deassert `start` after the last `sample` pulse.
+To continue with another byte without releasing `/CS` (a multi-byte transfer), keep `start` high and assert `load` with the next byte on `data_to_send` during the same clock cycle as the last `sample` pulse of the current byte.
+The provided testbench demonstrates both single-byte and multi-byte transfers.
 
 Create a controller with the name `spi_cntrl.sv` that has following top-level ports and parameters:
 
@@ -59,7 +74,7 @@ Create a controller with the name `spi_cntrl.sv` that has following top-level po
 | spi_miso | Input | 1 | SPI MISO signal |
 | data_received | Output | SHIFT_REG_WIDTH | Data received on the last transfer |
 | busy | Output | 1 | Controller is busy |
-| sample | Output | 1 | Indicates that a new sample is ready |
+| sample | Output | 1 | One clock cycle pulse at the end of each `SCLK` high phase (one pulse per bit transferred) |
 | spi_sclk | Output | 1 | SCLK output signal |
 | spi_mosi | Output | 1 | MOSI output signal |
 | spi_cs | Output | 1 | CS output signal |
@@ -75,14 +90,20 @@ Create your SPI controller from the following ASMD diagram:
 
 ![SPI Transaction](./spi_cntrl_asmd.png)
 
+The diagram shows the shift operations for LSB-first (`MSB_FIRST` = 0).
+The numbered footnotes give the corresponding operations for MSB-first (`MSB_FIRST` = 1, the default).
+(Note: `soi_cs` in the IDLE state should read `spi_cs`, and `spi_clk` in the reset notes should read `spi_sclk`.)
+
 The following notes provide more details for the ASMD diagram:
 * Internal Registers:
-  * The internal counter `sclk_cnt` counts the number of clock cycles for each phase of the `SPI_SCLK` signal. A constant `PHASE_CNT` determines how many clock cycles are needed and are based on the `CLK_FREQUENCY` and `SCLK_FREQUENCY` parameters.
-  * The internal register `data_o_sr` is a shift register used to shift data from the controller to the sub-node. It is loaded when `start` is asserted in the IDLE state and when `load` is asserted in the SCLK_HIGH state. 
+  * The internal counter `sclk_cnt` counts the number of clock cycles for each phase of the `SPI_SCLK` signal. A constant `PHASE_CNT` determines how many clock cycles are needed and is computed from the `CLK_FREQUENCY` and `SCLK_FREQUENCY` parameters.
+  * The internal register `data_o_sr` is a shift register used to shift data from the controller to the subnode. It is loaded when `start` is asserted in the IDLE state and when `load` is asserted at the end of the SCLK_HIGH state (i.e., in the same clock cycle that `sample` is asserted). Otherwise it shifts by one bit at the end of each SCLK_HIGH state.
+  * `data_received` is a shift register that captures `spi_miso` at the end of each SCLK_LOW state (the rising edge of `SCLK`). After the last bit of a byte, `data_received` holds the complete byte by the time the final `sample` pulse is asserted.
   * `spi_sclk` is a single-bit register that is used for the SPI clock output. It should be reset into the low state. It is set when transitioning between states. It is a register to avoid glitches.
   * `spi_cs` is a single-bit register that is used for the SPI chip select output. It should be reset into the high state. It is set when transitioning between states. It is a register to avoid glitches.
 * Outputs:
   * `busy` indicates that the controller is busy and is asserted in the non-IDLE states.
+  * `sample` is asserted for one clock cycle when the SCLK_HIGH state ends.
   * `spi_mosi` is driven from the MSB or LSB of the shift register depending on the `MSB_FIRST` parameter. Since it is derived from a shift register it will not have glitches
 
 <!-- 
@@ -136,6 +157,7 @@ When designing yoru controller, use the following Verilog 2001/SystemVerilog con
 A testbench named [spi_cntrl_tb.sv](spi_cntrl_tb.sv) has been created for you to test your controller.
 This testbench also instances the SPI subnode simulation model ([spi_subunit.sv](spi_subunit.sv)), so you will need to compile this file with your testbench.
 Create a makefile rule named `sim_spi_cntrl` that generates a log file named `sim_spi_cntrl.log`.
+The testbench prints `Error:<spi_cntrl_tb>` whenever a received byte does not match the expected value, and the passoff script checks the log file for this message.
 Make sure there are no errors in your controller before proceeding.
 
 <!-- 
@@ -173,16 +195,16 @@ Create your controller module in a file named `adxl362_cntrl.sv` and create the 
 | clk | Input | 1 | Clock |
 | rst | Input | 1 | Reset |
 | start| Input | 1 | start a transfer |
-| write | Input | 1 | Indicates typeof operation (0=read/1=write) |
+| write | Input | 1 | Indicates type of operation (0=read/1=write) |
 | data_to_send | Input | 8 | Data to send to subunit |
 | address | Input | 8 | Address for data transfer |
 | busy | Output | 1 | Controller is busy |
 | done | Output | 1 | One clock cycle signal indicating that the transfer is done and the received data is valid |
 | data_received | Output | 8 | Data received on the last transfer |
-| SPI_MISO | Input | 1 | SPI MISO signal |
-| SPI_SCLK | Output | 1 | SCLK output signal |
-| SPI_MOSI | Output | 1 | MOSI output signal |
-| SPI_CS | Output | 1 | CS output signal |
+| spi_miso | Input | 1 | SPI MISO signal |
+| spi_sclk | Output | 1 | SCLK output signal |
+| spi_mosi | Output | 1 | MOSI output signal |
+| spi_cs | Output | 1 | CS output signal |
 
 | Parameter Name | Default Value | Purpose |
 | ---- | ---- | ---- |
@@ -193,48 +215,58 @@ Your controller will instance the generic SPI controller you developed earlier.
 You will need to create a state machine in your controller design to implement the three byte transfer using the SPI controller (i.e., send one byte, send second byte, and so on for three bytes). 
 When the `start` signal is asserted read the `write` signal to determine what type of operation to perform.
 If `write` is asserted, perform a write sequence.
-If `read` is asserted, perform a read sequence. 
+If `write` is de-asserted, perform a read sequence. 
 These sequences are as follows:
 
   * Write register (when `write` is asserted)
-    * Byte 0: write register (0x0a) command that tells the adxl362 that you will be preforming a WRITE
+    * Byte 0: write register (0x0a) command that tells the adxl362 that you will be performing a WRITE
     * Byte 1: 8-bit address (taken from the `address` input)
     * Byte 2: Data to write (taken from `data_to_send`)
   * Read register (when `write` is de-asserted)
-    * Byte 0: read register (0x0b) command that tells the adxl362 that you will be preforming a READ
+    * Byte 0: read register (0x0b) command that tells the adxl362 that you will be performing a READ
     * Byte 1: 8-bit address (taken from the `address` input)
     * Byte 2: Don't care (capture the byte received on this operation)
 
+All three bytes must be sent within a single transaction (i.e., `/CS` stays low for all 24 bits).
+Since the SPI controller does not count bits, your state machine will need to count the `sample` pulses from the SPI controller:
+hold the SPI controller's `start` signal high for the entire transaction, assert `load` with the next byte at the 8th and 16th `sample` pulses, and deassert `start` after the 24th `sample` pulse.
+Assert `done` for one clock cycle when the SPI controller returns to IDLE, at which point `data_received` holds the byte received during byte 2.
+
 ### ADXL362 Testbench
 
-Create a testbench of your controller named `adxl362_cntrl_tb.sv` that tests the operation of your AXDL362L controller.
+Create a testbench of your controller named `adxl362_cntrl_tb.sv` that tests the operation of your ADXL362 controller.
 This testbench should be designed as follows:
 * Make the top-level testbench parameterizable with the two top-level parameters.
 * Create a free-running clock
-* Instance your top-level design
+* Instance your `adxl362_cntrl` module
 * Instance the [ADXL362 simulation](./adxl362_model.sv) model
-  * attach the SPI signals from the design to the SPI signals of the simulation
+  * attach the SPI signals from the design to the SPI signals of the simulation model
 * Perform the following sequence of events for your testbench:
   * Execute the simulation for a few clock cycles without setting any of the inputs
-  * Set default values for the inputs (reset, buttons, and switchces)
-  * Wait for a few clock cycle, assert the reset for a few clock cycles, deassert the reset (don't forget that the reset signal for the board is low asserted)
+  * Set default values for the inputs (`rst`, `start`, `write`, `address`, and `data_to_send`)
+  * Wait for a few clock cycles, assert `rst` for a few clock cycles, and deassert `rst`
   * Perform the following operations within your testbench by setting the address and data_to_send:
-    * Read the DEVICEID register (0x0). Should get 0xad
-    * Read the PARTID (0x02) to make sure you are getting consistent correct data (0xF2)
-    * Read the status register (0x0b): should get 0x41 on power up (0xC0?)
-    * Write the value 0x52 to register 0x1F for a soft reset
+    * Read the DEVICEID register (0x00). Should get 0xAD
+    * Read the PARTID register (0x02). Should get 0xF2
+    * Read the STATUS register (0x0B). Should get 0x41
+    * Write the value 0x52 to register 0x1F for a soft reset (the simulation model will print the value it received)
+  * For each read, check the value in `data_received` when `done` is asserted.
+    Print a message indicating that the correct value was received, or print a message that includes the string `Error:<adxl362_cntrl_tb>` if the value is incorrect
+    (the passoff script checks `sim_adxl362.log` for this string).
+  * End your simulation with `$stop`
 
 Make sure your design successfully passes this testbench.
-Add the makefile rules named `sim_adxl362` that will perform this simulation from the command line. and generates a log file named `sim_adxl362.log`.
+Add a makefile rule named `sim_adxl362` that performs this simulation from the command line and generates a log file named `sim_adxl362.log`.
+This rule will need to compile `spi_cntrl.sv`, `adxl362_cntrl.sv`, `adxl362_model.sv`, and `adxl362_cntrl_tb.sv`.
  <!-- (the `sim_adxl362_100` rule should be used to set the `SCLK_FREQUENCY` parameter to 100_000). -->
 
 ### Synthesis of SPI Controller Modules
 
-Before proceeding with the top-level SPI design, it is important to make sure that your SPI controller and adxl362 controller from the previous assignment are properly synthesize.
-Create a makefile rule named `synth_adxl362_cntrl` that performs "out of context" synthesis of the adxl362 controller module from the previous assignment.
+Before using these modules in a top-level design (next assignment), it is important to make sure that your SPI controller and ADXL362 controller synthesize properly.
+Create a makefile rule named `synth_adxl362_cntrl` that performs "out of context" synthesis of the `adxl362_cntrl` module (which includes your `spi_cntrl` module).
 Generate a log file named `synth_adxl362_cntrl.log` and a .dcp file named `adxl362_cntrl_synth.dcp`.
-Make sure all synthesis warnings and errors are resolved before proceeding with the top-level design.
-If you made any changes to your modules to resolve synthesis errors, rerun the testbenches from the previous assignment to make sure they operate correctly.
+Make sure all synthesis warnings and errors are resolved before submitting your assignment.
+If you made any changes to your modules to resolve synthesis errors, rerun both testbenches to make sure your modules still operate correctly.
 
 Once you have synthesized your design, open the .dcp file in Vivado to view the schematic of the synthesized design.
 You can view the schematic by running `vivado` in GUI mode and typing the following command in the Tcl console: ```open_checkpoint adxl362_cntrl_synth.dcp```
@@ -243,6 +275,7 @@ Select Tools->Schematic to view the schematic of the design.
 Take a screenshot of the schematic and name the file `adxl362_cntrl.png`.
 Double click on the 'spi_cntrl' instance to view the schematic of the SPI controller.
 Take a screenshot of the schematic and name the file `spi_cntrl.png`.
+Commit both screenshots to your repository (the passoff script checks that they are tracked).
 
 <!--
 ## Preliminary Synthesis
@@ -259,13 +292,12 @@ Make sure all synthesis warnings and errors are resolved before submitting your 
 
 ## Submission and Grading
 
-1. Add all required makefile rules described above (see `passoff.py` for details):
-4. Complete the `report.md` file with the required information
+1. Add all required makefile rules described above (see `passoff.py` for details): `sim_spi_cntrl`, `sim_adxl362`, and `synth_adxl362_cntrl`
+2. Commit the `adxl362_cntrl.png` and `spi_cntrl.png` schematic screenshots
+3. Complete the `report.md` file with the required information
 
 <!--
-- Fix the  ASM diagram to show high being able to move to the idle state if start is 0.
 - I think a text description of an SPI transaction would've been helpful. The explanations for each of the signals was very brief and didn't provide much information on what the signal was supposed to do. Because of my lack of exposure to protocols like this, it made it hard to know what data was being loaded when load was asserted, for example. Have a resource of what was supposed to happen in the system would've been helpful, since all I had to go off of was code that I wrote.
 - Come up with some "discussion" or exploration exercise as part of the readme.md
-- It is hard to follow their testbenches. Need to provide more constraints so that I can follow and see that what was recieved is what was sent
-  (prehaps have them provide such a statement in the testbench output)
+- It is hard to follow their testbenches. Need to provide more constraints so that I can follow and see that what was recieved is what was sent (prehaps have them provide such a statement in the testbench output)
 -->
