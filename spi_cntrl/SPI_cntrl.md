@@ -215,6 +215,8 @@ Like the UART, you will need to have a state that is multiple clock cycles long 
 You will determine the number of clock cycles for each phase of `SPI_SCLK` by the `SCLK_FREQUENCY` and `CLK_FREQUENCY` module parameters (`PHASE_CNT = CLK_FREQUENCY / (2 * SCLK_FREQUENCY)`).
 For example, with the default parameters (100 MHz clock, 500 kHz `SCLK`) each phase is 100 clock cycles long.
 
+The SPI specification requires that CS is high or at least 20 ns.
+Create a constant named `CS_DELAY` that determines the number of clock cycles CS should remain high before starting a new transaction.
 
 <!-- You will create another module that instances your SPI controller and adds additional logic to control the accelerometer on the Nexys4 board. 
 Links to the accelerometer are listed below for your convenience.
@@ -294,7 +296,7 @@ This testbench should be designed as follows:
     * Read the PARTID register (0x02). Should get 0xF2
     * Read the STATUS register (0x0B). Should get 0x41
     * Write the value 0x52 to register 0x1F for a soft reset (the simulation model will print the value it received)
-  * For each read, check the value in `data_to_send` when `done` is asserted.
+  * For each read, check the value in `read_data` when `done` is asserted.
     Print a message indicating that the correct value was received, or print a message that includes the string `Error:<adxl362_cntrl_tb>` if the value is incorrect
     (the passoff script checks `sim_adxl362.log` for this string).
   * End your simulation with `$stop`
