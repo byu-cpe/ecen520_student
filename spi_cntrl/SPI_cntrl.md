@@ -20,6 +20,7 @@ For the purposes of this assignment, the term "Main" will be used for the term "
 While these terms are not perfect, they retain the "M" letter and the "S" letter from the original terms and thus are consistent with the pin names of the SPI protocol.
 Other terminology has been proposed, and it can sometimes be difficult to reconcile the terminology from different devices and data sheets.
 
+<!-- 
 ## SPI Controller
 
 The first task for this assignment is to create a generic SPI controller that can be used to support a variety of application specific controllers.
@@ -35,7 +36,6 @@ As a serial protocol, data is shifted one bit per clock cycle.
 Unlike the UART, data is being written and read at the same time.
 The use of two data signals, `MISO` and `MOSI` allow this full duplex communication to occur.
 
-<!-- SCLK -->
 The controller you design will need to generate the `SPI_SCLK` signal used by the subunits.
 This clock is not continuous as with a conventional clock and will only toggle during a transaction.
 When there is no transaction, the signal should be low.
@@ -45,8 +45,7 @@ The `SPI_SCLK` signal will toggle at a much slower rate than our input 100 MHz c
 For the [accelerometer](https://www.analog.com/media/en/technical-documentation/data-sheets/ADXL362.pdf) we are using, the maximum frequency of the `SPI_SCLK` is 8 MHz (a minimum clock period of 125 ns, with the clock low and clock high phases each 50 ns or longer).  
 Your controller will need to generate the desired `SPI_SCLK` frequency based on a parameter, `SCLK_FREQUENCY`.
 Like the UART, you will need to have a state that is multiple clock cycles long for each phase of the `SPI_SCLK` signal.
-You will determine the number of clock cycles for each phase of `SPI_SCLK` by the `SCLK_FREQUENCY` and `CLK_FREQUENCY` module parameters
-(`PHASE_CNT = CLK_FREQUENCY / (2 * SCLK_FREQUENCY)`).
+You will determine the number of clock cycles for each phase of `SPI_SCLK` by the `SCLK_FREQUENCY` and `CLK_FREQUENCY` module parameters (`PHASE_CNT = CLK_FREQUENCY / (2 * SCLK_FREQUENCY)`).
 For example, with the default parameters (100 MHz clock, 500 kHz `SCLK`) each phase is 100 clock cycles long.
 
 A transaction with the controller proceeds as follows (this assumes `CPHA` = 0):
@@ -68,7 +67,8 @@ Create a controller with the name `spi_cntrl.sv` that has following top-level po
 | ---- | ---- | ---- | ----  |
 | clk | Input | 1 | Clock |
 | rst | Input | 1 | Reset |
-| start| Input | 1 | start a transfer |
+| start | Input | 1 | start a transfer |
+| end | Input | 1 | end a transfer |
 | load | Input | 1 | Load a new value into the shift register |
 | data_to_send | Input | SHIFT_REG_WIDTH | Data to send to subunit |
 | spi_miso | Input | 1 | SPI MISO signal |
@@ -92,7 +92,6 @@ Create your SPI controller from the following ASMD diagram:
 
 The diagram shows the shift operations for LSB-first (`MSB_FIRST` = 0).
 The numbered footnotes give the corresponding operations for MSB-first (`MSB_FIRST` = 1, the default).
-(Note: `soi_cs` in the IDLE state should read `spi_cs`, and `spi_clk` in the reset notes should read `spi_sclk`.)
 
 The following notes provide more details for the ASMD diagram:
 * Internal Registers:
@@ -101,10 +100,15 @@ The following notes provide more details for the ASMD diagram:
   * `data_received` is a shift register that captures `spi_miso` at the end of each SCLK_LOW state (the rising edge of `SCLK`). After the last bit of a byte, `data_received` holds the complete byte by the time the final `sample` pulse is asserted.
   * `spi_sclk` is a single-bit register that is used for the SPI clock output. It should be reset into the low state. It is set when transitioning between states. It is a register to avoid glitches.
   * `spi_cs` is a single-bit register that is used for the SPI chip select output. It should be reset into the high state. It is set when transitioning between states. It is a register to avoid glitches.
+* Inputs:
+  * `start` initiates a transfer when asserted in the IDLE state.
+  * `end` signals the end of a transfer and returns to the IDLE state.
 * Outputs:
   * `busy` indicates that the controller is busy and is asserted in the non-IDLE states.
   * `sample` is asserted for one clock cycle when the SCLK_HIGH state ends.
-  * `spi_mosi` is driven from the MSB or LSB of the shift register depending on the `MSB_FIRST` parameter. Since it is derived from a shift register it will not have glitches
+  * `spi_mosi` is driven from the MSB or LSB of the shift register depending on the `MSB_FIRST` parameter. Since it is derived from a shift register it will not have glitches 
+  
+  -->
 
 <!-- 
 Your controller should generate the `/CS`, `SCLK`, and `MOSI` signals as shown in the following SPI transaction diagram:
@@ -152,13 +156,14 @@ When designing yoru controller, use the following Verilog 2001/SystemVerilog con
 * An enumerated type for your state values  
 -->
 
-### SPI Testbench
+<!-- ### SPI Testbench
 
 A testbench named [spi_cntrl_tb.sv](spi_cntrl_tb.sv) has been created for you to test your controller.
 This testbench also instances the SPI subnode simulation model ([spi_subunit.sv](spi_subunit.sv)), so you will need to compile this file with your testbench.
 Create a makefile rule named `sim_spi_cntrl` that generates a log file named `sim_spi_cntrl.log`.
 The testbench prints `Error:<spi_cntrl_tb>` whenever a received byte does not match the expected value, and the passoff script checks the log file for this message.
 Make sure there are no errors in your controller before proceeding.
+ -->
 
 <!-- 
 Once you have created your SPI controller, create a testbench named `spi_cntrl_tb.sv` to simulate transactions with your controller.
@@ -181,10 +186,39 @@ Create a makefile rule named `sim_spi_cntrl` that will run your testbench with t
 In addition, create a makefile named `sim_spi_cntrl_100` that runs the same testbench but using 100_000 as the `SCLK_FREQUENCY` parameter.
  -->
 
-## ADXL362 Controller
+## ADXL362 SPI Controller
 
-You will create another module that instances your SPI controller and adds additional logic to control the accelerometer on the Nexys4 board. 
-Links to the accelerometer are listed below for your convenience. 
+The primary task of this assignment is to create a SPI controller for the ADXL362.
+This controller is not general purpose and will not be used for other SPI devices.
+This SPI controller will be responsible for communicating read and write commands to the ADXL362 accelerometer.
+
+Review online resources to become intimately familiar with the SPI protocol ([wikipedia](https://en.wikipedia.org/wiki/Serial_Peripheral_Interface),
+[Analog Devices](https://www.analog.com/en/analog-dialogue/articles/introduction-to-spi-interface.html), and
+[circuit basics](https://www.circuitbasics.com/basics-of-the-spi-communication-protocol/)).
+The SPI protocol is a serial protocol that involves the following four signals: a clock (`SCLK`), a chip select (`/CS`), data out or `MOSI` (Main out, subnode in), and data in or `MISO` (Main in, subnode out).
+Only one main controller may exist on the SPI bus but multiple sub-nodes may share the bus.
+The controller drives the `SCLK`, `/CS`, and `MOSI` signals.
+The sub-nodes drive the `MISO` signal.
+As a serial protocol, data is shifted one bit per clock cycle.
+Unlike the UART, data is being written and read at the same time.
+The use of two data signals, `MISO` and `MOSI` allow this full duplex communication to occur.
+
+The controller you design will need to generate the `SPI_SCLK` signal used by the subunits.
+This clock is not continuous as with a conventional clock and will only toggle during a transaction.
+When there is no transaction, the signal should be low.
+There is a control bit `CPOL` that determines the polarity of the idle `SPI_SCLK`.
+We will assume `CPOL` = 0 meaning that SCLK is low when no transactions are in process.
+The `SPI_SCLK` signal will toggle at a much slower rate than our input 100 MHz clock.
+For the [accelerometer](https://www.analog.com/media/en/technical-documentation/data-sheets/ADXL362.pdf) we are using, the maximum frequency of the `SPI_SCLK` is 8 MHz (a minimum clock period of 125 ns, with the clock low and clock high phases each 50 ns or longer).  
+Your controller will need to generate the desired `SPI_SCLK` frequency based on a parameter, `SCLK_FREQUENCY`.
+Like the UART, you will need to have a state that is multiple clock cycles long for each phase of the `SPI_SCLK` signal.
+You will determine the number of clock cycles for each phase of `SPI_SCLK` by the `SCLK_FREQUENCY` and `CLK_FREQUENCY` module parameters (`PHASE_CNT = CLK_FREQUENCY / (2 * SCLK_FREQUENCY)`).
+For example, with the default parameters (100 MHz clock, 500 kHz `SCLK`) each phase is 100 clock cycles long.
+
+
+<!-- You will create another module that instances your SPI controller and adds additional logic to control the accelerometer on the Nexys4 board. 
+Links to the accelerometer are listed below for your convenience.
+-->
 
 The ADXL362 accelerometer uses a three byte transfer to perform a read or a write to/from its registers (see figures 36 and 37 of the [data sheet](https://www.analog.com/media/en/technical-documentation/data-sheets/ADXL362.pdf)). 
 You will need to support both write and read register operation as described below.
@@ -195,12 +229,12 @@ Create your controller module in a file named `adxl362_cntrl.sv` and create the 
 | clk | Input | 1 | Clock |
 | rst | Input | 1 | Reset |
 | start| Input | 1 | start a transfer |
-| write | Input | 1 | Indicates type of operation (0=read/1=write) |
-| data_to_send | Input | 8 | Data to send to subunit |
+| read | Input | 1 | Indicates type of operation (0=write/1=read) |
+| write_data | Input | 8 | Data to send to controller |
 | address | Input | 8 | Address for data transfer |
 | busy | Output | 1 | Controller is busy |
 | done | Output | 1 | One clock cycle signal indicating that the transfer is done and the received data is valid |
-| data_received | Output | 8 | Data received on the last transfer |
+| read_data | Output | 8 | Data received on the last transfer |
 | spi_miso | Input | 1 | SPI MISO signal |
 | spi_sclk | Output | 1 | SCLK output signal |
 | spi_mosi | Output | 1 | MOSI output signal |
@@ -211,26 +245,36 @@ Create your controller module in a file named `adxl362_cntrl.sv` and create the 
 | CLK_FREQUENCY | 100_000_000 | Specify the clock frequency of the board |
 | SCLK_FREQUENCY  | 500_000 | Specify the frequency of the SCLK |
 
-Your controller will instance the generic SPI controller you developed earlier.
-You will need to create a state machine in your controller design to implement the three byte transfer using the SPI controller (i.e., send one byte, send second byte, and so on for three bytes). 
-When the `start` signal is asserted read the `write` signal to determine what type of operation to perform.
-If `write` is asserted, perform a write sequence.
-If `write` is de-asserted, perform a read sequence. 
+<!-- Your controller will instance the generic SPI controller you developed earlier.
+You will need to create a state machine in your controller design to implement the three byte transfer using the SPI controller (i.e., send one byte, send second byte, and so on for three bytes).
+-->
+
+Create your state machine based on the ASMD diagram shown below.
+
+![ASMD Diagram](./adxl_cntrl_asmd.png)
+
+When the `start` signal is asserted read the `read` signal to determine what type of operation to perform.
+If `read` is asserted, perform a read sequence.
+If `read` is de-asserted, perform a write sequence. 
 These sequences are as follows:
 
-  * Write register (when `write` is asserted)
+  * Write register (when `read` is not asserted)
     * Byte 0: write register (0x0a) command that tells the adxl362 that you will be performing a WRITE
     * Byte 1: 8-bit address (taken from the `address` input)
-    * Byte 2: Data to write (taken from `data_to_send`)
-  * Read register (when `write` is de-asserted)
+    * Byte 2: Data to write (taken from `write_data`)
+  * Read register (when `read` is asserted)
     * Byte 0: read register (0x0b) command that tells the adxl362 that you will be performing a READ
     * Byte 1: 8-bit address (taken from the `address` input)
     * Byte 2: Don't care (capture the byte received on this operation)
 
 All three bytes must be sent within a single transaction (i.e., `/CS` stays low for all 24 bits).
-Since the SPI controller does not count bits, your state machine will need to count the `sample` pulses from the SPI controller:
+<!-- Since the SPI controller does not count bits, your state machine will need to count the `sample` pulses from the SPI controller:
 hold the SPI controller's `start` signal high for the entire transaction, assert `load` with the next byte at the 8th and 16th `sample` pulses, and deassert `start` after the 24th `sample` pulse.
-Assert `done` for one clock cycle when the SPI controller returns to IDLE, at which point `data_received` holds the byte received during byte 2.
+-->
+Assert `done` for one clock cycle when the SPI controller returns to IDLE, at which point `read_data` holds the byte received during byte 2.
+
+
+
 
 ### ADXL362 Testbench
 
@@ -243,26 +287,26 @@ This testbench should be designed as follows:
   * attach the SPI signals from the design to the SPI signals of the simulation model
 * Perform the following sequence of events for your testbench:
   * Execute the simulation for a few clock cycles without setting any of the inputs
-  * Set default values for the inputs (`rst`, `start`, `write`, `address`, and `data_to_send`)
+  * Set default values for the inputs (`rst`, `start`, `read`, `address`, and `write_data`)
   * Wait for a few clock cycles, assert `rst` for a few clock cycles, and deassert `rst`
   * Perform the following operations within your testbench by setting the address and data_to_send:
     * Read the DEVICEID register (0x00). Should get 0xAD
     * Read the PARTID register (0x02). Should get 0xF2
     * Read the STATUS register (0x0B). Should get 0x41
     * Write the value 0x52 to register 0x1F for a soft reset (the simulation model will print the value it received)
-  * For each read, check the value in `data_received` when `done` is asserted.
+  * For each read, check the value in `data_to_send` when `done` is asserted.
     Print a message indicating that the correct value was received, or print a message that includes the string `Error:<adxl362_cntrl_tb>` if the value is incorrect
     (the passoff script checks `sim_adxl362.log` for this string).
   * End your simulation with `$stop`
 
 Make sure your design successfully passes this testbench.
 Add a makefile rule named `sim_adxl362` that performs this simulation from the command line and generates a log file named `sim_adxl362.log`.
-This rule will need to compile `spi_cntrl.sv`, `adxl362_cntrl.sv`, `adxl362_model.sv`, and `adxl362_cntrl_tb.sv`.
+This rule will need to compile `adxl362_cntrl.sv`, `adxl362_model.sv`, and `adxl362_cntrl_tb.sv`.
  <!-- (the `sim_adxl362_100` rule should be used to set the `SCLK_FREQUENCY` parameter to 100_000). -->
 
-### Synthesis of SPI Controller Modules
+### Synthesis of SPI Controller Module
 
-Before using these modules in a top-level design (next assignment), it is important to make sure that your SPI controller and ADXL362 controller synthesize properly.
+Before using these modules in a top-level design (next assignment), it is important to make sure that your SPI ADXL362 controller synthesize properly.
 Create a makefile rule named `synth_adxl362_cntrl` that performs "out of context" synthesis of the `adxl362_cntrl` module (which includes your `spi_cntrl` module).
 Generate a log file named `synth_adxl362_cntrl.log` and a .dcp file named `adxl362_cntrl_synth.dcp`.
 Make sure all synthesis warnings and errors are resolved before submitting your assignment.
@@ -273,9 +317,9 @@ You can view the schematic by running `vivado` in GUI mode and typing the follow
 At this point the device view is shown.
 Select Tools->Schematic to view the schematic of the design.
 Take a screenshot of the schematic and name the file `adxl362_cntrl.png`.
-Double click on the 'spi_cntrl' instance to view the schematic of the SPI controller.
-Take a screenshot of the schematic and name the file `spi_cntrl.png`.
-Commit both screenshots to your repository (the passoff script checks that they are tracked).
+<!-- Double click on the 'spi_cntrl' instance to view the schematic of the SPI controller.
+Take a screenshot of the schematic and name the file `spi_cntrl.png`. -->
+Commit the screenshot to your repository (the passoff script checks that they are tracked).
 
 <!--
 ## Preliminary Synthesis
@@ -292,8 +336,8 @@ Make sure all synthesis warnings and errors are resolved before submitting your 
 
 ## Submission and Grading
 
-1. Add all required makefile rules described above (see `passoff.py` for details): `sim_spi_cntrl`, `sim_adxl362`, and `synth_adxl362_cntrl`
-2. Commit the `adxl362_cntrl.png` and `spi_cntrl.png` schematic screenshots
+1. Add all required makefile rules described above (see `passoff.py` for details): `sim_adxl362`, and `synth_adxl362_cntrl`
+2. Commit the `adxl362_cntrl.png` schematic screenshot
 3. Complete the `report.md` file with the required information
 
 <!--
