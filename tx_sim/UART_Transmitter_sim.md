@@ -185,6 +185,11 @@ The following assignment specific items should be included in your repository:
 2. Complete the [report.md](report.md) file in your assignment directory.
 
 <!-- Notes:
+Time: 8,5,2.5,2,10,15,6,4,24,5,7,8,4,7,6,2
+
+- Makefile examples / templates
+- Make sure software and tools are loaded first
+- Better questasim tutorial
 - Need to have a way for the testbench to generate an error when there is a problem so the python file catches the error.
 - more instructions on makefiles and 'clean' (links to resources)
 - More instructions on using and setting up ModelSim/QuestaSim (links to resources). .do file tutorial

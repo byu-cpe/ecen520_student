@@ -26,9 +26,9 @@ This repository contains the lecture schedule (including links to lecture summar
 | 5  | 9/28/2026  | [Memories](./lectures/memories.md) | <!-- pptx=memories.pptx -->
 |    | 9/30/2026  | [SPI Controller](./lectures/spi.md) | <!-- pptx=spi_overview.pptx -->
 |    | 10/2/2026  | [Timing overview and review](./lectures/timing_overview.md) | <!-- pptx=basic_timing.pptx -->
-| 6  | 10/5/2026  | [Clock Skew](./lectures/clock_skew.md) |
-|    | 10/7/2026  | [Xilinx Clock Resources (MMCM)](./lectures/xilinx_clocking.md) |
-|    | 10/9/2026  | [Xilinx Clock Timing reports](./lectures/xilinx_timing.md) |
+| 6  | 10/5/2026  | [Clock Skew](./lectures/clock_skew.md) | <!-- pptx=clock_skew.pptx -->
+|    | 10/7/2026  | [Xilinx Clock Resources (MMCM)](./lectures/xilinx_clocking.md) | <!-- pptx=xilinx_clocking.pptx -->
+|    | 10/9/2026  | [Xilinx Clock Timing reports](./lectures/xilinx_timing.md) | <!-- pptx=xilinx_timing_report.pptx -->
 | 7  | 10/12/2026 |  **Exam #1** |
 |    | 10/14/2026 | [Reset timing and strategies](./lectures/reset_strategies.md) |
 |    | 10/16/2026 | [Metastability & Synchronizer design](./lectures/metastability.md)|
