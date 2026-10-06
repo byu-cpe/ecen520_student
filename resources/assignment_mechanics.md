@@ -62,7 +62,7 @@ You will lose points on your assignment if you fail to clean all intermediate fi
 ## Assignment Submission Process
 
 An assignment "submission" involves a final commit and tag of files to your class repository. 
-The assignment due dates are posted on learning suite. 
+The assignment due dates are listed at the class [README.md](./README.md) and posted on Canvas. 
 Each assignment submission will require a unique 'tag' where the actual tag is the same as the directory for the assignment.
 When grading your assignment, I will check the submission time of this tag. 
 If your latest commit of any file in the assignment with this tag is later than the deadline then you will be penalized for being late.
@@ -71,7 +71,7 @@ A [submission process checklist](#assignment-grading-checklist) has been created
 
 ## Assignment Due Dates and Late Policy
 
-Each assignment will have a due date/time published on learning suite.
+Each assignment will have a due date/time published on Canvas.
 It is your responsibility to identify the due date and submit your assignment on time.
 Late assignments will be accepted and graded but will be subject to a 30% penalty.
 Late submissions can be submitted at any time, but late submissions will not be graded in a timely manner and may not receive any feedback.

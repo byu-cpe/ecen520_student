@@ -7,7 +7,7 @@ If we have time, we will start reviewing the basics of SystemVerilog.
 
 ## Reading
 
-Review the learning suite syllabus carefully and the [assignment mechanics](../resources/assignment_mechanics.md) page.
+Review the Canvas syllabus carefully and the [assignment mechanics](../resources/assignment_mechanics.md) page.
 
 ## Key Concepts
 * Understand the requirements and expectations of the course
