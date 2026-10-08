@@ -88,11 +88,11 @@ Design your module to operate as follows:
 * Create a read pointer that indicates which address to read from
 * Increment this pointer every time `re` is asserted
 * Reset the pointer when `init` is asserted
-* Assert the 'end' signal when the value of the memory output is zero
+* Assert the 'rom_end' signal when the value of the memory output is zero
 
 ### BRAM ROM Testbench 
 
-Create a testbench in a file named `bram_rom_tb.sv`that demonstrates the ability to read all the contents of the ROM until the `end` signal is asserted.
+Create a testbench in a file named `bram_rom_tb.sv`that demonstrates the ability to read all the contents of the ROM until the `rom_end` signal is asserted.
 Provide a couple of clock cycles between each read.
 
 You will need to populate your ROM with a text message.

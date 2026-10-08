@@ -36,16 +36,16 @@ This repository contains the lecture schedule (including links to lecture summar
 |    | 10/21/2026 | [Clock domain crossing (cont.)](./lectures/clock_crossing.md) | | <!-- Cover Xilinx CDC IP and CDC verification -->
 |    | 10/23/2026 | [Handshaking and Data Transfer](./lectures/handshaking.md) |
 | 9  | 10/26/2026 | [Pipelining and Retiming](./lectures/pipelining.md) |
-|    | 10/28/2026 | [ASIC Design (Tomoo)](./lectures/asic-design.md) | <!-- Move later when gone at ChipIR? -->
-|    | 10/30/2026 | [AXI Bus](./lectures/axi.md) |
-| 10 | 11/2/2026  | [AXI Bus part 2](./lectures/axi.md) |
-|    | 11/4/2026  | [IP Integration](./lectures/ip_integration.md) |
-|    | 11/6/2026  | [Digital Arithmetic #1](./lectures/arith1.md) |
+|    | 10/28/2026 | [AXI Bus](./lectures/axi.md) |
+|    | 10/30/2026 | [AXI Bus part 2](./lectures/axi.md) |
+| 10 | 11/2/2026  | [IP Integration](./lectures/ip_integration.md) |
+|    | 11/4/2026  | [Digital Arithmetic #1](./lectures/arith1.md) |
+|    | 11/6/2026  | [Digital Arithmetic #2](./lectures/arith2.md) |
 | 11 | 11/9/2026  | **Exam #2** |
-|    | 11/11/2026 | [Digital Arithmetic #2](./lectures/arith2.md) |
-|    | 11/13/2026 | [DSP Blocks](./lectures/dsp.md) |
-| 12 | 11/16/2026 | MicroBlaze Assignment Preparation | <!-- ChipIR test - move Exam #1 here? -->
-|    | 11/18/2026 | [CLB Blocks](./lectures/clb.md) | <!-- TOMO lecture? -->
+|    | 11/11/2026 | [DSP Blocks](./lectures/dsp.md) |
+|    | 11/13/2026 | MicroBlaze Assignment Preparation |
+| 12 | 11/16/2026 | [CLB Blocks](./lectures/clb.md) | <!-- ChipIR test - move Exam #1 here? -->
+|    | 11/18/2026 | [ASIC Design (Tomoo)](./lectures/asic-design.md) | <!-- ChipIR test, I am gone -->
 |    | 11/20/2026 | [IO Resources #1](./lectures/io.md) |
 | 13 | 11/23/2026 | [IO Resources #2](./lectures/io.md) |
 |    | 11/25/2026 | No Class - Thanksgiving Break |
@@ -57,6 +57,8 @@ This repository contains the lecture schedule (including links to lecture summar
 |    | 12/9/2026  | Review for Exam (last day of class) |
 | **Week 16**|  |
 | 16 | 12/16/2026 | Final Exam in class (Wed, 11:00 AM - 2:00 PM) |
+
+
 
 <!--
 Suggested changes to schedule:
