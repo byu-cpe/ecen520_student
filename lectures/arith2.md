@@ -3,7 +3,7 @@
 
 ## Reading
 
-* Cummings Verilog/SV “Gotchas” paper (See 2006-snug-boston_standard_gotchas_paper.pdf in Canvas)
+* Sutherland & Mills Verilog/SV “Gotchas” paper (See [2006-snug-boston_standard_gotchas_paper.pdf](https://byu.instructure.com/courses/35900/pages/course-files#2006-snug-boston_standard_gotchas_paper) in Canvas)
   * 4.1 - 4.4
   * 5.1 - 5.3
 

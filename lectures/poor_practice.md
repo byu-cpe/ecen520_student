@@ -6,7 +6,7 @@ This lecture will review proper design practices and discuss common pitfalls.
 
 * [ECEN 220 Coding Standards](https://ecen220wiki.groups.et.byu.net/03-coding-standard/)
 * Chu, Chapter 9.1
-* Cummings Verilog/SV “Gotchas” paper (See 2006-snug-boston_standard_gotchas_paper.pdf in Canvas)
+* Sutherland & Mills Verilog/SV “Gotchas” paper (See [2006-snug-boston_standard_gotchas_paper.pdf](https://byu.instructure.com/courses/35900/pages/course-files#2006-snug-boston_standard_gotchas_paper) in Canvas)
   * 2.1-2.2, 6.1-6.2, 6.7-6.12, 
 
 ## Key Concepts
