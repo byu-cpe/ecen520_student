@@ -30,13 +30,13 @@ This repository contains the lecture schedule (including links to lecture summar
 |    | 10/7/2026  | [FPGA Clock Resources (MMCM)](./lectures/xilinx_clocking.md) | <!-- pptx=xilinx_clocking.pptx -->
 |    | 10/9/2026  | [FPGA Clock Timing reports](./lectures/xilinx_timing.md) | <!-- pptx=timing_analysis.pptx -->
 | 7  | 10/12/2026 |  **Exam #1** |
-|    | 10/14/2026 | [Reset timing and strategies](./lectures/reset_strategies.md) |
-|    | 10/16/2026 | [Metastability & Synchronizer design](./lectures/metastability.md)|
+|    | 10/14/2026 | [Reset timing and strategies](./lectures/reset_strategies.md) | <!-- pptx=reset_strategies.pptx -->
+|    | 10/16/2026 | [Metastability & Synchronizer design](./lectures/metastability.md)| <!-- pptx=metastability.pptx -->
 | 8  | 10/19/2026 | [Clock domain crossing](./lectures/clock_crossing.md) |
 |    | 10/21/2026 | [Clock domain crossing (cont.)](./lectures/clock_crossing.md) | | <!-- Cover Xilinx CDC IP and CDC verification -->
 |    | 10/23/2026 | [Handshaking and Data Transfer](./lectures/handshaking.md) |
 | 9  | 10/26/2026 | [Pipelining and Retiming](./lectures/pipelining.md) |
-|    | 10/28/2026 | [ASIC Design (Tomoo)](./lectures/asic-design.md) |
+|    | 10/28/2026 | [ASIC Design (Tomoo)](./lectures/asic-design.md) | <!-- Move later when gone at ChipIR? -->
 |    | 10/30/2026 | [AXI Bus](./lectures/axi.md) |
 | 10 | 11/2/2026  | [AXI Bus part 2](./lectures/axi.md) |
 |    | 11/4/2026  | [IP Integration](./lectures/ip_integration.md) |
@@ -44,8 +44,8 @@ This repository contains the lecture schedule (including links to lecture summar
 | 11 | 11/9/2026  | **Exam #2** |
 |    | 11/11/2026 | [Digital Arithmetic #2](./lectures/arith2.md) |
 |    | 11/13/2026 | [DSP Blocks](./lectures/dsp.md) |
-| 12 | 11/16/2026 | MicroBlaze Assignment Preparation |
-|    | 11/18/2026 | [CLB Blocks](./lectures/clb.md) |
+| 12 | 11/16/2026 | MicroBlaze Assignment Preparation | <!-- ChipIR test - move Exam #1 here? -->
+|    | 11/18/2026 | [CLB Blocks](./lectures/clb.md) | <!-- TOMO lecture? -->
 |    | 11/20/2026 | [IO Resources #1](./lectures/io.md) |
 | 13 | 11/23/2026 | [IO Resources #2](./lectures/io.md) |
 |    | 11/25/2026 | No Class - Thanksgiving Break |
@@ -100,8 +100,8 @@ Assignments are due at midnight the day they are listed in the table below (unle
 | 4 | 10/1/2026 | [UART Synthesis and Download](./rx_download/UART-Receiver_synth.md) | `rx_download` |
 | 5 | 10/8/2026 | [SPI Controller-Simulation](./spi_cntrl/SPI_cntrl.md) | `spi_cntrl` |
 | 6 | 10/15/2026 | [SPI Controller-Download](./spi_download/spi_download.md) | `spi_download` |
-| 7 | | [BRAM](./bram/bram.md) | `bram` |
-| 8 | | [BRAM-Download](./bram_download/bram_download.md) | `bram_download` |
+| 7 | 10/22/2026 | [BRAM](./bram/bram.md) | `bram` |
+| 8 | 10/29/2026 | [BRAM-Download](./bram_download/bram_download.md) | `bram_download` |
 | 9 | | [MMCM Clocking](./mmcm/mmcm.md) | `mmcm` |
 | 10 | | [AXI](./axi/axi.md) | `axi` |
 | 11 | | [MicroBlaze](./microblaze/microblaze.md) | `microblaze` |
