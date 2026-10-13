@@ -34,7 +34,7 @@ This repository contains the lecture schedule (including links to lecture summar
 |    | 10/16/2026 | [Metastability & Synchronizer design](./lectures/metastability.md) | <!-- pptx=metastability.pptx -->
 | 8  | 10/19/2026 | [Clock domain crossing](./lectures/clock_crossing.md) | <!-- pptx=clock_domain_crossing.pptx -->
 |    | 10/21/2026 | [Handshaking and Data Transfer](./lectures/handshaking.md) | <!-- pptx=handshaking.pptx -->
-|    | 10/23/2026 | [AMD Clock domain crossing IP](./lectures/CDC.md) | | <!-- Cover Xilinx CDC IP and CDC verification -->
+|    | 10/23/2026 | [AMD clock domain crossing (CDC) IP](./lectures/CDC.md) | | <!-- Cover Xilinx CDC IP and CDC verification -->
 | 9  | 10/26/2026 | [Pipelining and Retiming](./lectures/pipelining.md) |
 |    | 10/28/2026 | [AXI Bus](./lectures/axi.md) |
 |    | 10/30/2026 | [AXI Bus part 2](./lectures/axi.md) |

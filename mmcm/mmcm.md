@@ -176,6 +176,12 @@ Use markers to measure the frequency/period, the phase offset, and the duty cycl
 
 ### Synthesis
 
+TODO: Hve the students run the `report_cdc` command to check for any clock domain crossing issues in their design.
+Done after the `check_timing` command.
+
+`report_cdc -details -file cdc_report.rpt
+`
+
 Create a constraints file with all the necessary constraints for your design.
 Make sure you add the timing false path timing constraints like you did for the last assignment.
 Create a makefile rule named `synth_mmcm_top` that synthesizes your top-level design using the default parameters.
