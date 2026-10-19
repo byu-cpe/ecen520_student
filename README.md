@@ -10,6 +10,10 @@ This repository contains the lecture schedule (including links to lecture summar
 
 <!-- The pptx tags are for linking power point files to lecture mapping. A claude skill will use this to create a schedule page on canvas with the power point linked. -->
 
+<!-- Future change:
+- Move pipelining lecture closer to timing.
+-->
+
 | Week | Date | Lecture |
 | --- | --- | --- |
 | 1  | 9/2/2026   | [Class Overview](./lectures/class_overview.md) |
@@ -38,7 +42,7 @@ This repository contains the lecture schedule (including links to lecture summar
 | 9  | 10/26/2026 | [Pipelining and Retiming](./lectures/pipelining.md) |
 |    | 10/28/2026 | [AXI Bus](./lectures/axi.md) |
 |    | 10/30/2026 | [AXI Bus part 2](./lectures/axi.md) |
-| 10 | 11/2/2026  | [IP Integration](./lectures/ip_integration.md) |
+| 10 | 11/2/2026  | [IP Integration](./lectures/ip_integration.md) | <!-- Add discussion of ILA here -->
 |    | 11/4/2026  | [Digital Arithmetic #1](./lectures/arith1.md) |
 |    | 11/6/2026  | [Digital Arithmetic #2](./lectures/arith2.md) |
 | 11 | 11/9/2026  | **Exam #2** |
@@ -104,7 +108,7 @@ Assignments are due at midnight the day they are listed in the table below (unle
 | 6 | 10/15/2026 | [SPI Controller-Download](./spi_download/spi_download.md) | `spi_download` |
 | 7 | 10/22/2026 | [BRAM](./bram/bram.md) | `bram` |
 | 8 | 10/29/2026 | [BRAM-Download](./bram_download/bram_download.md) | `bram_download` |
-| 9 | | [MMCM Clocking](./mmcm/mmcm.md) | `mmcm` |
+| 9 | 11/5/2026 | [MMCM Clocking](./mmcm/mmcm.md) | `mmcm` |
 | 10 | | [AXI](./axi/axi.md) | `axi` |
 | 11 | | [MicroBlaze](./microblaze/microblaze.md) | `microblaze` |
 | 12 | | [DDR](./ddr/ddr.md) | `ddr` |
