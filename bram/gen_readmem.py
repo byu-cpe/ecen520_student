@@ -61,7 +61,7 @@ def main():
             char = read_file.read(1)
             if not char:
                 break
-            if args.length and values == args.length-1:
+            if args.length and values >= args.length-1:
                 # In this case, the file is bigger than the memory. Stop reading and write a 0
                 write_char(write_file,NULL_CHAR,args.binary)
                 values += 1
@@ -69,7 +69,8 @@ def main():
             else:
                 write_char(write_file,char,args.binary)    
                 values += 1
-                if args.cr and char == '\n':
+                # Add the carriage return only if there is room for it and the terminating 0
+                if args.cr and char == '\n' and (not args.length or values < args.length-1):
                     write_char(write_file,'\r',args.binary)
                     values += 1
     if args.length and values < args.length:

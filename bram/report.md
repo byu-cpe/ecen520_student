@@ -17,7 +17,7 @@ See the class [AI policy](../ai_policy.md) for a summary of acceptable use.
 
 ## Assignment Specific Responses
   1. Fill in the Resource Utilization table for the BRAM FIFO listed [below](#resource-utilization-table---fifo). You will need to get this information from the synthesis report for your FIFO design.
-  2. Fill in the Resource Utilization table for the BRAM ROM listed [below](#resource-utilization-table---rom). You will need to get this information from the synthesis report for your FIFO design.
+  2. Fill in the Resource Utilization table for the BRAM ROM listed [below](#resource-utilization-table---rom). You will need to get this information from the synthesis report for your ROM design.
   3. Open the synthesized `synth_bram_rom.dcp` file in Vivado to examine the BRAM ROM with the fight song preloaded. Open the schematic and find the BRAM. Click on the BRAM and you should see the BRAM properties in the "Cell Properties" window. Copy and paste the property for the property `INIT_00` here: `INIT_00 = 256'h...`
 
 ### Resource Utilization Table - FIFO

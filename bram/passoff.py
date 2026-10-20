@@ -19,7 +19,7 @@ def main():
     tester.add_Makefile_rule("sim_bram_rom_moroni_10", ["bram_rom.sv", "bram_rom_tb.sv"], 
                             ["sim_bram_rom_moroni_10.log", "moroni_10.mem"])
     tester.add_Makefile_rule("synth_bram_fifo", ["bram_fifo.sv"], ["synth_bram_fifo.log", "synth_bram_fifo.dcp"])
-    tester.add_Makefile_rule("synth_bram_rom", ["bram_rom.sv"], ["synth_bram_rom.log", "synth_bram_rom.dcp"])
+    tester.add_Makefile_rule("synth_bram_rom", ["bram_rom.sv"], ["synth_bram_rom.log", "synth_bram_rom.dcp", "fight_song.mem"])
     tester.run_tests()
 
 if __name__ == "__main__":

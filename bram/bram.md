@@ -18,14 +18,23 @@ The ports of this module should be as follows:
 | full | Output | 1 | Indicates FIFO is full |
 | empty | Output | 1 | Indicates FIFO is empty |
 
-Your FIFO should be created by as follows:
-* Create a "write address" counter and a "read address" counter that indicate which address to write to and read from, respectively.
-  * Every time a byte is written to the FIFO (i.e., when 'we' is asserted), the write address should increment by one. The address should roll over if you reach the limit. 
-  * You should read from the memory every clock cycle. Increment this address every time the `re` signal is asserted.
-* Perform a write to the memory when the `we` signal is asserted.
-* Create an 'empty' signal that is asserted when the read address is equal to the write address.
-* Create a 'full' signal that is asserted when the write address is one less than the read address.
-* You should ignore reads when the fifo is empty and you should ignore writes when the fifo is full.
+Your FIFO should be created as follows:
+* Create a 12-bit "write address" counter and a 12-bit "read address" counter that indicate which address to write to and read from, respectively (12 bits address the 4096 bytes of the BRAM).
+  * Every time a byte is written to the FIFO (i.e., when `we` is asserted), the write address should increment by one. The address naturally rolls over from 4095 to 0.
+  * Every time a byte is read from the FIFO (i.e., when `re` is asserted), the read address should increment by one (also rolling over).
+* Perform a write to the memory when a valid write occurs.
+* Perform a read from the memory only when a valid read occurs (i.e., enable the BRAM read port with `re` asserted and the FIFO not empty).
+* Create an `empty` signal that is asserted when the read address is equal to the write address.
+* Create a `full` signal that is asserted when the write address is one less than the read address, with wrap-around (i.e., `wr_addr + 1 == rd_addr` using 12-bit arithmetic).
+  Because one location is always left unused to distinguish full from empty, the FIFO holds at most 4095 bytes.
+* Ignore reads when the FIFO is empty and ignore writes when the FIFO is full.
+  These decisions are based on the `empty` and `full` values at the start of the clock cycle. If `we` and `re` are asserted in the same cycle:
+  * When the FIFO is neither empty nor full, both the write and the read occur (the number of bytes in the FIFO does not change).
+  * When the FIFO is empty, only the write occurs.
+  * When the FIFO is full, only the read occurs (the write is ignored even though the read frees a location).
+* Read timing: the FIFO has a one clock cycle read latency.
+  When `re` is asserted (and the FIFO is not empty), the byte at the head of the FIFO appears on `dout` on the next clock cycle and remains on `dout` until the next valid read.
+  The value of `dout` is undefined before the first read.
 * Instance a `RAMB36E1` primitive into your design using an 8-bit data bus. You will need to carefully read the details about this primitive in the [7 Series Memory Resources (UG473)](https://docs.amd.com/v/u/en-US/ug473_7Series_Memory_Resources) (see page 25).
   * Make sure all inputs are wired up. Many inputs are not needed but every input should have a constant if it is not used.
   * Use the 'A' port for writing to the BRAM and the 'B' port for reading from the BRAM. 
@@ -35,13 +44,15 @@ Your FIFO should be created by as follows:
     * `DIADI` and `DOBDO` (32-bit data ports)
     * `ADDRARDADDR` and `ADDRBWRADDR` (16 bits) It is tricky to hook up the address ports appropriately. Read the data sheet carefully to understand how to connect this port.
     * `WEA` (4 bit write enable).
-    * `ENARDEN`
+    * `ENARDEN` (port A enable)
+    * `ENBWREN` (port B enable): drive this with your valid read signal (`re` and not empty) to get the read timing described above.
   * Do not include the parameters for initializing the memory. In fact, use only those parameters that you plan to override.
 
 ### BRAM FIFO Testbench 
 
 Create a simple testbench named `bram_fifo_tb.sv` that demonstrates writing a few bytes, reading/writing a few bytes, and the full/empty signals working properly.
 Use a SystemVerilog 'queue' to store the values of the FIFO so you can check that the order you write is the order that you read.
+Remember the one-cycle read latency: compare `dout` against the expected value on the clock cycle *after* you assert `re`.
 Print a message each time an element is written to or read from the FIFO.
 
 To simulate the `RAMB36E1` primitive you will need to include the 'unisim' library in your simulation.
@@ -84,7 +95,7 @@ The ports of this module should be as follows:
 
 Design your module to operate as follows:
 * Create an "inferred" memory that is 8 bits x 4096 (i.e., don't instance the BRAM primitive but use the inferred memory in your HDL).
-* Provide a parameter that contains a file name that contains the data to be stored in the ROM. Create an initial block that performs this initialization.
+* Use the `FILENAME` parameter in an initial block that loads the ROM contents with `$readmemh`.
 * Create a read pointer that indicates which address to read from
 * Increment this pointer every time `re` is asserted
 * Reset the pointer when `init` is asserted
@@ -92,7 +103,7 @@ Design your module to operate as follows:
 
 ### BRAM ROM Testbench 
 
-Create a testbench in a file named `bram_rom_tb.sv`that demonstrates the ability to read all the contents of the ROM until the `rom_end` signal is asserted.
+Create a testbench in a file named `bram_rom_tb.sv` that demonstrates the ability to read all the contents of the ROM until the `rom_end` signal is asserted.
 Provide a couple of clock cycles between each read.
 
 You will need to populate your ROM with a text message.
@@ -107,6 +118,17 @@ The following example demonstrates how to create a memory file that is readable 
 The `-l 4096` option specifies the length of the memory (in bytes) and will zero fill the memory if the file is shorter than this length.
 The `-r` option indicates that a carriage return should be added to the end of each line.
 
+The `.mem` files are *generated* files: do not commit them to your repository, and add them to your `.gitignore` file.
+Instead, create makefile rules that generate them from the `.txt` files using `gen_readmem.py`, for example:
+
+```
+fight_song.mem: fight_song.txt
+	python3 gen_readmem.py fight_song.txt fight_song.mem -l 4096 -r
+```
+
+Make every simulation and synthesis rule that uses a `.mem` file depend on it, so the `.mem` file is regenerated automatically on a clean checkout (the passoff script checks that these rules create the `.mem` files they need).
+Your `clean` rule should also delete the `.mem` files.
+
 Create a memory file for both text files and add a parameter to your testbench to specify the default ROM contents.
 Configure your testbench to use the `fight_song.mem` file by default.
 Create a makefile rule named `sim_bram_rom` that runs your testbench with the `fight_song.mem` from the command line and generates a log file named `sim_bram_rom.log`.
@@ -114,11 +136,11 @@ Also, create a makefile rule named `sim_bram_rom_moroni_10` that runs your testb
 
 ### BRAM ROM Synthesis 
 
-After verifying that your FIFO works properly, create a makefile rule for synthesizing your BRAM ROM in the out of context synthesis mode.
-The makefile rule should be named: `synth_bram_rom` and should synthesize the ROM with the `fight_song` file contents.
+After verifying that your ROM works properly, create a makefile rule for synthesizing your BRAM ROM in the out of context synthesis mode.
+The makefile rule should be named: `synth_bram_rom` and should synthesize the ROM with the `fight_song.mem` file contents (this rule must also depend on `fight_song.mem` so that it is generated before synthesis).
 This synthesis step should create a .dcp file named `synth_bram_rom.dcp` and a log file named `synth_bram_rom.log`
 
-Resolve any synthesis errors or warnings before proceeding with the next module.
+Resolve any synthesis errors or warnings before submitting your assignment.
 Review your synthesis log to **make sure** the synthesis log shows that one RAMB36E1 was allocated for your module.
 If you made any changes to your modules to resolve synthesis errors, rerun the testbench to make sure the module operates correctly.
 
@@ -126,16 +148,9 @@ If you made any changes to your modules to resolve synthesis errors, rerun the t
 ## Submission and Grading
 
 1. Implement all the required makefile rules and make sure your `passoff.py` script runs without errors.
-2. Complete and commit the [report.md](report.md) file for this assignment.
-
-
-3. Assignment specific Questions:
-    1. Create a table in your report that indicates the total number of primitives for each design based on the synthesis reports. The table listed below is an example of what you should include in your report. You will need to include all cells used in each of the two designs.
-
-| Cell Type | BRAM ROM | BRAM FIFO |
-| ---- | ---- | ---- |
-| CARRY4 | | |
-| RAMB36E1 | | |
+2. Complete and commit the [report.md](report.md) file for this assignment. The assignment specific questions in the report ask you to:
+    * Fill in a resource utilization table for each design (FIFO and ROM) from its synthesis log.
+    * Open `synth_bram_rom.dcp` in Vivado, find the ROM's BRAM in the schematic, and copy its `INIT_00` property from the "Cell Properties" window. This shows how the fight song contents were loaded into the BRAM.
 
 
 <!--
