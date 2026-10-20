@@ -13,8 +13,8 @@ import repo_test
 
 def main():
     tester = test_suite_520.build_test_suite_520("bram_download", max_repo_files = 30)
-    tester.add_Makefile_rule("sim_bram_top", ["bram_top.sv","bram_top_tb.sv"], ["sim_bram_top.log"])
-    tester.add_Makefile_rule("synth_bram_top", [], ["synth_bram_top.log", "bram_top_synth.dcp"])
+    tester.add_Makefile_rule("sim_bram_top", ["bram_top.sv","bram_top_tb.sv"], ["sim_bram_top.log", "fight_song.mem"])
+    tester.add_Makefile_rule("synth_bram_top", [], ["synth_bram_top.log", "bram_top_synth.dcp", "fight_song.mem"])
     tester.add_Makefile_rule("implement_bram_top", ["bram_top_synth.dcp"], 
                              ["implement_bram_top.log", "bram_top.dcp", "bram_top.bit",
                             "timing_bram_top.rpt", "utilization_bram_top.rpt"])
