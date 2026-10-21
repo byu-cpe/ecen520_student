@@ -28,25 +28,31 @@ See the class [AI policy](../ai_policy.md) for a summary of acceptable use.
       * [`mmcm_clk4.png`](./mmcm_clk4.png)
       * [`mmcm_clk5.png`](./mmcm_clk5.png)
       * [`mmcm_clk6.png`](./mmcm_clk6.png)
-  3. Timing Report Review
+  4. Timing Report Review
     * What is the "Worst Negative Slack" (WNS) of this design?: **X.Xns**
     * Which clock domain has the worst timing?: **<clock name>**
     * How many "THS Total Endpoints" are there for this design? **X**
-  4. Complete the Utilization Report table listed [below](#utilization-report-table) from your implementation utilization report.
-  5. How many times did you have to download your design to the Nexys4 board before it worked correctly? **X**
+    * Complete the Clock Domain Timing Table listed [below](#clock-domain-timing-table) using your MMCM settings and your implementation timing report.
+  5. Complete the Utilization Report table listed [below](#utilization-report-table) from your implementation utilization report.
+  6. How many times did you have to download your design to the Nexys4 board before it worked correctly? **X**
 
 ### Clock Domain Timing Table
 
-| Clock Domain | Frequency | Period | Setup Slack | Hold Slack |
-| ---- | ---- | ---- | ---- | ---- |
-| Input Clock | 100 MHz | 10.00 ns | | |
-| CLKOUT0 |  |  |  |  |
-| CLKOUT1 |  |  |  |  |
-| CLKOUT2 |  |  |  |  |
-| CLKOUT3 |  |  |  |  |
-| CLKOUT4 |  |  |  |  |
-| CLKOUT5 |  |  |  |  |
-| CLKOUT6 |  |  |  |  |
+For each clock, list the MMCM settings you used: the multiply (M, `CLKFBOUT_MULT_F`) and divide (D, `DIVCLK_DIVIDE`) values of the MMCM, and the output divide (O, `CLKOUTn_DIVIDE`) of the clock.
+The phase is relative to the input clock. Enter "n/a" for the phase of CLKB, since that MMCM does not deskew its output (it has no defined phase relationship with its input).
+The setup and hold slack values are the worst slack for each clock domain in your timing report.
+
+| Clock Domain | M / D / O | Frequency | Period | Phase | Setup Slack | Hold Slack |
+| ---- | ---- | ---- | ---- | ---- | ---- | ---- |
+| Input Clock | n/a | 100 MHz | 10.00 ns | 0° | | |
+| CLKOUT0 |  |  |  |  |  |  |
+| CLKOUT1 |  |  |  |  |  |  |
+| CLKOUT2 |  |  |  |  |  |  |
+| CLKOUT3 |  |  |  |  |  |  |
+| CLKOUT4 |  |  |  |  |  |  |
+| CLKOUT5 |  |  |  |  |  |  |
+| CLKOUT6 |  |  |  |  |  |  |
+| CLKB (secondary MMCM) |  |  |  |  |  |  |
 
 ### Utilization Report Table
 
@@ -61,4 +67,4 @@ See the "Primitives" section of your utilization report for the values to fill i
 | FDxE   |  |
 | IBUF   |  |
 | OBUF   |  |
-| MMCME2_EDV   |  |
+| MMCME2_ADV   |  |
