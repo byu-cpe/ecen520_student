@@ -10,7 +10,7 @@ You will learn about the ASM diagram and how to convert ASM diagrams to FSMDs.
 -->
 
 ## Reading
-  * Chapter 11 sections 1-4 [RTL Hardware Design Using VHDL](http://search.lib.byu.edu/byu/record/sfx.3578786?holding=i9vahb2m4z7qvbf3). 
+  * Chapter 11 sections 1-4 [RTL Hardware Design Using VHDL](../resources/textbooks.md#rtl-hardware-design-using-vhdl). 
     * 11.1 - scan
     * 11.2 - Read carefully (this is the meat of the concept)
     * 11.3 - scan briefly through the examples (ignore the VHDL)

@@ -5,7 +5,7 @@ This lecture will review the fundamental principles of digital timing that were 
 
 ## Reading
 
-* Section 8.6 from [RTL Hardware Design Using VHDL](http://search.lib.byu.edu/byu/record/sfx.3578786?holding=i9vahb2m4z7qvbf3)
+* Section 8.6 from [RTL Hardware Design Using VHDL](../resources/textbooks.md#rtl-hardware-design-using-vhdl)
 * Chapters 13 and 15 from [Dr. Nelson's](https://www.amazon.com/Designing-Digital-Systems-SystemVerilog-v4-0/dp/B0F4421795) ECEN 220 textbook
 * Sequential Timing (Dr. Nelson - [see Canvas](https://byu.instructure.com/courses/35900/pages/course-files#basic_timing))
 * Hold Time (Dr. Nelson - [see Canvas](https://byu.instructure.com/courses/35900/pages/course-files#hold_time))

@@ -8,7 +8,7 @@ Clock skew introduces subtle timing problems that must be understood and address
 ## Reading
 
 * Dr. Nelson's chapter on clock skew (see Canvas)
-* Section 16.1-16.3 from [RTL Hardware Design Using VHDL](http://search.lib.byu.edu/byu/record/sfx.3578786?holding=i9vahb2m4z7qvbf3)
+* Section 16.1-16.3 from [RTL Hardware Design Using VHDL](../resources/textbooks.md#rtl-hardware-design-using-vhdl)
 
 ## Key Concepts
 

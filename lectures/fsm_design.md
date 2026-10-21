@@ -4,7 +4,7 @@ In this lecture we will discuss proper approaches for designing Finite State Mac
 We will discuss several styles of FSM coding and discuss their relatively advantages and disadvantages.
 
 ## Reading
-  * Chapter 10 sections 1-5 from [RTL Hardware Design Using VHDL](http://search.lib.byu.edu/byu/record/sfx.3578786?holding=i9vahb2m4z7qvbf3) book (ignore the VHDL code examples for now). 
+  * Chapter 10 sections 1-5 from [RTL Hardware Design Using VHDL](../resources/textbooks.md#rtl-hardware-design-using-vhdl) book (ignore the VHDL code examples for now). 
     * Read 10.1 carefully
     * 10.2.1 should be review - just scan through this and make sure you understand the key concepts
     * 10.2.2 introduces a new way of representing FSMs. Read this carefully (there are a lot of figures so the pages go quickly)

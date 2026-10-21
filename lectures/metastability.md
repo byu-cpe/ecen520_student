@@ -6,7 +6,7 @@ This lecture will summarize the causes of metastability and techniques for addre
 
 ## Reading
 
-  * 16.4-16.5 from [RTL Hardware Design Using VHDL](http://search.lib.byu.edu/byu/record/sfx.3578786?holding=i9vahb2m4z7qvbf3)
+  * 16.4-16.5 from [RTL Hardware Design Using VHDL](../resources/textbooks.md#rtl-hardware-design-using-vhdl)
 
 ## Key Concepts
   * What is metastability and why is it a problem

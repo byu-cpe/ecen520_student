@@ -4,7 +4,7 @@ This lecture will discuss handshaking and techniques for sending data across dif
 
 ## Reading
 
-  * 16.7-16.9 from [RTL Hardware Design Using VHDL](http://search.lib.byu.edu/byu/record/sfx.3578786?holding=i9vahb2m4z7qvbf3)
+  * 16.7-16.9 from [RTL Hardware Design Using VHDL](../resources/textbooks.md#rtl-hardware-design-using-vhdl)
 
 ## Key Concepts
 

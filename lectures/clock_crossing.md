@@ -6,7 +6,7 @@ This lecture will discuss the handshaking and clock domain crossing approaches.
 
 ## Reading
 
-  * 16.6 from [RTL Hardware Design Using VHDL](http://search.lib.byu.edu/byu/record/sfx.3578786?holding=i9vahb2m4z7qvbf3)
+  * 16.6 from [RTL Hardware Design Using VHDL](../resources/textbooks.md#rtl-hardware-design-using-vhdl)
 
 ## Key Concepts
 

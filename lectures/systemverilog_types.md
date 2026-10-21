@@ -16,7 +16,7 @@ In this lecture we will review the different types available in SystemVerilog an
 * time
 
 **Reading**
-  * [SystemVerilog for verification](https://lib.byu.edu/search/byu/record/cat.3659047.item.31197227929699?holding=9mng3ggqdhk9ykw0), Chapter 2. This textbook is available as an ebook online through the BYU library.
+  * [SystemVerilog for verification](../resources/textbooks.md#systemverilog-for-verification), Chapter 2. This textbook is available as an ebook online through the BYU library.
 
 <!--
 This should be split up into two lectures:
