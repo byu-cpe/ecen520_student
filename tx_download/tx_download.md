@@ -262,10 +262,22 @@ The following assignment specific items should be included in your repository:
 
 
 <!--
+Time: 6,6.5,6,14,18,10,6,12,6,9,5,7,7,4.5
+
 Preparation:
 - Make sure students can use putty on the lab machines. Try it out on the labs ahead of time.
 Future Changes:
  Modify the gen_bounce.sv to provide a signal saying when the debouncer "should" have propagated. This helps with testbenches.
 - Enforce certain warnings not showing up (CFG_Voltage, etc, parallel synthesis). Make it easier to earch for these warnings in grading.
 - Better instructions on how to download
+- Specify certain resets to be syncchronous and certain to be asynchronous to give them practice with both.
+  - Make it clear which is which
+  - Need to get students all on the same page.
+- Some students put resets on the sycnrhonizers. They probably don't need them but if they have them they
+  should be asynchronous.
+- Instructions for generating the timing report (link was bad)
+- Report requires 4/5 (synth/dosnload). It is confusing that you need both.
+- Better questa sim tutorials? (how to simulate with multiple modules and probe signals in multiple files)
+- Build system puts files in the build dir? (not in source dir)
+- Give implementation and synthesis scripts? Example makefile rule (they don't get them in 320)
 -->

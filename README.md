@@ -38,9 +38,9 @@ This repository contains the lecture schedule (including links to lecture summar
 |    | 10/16/2026 | [Metastability & Synchronizer design](./lectures/metastability.md) | <!-- pptx=metastability.pptx -->
 | 8  | 10/19/2026 | [Clock domain crossing](./lectures/clock_crossing.md) | <!-- pptx=clock_domain_crossing.pptx -->
 |    | 10/21/2026 | [Handshaking and Data Transfer](./lectures/handshaking.md) | <!-- pptx=handshaking.pptx -->
-|    | 10/23/2026 | [AMD clock domain crossing (CDC) IP](./lectures/CDC.md) | | <!-- pptx=xilinx_cdc.pptx -->
-| 9  | 10/26/2026 | [Pipelining and Retiming](./lectures/pipelining.md) |
-|    | 10/28/2026 | [AXI Bus](./lectures/axi.md) |
+|    | 10/23/2026 | [AMD clock domain crossing (CDC) IP](./lectures/CDC.md) | <!-- pptx=xilinx_cdc.pptx -->
+| 9  | 10/26/2026 | [Pipelining and Retiming](./lectures/pipelining.md) | <!-- pptx=pipelining.pptx -->
+|    | 10/28/2026 | [AXI Bus](./lectures/axi.md) | <!-- pptx=axi.pptx -->
 |    | 10/30/2026 | [AXI Bus part 2](./lectures/axi.md) |
 | 10 | 11/2/2026  | [IP Integration](./lectures/ip_integration.md) | <!-- Add discussion of ILA here -->
 |    | 11/4/2026  | [Digital Arithmetic #1](./lectures/arith1.md) |
@@ -109,7 +109,7 @@ Assignments are due at midnight the day they are listed in the table below (unle
 | 7 | 10/22/2026 | [BRAM](./bram/bram.md) | `bram` |
 | 8 | 10/29/2026 | [BRAM-Download](./bram_download/bram_download.md) | `bram_download` |
 | 9 | 11/5/2026 | [MMCM Clocking](./mmcm/mmcm.md) | `mmcm` |
-| 10 | | [AXI](./axi/axi.md) | `axi` |
+| 10 | 11/12/2026 | [AXI](./axi/axi.md) | `axi` |
 | 11 | | [MicroBlaze](./microblaze/microblaze.md) | `microblaze` |
 | 12 | | [DDR](./ddr/ddr.md) | `ddr` |
 
