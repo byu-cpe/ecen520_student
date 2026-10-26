@@ -12,6 +12,7 @@ This repository contains the lecture schedule (including links to lecture summar
 
 <!-- Future change:
 - Move pipelining lecture closer to timing.
+- Need to reduce the clock domain crossing/handsaking/xilinx CDC lecture down by one
 -->
 
 | Week | Date | Lecture |

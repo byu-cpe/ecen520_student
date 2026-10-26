@@ -6,7 +6,7 @@ Retiming is an automated techinque for implementing pipelining on your RTL desig
 
 ## Reading
 
-* Chu, Section 9.4
+* [Chu](../resources/textbooks.md#rtl-hardware-design-using-vhdl), Section 9.4
 * [AMD retiming example](https://adaptivesupport.amd.com/s/article/934201?language=en_US)
 * [Retiming article](https://www.sciencedirect.com/science/article/pii/S0167926097000023)
 * [Retiming, Wikipedia](https://en.wikipedia.org/wiki/Retiming)
