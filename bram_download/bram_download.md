@@ -36,9 +36,9 @@ Design your top-level design to operate as follows:
   * Add a two flip-flop synchronizer. Give the first flip-flop the `(* ASYNC_REG = "TRUE" *)` attribute, as in the spi_download assignment.
   * Debounce the synchronized signal with your debouncer, passing in the `DEBOUNCE_TIME_US` parameter.
   * Create one-shot logic from the debouncer output so that each button press starts at most one send, no matter how long the button is held.
-* When the **left** button is pressed, the _entire_ ROM contents are sent over the UART transmitter one character at a time. You will need to wait until the transmitter is no longer busy before sending the next character.
-* When characters are received by the UART receiver, they are placed in the BRAM FIFO. Characters received while the FIFO is full are dropped (the FIFO ignores writes when it is full).
-* When the **right** button is pressed, your circuit should send each character in the BRAM FIFO over the UART back to the host until the FIFO is empty. Once you have sent the data from the FIFO the data is gone and any new data that you send to the FIFO will be sent over the UART on the next button press.
+* When the **left** button is pressed, the _entire_ ROM contents are sent over the UART transmitter one character at a time. You will need to wait until the transmitter is no longer busy before sending the next character. You can ignore left button presses while the transmitter is sending the ROM contents.
+* When characters are received by the UART receiver, they are placed in the BRAM FIFO (you do not need to display the characters received). Characters received while the FIFO is full are dropped (the FIFO ignores writes when it is full).
+* When the **right** button is pressed, your circuit should send each character in the BRAM FIFO over the UART back to the host until the FIFO is empty. Once you have sent the data from the FIFO the data is gone and any new data that you send to the FIFO will be sent over the UART on the next button press. Note that the FIFO should continue to accept new data while transfering data after a button press. 
 * Both sends share the single UART transmitter, so only one send can be in progress at a time. While either send (ROM or FIFO) is in progress, ignore presses of **both** buttons.
 * Use `LED16_B` for the TX busy signal, `LED17_R` for the RX busy signal, and `LED17_G` for the RX error signal.
 * Attach the FIFO empty signal to LED[0] and the FIFO full signal to LED[1].
