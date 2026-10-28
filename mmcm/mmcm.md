@@ -26,7 +26,8 @@ Create your top-level design with the name `mmcm_top.sv` and with the following 
 ###  Main MMCM
 
 The first step in this assignment is to create your "Main" MMCM that is used to deskew the input clock and generate a variety of clocks.
-The details of the MMCM and its configurations are described in the [7 Series FPGAs Clocking Resources User Guide (UG472)](https://docs.amd.com/v/u/en-US/ug472_7Series_Clocking). The figure numbers referenced below are from version 1.14 of this guide.
+The details of the MMCM and its configurations are described in the [7 Series FPGAs Clocking Resources User Guide (UG472)](https://docs.amd.com/v/u/en-US/ug472_7Series_Clocking).
+The figure numbers referenced below are from version 1.14 of this guide.
 
 The following clock names are used throughout this assignment:
   * **Input clock**: the free-running 100 MHz board clock that comes into the FPGA on the `CLK100MHZ` pin
@@ -44,10 +45,24 @@ Note that you can look at the text for the module definition of this primitive i
   * Create additional clock outputs with the following requirements:
     * CLKOUT1: Same clock frequency as input, phase shifted 180 degrees, 25% duty cycle
     * CLKOUT2: Same clock frequency as input, phase shifted 90 degrees, 75% duty cycle
-    * CLKOUT3: Lower clock frequency than input, out of phase with input. Do not use power of 2 divide and make this at least 6x lower frequency than the input.
-    * CLKOUT4: Higher clock frequency than input, out of phase with input. Do not use power of 2 multiply and make this at least 2.5x greater than input clock.
+    * CLKOUT3: Lower clock frequency than input, out of phase with input (any non-zero phase shift is acceptable). Do not use power of 2 divide and make this at least 6x lower frequency than the input.
+    * CLKOUT4: Higher clock frequency than input, out of phase with input (any non-zero phase shift is acceptable). Do not use power of 2 multiply and make this at least 2.1x greater than the input clock (i.e., at least 210 MHz).
     * CLKOUT5: Lower clock frequency than input (but different from CLKOUT3), in phase with input
     * CLKOUT6: Higher clock frequency than input (but different from CLKOUT4), in phase with input
+
+All of these clocks are generated from a single voltage controlled oscillator (VCO) within the MMCM, so you must choose the multiply value M (`CLKFBOUT_MULT_F`), the divide value D (`DIVCLK_DIVIDE`), and the output divide values (`CLKOUTn_DIVIDE`) so that every clock requirement is met by the same VCO frequency.
+The VCO frequency and each output frequency are computed as follows:
+
+  * F<sub>VCO</sub> = F<sub>in</sub> x M / D
+  * F<sub>CLKOUTn</sub> = F<sub>VCO</sub> / CLKOUTn_DIVIDE
+
+The following constraints apply to the `xc7a100tcsg324-1` part used in this class (see the MMCM switching characteristics in the [Artix-7 Data Sheet (DS181)](https://docs.amd.com/v/u/en-US/ds181_Artix_7_Data_Sheet)):
+  * The VCO frequency must be between 600 MHz and 1200 MHz (the 1200 MHz maximum is the limit for the -1 speed grade; faster speed grades allow higher frequencies). With a 100 MHz input clock, M/D must be between 6 and 12.
+  * The phase detector input frequency (F<sub>in</sub> / D) must be at least 10 MHz. With a 100 MHz input clock, D can be no larger than 10.
+  * Since CLKOUT0, CLKOUT1, and CLKOUT2 must all be 100 MHz, the VCO frequency must be an integer multiple of 100 MHz (i.e., 600, 700, ..., 1200 MHz). Only CLKOUT0 supports a fractional divide, so CLKOUT1 and CLKOUT2 need an integer divide of the VCO to reach 100 MHz. Starting with a VCO frequency that is a multiple of 100 MHz will save you a lot of trial and error.
+
+Note that it may be difficult to meet timing on this part with the CLKOUT4 counter at 250 MHz or higher (although it has been done).
+Choosing a CLKOUT4 frequency closer to the 210 MHz minimum will make timing closure easier.
 
 ### Clock Domain Reset signals
 
@@ -55,7 +70,8 @@ You will need to create a separate reset signal for each of the clock domains yo
 This reset signal will be used by the logic in each of the clock domains. 
 The purpose of this reset signal is to provide a power up reset that is synchronous with the given clock domain.
 
-A good example on how to do this can be found in Figure 4 of the following [URL](http://www.markharvey.info/art/7clk_19.10.2015/7clk_19.10.2015.html).
+A good example on how to do this is shown [here](./mmcm_reset.png) 
+(this image is Figure 4 of the following [URL](http://www.markharvey.info/art/7clk_19.10.2015/7clk_19.10.2015.html)).
 This approach involves the following principles:
   * Provide several flip-flops in a chain for the reset signal (at least two as a synchronizer and a few more if you want more time for the reset)
   * The last flip-flop of this chain is your clock domain reset signal, the first flip-flop should have a '0' as its input (so that the 0 can propagate through the flip-flop chain)
@@ -73,13 +89,13 @@ These counters will be referred to later in the description as CNT0, CNT1, ... C
 
 For this part you will create enable signals in various clock domains and "count" these enable pulses in a different clock domain. 
 
-  * Create a single pulse in the CLKOUT3 domain (<100 MHZ) that is asserted for one clock cycle every 4 clock cycles (PULSE3). Make sure this pulse is glitch free.
-  * Create a single pulse in the CLKOUT4 domain (>250 MHz) that is asserted for one clock cycle every 100 clock cycles (PULSE4). Make sure this pulse is glitch free.
-  * Create a 32-bit counter in the CLKOUT0 domain that counts the PULSE3 pulses (generated by the CLKOUT3 domain). Note that you should only count once for each unique PULSE3 signal. This counter will be referred to as PULSE3CNT.
+  * Create a single pulse in the CLKOUT3 domain (≤ 16.7 MHz, since CLKOUT3 is at least 6x slower than the input clock) that is asserted for one clock cycle every 4 clock cycles (PULSE3). Make sure this pulse is glitch free.
+  * Create a single pulse in the CLKOUT4 domain (≥ 210 MHz) that is asserted for one clock cycle every 100 clock cycles (PULSE4). Make sure this pulse is glitch free.
+  * Create a 32-bit counter in the CLKOUT0 domain that counts the PULSE3 pulses (generated by the CLKOUT3 domain). Note that you should only count once for each unique PULSE3 signal. Since CLKOUT3 is much slower than CLKOUT0, each PULSE3 pulse will be high for several CLKOUT0 cycles. Pass PULSE3 through a synchronizer in the CLKOUT0 domain and then use a rising edge detector on the synchronized signal so that each PULSE3 pulse is counted exactly once. This counter will be referred to as PULSE3CNT.
   * Create a 32-bit counter in the CLKOUT0 domain that counts the PULSE4 pulses. Note that you should only count once for each unique PULSE4 signal. Further, you need to make sure you do not miss any PULSE4 signals (since the PULSE4 signals are shorter than a clock cycle in the CLKOUT0 domain). Consider using a pulse stretcher circuit or a toggle (non-return-to-zero) synchronizer. This counter will be referred to as PULSE4CNT.
 
 When synchronizing the pulse signal that crosses clock domains, you will want to use the `ASYNC_REG` attribute to instruct the synthesis tool that these signals are asynchronous.
-This attribute specifies that (1) A register can receive asynchronous data on the D input pin relative to its source clock and (2) a register is a synchronizing register within a synchronization chain.
+This attribute specifies that (1) a register can receive asynchronous data on the D input pin relative to its source clock and (2) a register is a synchronizing register within a synchronization chain.
 From the [ASYNC_REG section of the Vivado Synthesis Guide (UG901)](https://docs.amd.com/r/en-US/ug901-vivado-synthesis/ASYNC_REG):
 > Specifying ASYNC_REG also affects optimization, placement, and routing to improve mean time between failure (MTBF) for registers that can go metastable. If ASYNC_REG is applied, the placer will ensure the flip-flops on a synchronization chain are placed closely together to maximize MTBF. Registers that have this property that are directly connected will be grouped and placed together into a single SLICE/CLB, assuming they have a compatible control set and the number of registers does not exceed the available resources of the SLICE/CLB.
 
@@ -92,6 +108,7 @@ From the [ASYNC_REG section of the Vivado Synthesis Guide (UG901)](https://docs.
 Instance a second MMCM that uses CLKOUT0 as its input clock. 
 Create a new clock, CLKB, from this MMCM that is a fractional value of the frequency of CLKOUT0 (using prime numbers for M and D). 
 Your resulting frequency should be between 50 MHz and 100 MHz. 
+The same VCO constraints described for the main MMCM apply here: with CLKOUT0 (100 MHz) as the input, M/D must be between 6 and 12, and the phase detector input frequency (100 MHz / D) must be at least 10 MHz, so D must be a prime number no larger than 10 (i.e., 2, 3, 5, or 7).
 Do **NOT** use deskewing in this configuration (i.e., do not align CLKB with CLKOUT0 - see UG472, Figure 3-13). 
 Instead, use internal feedback: connect the `CLKFBOUT` output of this MMCM directly to its `CLKFBIN` input (without a BUFG). 
 The goal here is to make a second MMCM that is *not* necessarily synchronous with CLKOUT0 (in most cases you would just make them synchronous).
@@ -182,9 +199,9 @@ Add a timescale directive to your testbench as follows (you will need pico-secon
 ```
 
 Run your simulation in the GUI mode and create a waveform that demonstrates the proper operation of each of your 7 clocks.
-Take a screenshot of each waveform and include them in your report.
-Your waveforms should be named `mmcm_clk0.png`, `mmcm_clk1.png`, ..., `mmcm_clk6.png`.
-Use markers to measure the frequency/period, the phase offset, and the duty cycle.
+Create a waveform that includes each of the seven clocks (mmcm_clk0, mmcm_clk1, ..., mmcm_clk6).
+Use markers to measure the frequency/period, the phase offset, and the duty cycle of each clock.
+Take a screenshot of this waveform that includes all the clocks and name the file `mmcm_waveform.png`.
 
 ## Implementation
 
@@ -228,22 +245,21 @@ Download your design and make sure it operates as expected.
 
 
 <!--
-- In futrure have them create one graph with all of the waveforms rather than 6. Include markers on each waveform.
 - Need to figure out how to maek the simulation libraries more platform independent (currenlty the siulation libraries for modelsim are hard coded fof the digital lab)
 - The build makefiles had hard coded paths for the glbl.v file. Need to modify the instructions so that the make will work on any computer (have them copy it to their repo?)
 - Have them figure out the TCL commands for printing the simulation files to an image
 - Need to ahve the testbench print more out with more interesting notes/comments
 - Force them to get metastability? If so, how to force it? (more guidelines). See Baker's
 - Force them to use generate statements? It is a good place to learn to use them.
-- Makethe cross domain coutners increment at a much slower rate (more delay) than is current.
+- Make the cross domain coutners increment at a much slower rate (more delay) than is current.
 -->
 
 <!--
-Fvco range is 600 MHz to 1600 Mhz
+Fvco range is 600 MHz to 1200 Mhz (-1 speed grade)
 
 Fvco = Fin X M / D
 
-Fin = 100 MHz thus M/D must be between 6 and 16
+Fin = 100 MHz thus M/D must be between 6 and 12
 DIVCLK_DIVIDE = D
 
 for 100 MHz, D=2, M=12

@@ -13,7 +13,7 @@ import repo_test
 
 def main():
     tester = test_suite_520.build_test_suite_520("mmcm", max_repo_files = 30)
-    tester.add_required_tracked_files([f"mmcm_clk{i}.png" for i in range(7)])
+    tester.add_required_tracked_files(["mmcm_waveform.png"])
     tester.add_Makefile_rule("sim_mmcm_top", ["mmcm_top.sv","mmcm_top_tb.sv"], ["sim_mmcm_top.log"])
     tester.add_Makefile_rule("synth_mmcm_top", [], ["synth_mmcm_top.log", "mmcm_top_synth.dcp"])
     tester.add_Makefile_rule("implement_mmcm_top", ["mmcm_top_synth.dcp"], 
