@@ -35,6 +35,30 @@ See the class [AI policy](../ai_policy.md) for a summary of acceptable use.
     * Complete the Clock Domain Timing Table listed [below](#clock-domain-timing-table) using your MMCM settings and your implementation timing report.
   5. Complete the Utilization Report table listed [below](#utilization-report-table) from your implementation utilization report.
   6. How many times did you have to download your design to the Nexys4 board before it worked correctly? **X**
+  7. Complete the [Metastability Experiment](#metastability-experiment) questions below.
+
+### Metastability Experiment
+
+  1. Review the reports:
+    * Does the design meet timing? **Yes/No**
+    * Data path delay from flip-flop A to flip-flop B: **X.XXX ns**
+    * Which crossings are waived in the CDC report, and why is it acceptable to waive them?
+  2. CFGMCLK frequency:
+    * Five transition counts: **X, X, X, X, X**
+    * Average frequency: **XX.XXX MHz**
+    * Variation between measurements and comparison to the nominal 65 MHz:
+  3. 50% point and zero point:
+    * Last step with ratio above 0.5: Δ<sub>1</sub> = **XXX ps**, r<sub>1</sub> = **X.XX**
+    * Next step (ratio below 0.5): Δ<sub>2</sub> = **XXX ps**, r<sub>2</sub> = **X.XX**
+    * Δ<sub>50</sub> = **XXX ps**
+    * How does Δ<sub>50</sub> compare with the data path delay from question 1?
+    * Δ<sub>0</sub> = **XXX ps**
+  4. Metastability margin (Δ<sub>0</sub> - Δ<sub>50</sub>): **XXX ps**. How does it compare to a 10 ns clock period?
+  5. Estimate of τ:
+    * Δ<sub>A</sub> = **XXX ps**, N<sub>A</sub> = **X**
+    * Δ<sub>B</sub> = **XXX ps**, N<sub>B</sub> = **X**
+    * τ = **XX ps**
+  6. Factor by which the probability of an unsettled flip-flop drops for each additional 1 ns of settling time: **X**. Explain why a two flip-flop synchronizer clocked at 100 MHz almost never fails, and why a detector that gives the flip-flop a full clock period to settle will almost never detect an event.
 
 ### Clock Domain Timing Table
 

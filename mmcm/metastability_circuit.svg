@@ -1,0 +1,165 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1080" height="560" viewBox="0 0 1080 560" font-family="Helvetica, Arial, sans-serif">
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#424242"/>
+    </marker>
+  </defs>
+  <style>
+    .wire { stroke:#424242; stroke-width:2; fill:none; }
+    .ff-cfg { fill:#E8F5E9; stroke:#2E7D32; stroke-width:2; }
+    .ff-a   { fill:#E3F2FD; stroke:#1565C0; stroke-width:2; }
+    .ff-b   { fill:#FFF3E0; stroke:#E65100; stroke-width:2; }
+    .gate   { fill:#FAFAFA; stroke:#424242; stroke-width:2; }
+    .box    { fill:#FAFAFA; stroke:#424242; stroke-width:2; }
+    .pin    { font-size:14px; fill:#212121; }
+    .name   { font-size:18px; font-weight:bold; fill:#212121; }
+    .clk-cfg { font-size:14px; fill:#2E7D32; font-weight:bold; }
+    .clk-a  { font-size:14px; fill:#1565C0; font-weight:bold; }
+    .clk-b  { font-size:14px; fill:#E65100; font-weight:bold; }
+    .note   { font-size:13px; fill:#424242; font-style:italic; }
+    .warn   { font-size:13px; fill:#C62828; font-style:italic; font-weight:bold; }
+    .label  { font-size:14px; fill:#212121; }
+    .title  { font-size:15px; font-weight:bold; fill:#212121; }
+  </style>
+  <rect width="1080" height="560" fill="#FFFFFF"/>
+
+  <!-- ===================== Toggle flip-flop (CFGMCLK domain) ===================== -->
+  <rect class="ff-cfg" x="90" y="110" width="70" height="90" rx="3"/>
+  <text class="pin" x="97" y="140">D</text>
+  <text class="pin" x="140" y="140">Q</text>
+  <polygon points="90,178 102,185 90,192" fill="none" stroke="#2E7D32" stroke-width="2"/>
+  <text class="name" x="80" y="100">data_tog</text>
+  <text class="clk-cfg" x="72" y="220">CFGMCLK</text>
+  <text class="note" x="58" y="237">(~65 MHz, asynchronous)</text>
+  <!-- inverter feedback -->
+  <path class="wire" d="M160,135 L190,135 M180,135 L180,70 L148,70"/>
+  <polygon class="gate" points="148,58 148,82 116,70"/>
+  <circle cx="111" cy="70" r="5" class="gate"/>
+  <path class="wire" d="M106,70 L65,70 L65,135 L90,135"/>
+  <circle cx="180" cy="135" r="4" fill="#424242"/>
+
+  <!-- data_tog -> A -->
+  <path class="wire" d="M190,135 L300,135"/>
+
+  <!-- ===================== Flip-flop A (clk_a) ===================== -->
+  <rect class="ff-a" x="300" y="110" width="70" height="90" rx="3"/>
+  <text class="pin" x="307" y="140">D</text>
+  <text class="pin" x="350" y="140">Q</text>
+  <polygon points="300,178 312,185 300,192" fill="none" stroke="#1565C0" stroke-width="2"/>
+  <text class="name" x="327" y="100">A</text>
+  <text class="clk-a" x="312" y="220">clk_a</text>
+  <text class="warn" x="275" y="237">can go metastable</text>
+
+  <!-- A.Q net: to C and down to B -->
+  <path class="wire" d="M370,135 L540,135"/>
+  <path class="wire" d="M420,135 L420,315 L450,315"/>
+  <circle cx="420" cy="135" r="4" fill="#424242"/>
+
+  <!-- ===================== Flip-flop C (clk_a) ===================== -->
+  <rect class="ff-a" x="540" y="110" width="70" height="90" rx="3"/>
+  <text class="pin" x="547" y="140">D</text>
+  <text class="pin" x="590" y="140">Q</text>
+  <polygon points="540,178 552,185 540,192" fill="none" stroke="#1565C0" stroke-width="2"/>
+  <text class="name" x="567" y="100">C</text>
+  <text class="clk-a" x="552" y="220">clk_a</text>
+  <text class="note" x="500" y="237">late sample (settled value)</text>
+
+  <!-- ===================== Flip-flop B (clk_b) ===================== -->
+  <rect class="ff-b" x="450" y="290" width="70" height="90" rx="3"/>
+  <text class="pin" x="457" y="320">D</text>
+  <text class="pin" x="500" y="320">Q</text>
+  <polygon points="450,358 462,365 450,372" fill="none" stroke="#E65100" stroke-width="2"/>
+  <text class="name" x="477" y="280">B</text>
+  <text class="clk-b" x="462" y="400">clk_b</text>
+  <text class="note" x="408" y="417">early sample:</text>
+  <text class="note" x="408" y="433">Δ after the clk_a edge</text>
+
+  <!-- B -> B2 -->
+  <path class="wire" d="M520,315 L600,315"/>
+
+  <!-- ===================== Flip-flop B2 (clk_a) ===================== -->
+  <rect class="ff-a" x="600" y="290" width="70" height="90" rx="3"/>
+  <text class="pin" x="607" y="320">D</text>
+  <text class="pin" x="650" y="320">Q</text>
+  <polygon points="600,358 612,365 600,372" fill="none" stroke="#1565C0" stroke-width="2"/>
+  <text class="name" x="620" y="280">B2</text>
+  <text class="clk-a" x="612" y="400">clk_a</text>
+  <text class="note" x="578" y="417">early sample moved</text>
+  <text class="note" x="578" y="433">into clk_a domain</text>
+
+  <!-- ===================== C.Q net ===================== -->
+  <path class="wire" d="M610,135 L770,135"/>
+  <circle cx="650" cy="135" r="4" fill="#424242"/>
+  <circle cx="770" cy="135" r="4" fill="#424242"/>
+  <!-- up to C_d -->
+  <path class="wire" d="M650,135 L650,45 L690,45"/>
+  <!-- to trans XOR (lower input) and err XOR (upper input) -->
+  <path class="wire" d="M770,135 L770,88 L806,88"/>
+  <path class="wire" d="M770,135 L770,212 L806,212"/>
+
+  <!-- ===================== C_d (clk_a) ===================== -->
+  <rect class="ff-a" x="690" y="20" width="56" height="70" rx="3"/>
+  <text class="pin" x="696" y="50">D</text>
+  <text class="pin" x="728" y="50">Q</text>
+  <polygon points="690,70 701,76 690,82" fill="none" stroke="#1565C0" stroke-width="2"/>
+  <text class="clk-a" x="696" y="106">clk_a</text>
+  <text class="name" x="752" y="28" font-size="15">C_d</text>
+  <path class="wire" d="M746,45 L785,45 L785,62 L806,62"/>
+
+  <!-- B2.Q -> err XOR (lower input) -->
+  <path class="wire" d="M670,315 L785,315 L785,238 L806,238"/>
+
+  <!-- ===================== XOR gates ===================== -->
+  <!-- trans XOR -->
+  <path class="gate" d="M800,50 Q820,75 800,100 Q845,100 860,75 Q845,50 800,50 Z"/>
+  <path class="wire" d="M792,50 Q812,75 792,100"/>
+  <text class="label" x="868" y="68">trans</text>
+  <!-- err XOR -->
+  <path class="gate" d="M800,200 Q820,225 800,250 Q845,250 860,225 Q845,200 800,200 Z"/>
+  <path class="wire" d="M792,200 Q812,225 792,250"/>
+  <text class="label" x="868" y="218">err</text>
+
+  <!-- XOR outputs -> counters -->
+  <path class="wire" d="M860,75 L918,75" marker-end="url(#arrow)"/>
+  <path class="wire" d="M860,225 L918,225" marker-end="url(#arrow)"/>
+
+  <!-- ===================== Counters and display ===================== -->
+  <rect class="box" x="920" y="40" width="140" height="220" rx="6"/>
+  <text class="title" x="932" y="68">Counters</text>
+  <text class="label" x="932" y="95">transitions</text>
+  <text class="label" x="932" y="113">per second</text>
+  <text class="label" x="932" y="230">errors</text>
+  <text class="label" x="932" y="248">per second</text>
+  <text class="note" x="932" y="160">clk_a domain,</text>
+  <text class="note" x="932" y="176">1 s window</text>
+  <path class="wire" d="M990,260 L990,318" marker-end="url(#arrow)"/>
+  <rect class="box" x="920" y="320" width="140" height="70" rx="6"/>
+  <text class="label" x="932" y="345">Seven segment</text>
+  <text class="label" x="932" y="363">display</text>
+  <text class="note" x="932" y="380">(100 MHz clock)</text>
+
+  <!-- ===================== Detector MMCM ===================== -->
+  <rect class="box" x="300" y="460" width="250" height="80" rx="6"/>
+  <text class="title" x="315" y="486">Detector MMCM</text>
+  <text class="label" x="315" y="506">(MMCME2_ADV, VCO = 1000 MHz)</text>
+  <text class="note" x="315" y="526">fine dynamic phase shift on clk_b</text>
+  <!-- inputs -->
+  <path class="wire" d="M200,480 L298,480" marker-end="url(#arrow)"/>
+  <text class="label" x="95" y="485">CLK100MHZ</text>
+  <path class="wire" d="M200,522 L298,522" marker-end="url(#arrow)"/>
+  <text class="label" x="20" y="515">BTNU / BTND: Δ ± 1 step</text>
+  <text class="label" x="20" y="533">BTNL / BTNR: Δ ± 8 steps</text>
+  <!-- outputs -->
+  <path class="wire" d="M550,480 L640,480" marker-end="url(#arrow)"/>
+  <text class="clk-a" x="648" y="485">clk_a: 200 MHz</text>
+  <path class="wire" d="M550,522 L640,522" marker-end="url(#arrow)"/>
+  <text class="clk-b" x="648" y="527">clk_b: 200 MHz, delayed by Δ (17.9 ps per step)</text>
+
+  <!-- ===================== Legend ===================== -->
+  <rect class="ff-cfg" x="20" y="300" width="16" height="16"/>
+  <text class="label" x="44" y="313">CFGMCLK domain</text>
+  <rect class="ff-a" x="20" y="326" width="16" height="16"/>
+  <text class="label" x="44" y="339">clk_a domain</text>
+  <rect class="ff-b" x="20" y="352" width="16" height="16"/>
+  <text class="label" x="44" y="365">clk_b domain</text>
+</svg>

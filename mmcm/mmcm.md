@@ -1,6 +1,7 @@
 # MMCM Assignment
 
-In this assignment you will learn how to use the MMCM primitive to create a deskewed clock, clocks of various frequency, and phase, and to induce metastability.
+In this assignment you will learn how to use the MMCM primitive to create a deskewed clock and clocks of various frequency and phase.
+You will also build and run a provided design that measures metastability in a flip-flop.
 You will use the switches, buttons, seven segment display, and LEDs to interact with your clocking circuit.
 
 ##  Top-Level Design
@@ -116,6 +117,9 @@ This MMCM should be reset when the first MMCM is not locked (i.e., the output of
 Create a 48-bit counter in the CLKB clock domain named CNTB_0. 
 This counter should be reset using an appropriate reset signal (i.e., a reset signal that is synchronous with the CLKB clock domain).
 
+<!-- 
+This portion of the lab is moved to a standalone design that the students will run.
+
 ### Metastability Circuit
 
 Create a signal in the CLKB clock domain that toggles every clock cycle. 
@@ -124,12 +128,13 @@ Create a metastability detection circuit (see resources below)
   * [Old FPGA app note: Figure 1](https://docs.xilinx.com/v/u/en-US/xapp094)
   * [this paper](https://www.researchgate.net/publication/258377930_Metastability_Testing_at_FPGA_Circuit_Design_using_Propagation_Time_Characterization)
   * (Let me know if you find some other good ones!)
-<!-- as shown [here in Figure 1](http://userweb.eng.gla.ac.uk/scott.roy/DCD3/technotes.pdf).-->
+(as shown [here in Figure 1](http://userweb.eng.gla.ac.uk/scott.roy/DCD3/technotes.pdf).)
 The f_data signal is your toggling circuit created in the CLKB clock domain. 
 Use CLKOUT4 as the f_clk. 
 Every time FF 'D' goes high, a metastability event has been detected.
 Create a 32-bit counter in the CLKOUT4 clock domain that counts metastability events. 
-This counter will be referred to as CNT_META.
+This counter will be referred to as CNT_META. 
+-->
 
 ### Seven Segment Display
 
@@ -162,29 +167,115 @@ It is possible you will get metastability, but this is not an issue for the seve
 | 0x7 | PULSE3CNT |
 | 0x8 | PULSE4CNT |
 | 0x9 | CNTB_0[47:16]  |
-| 0xA | CNT_META |
-| 0xB - 0xF | 0 |
+| 0xA - 0xF | 0 |
 
 ### Timing Constraints
 
-In addition to the `(* ASYNC_REG = "TRUE" *)` attribute that you add to your HDL, you will need to add a number of additional timing constraints for this design.
-For every clock domain crossing signal, you will need to add a `set_false_path` constraint to your .xdc file.
-`set_false_path -from [ get_cells clk0_cntr_reg[*] ] -to [get_cells ssd_sync_reg[*] ]
-`
-Without this constraint, the timing analysis tool will try to resolve timing for two signals of different clock domains.
-The following situations provide examples of when you will need to add a `set_false_path` constraint:
-    * The synchronizer for the pulse3 and pulse4 signals that are crossing clock domains
-    * The synchronizer register used to synchronize the various counters to the input clock domain (for the seven-segment display)
-    * The input to the "metastability A" FF used to detect metastability.
-The following example demonstrates this constraint:
+In addition to the `(* ASYNC_REG = "TRUE" *)` attribute that you add to your HDL, you will need to add timing constraints for every clock domain crossing in this design.
+
+Every clock in this design is derived from the input clock (all of the MMCM outputs come from the same VCO, and the secondary MMCM uses CLKOUT0 as its input).
+As a result, Vivado treats every pair of clocks as *related* and times each clock domain crossing as if it were an ordinary synchronous path.
+For each crossing, Vivado lines up the two clock waveforms over their common period and uses the closest pair of launch and capture edges as the timing requirement.
+For clocks with unusual frequency ratios or phase shifts this requirement can be extremely small (e.g., about 0.3 ns for a crossing from CLKB to CLKOUT0), and the path will fail timing.
+This requirement is meaningless for a synchronizer: the synchronizer is designed to tolerate data that arrives at *any* time relative to the capture clock.
+Note that the `ASYNC_REG` attribute does not change the timing analysis (it only affects placement, optimization, and clock domain crossing reports).
+
+For each clock domain crossing, add a `set_max_delay -datapath_only` constraint to your .xdc file:
 ```
-# Sets a false path from counter0 to the ssd_sync register (all 32 bits)
-# Note that Vivado adds the "_reg" name to your HDL name
-set_false_path -from [ get_cells clk0_cntr_reg[*] ] -to [ get_cells ssd_sync_reg[*] ]
-# Sets a false path from the pulse3_reg signal to the synchronizer signal in another clock
-# domain.
-set_false_path -from [ get_cells pulse3_reg ] -to [ get_cells pulse3_clk0_d_reg ]
+set_max_delay -datapath_only <X> -from <source cells> -to <destination cells>
 ```
+This constraint replaces the clock-edge based timing requirement with a simple rule: the data must travel from the source flip-flop to the destination flip-flop within `X` ns.
+Specifically, the `-datapath_only` option:
+* Ignores the clock latency (skew) of both clocks, which is meaningless between clocks that are treated as asynchronous
+* Checks only the data path delay (clock-to-Q of the source flip-flop + logic + routing + setup time of the destination flip-flop) against `X`
+* Removes the hold check on the path (a hold check on an asynchronous crossing is also meaningless)
+
+You may have seen the `set_false_path` constraint used for this purpose.
+A false path tells the tool to ignore the path completely, so the tool will accept any routing delay (even a very long one).
+The `set_max_delay -datapath_only` constraint still times the path, so the crossing is routed with a bounded and predictable delay, and the tool will report a failure if the route is too long.
+For clock domain crossings, `set_max_delay -datapath_only` is almost always what you want.
+
+The following clock domain crossings in your design need this constraint:
+* The first synchronizer flip-flop for the PULSE3 signal (CLKOUT3 to CLKOUT0)
+* The first synchronizer flip-flop for the PULSE4 signal (CLKOUT4 to CLKOUT0)
+* The register that samples the various counters for the seven-segment display (each counter's clock domain to the input clock domain)
+
+Choose the value of `X` based on the type of crossing:
+
+| Crossing | Value of `X` | Reason |
+| ---- | ---- | ---- |
+| Single-bit synchronizer (PULSE3, PULSE4) | The smaller of the source and destination clock periods | Keeps the crossing latency predictable |
+| Counters to the seven-segment display register | One input clock period (10 ns) | Keeps the path constrained and short |
+
+Compute these values from the clock frequencies you chose for your design.
+The exact value is not critical (typical routes are 1-2 ns), but it should be a reasonable bound rather than a very large number.
+
+The following example demonstrates these constraints (this example assumes CLKOUT4 is 220 MHz; use your own clock periods and cell names):
+```
+# Note that Vivado adds "_reg" to the name of each register in your HDL
+
+# Counters in each clock domain to the seven-segment display register (input clock domain).
+# A single constraint can list all of the counter registers.
+set_max_delay -datapath_only 10.0 \
+  -from [get_cells {clk0_cntr_reg[*] clk1_cntr_reg[*] clk2_cntr_reg[*] clk3_cntr_reg[*] \
+                    clk4_cntr_reg[*] clk5_cntr_reg[*] clk6_cntr_reg[*] cntb_0_reg[*] \
+                    pulse3cnt_reg[*] pulse4cnt_reg[*]}] \
+  -to   [get_cells ssd_sync_reg[*]]
+
+# PULSE3 (CLKOUT3) to the first synchronizer flip-flop (CLKOUT0): one CLKOUT0 period
+set_max_delay -datapath_only 10.0 -from [get_cells pulse3_reg] -to [get_cells pulse3_clk0_d_reg]
+
+# PULSE4 (CLKOUT4) to the first synchronizer flip-flop (CLKOUT0): one CLKOUT4 period
+set_max_delay -datapath_only 4.5 -from [get_cells pulse4_toggle_reg] -to [get_cells pulse4_clk0_d_reg]
+
+```
+
+If your registers are inside a submodule, use the hierarchical name of the cell (e.g., `ssd_inst/ssd_sync_reg[*]`) or use `get_cells -hierarchical`.
+
+After implementing your design, use the following commands to check your constraints:
+* `report_exceptions -ignored`: Lists any constraints that did not match any cells or were overridden. A misspelled cell name will appear here (otherwise the constraint is silently ignored).
+* `report_clock_interaction`: Shows how each pair of clocks is timed. Any pair still marked "Timed (unsafe)" has a clock domain crossing that you have not constrained.
+* `report_timing_summary`: The "Inter-Clock Paths" section should show that all of the clock domain crossings meet timing.
+
+### Clock Domain Crossing Report and Waivers
+
+The timing constraints above make sure each clock domain crossing is routed with a bounded delay, but they do not check whether the crossing is *structurally* safe (i.e., whether it has a proper synchronizer).
+Vivado provides the `report_cdc` command to check the structure of every clock domain crossing in your design:
+```
+report_cdc -details -file cdc_mmcm_top.rpt
+```
+The summary table at the top of this report lists each pair of clocks with the number of endpoints that are "Safe", "Unsafe", or "Unknown" and the number of synchronizers missing the `ASYNC_REG` attribute.
+The details section lists each violation with a rule ID (e.g., `CDC-1`) and the source and destination cells.
+Review this report and make sure each crossing is reported as expected:
+* **PULSE3 and PULSE4 synchronizers**: These should be reported as "Safe" with no missing `ASYNC_REG`. If they are reported as "Unknown" or are missing `ASYNC_REG`, fix your synchronizer (do not waive these).
+* **Synchronizers on the input ports** (switches and reset): These should also be "Safe" with no missing `ASYNC_REG`. Fix them if they are not.
+* **Counters to the seven-segment display register**: These will be reported as "Unknown" with a *Critical* severity (rule `CDC-1`, "1-bit unknown CDC circuitry", for each bit of the display register) because each counter is sampled by a single register with no synchronizer. This crossing is unsafe on purpose: the value is only used for display and an incorrect sample lasts for only one display refresh. Add a waiver for this crossing.
+* Every crossing you created should appear in this report. If one is missing, check that the signal crossing the clock domain is not used as a clock or latch enable (the report only analyzes data paths).
+
+A waiver tells Vivado that you have reviewed a specific violation and have determined that it is acceptable.
+Unlike `set_false_path`, a waiver does not change the timing analysis; it only marks the violation as reviewed in the CDC report.
+Waived violations are still listed in the report as waived, so the decision is documented rather than hidden.
+Add waivers with the `create_waiver` command in your .xdc file.
+Each waiver must include the rule ID from the details section of your CDC report, your name (`-user`), and a description that explains why the crossing is acceptable.
+Only waive the intentionally unsafe display crossing described above.
+
+The following example demonstrates this waiver (use the rule ID and cell names from your own CDC report):
+```
+# Counters sampled by the seven-segment display register (input clock domain).
+# A single waiver covers all of the counters since it only specifies the destination.
+create_waiver -type CDC -id {CDC-1} -user "your_name" \
+  -to [get_pins ssd_sync_reg[*]/D] \
+  -description "Counters sampled for display only; an incorrect sample lasts one display refresh"
+
+```
+
+Create the report `cdc_mmcm_top.rpt` using the `report_cdc` command as part of your implementation script.
+
+<!-- After adding the waivers, run `report_cdc` again and confirm that:
+* The only remaining violations are waived (no unwaived *Critical* entries)
+* No synchronizer is missing the `ASYNC_REG` attribute -->
+
+You can use the `report_waivers` command to list all of the waivers in your design.
 
 ## Testbench
 
@@ -214,7 +305,7 @@ Done after the `check_timing` command.
 `
 
 Create a constraints file with all the necessary constraints for your design.
-Make sure you add the timing false path timing constraints like you did for the last assignment.
+Make sure your constraints file includes the clock domain crossing constraints described in the [Timing Constraints](#timing-constraints) section above (as well as the false path constraints for the I/O pins that you added in the spi_download assignment).
 Create a makefile rule named `synth_mmcm_top` that synthesizes your top-level design using the default parameters.
 This makefile rule should generate a log file named `synth_mmcm_top.log` and a .dcp file named `mmcm_top_synth.dcp`.
 Make sure all synthesis warnings and errors are resolved before proceeding with the implementation of your design.
@@ -237,6 +328,109 @@ You will need to indicate the location in your report.
 
 Make sure your design meets the timing constraint and doesn't have any errors or warnings.
 Download your design and make sure it operates as expected.
+
+## Metastability Circuit
+
+In this part of the assignment you will build and run a provided design that measures metastability in a flip-flop of the FPGA.
+This design is separate from your `mmcm_top` design: you do not need to add anything to your own design.
+
+### How the circuit works
+
+A flip-flop goes metastable when its data input changes very close to its clock edge.
+When this happens, the output of the flip-flop takes longer than normal to settle to a '0' or '1'.
+The time needed to settle is random, and the probability that the flip-flop has *not* settled after a time *t* drops exponentially (proportional to e<sup>-t/τ</sup>, where τ is the settling time constant of the flip-flop).
+The flip-flops in this FPGA settle very quickly (τ is on the order of tens of picoseconds), so a flip-flop that is given a full clock period to settle will essentially never be caught in a metastable state.
+To observe metastability, the output of the flip-flop must be checked only a few hundred picoseconds after the clock edge.
+
+The provided design, [`metastability_top.sv`](metastability_top.sv), does this with the following circuit:
+* **Asynchronous data**: A flip-flop toggles every cycle of `CFGMCLK`, the internal configuration oscillator of the FPGA (nominally 65 MHz). This oscillator is completely independent of the 100 MHz board clock, so the data changes at random times relative to the sampling clock. The `STARTUPE2` primitive provides access to this clock.
+* **Sampling flip-flop (A)**: Samples the toggling data with `clk_a` (200 MHz). This is the flip-flop that can go metastable.
+* **Early sample (B)**: Samples the output of A with `clk_b`, a copy of `clk_a` that is delayed by a small, adjustable time *delta*. If A has not settled within *delta* of the clock edge, B captures the wrong value.
+* **Late sample (C)**: Samples the output of A one full `clk_a` period later. By this time A has settled, so C holds the correct value.
+* **Error detection**: Flip-flop B2 moves the early sample into the `clk_a` domain so it can be compared with the late sample (both refer to the same `clk_a` edge). Each mismatch is an *error* (A had not settled within *delta*). Flip-flop C_d holds the previous late sample, and each change in the late sample is a *transition* of A.
+
+![Metastability detection circuit](metastability_circuit.png)
+<!-- The figure source is metastability_circuit.svg. After editing the SVG, regenerate the PNG (2x scale) from the mmcm directory with:
+     rsvg-convert -z 2 -o metastability_circuit.png metastability_circuit.svg
+     (rsvg-convert is part of librsvg: "brew install librsvg" on macOS, "apt install librsvg2-bin" on Ubuntu) -->
+
+An MMCM generates `clk_a` and `clk_b`.
+The delay *delta* is adjusted using the MMCM "fine dynamic phase shift" feature, which shifts `clk_b` by 1/56 of the MMCM VCO period for each step (about 17.9 ps with the 1000 MHz VCO used in this design).
+The design counts errors and transitions for one second and displays the counts on the seven segment display.
+
+### Building the design
+
+The following files are provided in this directory:
+* [`metastability_top.sv`](metastability_top.sv): the top-level design
+* [`metastability_top.xdc`](metastability_top.xdc): the constraints for the design
+* [`metastability_build.tcl`](metastability_build.tcl): a Vivado script that synthesizes and implements the design, generates reports, and generates the bitfile `metastability_top.bit`
+
+The design uses your `seven_segment8` module (rx_sim assignment) and your `debounce` module (tx_download assignment).
+The build script expects these modules in `../rx_sim/seven_segment8.sv` and `../tx_download/debounce.sv`.
+If your files are in a different location, change the paths at the top of `metastability_build.tcl` (do not modify the other provided files).
+
+Create a makefile rule named `build_metastability` that builds the design with the following command:
+```
+vivado -mode batch -source metastability_build.tcl -log metastability_build.log
+```
+This rule generates the following reports: `timing_metastability_top.rpt`, `utilization_metastability_top.rpt`, `clock_interaction_metastability_top.rpt`, and `cdc_metastability_top.rpt`.
+Review the constraints file and these reports to see how the timing of the intentionally unsafe clock domain crossings in this circuit is constrained.
+
+### Running the design
+
+Download `metastability_top.bit` to your board.
+The design is controlled with the buttons and switches as follows:
+
+| Control | Function |
+| ---- | ---- |
+| BTNU / BTND | Increase / decrease *delta* by one step (about 17.9 ps) |
+| BTNL / BTNR | Increase / decrease *delta* by eight steps (about 143 ps) |
+| CPU_RESETN | Reset the design (*delta* returns to zero) |
+| SW[1:0] = 00 | Display the number of errors in the last measurement |
+| SW[1:0] = 01 | Display the number of transitions in the last measurement (frequency of the clock) |
+| SW[1:0] = 10 | Display *delta*: the number of steps in the left four digits and the delay in ps in the right four digits |
+| SW[1:0] = 11 | Display the number of measurements since reset |
+| SW[2] | 0 = decimal display, 1 = hexadecimal display |
+
+*Delta* is limited to the range of 0 to 140 steps (0 to 2.5 ns).
+In decimal mode, the leftmost digit point indicates that the value is too large to display (larger than 99,999,999).
+
+The LEDs show the status of the experiment:
+
+| LED | Meaning |
+| ---- | ---- |
+| LED[0] | The MMCM is locked |
+| LED[1] | The measurement is valid: a full one second measurement has completed since *delta* last changed |
+| LED[2] | Toggles each time a new measurement is available (once per second) |
+| LED[3] | *Delta* is at its minimum or maximum value |
+
+A new measurement is available once per second.
+The measurement that is in progress when you change *delta* includes samples from both the old and the new *delta*, so **always wait for LED[1] to turn on before recording a value** after changing *delta*.
+
+### Exercises
+
+Answer the questions for these exercises in your [report](report.md).
+In these exercises, the *error ratio* is the number of errors divided by the number of transitions in a measurement.
+
+1. **Review the reports.** Open `timing_metastability_top.rpt` and `cdc_metastability_top.rpt`.
+   * Does the design meet timing?
+   * Open `metastability_top.dcp` in Vivado and run `report_timing -from [get_cells ff_a_reg] -to [get_cells ff_b_reg]`. What is the data path delay from flip-flop A to flip-flop B? This is the normal (non-metastable) delay from the A clock edge to the B input.
+   * Which clock domain crossings are waived in the CDC report, and why is it acceptable to waive them in this design?
+2. **Measure the CFGMCLK frequency.** The data toggles on every `CFGMCLK` edge, so the number of transitions in one second is the frequency of `CFGMCLK` in Hz. Record the transition count for five measurements. What is the average frequency, how much does it vary between measurements, and how does it compare to the nominal 65 MHz?
+3. **Find the 50% point and the zero point.** At *delta* = 0 the error ratio is close to 1 (B always samples A before its output changes). As you increase *delta*, the error ratio drops sharply and then continues to drop more slowly until no errors occur. Use the coarse buttons to find the approximate location of the drop and then use the fine buttons to find the following two points (remember to wait for LED[1] before recording each measurement):
+   * **The 50% point (Δ<sub>50</sub>)**: The *delta* where the error ratio is 0.5. You will usually find this point between two fine steps. Record the *delta* and error ratio of the last fine step with an error ratio above 0.5 (Δ<sub>1</sub>, r<sub>1</sub>) and the next fine step, which has an error ratio below 0.5 (Δ<sub>2</sub>, r<sub>2</sub>). Estimate the 50% point with linear interpolation:
+
+     Δ<sub>50</sub> = Δ<sub>1</sub> + (r<sub>1</sub> - 0.5) / (r<sub>1</sub> - r<sub>2</sub>) × (Δ<sub>2</sub> - Δ<sub>1</sub>)
+
+     Δ<sub>50</sub> is an estimate of the normal delay from the A clock edge to the B input: the clock-to-Q delay of A, the routing delay from A to B, the setup time of B, and the clock skew between `clk_a` and `clk_b`. How does it compare with the data path delay you found in exercise 1?
+   * **The zero point (Δ<sub>0</sub>)**: The smallest *delta* where the error count is zero for three consecutive measurements. Note that this is not a property of the flip-flop: it is the point where errors become less frequent than about once per second.
+4. **Compute the metastability margin.** The difference Δ<sub>0</sub> - Δ<sub>50</sub> is the additional settling time beyond the normal delay that is needed to reduce the errors from "every transition" to less than one per second. What is your metastability margin? How does it compare to a 10 ns clock period?
+5. **Estimate τ.** Between Δ<sub>50</sub> and Δ<sub>0</sub>, the number of errors decreases exponentially with *delta* (proportional to e<sup>-Δ/τ</sup>). You can estimate τ from two measurements in this region. Choose two values of *delta*, Δ<sub>A</sub> and Δ<sub>B</sub> (Δ<sub>B</sub> > Δ<sub>A</sub>), that are past the sharp drop and have error counts N<sub>A</sub> and N<sub>B</sub> of at least 10 (for example, one point with about 1,000 errors and one point with about 10 errors). Estimate τ as follows:
+
+   τ = (Δ<sub>B</sub> - Δ<sub>A</sub>) / ln(N<sub>A</sub> / N<sub>B</sub>)
+
+   For example, if the error count drops from 1,000 to 10 over 100 ps, then τ = 100 ps / ln(100) ≈ 22 ps.
+6. **Synchronizers.** Using your value of τ, by what factor does the probability of an unsettled flip-flop drop for each additional 1 ns of settling time (e<sup>1 ns / τ</sup>)? Based on this, explain why a two flip-flop synchronizer clocked at 100 MHz (which gives the first flip-flop nearly a full 10 ns clock period to settle) almost never fails, and why a metastability detector that gives the flip-flop a full clock period to settle will almost never detect an event.
 
 ## Submission and Grading
 
