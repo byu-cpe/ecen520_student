@@ -35,7 +35,7 @@ def main():
 	ocd_file = open(ocd_filename, 'w')
 	ocd_file.write(str.format('# openocd script for {}\n',args.filename))
 	ocd_file.write("adapter driver ftdi\n")
-	if args.legacy():
+	if args.legacy:
 		# Use legacy ftdi commands
 		ocd_file.write("ftdi_device_desc \"Digilent USB Device\"\n")
 		ocd_file.write("ftdi_vid_pid 0x0403 0x6010\n")
