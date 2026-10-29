@@ -13,6 +13,7 @@ This repository contains the lecture schedule (including links to lecture summar
 <!-- Future change:
 - Move pipelining lecture closer to timing.
 - Need to reduce the clock domain crossing/handsaking/xilinx CDC lecture down by one
+- Combine the AXI lectures into one
 -->
 
 | Week | Date | Lecture |
@@ -47,9 +48,9 @@ This repository contains the lecture schedule (including links to lecture summar
 |    | 11/4/2026  | [Digital Arithmetic #1](./lectures/arith1.md) |
 |    | 11/6/2026  | [Digital Arithmetic #2](./lectures/arith2.md) |
 | 11 | 11/9/2026  | **Exam #2** |
-|    | 11/11/2026 | [DSP Blocks](./lectures/dsp.md) |
+|    | 11/11/2026 | [CLB Blocks](./lectures/clb.md) |
 |    | 11/13/2026 | MicroBlaze Assignment Preparation |
-| 12 | 11/16/2026 | [CLB Blocks](./lectures/clb.md) | <!-- ChipIR test - move Exam #1 here? -->
+| 12 | 11/16/2026 | [DSP Blocks](./lectures/dsp.md) | <!-- ChipIR test - Brigham teach (DSP)? -->
 |    | 11/18/2026 | [ASIC Design (Tomoo)](./lectures/asic-design.md) | <!-- ChipIR test, I am gone -->
 |    | 11/20/2026 | [IO Resources #1](./lectures/io.md) | <!-- ChipIR test, I am gone. Cancel class? -->
 | 13 | 11/23/2026 | [IO Resources #2](./lectures/io.md) |

@@ -281,3 +281,31 @@ Future Changes:
 - Build system puts files in the build dir? (not in source dir)
 - Give implementation and synthesis scripts? Example makefile rule (they don't get them in 320)
 -->
+<!--
+Grading suggestions for the downloaded bitfiles:
+- tx_top.bit: configure putty for 19200 baud, 8 data bits, odd parity, 1 stop bit, no flow control.
+  tx_top_115200_even.bit: 115200 baud, 8 data bits, even parity, 1 stop bit.
+- Download the bitfile with putty already open. No character should appear during
+  configuration/startup, and none should appear before BTNC is pressed.
+- Check that LED[7:0] follow SW[7:0] and that SW[15:8] have no effect.
+- Single character per press: set SW = 0x41 ('A') and press BTNC once -> exactly one 'A'.
+  Hold BTNC down for a few seconds -> still only one 'A' (one-shot works). Releasing the
+  button should not send a character. Press rapidly several times -> one character per press,
+  no doubles (debouncer works).
+- Try a variety of bit patterns to catch bit-ordering and data path errors:
+  0x30 '0', 0x55 'U' (alternating bits), 0x7A 'z', 0x7E '~', 0x20 (space).
+  Use characters with both an even and odd number of 1s (e.g., 0x41 'A' has two 1s,
+  0x43 'C' has three) so both parity bit values get exercised.
+- Wrong-settings check: with the odd parity bitfile, set putty to even parity (or the wrong
+  baud rate) and confirm characters are garbled/dropped. This catches designs that send the
+  wrong parity or ignore the PARITY parameter (results depend on the OS serial driver, so
+  compare against the correct-settings behavior).
+- Confirm the 115200 bitfile is actually different: it should NOT work at 19200 and vice versa
+  (catches students who generated both bitfiles with the default parameters).
+- LED16_B should flicker blue on each transmission (only ~0.6 ms at 19200, so it is a brief
+  flash) and be off when idle.
+- Reset: press CPU_RESETN and confirm the design keeps working afterward. Holding CPU_RESETN
+  while pressing BTNC should not send anything. A reset during a transmission should not
+  leave the transmitter stuck busy.
+- Check the synth/implement logs for latch warnings and that timing.rpt shows positive WNS.
+-->
