@@ -21,6 +21,7 @@ def main():
 	parser.add_argument('filename', type=str, help="Bitstream filename")
 	# Don't delete download file
 	parser.add_argument('--nodelete', action="store_true", help="Don't delete openocd file when done")
+	parser.add_argument('--legacy', action="store_true", help="Use legacy fdti commands")
 	# Parse arguments
 	args = parser.parse_args()
 
@@ -34,16 +35,18 @@ def main():
 	ocd_file = open(ocd_filename, 'w')
 	ocd_file.write(str.format('# openocd script for {}\n',args.filename))
 	ocd_file.write("adapter driver ftdi\n")
-	# DEPRECATED! use 'ftdi device_desc' not 'ftdi_device_desc'
-	ocd_file.write("ftdi device_desc \"Digilent USB Device\"\n")
-	#DEPRECATED! use 'ftdi vid_pid' not 'ftdi_vid_pid'
-	ocd_file.write("ftdi vid_pid 0x0403 0x6010\n")
-	#ocd_file.write("# channel 1 does not have any functionality\n")
-	# DEPRECATED! use 'ftdi channel' not 'ftdi_channel'
-	ocd_file.write("ftdi channel 0\n")
-	#ocd_file.write("# just TCK TDI TDO TMS, no reset\n")
-	# DEPRECATED! use 'ftdi layout_init' not 'ftdi_layout_init'
-	ocd_file.write("ftdi layout_init 0x0088 0x008b\n")
+	if args.legacy():
+		# Use legacy ftdi commands
+		ocd_file.write("ftdi_device_desc \"Digilent USB Device\"\n")
+		ocd_file.write("ftdi_vid_pid 0x0403 0x6010\n")
+		ocd_file.write("ftdi_channel 0\n")
+		ocd_file.write("ftdi_layout_init 0x0088 0x008b\n")
+	else:
+		ocd_file.write("ftdi device_desc \"Digilent USB Device\"\n")
+		ocd_file.write("ftdi vid_pid 0x0403 0x6010\n")
+		#ocd_file.write("# channel 1 does not have any functionality\n")
+		ocd_file.write("ftdi channel 0\n")
+		ocd_file.write("ftdi layout_init 0x0088 0x008b\n")
 	ocd_file.write("reset_config none\n")
 	ocd_file.write("adapter speed 10000\n")
 	ocd_file.write("source [find cpld/xilinx-xc7.cfg]\n")
