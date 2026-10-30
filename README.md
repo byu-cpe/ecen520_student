@@ -14,6 +14,7 @@ This repository contains the lecture schedule (including links to lecture summar
 - Move pipelining lecture closer to timing.
 - Need to reduce the clock domain crossing/handsaking/xilinx CDC lecture down by one
 - Combine the AXI lectures into one
+- Arithmetic #1 needs better reading (base arithmetic without HDL). Better quiz questions
 -->
 
 | Week | Date | Lecture |
@@ -112,7 +113,7 @@ Assignments are due at midnight the day they are listed in the table below (unle
 | 8 | 10/29/2026 | [BRAM-Download](./bram_download/bram_download.md) | `bram_download` |
 | 9 | 11/5/2026 | [MMCM Clocking](./mmcm/mmcm.md) | `mmcm` |
 | 10 | 11/12/2026 | [AXI](./axi/axi.md) | `axi` |
-| 11 | | [MicroBlaze](./microblaze/microblaze.md) | `microblaze` |
+| 11 | 11/19/2026 | [MicroBlaze](./microblaze/microblaze.md) | `microblaze` |
 | 12 | | [DDR](./ddr/ddr.md) | `ddr` |
 
 <!--

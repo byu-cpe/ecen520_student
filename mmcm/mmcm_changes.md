@@ -86,10 +86,11 @@ All rule names and output file names in the md match passoff.py (`sim_mmcm_top`,
 - [x] **The CNT_META width isn't stated** (displayed in full, so presumably 32 bits). *Resolved:* 32 bits.
 - [x] **No-deskew configuration:** say that `CLKFBOUT` connects directly to `CLKFBIN` (no BUFG) for the internal feedback configuration. *Resolved:* added a sentence after the "Do NOT use deskewing" line.
 - [ ] **Check that a prime M and D are possible** within the VCO and PFD limits (e.g. M = 31, D = 3 gives Fvco ≈ 1033 MHz; then O = 11 gives ≈ 93.9 MHz). Giving one worked example would help.
-- [ ] **The metastability circuit depends entirely on XAPP094 Figure 1,** an old app note (XC4000-era). Its FF labels (A, B, C, D) are used in the md ("Every time FF 'D' goes high"; "the input to the 'metastability A' FF") without being defined.
+- [x] **The metastability circuit depends entirely on XAPP094 Figure 1,** an old app note (XC4000-era). Its FF labels (A, B, C, D) are used in the md ("Every time FF 'D' goes high"; "the input to the 'metastability A' FF") without being defined.
   - See **Proposal 2** at the end of this file for a replacement circuit.
   - Describe the circuit in the md (or include a small diagram) so the labels are defined.
   - The feedback notes ask, "Force them to get metastability? … See Baker's". Decide whether students are expected to observe non-zero CNT_META on the board, and say what result is expected.
+  - *Resolved:* the student-built circuit was removed (commented out) and replaced by the provided stand-alone design from Proposal 2 (`metastability_top.sv`, `metastability_top.xdc`, `metastability_build.tcl`), with a circuit figure (`metastability_circuit.png`) and a new "Metastability Circuit" section.
 - [ ] "(Let me know if you find some other good ones!)" is fine but informal. Consider moving it to the report suggestions section.
 
 ## Seven-segment display and mux
@@ -135,7 +136,7 @@ All rule names and output file names in the md match passoff.py (`sim_mmcm_top`,
 - [x] **The "Clock Domain Timing Table" isn't referenced by any question,** so students may skip it. Add a question that points to it. *Resolved:* added as a bullet under Timing Report Review (question 4), linking to the table.
 - [x] **The timing table has no row for the secondary MMCM clock** (CNTB_0 domain); add one. Consider a "Phase" column, and the MMCM settings used (M, D, O) for each clock. *Resolved:* added the secondary MMCM row, plus "M / D / O" and "Phase" columns, and a short explanation above the table of what goes in each column.
 - [x] **Utilization table typo:** "MMCME2_EDV" → "MMCME2_ADV". *Resolved.*
-- [ ] **Add a question on the metastability experiment:** the CNT_META value observed on the board after N seconds, and an interpretation.
+- [x] **Add a question on the metastability experiment:** the CNT_META value observed on the board after N seconds, and an interpretation. *Resolved:* report.md has a "Metastability Experiment" section matching the six exercises.
 - [ ] If `report_cdc` is required, add a question summarizing its findings.
 
 ## Typos and wording
@@ -255,6 +256,8 @@ Optional teaching exercise: implement once with no CDC constraints, record the f
 ## Proposal 2: Metastability measurement circuit
 
 Related items above: "The metastability circuit depends entirely on XAPP094 Figure 1" and the report.md metastability question. This would replace the "Metastability Circuit" section of `mmcm.md`.
+
+**Status:** implemented as a provided, stand-alone top-level design rather than a circuit students insert into their own design. Students build it with `metastability_build.tcl` (using their `seven_segment8` and `debounce` modules), run it on the board, and complete six exercises (reports, CFGMCLK frequency, the 50% point and zero point, the metastability margin, a two-point τ estimate, and synchronizer implications). Differences from the description below: the detector MMCM is fed directly from `CLK100MHZ`, four buttons control the phase (BTNU/BTND ±1 step, BTNL/BTNR ±8 steps, limited to 0–140 steps), the display shows decimal values, and LED[1] indicates when a measurement is valid. See Proposal 3 for possible extensions.
 
 ### Why students don't see metastability now
 
@@ -404,4 +407,77 @@ end
 - [ ] **Undercounting.** If A goes metastable and settles to the *old* value, B and C agree and nothing is counted. Fine for estimating τ (the slope matters, not the absolute count).
 - [ ] **STARTUPE2 conflict.** Only one per design; it would conflict with any lab that uses the SPI flash clock (`USRCCLKO`).
 - [ ] **`CFGMCLK` into an MMCM** is not recommended (noisy; may not lock reliably). Use it directly through a BUFG.
-- [ ] **Scope.** This adds `MMCME2_ADV` dynamic phase shift, STARTUPE2, placement constraints, and a measurement/handshake circuit. Decide whether it replaces the current metastability section, becomes a separate lab, or is an optional extension.
+- [x] **Scope.** This adds `MMCME2_ADV` dynamic phase shift, STARTUPE2, placement constraints, and a measurement/handshake circuit. Decide whether it replaces the current metastability section, becomes a separate lab, or is an optional extension. *Resolved:* provided as a stand-alone design that students build and run.
+
+## Proposal 3: Extending the metastability experiment
+
+The current exercises were deliberately kept simple (no plotting, a two-point τ estimate). The ideas below would make the experiment more thorough. They are listed roughly from easiest to hardest. All of them should be tried on a reference build first: the actual τ, the edge location, and whether the tail is visible above the clock jitter are still unknown.
+
+### Background model (for writing the extensions)
+
+- Error ratio r(Δ) = errors / transitions. Let t<sub>d</sub> be the normal delay seen by B (clock-to-Q + route + setup + clk_b/clk_a skew), and T<sub>a</sub> = 5 ns (the clk_a period).
+- Plateau (Δ < t<sub>d</sub>): r ≈ 1.
+- Tail (Δ > t<sub>d</sub>): r(Δ) ≈ (T<sub>0</sub> / T<sub>a</sub>) · e<sup>-(Δ - t<sub>d</sub>)/τ</sup>, so ln r is a straight line with slope -1/τ. T<sub>0</sub> (the metastability window) is probably a few ps or less, so the tail starts around 10<sup>-3</sup>.
+- Edge: clock jitter (tens of ps) blurs the step from 1 to T<sub>0</sub>/T<sub>a</sub>. On a log scale the edge curves downward more and more steeply (jitter falls off faster than an exponential); the tail is straight.
+- The first zero point is where the expected count in the measurement window drops below about one. It depends on the measurement time, not just the flip-flop.
+
+### Extensions
+
+- [ ] **Full sweep and plot.** Record every fine step from below the edge to the zero point (in a CSV file) and plot ln(errors/transitions), or the ratio on a log axis, against Δ. Have students label the plateau, edge, and tail, and explain why the edge curves while the tail is straight. Leave out zero counts (they can't be plotted on a log scale).
+- [ ] **Least-squares fit for τ.** Fit a line to ln(r) against Δ over the tail only and report τ = -1/slope. Points to discuss:
+  - Exclude the edge (if the "tail" still curves, the fit is measuring jitter, not τ).
+  - Exclude zero counts and down-weight small counts: counting noise is about √N, so a count of 4 could easily have been 2 or 6. A weighted fit with weights proportional to N (the inverse variance of ln N) is the proper approach.
+  - Report the uncertainty of τ from the fit and compare it with the two-point estimate.
+- [ ] **Step-to-step ratio.** In the tail, the count should drop by a roughly constant factor per fine step (for τ ≈ 20–25 ps, about 0.4–0.5 per 17.9 ps step). A constant ratio is the signature of exponential decay; a ratio that changes from step to step indicates the edge. This gives a quick τ = 17.9 ps / ln(N<sub>1</sub>/N<sub>2</sub>) at every step.
+- [ ] **Repeatability (counting statistics).** Record five measurements at one Δ in the tail and compare the spread with √N. (This was exercise 7 in an earlier draft.)
+- [ ] **Measurement time and the zero point.** At Δ<sub>0</sub>, record ten consecutive measurements (a 10 s window); a few errors will probably appear. Then find the Δ where ten consecutive measurements are all zero. Watching 10× longer should move the zero point by about τ·ln(10) ≈ 2.3τ (about 50 ps, three fine steps). This demonstrates that "no errors" only means "no errors yet", which is the MTBF concept.
+- [ ] **MTBF extrapolation.** At Δ<sub>0</sub> the circuit fails about once per second. Each additional τ·ln(10) of settling time reduces the failure rate 10× (and each τ·ln(2) ≈ 15 ps halves it). Have students compute the additional settling time for one failure per day (≈ 11.4τ), per year (≈ 17.3τ), and per age of the universe (≈ 40τ, under 1 ns for τ ≈ 22 ps), and compare with the ~9 ns a two flip-flop synchronizer at 100 MHz provides (over 100 orders of magnitude of margin). Treat the results as order-of-magnitude estimates.
+- [ ] **Errors per transition.** Express tail measurements as odds (e.g., 650 errors out of 65 million transitions is 1 in 100,000) to make the probabilities concrete.
+- [ ] **Estimate T<sub>0</sub>.** Using the fitted line and Δ<sub>50</sub> as the estimate of t<sub>d</sub>, extrapolate the tail back to Δ = t<sub>d</sub>: the intercept is T<sub>0</sub>/T<sub>a</sub>. Sensitive to the t<sub>d</sub> estimate (an error of δ in t<sub>d</sub> scales T<sub>0</sub> by e<sup>δ/τ</sup>), so treat it as rough.
+- [ ] **Compare Δ<sub>50</sub> with the timing model.** The `-datapath_only` constraint hides the clock paths in the A → B timing report. In the opened checkpoint, remove the exception (`reset_path -from [get_cells ff_a_reg] -to [get_cells ff_b_reg]`; confirm the command) and rerun `report_timing` to see clock-to-Q, route, setup, and the clk_a/clk_b skew at Δ = 0. Compare Δ<sub>50</sub> with both the slow corner (default) and fast corner (`-delay_type min`) results. The measured value should fall between them, since a real chip at room temperature is faster than the worst-case model.
+- [ ] **Data rate scaling.** The error rate should be proportional to f<sub>clk</sub> × f<sub>data</sub>. Add a switch that makes `data_tog` toggle every 2 or 4 `CFGMCLK` cycles; at a fixed Δ in the tail, the error count should drop by 2× or 4× while the error ratio (errors per transition) stays the same. This checks the MTBF formula directly with a small design change.
+- [ ] **Placement experiment.** Build with the pblock moved, or with the A → B route made longer. The edge (t<sub>d</sub>) should move while τ stays the same, showing that t<sub>d</sub> depends on the implementation and τ is a property of the flip-flop.
+- [ ] **Temperature.** `CFGMCLK` (the transition count) and possibly τ change with temperature. Comparing a cold board with a warm one is easy to observe, but avoid touching the FPGA (ESD).
+- [ ] **Automatic sweep over the UART.** Add a mode that steps Δ once every two measurements and sends `step, transitions, errors` over the UART transmitter from the earlier lab. Students log a CSV with a terminal program or Python, which removes manual recording, makes the full sweep and the least-squares fit practical, and allows longer measurement windows (e.g., 10 s per point) for the tail.
+- [ ] **Display the error ratio directly.** Add a sequential divider to show errors per million transitions (ppm), so students don't have to compute ratios by hand.
+- [ ] **Longer measurement window.** Make `GATE_CYCLES` selectable (e.g., 1 s or 10 s with a switch) to resolve the far tail with more counts, at the cost of a slower sweep.
+
+### Caveats for any extension
+
+- **Jitter may hide the tail.** If the count drops straight from the edge to zero, the "tail" measurements really measure jitter, and τ cannot be extracted. The margin and zero-point exercises still work.
+- **Undercounting.** If A goes metastable and settles to the old value, B and C agree and the event isn't counted. This affects T<sub>0</sub> estimates but not τ (the slope).
+- **B → B2 limit.** Near the 2.5 ns maximum Δ, the B → B2 path runs out of time and errors could reappear. This is an artifact of the circuit, not metastability.
+
+## Proposal 4: Add a truly asynchronous clock (CFGMCLK) to the student design
+
+**Status:** future semester. It is too late to change the student design for Fall 2026.
+
+### Motivation
+
+- Every clock in the current student design comes from `CLK100MHZ` (the secondary MMCM uses CLKOUT0 as its input). Vivado treats all of them as related, so:
+  - unconstrained crossings fail timing with meaningless requirements (e.g., ≈ 0.3 ns for CLKB → CLKOUT0);
+  - `report_cdc` reports related crossings without exceptions as "Safely Timed" / Safe, even when they have no synchronizer;
+  - on the board, data-to-clock phase follows a fixed, repeating pattern, so a broken synchronizer may fail consistently or never, depending on placement.
+- `CFGMCLK` (the STARTUPE2 internal configuration oscillator, nominally 65 MHz) is independent of the board oscillator. It is a real asynchronous clock domain:
+  - Vivado sees no common primary clock, and `report_cdc` analyzes the crossings as "No Common Primary Clock";
+  - the phase relative to the other clocks drifts continuously, so crossing bugs show up on the board as intermittent failures, like real designs;
+  - students already use this clock in the provided metastability design, so the primitive and constraints will be familiar.
+
+### Suggested changes to the student design
+
+- [ ] Instance `STARTUPE2` and a BUFG for `CFGMCLK` in `mmcm_top` (instantiation and constraints can be copied from `metastability_top.sv` / `metastability_top.xdc`). Add `create_clock -name clk_cfg -period 15.385 [get_pins <startup_inst>/CFGMCLK]`.
+- [ ] Have students observe that Vivado still times crossings between unrelated clocks by default ("Timed (unsafe)" in `report_clock_interaction`), so they must add `set_max_delay -datapath_only` constraints. This teaches that Vivado assumes all clocks are related unless told otherwise.
+- [ ] Move one or more of the clock domain crossing exercises to this clock. Options:
+  - **Frequency counter:** count `CFGMCLK` cycles for one second of `CLK100MHZ` and display the result. This requires a multi-bit crossing (e.g., a toggle handshake like the one in `metastability_top.sv`, or a gray-code counter with `set_bus_skew`), and each board reads slightly differently.
+  - **Pulse crossings:** generate PULSE3-style (slow → fast) or PULSE4-style (fast → slow) pulses in or out of the `CFGMCLK` domain, so the synchronizers are exercised with truly random phase.
+  - **Counter display:** add a 48-bit `CFGMCLK` counter to the display mux (another unsafe display crossing to waive).
+- [ ] Add report questions on the `report_cdc` results for the `CFGMCLK` crossings, and compare them with the MMCM crossings ("No Common Primary Clock" vs "Safely Timed").
+- [ ] Consider making `CFGMCLK` the asynchronous clock for all CDC exercises and keeping the MMCM clocks for the frequency, phase, and duty cycle portion of the lab.
+
+### Caveats
+
+- **Simulation:** the STARTUPE2 simulation model may not toggle `CFGMCLK`. Have the testbench supply the clock instead (e.g., a top-level parameter that selects a testbench clock with a random start phase and jitter).
+- **Unknown frequency:** nominally 65 MHz with a wide tolerance (check DS181). Exercises must not depend on an exact frequency; the measured frequency in the metastability experiment was about 65 MHz.
+- **One STARTUPE2 per design:** it conflicts with any design that needs the SPI flash clock (`USRCCLKO`). Not an issue for `mmcm_top`.
+- **Do not use `CFGMCLK` as an MMCM input:** it is noisy and the MMCM may not lock reliably. Use it directly through a BUFG.
+- **Grading:** the constraints and waivers become part of the grading criteria (every `CFGMCLK` crossing should appear in `report_cdc` as Safe, or waived with a justification).
