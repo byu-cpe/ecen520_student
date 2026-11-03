@@ -20,14 +20,7 @@ See the class [AI policy](../ai_policy.md) for a summary of acceptable use.
   2. Indicate the location of your two MMCMs:
     * Main MMCM: **MMCME2_ADV_XxYx**
     * Secondary MMCM: **MMCME2_ADV_XxYx**
-  3. Make sure you have the following files committed to your repository so they can be viewed in this report:
-      * [`mmcm_clk0.png`](./mmcm_clk0.png)
-      * [`mmcm_clk1.png`](./mmcm_clk1.png)
-      * [`mmcm_clk2.png`](./mmcm_clk2.png)
-      * [`mmcm_clk3.png`](./mmcm_clk3.png)
-      * [`mmcm_clk4.png`](./mmcm_clk4.png)
-      * [`mmcm_clk5.png`](./mmcm_clk5.png)
-      * [`mmcm_clk6.png`](./mmcm_clk6.png)
+  3. Make sure you have the single .png file with the waveforms.
   4. Timing Report Review
     * What is the "Worst Negative Slack" (WNS) of this design?: **X.Xns**
     * Which clock domain has the worst timing?: **<clock name>**
