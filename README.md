@@ -46,7 +46,7 @@ This repository contains the lecture schedule (including links to lecture summar
 |    | 10/28/2026 | [AXI Bus](./lectures/axi.md) | <!-- pptx=axi.pptx -->
 |    | 10/30/2026 | [AXI Bus part 2](./lectures/axi.md) |
 | 10 | 11/2/2026  | [IP Integration](./lectures/ip_integration.md) | <!-- pptx=ip_integration.pptx -->
-|    | 11/4/2026  | [Digital Arithmetic #1](./lectures/arith1.md) |
+|    | 11/4/2026  | [Digital Arithmetic #1](./lectures/arith1.md) | <!-- pptx=arithmetic.pptx -->
 |    | 11/6/2026  | [Digital Arithmetic #2](./lectures/arith2.md) |
 | 11 | 11/9/2026  | **Exam #2** |
 |    | 11/11/2026 | [CLB Blocks](./lectures/clb.md) |
