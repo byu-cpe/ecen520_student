@@ -6,13 +6,13 @@ The commented student feedback at the end of `axi.md` (lines 184–189) asks for
 
 ## Glaring issues
 
-- [ ] **The status register has no "TX FIFO empty" bit, but the testbench requires checking it.** Testbench step (line 149): "Read the status register to make sure the tx FIFO is not empty." The status register (lines 90–99) only has TX FIFO *full* and RX FIFO *empty*.
+- [x] **The status register has no "TX FIFO empty" bit, but the testbench requires checking it.** Testbench step (line 149): "Read the status register to make sure the tx FIFO is not empty." The status register (lines 90–99) only has TX FIFO *full* and RX FIFO *empty*. *Resolved:* added bit 7 (TX FIFO empty) and bit 8 (RX FIFO full); unlisted bits read as 0.
   - Add a TX FIFO empty bit (and an RX FIFO full bit for symmetry).
   - Add the new bits at bit 7 and above so the existing bits keep their positions. The MicroBlaze software (`microblaze/mb_uart.c`) uses `RX_EMPTY_MASK 0x10` (bit 4).
-- [ ] **The `build_vip` log name doesn't match passoff.** The md says to run `vivado -mode batch -source create_vip_files.tcl` (line 130), which writes `vivado.log`. Passoff expects `build_ip.log` from the `build_vip` rule.
+- [x] **The `build_vip` log name doesn't match passoff.** The md says to run `vivado -mode batch -source create_vip_files.tcl` (line 130), which writes `vivado.log`. Passoff expects `build_ip.log` from the `build_vip` rule. *Resolved:* the md gives the command with `-log build_vip.log`, passoff expects `build_vip.log`, and the two `build_ip` references now say `build_vip`.
   - Tell students to add `-log build_vip.log` and change passoff to match (or tell them to use `-log build_ip.log`).
   - The simulation instructions also refer to "the `build_ip` rule" (lines 157–158); the rule is `build_vip`.
-- [ ] **The testbench wiring instructions are backwards** (lines 140–141).
+- [x] **The testbench wiring instructions are backwards** (lines 140–141). *Resolved:* the transmitter drives `rx_in` and the receiver attaches to `tx_out`; also fixed the typos from line 142.
   - "Instance a transmitter module into your testbench and attach it to the output of your AXI UART module": the testbench transmitter drives the UART's *input* (`rx_in`).
   - "Instance a receiver module into your and attach it to the output": missing "testbench"; this one does attach to the output (`tx_out`).
 - [ ] **There is no description of the AXI4-Lite handshake requirements.** This is the hardest part of the assignment, and the student feedback (line 188) says students spent a lot of time on an incorrect design. See the "AXI4-Lite interface" section below.
@@ -20,23 +20,23 @@ The commented student feedback at the end of `axi.md` (lines 184–189) asks for
 ## FIFO
 
 - [ ] **Give a port table**, as the other labs do. The FIFO is reused by `uart_axi` and the MicroBlaze lab, so consistent names help. For example: `clk`, `rst`, `clr`, `we`, `din`, `re`, `dout`, `full`, `empty`, `overflow`, `underflow`.
-- [ ] **Explain the read behavior ("first-word fall-through").** "Reads should be asynchronous" (lines 17 and 23) is easy to misread. State that `dout` always shows the entry at the read pointer (asynchronous distributed RAM read), and that asserting `re` advances the read pointer at the next clock edge. Explain why this matters: the TX state machine and the AXI read can use `dout` in the same cycle they assert `re`.
-- [ ] **Remove the duplicated bullets.** "The writes should be synchronous" / "Reads should be asynchronous" appear both under the storage bullet (lines 16–17) and under the port bullets (lines 20, 23).
+- [x] **Explain the read behavior ("first-word fall-through").** "Reads should be asynchronous" (lines 17 and 23) is easy to misread. State that `dout` always shows the entry at the read pointer (asynchronous distributed RAM read), and that asserting `re` advances the read pointer at the next clock edge. Explain why this matters: the TX state machine and the AXI read can use `dout` in the same cycle they assert `re`. *Resolved:* described as first-word fall-through, with the reason it matters.
+- [x] **Remove the duplicated bullets.** "The writes should be synchronous" / "Reads should be asynchronous" appear both under the storage bullet (lines 16–17) and under the port bullets (lines 20, 23). *Resolved:* the FIFO spec was rewritten as a parameter table, a port table and one list of implementation bullets.
 - [ ] **Say whether `overflow` and `underflow` are sticky.** The testbench ("verify that the fifo error is cleared", lines 40, 42) implies they stay set until `clr` or `rst`. State it explicitly, and say that writes when full and reads when empty are ignored (the pointers don't move).
 - [ ] **Specify simultaneous read and write** when full and when empty, as the bram lab does (lines 30–33 of `bram.md`).
-- [ ] **Say how full and empty are detected** (an extra pointer bit or an entry count), and whether `DEPTH` must be a power of 2. With the default `DEPTH = 32`, the storage maps naturally to `RAM32M` / `RAM32X1D` primitives.
-- [ ] **Specify the reset polarity.** The FIFO reset is presumably active high, while the AXI reset (`s_axi_aresetn`) is active low. Say that `uart_axi` must invert it.
-- [ ] **Point to the specific UG901 section** ("Distributed RAM Examples", line 14) with a direct link, as was done for `ASYNC_REG` in the mmcm lab.
+- [x] **Say how full and empty are detected** (an extra pointer bit or an entry count), and whether `DEPTH` must be a power of 2. With the default `DEPTH = 32`, the storage maps naturally to `RAM32M` / `RAM32X1D` primitives. *Resolved:* pointers are one bit wider than the address (an extra MSB), the FIFO holds exactly `DEPTH` entries, and `DEPTH` must be a power of 2. Also specified simultaneous read/write (line 26) and sticky flags (line 25).
+- [x] **Specify the reset polarity.** The FIFO reset is presumably active high, while the AXI reset (`s_axi_aresetn`) is active low. Say that `uart_axi` must invert it. *Resolved:* `rst` and `clr` are active high in the port table, with a note that `uart_axi` must invert `s_axi_aresetn`.
+- [x] **Point to the specific UG901 section** ("Distributed RAM Examples", line 14) with a direct link, as was done for `ASYNC_REG` in the mmcm lab. *Resolved:* linked to `ug901-vivado-synthesis/Distributed-RAM-Examples`. The AMD portal returns 200 for any path, so check that the link opens the right topic.
 
 ### FIFO testbench
 
-- [ ] **Add tests:**
+- [x] **Add tests:** *Resolved:* all four tests added; the testbench must also print `Simulation done with X errors` (part of line 38, but no passoff regex check yet).
   - check the data values read back (not just the flags);
   - pointer wraparound (write and read more than `DEPTH` bytes in total);
   - simultaneous read and write;
   - `full` and `empty` deasserting at the right times.
 - [ ] **Require self-checking.** Count errors and print a final summary, and add a passoff `file_regex_check` on `sim_fifo.log` (as in other labs).
-- [ ] **Clarify the bram reference.** "Very similar to the bram fifo testbench" (line 35): say which file (the student's own testbench from the bram lab), since the bram FIFO has a different interface (synchronous BRAM read, no overflow/underflow).
+- [x] **Clarify the bram reference.** "Very similar to the bram fifo testbench" (line 35): say which file (the student's own testbench from the bram lab), since the bram FIFO has a different interface (synchronous BRAM read, no overflow/underflow). *Resolved:* refers to the student's bram FIFO testbench and explains the interface differences.
 
 ## Transmitter and receiver paths
 
@@ -47,7 +47,7 @@ The commented student feedback at the end of `axi.md` (lines 184–189) asks for
 
 ## AXI4-Lite interface
 
-- [ ] **Add a block diagram** of `uart_axi`: AXI write channels → TX FIFO → TX state machine → `tx`; `rx` → RX FIFO → AXI read channels; status and control registers. This was requested in the student feedback (line 185). An SVG/PNG like the mmcm metastability figure would work.
+- [x] **Add a block diagram** of `uart_axi`: AXI write channels → TX FIFO → TX state machine → `tx`; `rx` → RX FIFO → AXI read channels; status and control registers. This was requested in the student feedback (line 185). An SVG/PNG like the mmcm metastability figure would work. *Resolved:* added `axi_block_diagram.png` to the AXI-Lite UART Interface section, with a paragraph explaining the two paths and that the UART and AXI sides operate independently (also covers the independence point in the step-by-step item, line 57).
 - [ ] **Add a description of the handshake rules** students must follow. At minimum:
   - A transfer happens on a channel when `VALID` and `READY` are both high on a rising clock edge.
   - The master may present `AWVALID` and `WVALID` in either order or in the same cycle. The subordinate must handle all three cases (a common simplification: wait until both are valid, then assert `AWREADY` and `WREADY` together for one cycle).
@@ -75,18 +75,18 @@ The commented student feedback at the end of `axi.md` (lines 184–189) asks for
 
 ## Provided files
 
-- [ ] **Parameter defaults and types are inconsistent:**
+- [x] **Parameter defaults and types are inconsistent:** *Resolved:* `BAUD_RATE` defaults to 115,200 and `PARITY` is `integer` in all three files; added a parameter table to the md. Confirm that the MicroBlaze lab and its terminal use 115,200.
   - `BAUD_RATE`: 115,200 in `uart_axi_template.sv` and `uart_axi_tb_template.sv`, 19,200 in `uart_axi_wrapper.v`, and the MicroBlaze notes mention 9600. Pick one default and say which baud rate the MicroBlaze lab uses.
   - `PARITY`: `logic` in the templates, `integer` in the wrapper and the tx lab spec. Use `integer` everywhere.
-- [ ] **`uart_axi_wrapper.v` isn't mentioned in `axi.md`**, but the MicroBlaze lab requires it ("Your fifo, uart_axi, and uart_axi_wrapper from the axi assignment"). Explain that it is a Verilog wrapper for the block diagram (which doesn't accept SystemVerilog). Consider synthesizing through the wrapper in `synth_uart_axi` so problems show up in this lab. Fix its header comment (`// uart_axi.v`).
-- [ ] **Consider exposing a `FIFO_DEPTH` parameter** on `uart_axi` (passed to both FIFOs).
+- [x] **`uart_axi_wrapper.v` isn't mentioned in `axi.md`**, but the MicroBlaze lab requires it ("Your fifo, uart_axi, and uart_axi_wrapper from the axi assignment"). Explain that it is a Verilog wrapper for the block diagram (which doesn't accept SystemVerilog). Consider synthesizing through the wrapper in `synth_uart_axi` so problems show up in this lab. Fix its header comment (`// uart_axi.v`). *Resolved:* the md explains the wrapper, and the header comment is fixed. `synth_uart_axi` still synthesizes `uart_axi` directly.
+- [x] **Consider exposing a `FIFO_DEPTH` parameter** on `uart_axi` (passed to both FIFOs). *Resolved:* added `FIFO_DEPTH` (default 32) to the template and the wrapper (passed through), and to the md parameter table.
 - [ ] **`uart_axi_tb_template.sv`:**
   - Signal names copied from a block design (`clk_wiz_clk_out1`, `rst_clk_wiz_100M_peripheral_aresetn`, `design_1_uart_axi_0_0`) are confusing in a testbench. Rename them to `clk`, `aresetn`, `uut`.
   - The template has no clock generator, and the md says to create the clock "in your initial block" (line 145). A clock needs its own `always`/`initial` block; provide it in the template.
   - `timescale 1ps/1ps` differs from the other labs (`1ns/1ps`).
   - Explain the example calls (`AXI4LITE_READ_BURST` / `AXI4LITE_WRITE_BURST`): the arguments, that they block until the transaction completes, and how to check `resp`. Explain that the address `0x44A0_0000` in the examples is arbitrary, because only bits [3:0] are connected.
   - Say how long to hold `aresetn` low (Xilinx IP typically requires at least 16 clock cycles; confirm what the VIP requires) and that `start_master()` must be called before any transaction (it already is in the template).
-- [ ] **`create_vip_files.tcl`:** the md says "This script when run within the Vivado Tcl console" (line 129) but then runs it in batch mode. Remove the Tcl console wording. Typo: "A scripted named" → "A script named" (line 128).
+- [x] **`create_vip_files.tcl`:** the md says "This script when run within the Vivado Tcl console" (line 129) but then runs it in batch mode. Remove the Tcl console wording. Typo: "A scripted named" → "A script named" (line 128). *Resolved.*
 
 ## Simulation setup
 
@@ -126,7 +126,7 @@ The commented student feedback at the end of `axi.md` (lines 184–189) asks for
 
 ## passoff.py
 
-- [ ] Fix the `build_vip` log name (see Glaring issues).
+- [x] Fix the `build_vip` log name (see Glaring issues). *Resolved.*
 - [ ] Add regex checks on `sim_fifo.log` and `sim_uart_axi.log` for the self-checking error summaries.
 - [ ] If `synth_uart_axi` synthesizes through the wrapper, add `uart_axi_wrapper.v` to its input files (currently `["uart_axi.sv", "fifo.sv"]`).
 - [ ] Consider checking that `ip/` is not committed (it's in `.gitignore`).
@@ -136,7 +136,7 @@ The commented student feedback at the end of `axi.md` (lines 184–189) asks for
 The report has one question ("Discuss any unique warning messages…"). The student feedback asks for a more involved report. Suggested questions:
 
 - [ ] Describe how your design handles the AW and W channels (wait for both, or accept them independently), and why.
-- [ ] Include a waveform screenshot of one AXI write and one AXI read, with the handshakes marked.
+- [x] Include a waveform screenshot of one AXI write and one AXI read, with the handshakes marked. *Resolved:* the md requires `uart_axi_sim.png` (one write and one read with the handshakes visible); passoff checks that it is tracked; report.md question 2 embeds it.
 - [ ] On which handshake does a read of the RX data register pop the RX FIFO? What does your design return when the RX FIFO is empty?
 - [ ] What is the status register value immediately after reset? Explain each bit.
 - [ ] How many distributed RAM primitives (and LUTs and flip-flops) does `uart_axi` use? Does this match two FIFOs of `DEPTH` × 8?

@@ -17,3 +17,6 @@ See the class [AI policy](../ai_policy.md) for a summary of acceptable use.
 
 ## Assignment Specific Responses
   1. Discuss any unique warning messages you received in your synthesis log and justify them.
+  2. Make sure the waveform screenshot [`uart_axi_sim.png`](./uart_axi_sim.png) is committed to your repository so it can be viewed in this report. In the screenshot, identify the clock cycle in which each handshake (`VALID` and `READY` both high) occurs for the AXI write and the AXI read.
+
+![AXI UART simulation](./uart_axi_sim.png)

@@ -16,10 +16,11 @@ def main():
     tester = test_suite_520.build_test_suite_520("axi", max_repo_files = 30)
     tester.add_Makefile_rule("sim_fifo", ["fifo.sv", "fifo_tb.sv"], ["sim_fifo.log"])
     tester.add_Makefile_rule("synth_fifo", ["fifo.sv"], ["synth_fifo.log",])
-    tester.add_Makefile_rule("build_vip", [], ["build_ip.log",
-                                               "./ip/axi_vip_0/sim/axi_vip_0_pkg.sv",
-                                               "./ip/axi_vip_0/sim/axi_vip_0.sv"])
+    tester.add_Makefile_rule("build_vip", [], ["build_vip.log",
+                                                "./ip/axi_vip_0/sim/axi_vip_0_pkg.sv",
+                                                "./ip/axi_vip_0/sim/axi_vip_0.sv"])
     tester.add_Makefile_rule("sim_uart_axi", ["uart_axi.sv", "uart_axi_tb.sv"], ["sim_uart_axi.log"])
+    tester.add_required_tracked_files(["uart_axi_sim.png"])
     tester.add_Makefile_rule("synth_uart_axi", ["uart_axi.sv", "fifo.sv"], ["synth_uart_axi.log"])
     tester.run_tests()
 

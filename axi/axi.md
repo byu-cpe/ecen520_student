@@ -6,41 +6,68 @@ In this assignment you will create an AXI4-Lite subordinate/slave interface that
 
 The AXI UART interface requires a FIFO to manage the flow of data between the AXI bus and the UART modules.
 Start the assignment by creating a simple FIFO module named `fifo.sv`.
-Design your fifo with the following specifications:
-* Create the following parameters:
-  * DATA_WIDTH: Width of the data bus (default 8)
-  * DEPTH: Depth of the FIFO in number of entries (default 32)
-* Create a 'write pointer' used to control the address of the write/in port and a 'read pointer' that controls the address of the read/out port.
-* Design your FIFO to take advantage of the "distributed RAM" feature of the FPGA (see the [synthesis guide](https://docs.amd.com/r/en-US/ug901-vivado-synthesis), search for the title "Distributed RAM Examples").
-  * Allocate an array of data of size DATA_WIDTH x DEPTH to implement the fifo storage.
-  * The writes should be synchronous to the clock
-  * Reads should be asynchronous to the clock
-* Create a data in port of width DATA_WIDTH
-  * Create a 'write enable' signal that writes data into the fifo in the data in port based on the write pointer
-  * Writes should be synchronous to the clock
-* Create a data out port of width DATA_WIDTH
-  * Create a 'read enable' signal that reads data from the fifo based on the read pointer
-  * Reads should be asynchronous to the clock
-* Create the following status signals:
-  * full: Indicates the fifo is full and cannot accept more data
-  * empty: Indicates the fifo is empty and there is no data to read
-  * overflow: Indicates a write was attempted when the fifo was full.
-  * underflow: Indicates a read was attempted when the fifo was empty.
-* Create a synchronous reset signal that resets the fifo pointers and status signals.
-* Add a control signal that 'clears' the FIFO (resets pointers and status) without resetting the entire module.
+Design your fifo with the following parameters and ports:
+
+| Parameter | Default | Purpose |
+| ---- | ---- | ---- |
+| DATA_WIDTH | 8 | Width of the data bus |
+| DEPTH | 32 | Number of entries in the FIFO (must be a power of 2) |
+
+| Port | Direction | Width | Purpose |
+| ---- | ---- | ---- | ---- |
+| clk | Input | 1 | Clock |
+| rst | Input | 1 | Synchronous reset (active high): resets the pointers and the status signals |
+| clr | Input | 1 | Synchronous clear (active high): same effect as `rst`, used to empty the FIFO without resetting the rest of the design |
+| we | Input | 1 | Write enable: writes `din` into the FIFO on the rising clock edge |
+| din | Input | DATA_WIDTH | Write data |
+| re | Input | 1 | Read enable: removes the entry at the head of the FIFO on the rising clock edge |
+| dout | Output | DATA_WIDTH | Read data: the entry at the head of the FIFO |
+| full | Output | 1 | The FIFO is full and cannot accept more data |
+| empty | Output | 1 | The FIFO is empty and there is no data to read |
+| overflow | Output | 1 | A write was attempted when the FIFO was full |
+| underflow | Output | 1 | A read was attempted when the FIFO was empty |
+
+Note that `rst` and `clr` are active high, while the AXI reset (`s_axi_aresetn`) used later in this assignment is active low.
+Your `uart_axi` module will need to invert the AXI reset before connecting it to the FIFO `rst` port.
+
+Implement your FIFO as follows:
+* Design your FIFO to take advantage of the "distributed RAM" feature of the FPGA (see the [Distributed RAM Examples](https://docs.amd.com/r/en-US/ug901-vivado-synthesis/Distributed-RAM-Examples) section of the synthesis guide).
+  * Allocate an array of size DATA_WIDTH x DEPTH to implement the FIFO storage.
+  * Writes to the array are synchronous to the clock.
+  * Reads from the array are asynchronous (combinational). This is what allows the array to be mapped to distributed RAM (`RAM32M` or similar primitives with the default `DEPTH` of 32).
+* Create a 'write pointer' that addresses the write port of the array and a 'read pointer' that addresses the read port.
+  * Make each pointer one bit wider than needed to address the array ($clog2(DEPTH)+1 bits). Use the lower bits to address the array; the extra upper bit distinguishes full from empty.
+  * `empty` is asserted when the two pointers are equal (all bits).
+  * `full` is asserted when the lower bits of the pointers are equal and the upper bits differ. Your FIFO therefore holds exactly `DEPTH` entries.
+  * Because the pointers roll over naturally, `DEPTH` must be a power of 2.
+* Read behavior ("first-word fall-through"): `dout` always shows the entry at the read pointer, without waiting for a clock edge.
+  Asserting `re` does not change `dout` in the same cycle; it advances the read pointer at the next rising clock edge so that `dout` then shows the next entry.
+  This allows a circuit that uses the FIFO to look at `dout` and assert `re` in the same cycle to consume the entry.
+  The value of `dout` is undefined when the FIFO is empty.
+* Ignore writes when the FIFO is full and reads when the FIFO is empty (the pointers do not move).
+  These decisions are based on the `full` and `empty` values at the start of the clock cycle. If `we` and `re` are asserted in the same cycle:
+  * When the FIFO is neither empty nor full, both the write and the read occur (the number of entries does not change).
+  * When the FIFO is empty, only the write occurs (and `underflow` is set).
+  * When the FIFO is full, only the read occurs (and `overflow` is set).
+* `overflow` and `underflow` are "sticky": once set, they stay set until `rst` or `clr` is asserted.
 
 ### FIFO Testbench
 
 Create a testbench named `fifo_tb.sv` that instantiates your fifo and simulates the fifo.
-This testbench will be very similar to the bram fifo testbench so feel free to reuse as much of your testbench code as you like.
+The structure of this testbench is similar to the FIFO testbench you wrote for the bram assignment, so feel free to reuse code from it.
+Note, however, that the two FIFOs behave differently: the bram FIFO has a one cycle read latency and no overflow/underflow signals, while this FIFO's `dout` shows the head entry immediately.
 Include the following tests in your testbench:
-* Write a few bytes of data and read them back out (without overflow or underflow)
+* Write a few bytes of data and read them back out (without overflow or underflow). Check that the bytes read from `dout` match the bytes written.
 * Write enough bytes to fill up the FIFO and verify that the full signal is asserted
 * Attempt to write one more byte and verify that the overflow signal is asserted
+* Read one byte and verify that `full` is deasserted. Read the rest of the bytes, checking each value, and verify that `empty` is asserted after the last read.
 * Issue the 'clear' signal and verify that the fifo error is cleared.
 * Attempt to read from an empty fifo and verify that the underflow signal is asserted
 * Issue the 'clear' signal and verify that the fifo error is cleared.
+* Write and read more than `DEPTH` bytes in total (for example, keep the FIFO partially full while writing and reading 3 x `DEPTH` bytes) to verify that the pointers wrap around correctly.
+* Assert `we` and `re` in the same cycle when the FIFO is empty, when it is partially full, and when it is full, and verify the behavior described above.
 
+Your testbench should be self-checking: count the number of errors and print `Simulation done with X errors` at the end of the simulation.
 Create a makefile rule `sim_fifo` that performs this simulation from the command line and generates a log file named `sim_fifo.log`.
 
 ### FIFO Synthesis
@@ -53,6 +80,28 @@ Review the synthesis report and verify that your fifo was implemented using dist
 Create a new module named `uart_axi.sv` that implements an AXI4-Lite subordinate/slave interface to your UART transmitter and receiver modules.
 Base your new module on the module template file named `uart_axi_template.sv`.
 This file includes the port definitions and parameters for your module to help you get started.
+
+| Parameter | Default | Purpose |
+| ---- | ---- | ---- |
+| CLK_FREQUENCY | 100_000_000 | Clock frequency in Hz (passed to your transmitter and receiver) |
+| BAUD_RATE | 115_200 | Baud rate (passed to your transmitter and receiver) |
+| PARITY | 1 | Parity type, 0 = even, 1 = odd (passed to your transmitter and receiver) |
+| FIFO_DEPTH | 32 | Number of entries in each FIFO (passed to the `DEPTH` parameter of both FIFOs) |
+| C_S_AXI_ADDR_WIDTH | 4 | Width of the AXI address bus |
+
+A Verilog wrapper named `uart_axi_wrapper.v` is also provided.
+It instances your `uart_axi` module and passes through all of its parameters and ports.
+You do not need it for this assignment, but you will use it in the MicroBlaze assignment: the Vivado block diagram editor does not accept SystemVerilog modules directly, so the wrapper is the module you add to the block diagram.
+Make sure your `uart_axi` module uses exactly the parameter and port names of the template so that the wrapper works without changes.
+
+The figure below shows the structure of the `uart_axi` module.
+An AXI write to the TX data register places a byte in the transmit FIFO, and the transmit logic sends bytes from this FIFO through your transmitter to `tx_out`.
+Bytes arriving on `rx_in` are received by your receiver and placed in the receive FIFO, and an AXI read of the RX data register removes a byte from this FIFO.
+The FIFOs separate the AXI bus from the UART: an AXI transaction completes in a few clock cycles while a byte takes many microseconds to send or receive.
+The UART side of each path operates independently of the AXI side. For example, the receiver writes bytes into the receive FIFO whenever they arrive, regardless of whether any AXI reads are taking place.
+
+![AXI UART block diagram](axi_block_diagram.png)
+
 Follow the instructions below for building your AXI UART.
 
 ### Transmitter
@@ -97,6 +146,10 @@ The address map for your AXI interface is as follows:
 | 4 | RX FIFO empty |
 | 5 | TX overflow |
 | 6 | RX underflow |
+| 7 | TX FIFO empty |
+| 8 | RX FIFO full |
+
+Bits that are not listed in the table read as 0.
 
 **Control Register**
 | Bit | Purpose |
@@ -125,9 +178,12 @@ The Xilinx/AMD tools include a pre-built AXI4-Lite Bus Functional Model (BFM) ca
 This VIP can be used to simulate AXI bus transactions in your testbench to make sure your AXI interface works correctly.
 You will need to 'generate' this IP from the Vivado IP tool in order to access the source files for simulation.
 
-A scripted named `create_vip_files.tcl` is provided in this assignment directory that will generate the AXI VIP files for you.
-This script when run within the Vivado Tcl console will create a new Vivado IP project and generate the VIP files you need to include in your simulation.
-Create a makefile rule named `build_vip` that executes the following command `vivado -mode batch -source create_vip_files.tcl` to generate the VIP files.
+A script named `create_vip_files.tcl` is provided in this assignment directory that will generate the AXI VIP files for you.
+This script creates a new Vivado IP project and generates the VIP files you need to include in your simulation.
+Create a makefile rule named `build_vip` that executes the following command to generate the VIP files and a log file named `build_vip.log`:
+```
+vivado -mode batch -source create_vip_files.tcl -log build_vip.log
+```
 This command will generate a directory named `ip` that contains the following AXI VIP source files you need for simulation:
   * `./ip/axi_vip_0/sim/axi_vip_0_pkg.sv`
   * `./ip/axi_vip_0/sim/axi_vip_0.sv`
@@ -137,9 +193,9 @@ Add this directory to your `.gitignore` file and clean this directory as part of
 ### Testbench
 
 Copy the axi testbench template file `uart_axi_tb_template.sv` to `uart_axi_tb.sv` and create a testbench with the following steps:
-* Instance a transmitter module into your testbench and attach it to the output of your AXI UART module. This transmitter is used in the testbench to send data to your AXI UART.
-* Instance a receiver module into your and attach it to the output of your AXI UART module. This receiver is use in the testbench to receive data from your AXI UART.
-* Create a SystemVerilog 'queue' object that represents a queue of bytes that need to be transmitted from your testbench tx module and to the receiver of your uart_axi module. Create logic within your testbench that will send a byte from this queue whenever the queue is not empty and the testbench transmitter is not busy. Print a message every time a new byte is sent.
+* Instance a transmitter module into your testbench and attach its output to the input of your AXI UART module (`rx_in`). This transmitter is used in the testbench to send data to your AXI UART.
+* Instance a receiver module into your testbench and attach its input to the output of your AXI UART module (`tx_out`). This receiver is used in the testbench to receive data from your AXI UART.
+* Create a SystemVerilog 'queue' object that represents a queue of bytes that need to be transmitted by your testbench tx module to the receiver of your uart_axi module. Create logic within your testbench that will send a byte from this queue whenever the queue is not empty and the testbench transmitter is not busy. Print a message every time a new byte is sent.
 * Add logic into your testbench that prints a message every time a new byte is received by your testbench rx module (i.e., sent by your uart_axi module).
 * Add the following to your 'initial' block testbench procedure:
     * Create a clock running at 100 MHz
@@ -154,8 +210,8 @@ Copy the axi testbench template file `uart_axi_tb_template.sv` to `uart_axi_tb.s
     * Perform a write to the control register to reset the internal FIFOs.
 
 To simulate your testbench and the VIP files, you will need to compile the files in modelsim as follows:
-  * Compile the `axi_vip_0_pkg.sv` file generated by the `build_ip` rule using the `-L xilinx_vip` flag: `vlog -sv -L xilinx_vip ./ip/axi_vip_0/sim/axi_vip_0_pkg.sv`
-  * Compile the `axi_vip_0.sv` file generated by the `build_ip` rule using the `-L xilinx_vip` flag: `vlog -sv -L xilinx_vip ./ip/axi_vip_0/sim/axi_vip_0.sv`
+  * Compile the `axi_vip_0_pkg.sv` file generated by the `build_vip` rule using the `-L xilinx_vip` flag: `vlog -sv -L xilinx_vip ./ip/axi_vip_0/sim/axi_vip_0_pkg.sv`
+  * Compile the `axi_vip_0.sv` file generated by the `build_vip` rule using the `-L xilinx_vip` flag: `vlog -sv -L xilinx_vip ./ip/axi_vip_0/sim/axi_vip_0.sv`
   * Add the `-L xilinx_vip` flag when running `vlog` on your testbench
   * Add the following libraries when you run the `vsim` commnad: `-L xilinx_vip` and `-L axi_vip_v1_1_17`
   * Add the following lines to your modelsim.ini
@@ -167,6 +223,10 @@ xilinx_vip = /tools/Xilinx/Vivado/2024.1/data/questa/xilinx_vip
 
 Create a makefile rule `sim_uart_axi` that performs this simulation from the command line and generates a log file named `sim_uart_axi.log`.
 Make sure you have messages in your simulation output that indicate each of the steps described above.
+
+Take a screenshot of the simulation waveform that shows one AXI write and one AXI read to your `uart_axi` module.
+Include the `VALID`, `READY`, address, and data signals of each channel used by the transaction, and zoom in so that the individual handshakes are visible.
+Save the screenshot as `uart_axi_sim.png` and commit it to your repository.
 
 ## AXI UART Synthesis
 

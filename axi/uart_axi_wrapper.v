@@ -1,9 +1,13 @@
-// uart_axi.v
+// uart_axi_wrapper.v
+//
+// Verilog wrapper for uart_axi. The Vivado block diagram editor does not accept
+// SystemVerilog modules, so this wrapper is added to the block diagram instead.
 
 module uart_axi_wrapper #(
     parameter integer CLK_FREQUENCY = 100_000_000,
-    parameter integer PARITY = 1'd1,
-    parameter integer BAUD_RATE = 19_200,
+    parameter integer PARITY = 1,
+    parameter integer BAUD_RATE = 115_200,
+    parameter integer FIFO_DEPTH = 32,
     // Width of S_AXI address bus
     parameter integer C_S_AXI_ADDR_WIDTH = 4
 )
@@ -45,7 +49,8 @@ module uart_axi_wrapper #(
         .C_S_AXI_ADDR_WIDTH(C_S_AXI_ADDR_WIDTH),
         .CLK_FREQUENCY(CLK_FREQUENCY),
         .PARITY(PARITY),
-        .BAUD_RATE(BAUD_RATE)
+        .BAUD_RATE(BAUD_RATE),
+        .FIFO_DEPTH(FIFO_DEPTH)
     )
     uart_sv_inst (
         .s_axi_aclk(s_axi_aclk),
