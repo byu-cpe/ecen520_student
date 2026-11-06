@@ -207,7 +207,11 @@ The following assignment specific items should be included in your repository:
     1. Summarize the purpose of each 'task' in the testbench.
 
 <!--
+11,7,3.5,16,12,10,6,12,5,8,6,5,5,3.5
+
 Future Changes:
+* Testbench doesn't check the blank signal for the ssd
+  * add a timeout for the ssd_tb.sv testbench
 * Have them read through the testbench in some detail and answer questions about the testbench. They are not writing testbenches but I should ask them to read through it and understand it.
 * The synthesis tool couldn't extract a FSM from some students. Need to figure out what is going on. Perhaps make a requirement that it has to find it?
 * sort of easy: 3-5 hours

@@ -187,6 +187,9 @@ The following assignment specific items should be included in your repository:
 <!-- Notes:
 Time: 8,5,2.5,2,10,15,6,4,24,5,7,8,4,7,6,2
 
+- For this lab and future labs I need to be very expclicit on which type of reset to use
+  Pick some modules as asynchronously reset and otheres as synchronous and provide a justification.
+  (different students do something different and they are not sure why)
 - Makefile examples / templates
 - Make sure software and tools are loaded first
 - Better questasim tutorial
