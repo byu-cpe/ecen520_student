@@ -46,7 +46,7 @@ Note that you can look at the text for the module definition of this primitive i
   * Create additional clock outputs with the following requirements:
     * CLKOUT1: Same clock frequency as input, phase shifted 180 degrees, 25% duty cycle
     * CLKOUT2: Same clock frequency as input, phase shifted 90 degrees, 75% duty cycle
-    * CLKOUT3: Lower clock frequency than input, out of phase with input (any non-zero phase shift is acceptable). Do not use power of 2 divide and make this at least 6x lower frequency than the input.
+    * CLKOUT3: Lower clock frequency than input, out of phase with input (any non-zero phase shift is acceptable). Make this at least 6x lower frequency than the input (but not a factor of a power of 2 lower).
     * CLKOUT4: Higher clock frequency than input, out of phase with input (any non-zero phase shift is acceptable). Do not use power of 2 multiply and make this at least 2.1x greater than the input clock (i.e., at least 210 MHz).
     * CLKOUT5: Lower clock frequency than input (but different from CLKOUT3), in phase with input
     * CLKOUT6: Higher clock frequency than input (but different from CLKOUT4), in phase with input
