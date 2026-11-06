@@ -15,6 +15,7 @@ This repository contains the lecture schedule (including links to lecture summar
 - Need to reduce the clock domain crossing/handsaking/xilinx CDC lecture down by one
 - Combine the AXI lectures into one
 - Arithmetic #1 needs better reading (base arithmetic without HDL). Better quiz questions
+- Need to describe CLB much earlier in semester to give overview of FPGA.
 -->
 
 | Week | Date | Lecture |
@@ -50,18 +51,18 @@ This repository contains the lecture schedule (including links to lecture summar
 |    | 11/6/2026  | [Digital Arithmetic #2](./lectures/arith2.md) |
 | 11 | 11/9/2026  | **Exam #2** |
 |    | 11/11/2026 | [CLB Blocks](./lectures/clb.md) |
-|    | 11/13/2026 | MicroBlaze Assignment Preparation |
-| 12 | 11/16/2026 | [DSP Blocks](./lectures/dsp.md) | <!-- ChipIR test - Brigham teach (DSP)? -->
+|    | 11/13/2026 | [IO Resources](./lectures/io.md) |
+| 12 | 11/16/2026 | [DSP Blocks](./lectures/dsp.md) | <!-- ChipIR test - Brigham teach (DSP) -->
 |    | 11/18/2026 | [ASIC Design (Tomoo)](./lectures/asic-design.md) | <!-- ChipIR test, I am gone -->
-|    | 11/20/2026 | [IO Resources #1](./lectures/io.md) | <!-- ChipIR test, I am gone. Cancel class? -->
-| 13 | 11/23/2026 | [IO Resources #2](./lectures/io.md) |
+|    | 11/20/2026 | No Class | <!-- ChipIR test, I am gone. -->
+| 13 | 11/23/2026 | MicroBlaze Assignment Preparation |
 |    | 11/25/2026 | No Class - Thanksgiving Break |
 |    | 11/27/2026 | No Class - Thanksgiving Break |
 | 14 | 11/30/2026 | [DDR](./lectures/ddr.md) |
-|    | 12/2/2026  | VHDL #1 |
-|    | 12/4/2026  | VHDL #2 |
-| 15 | 12/7/2026  | Trends in HDL design |
-|    | 12/9/2026  | Review for Exam (last day of class) |
+|    | 12/2/2026  |  |
+|    | 12/4/2026  | VHDL #1 |
+| 15 | 12/7/2026  | VHDL #2 |
+|    | 12/9/2026  | Trends in HDL design, Review for Exam (last day of class) |
 | **Week 16**|  |
 | 16 | 12/16/2026 | Final Exam in class (Wed, 11:00 AM - 2:00 PM) |
 
@@ -113,8 +114,10 @@ Assignments are due at midnight the day they are listed in the table below (unle
 | 8 | 10/29/2026 | [BRAM-Download](./bram_download/bram_download.md) | `bram_download` |
 | 9 | 11/5/2026 | [MMCM Clocking](./mmcm/mmcm.md) | `mmcm` |
 | 10 | 11/12/2026 | [AXI](./axi/axi.md) | `axi` |
-| 11 | 11/19/2026 | [MicroBlaze](./microblaze/microblaze.md) | `microblaze` |
+| 11 | 11/24/2026<sup>1</sup> | [MicroBlaze](./microblaze/microblaze.md) | `microblaze` |
 | 12 | | [DDR](./ddr/ddr.md) | `ddr` |
+
+<sup>1</sup>The MicroBlaze assignment due date has been extended and is due on a Tuesday instead of the conventional Thursday.
 
 <!--
 [VGA Controller (VHDL)](./vga/vga.md) `vga`
