@@ -113,11 +113,11 @@ Assignments are due at midnight the day they are listed in the table below (unle
 | 7 | 10/22/2026 | [BRAM](./bram/bram.md) | `bram` |
 | 8 | 10/29/2026 | [BRAM-Download](./bram_download/bram_download.md) | `bram_download` |
 | 9 | 11/5/2026 | [MMCM Clocking](./mmcm/mmcm.md) | `mmcm` |
-| 10 | 11/12/2026 | [AXI](./axi/axi.md) | `axi` |
+| 10 | 11/16/2026 | [AXI](./axi/axi.md) | `axi` |
 | 11 | 11/24/2026<sup>1</sup> | [MicroBlaze](./microblaze/microblaze.md) | `microblaze` |
 | 12 | | [DDR](./ddr/ddr.md) | `ddr` |
 
-<sup>1</sup>The MicroBlaze assignment due date has been extended and is due on a Tuesday instead of the conventional Thursday.
+<sup>1</sup>These due dates are not at the conventional Thursday time.
 
 <!--
 [VGA Controller (VHDL)](./vga/vga.md) `vga`
