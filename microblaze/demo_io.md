@@ -1,7 +1,6 @@
 # MicroBlaze IO Demonstration
 
-
-This demo involves the creation of a basic MicroBlaze system with a UART.
+This demo involves the creation of a basic MicroBlaze system with GPIO peripherals for the LEDs and switches.
 You will be using the GUI to create the Vivado project and the Vitis tool to create the software application.
 You will also learn how to recreate the Vivado project using Tcl scripts.
 
@@ -19,14 +18,15 @@ These instructions assume you are using Vivado 2024.1 but other versions should 
         * Running the vivado tool from the command line will generate a number of temporary files. You will need to 'ignore' these files in your git repository and clean them as part of your clean process.
 * Create the `demo_io` project
     * Create new project from GUI: File->Project->New
-        * Project name: `demo_io`
-        * Make sure the directory created is in your `microblaze` assignment directory
+        * Project name: `demo_io` (leave 'create project subdirectory' checked)
+        * Make sure the directory created is in your `microblaze` assignment directory (i.e., project is created in the `microblaze/demo_io/` directory)
         * RTL project (default)
         * Click "Next" for the "Add Sources" and "Add Constraints" pages
         * Select the target part: `xc7a100tcsg324-1`
         * Click Finish
-    * Copy default NEXYS DDR .xdc file to your assignment directory and name it `demo_io.xdc`
-        * `cp ../resources/Nexys-4-DDR-Master.xdc ./demo_io.xdc`
+    * Copy the default Nexys 4 DDR .xdc file to your assignment directory and name it `demo_io.xdc`
+        * `cp ../resources/Nexys-4-DDR-Master.xdc ./demo_io.xdc` (note that this is saved in your top-level project directory rather than the `demo_io/` directory)
+        * Add this file to your repository
     * Add the .xdc file to the project
         * Click on "add Sources" in the Flow Navigator
         * Select "Add or create constraints", press Next
@@ -51,8 +51,8 @@ These instructions assume you are using Vivado 2024.1 but other versions should 
     * Configure Clock Module
         * Double click 'clocking wizard' block and make the following changes:
             * At the bottom of the page in the "Input Clock Information" table, change input clock from differential to single ended
-            * Go to the next "output clocks" page, change 'reset type' to "active Low" (to reflect the fact that our reset is active low)
-        * Click ok to finalize the changes
+            * Go to the next "output clocks" page, change 'reset type' to "active Low" (to reflect the fact that our board reset is active low)
+        * Click OK to finalize the changes
     * Hook up the external Clock and Reset
         * Click on the "Run Connection Automation" link in the 'Designer Assistance' box that appears. A new dialog box will open up.
             * Click the box next to "clk_in1" and press "ok"
@@ -67,9 +67,9 @@ These instructions assume you are using Vivado 2024.1 but other versions should 
         * Click the "+" button to add a new IP. Type "gpio" in the box and select AXI GPIO
         * Select the module on the canvas and change its name in the "Block Properties" box to "axi_gpio_LED"
         * Click "Connection Automation", select "All Automation" and click OK. 
-            * This will hook up the block to the AXI bus and generate new output ports for the module
+            * This will hook up the block to the AXI bus and generate new output ports for the LEDs
         * Configure the block to match the LED ports
-            * Double click the box to open the "re-customize IP" box#
+            * Double click the box to open the "re-customize IP" box
             * Select "All Outputs" 
             * Change GPIO Width from 32 to 16
         * Select the gpio_rtl_0 output port, right click "External Interface Properties"
@@ -77,15 +77,15 @@ These instructions assume you are using Vivado 2024.1 but other versions should 
     * Add the AXI GPIO module for the switches
         * Follow the same procedure as above with the following changes
             * Rename the module "axi_gpio_SW"
-            * Rename the ouptput pins to "gpio_SW"
+            * Rename the output pins to "gpio_SW"
             * Select "All Inputs"
-            * Sete width to 16
+            * Set width to 16
     * Check for errors
-        * Click the icon that looks like a check in a box to perform a validationcheck.### Rebuilding Vitis Project from the command line
-
-
-    * Create tcl file for recreating the block diagram in the future: 
+        * Click the icon that looks like a check in a box to perform a validation check.
+* Export and Save the Block Diagram
+    * Create tcl file for recreating the block diagram in the future. This step will generate a .tcl file that will generate the block diagram without having you to do this by hand.
         * File->Export->Export Block Diagram. Save the file in your assignment directory: `./demo_io_bd.tcl`
+        * Add this file to your repository
     * Save block diagram
         * Close the block diagram editor and save the block diagram when prompted.
         * This will create a file `./demo_io/demo_io.srcs/sources_1/bd/demo_io_bd/demo_io_bd.bd` in the project and is currently the only source of the project
@@ -99,26 +99,28 @@ These instructions assume you are using Vivado 2024.1 but other versions should 
     * Set the LED constraints
         * Uncomment the lines for the LEDs and rename them to match the name given in the block design (`gpio_LED_tri_o`)
     * Set the SW constraints
-        * Uncomment the lines for the LEDs and rename them to match the name given in the block design (`gpio_SW_tri_i`)
+        * Uncomment the lines for the switches and rename them to match the name given in the block design (`gpio_SW_tri_i`)
 * Generate IP output products
     * At this point you have a "block diagram" which is just a graphical representation of your system. You need to generate a variety of files including Verilog files before synthesizing your design
     * Generate the IP output products for the block diagram
         * This step generates the HDL on all the blocks in the system for the IP. It also generates the simulation, synthesis, and implementation files needed to use the IP in your design.
-        * Right click over the block diagram in the sources view and select "Generate Output Products". The defaults are sufficient. Click "Generate". The tool will generate all the IP files including a Verilog file that describes the block diagram. This may take a few minutes to complete.
-        * Review the files **TODO** to see what was generated.
-    * Generate the top-level wrapper for the block diagram (right click and select "Create HDL wrapper").
-        * This is a top-level Verilog file that can be edited and instances the block diagram. This is different from the block diagram Verilog file.
-        * Note that this should become the "black" top-level design (instead of the block diagram)
-    * Create HDL wrapper
-        * Create a top-level HDL wrapper for the block diagram
+        * Right click over the block diagram in the sources view and select "Generate Output Products". The defaults are sufficient. Click "Generate". The tool will generate all the IP files including a Verilog file that describes the block diagram. This may take a few minutes to complete as it performs out of context synthesis on the blocks.
+        * Review the generated files in `./demo_io/demo_io.gen/sources_1/bd/demo_io_bd/`:
+            * `synth/demo_io_bd.v`: a Verilog netlist of your block diagram, with one instance per block and one net per wire. Its port list gives the exact names of the top-level ports (e.g., `gpio_LED_tri_o`) that your .xdc file must match.
+            * `ip/`: one directory per IP block, containing its configuration (`.xci`), HDL, and constraints. Each IP is synthesized separately ("out of context"), which is why the first build takes several minutes.
+            * `hw_handoff/`: a description of the hardware (peripherals and their addresses) that is exported in the `.xsa` file and used by Vitis to generate `xparameters.h`.
+    * Generate the top-level wrapper for the block diagram
+        * Select the demo_io_bd icon in design sources (right click and select "Create HDL wrapper").
         * Select the block diagram and right click and select "Create HDL Wrapper". Leave the option "Let Vivado Manage wrapper and auto-update" selected and click OK.
+        * This is a top-level Verilog file that can be edited and instances the block diagram. This is different from the block diagram Verilog file.
+        * Note that the tree structure under "Design Sources" should become a top-level design (instead of the block diagram). If you expand it you will see the block design.
     * Generate hardware platform for Vitis
-        * You need to generate an .xsa platform project for use by Vitis. This tells vitis what type of platform you are programming for. 
+        * You need to generate an .xsa platform project for use by Vitis. This tells Vitis what type of platform you are programming for. 
         * File->Export, Export Hardware, keep "pre-synthesis" selected.
         * Change the .xsa name to `demo_io`. This will create the file `./demo_io/demo_io.xsa` that you will use for the Vitis programming step
     * Run implementation to generate the bitstream
-        * Run synthesis on the design to make sure everything is hooked up correctly and named properly in the xdc file. Most problems involve incorrect pin names or not providing pin constraints        
-        * Clock "Run Implementation" on the Flow Navigator. This will run the implementation tools and generate a bitstream for your design. Click OK as needed to get the process started.
+        * Run synthesis on the design to make sure everything is hooked up correctly and named properly in the xdc file. Most problems involve incorrect pin names or not providing pin constraints. You will likely get a lot of synthesis warnings.
+        * Click "Run Implementation" on the Flow Navigator. This will run the implementation tools and generate a bitstream for your design. Click OK as needed to get the process started.
         * Click "Generate Bitstream" when implementation is complete to generate the bitstream.
         * The bitfile will be located at `./demo_io/demo_io.runs/impl_1/demo_io.bit`
 
@@ -137,23 +139,23 @@ source demo_io_bd.tcl
 make_wrapper -files [get_files ./demo_io/demo_io.srcs/sources_1/bd/demo_io_bd/demo_io_bd.bd] -top
 add_files -norecurse ./demo_io/demo_io.gen/sources_1/bd/demo_io_bd/hdl/demo_io_bd_wrapper.v
 launch_runs impl_1 -to_step write_bitstream -jobs 4
-wait_on_run impl_1### Rebuilding Vivado Project from Tcl
+wait_on_run impl_1
 
 write_hw_platform -fixed -include_bit -force -file ./demo_io/demo_io.xsa
 ```
 
-Create a makefile step named `build_demo_io` that will create the demo_io project and generate a bitstream and a the `./demo_io/demo_io.xsa` file.
-Also, make sure your 'clean' rule will clean up the project completely.
+Create a makefile step named `build_demo_io` that will create the demo_io project and generate a bitstream and the `./demo_io/demo_io.xsa` file.
+Also, make sure your 'clean' rule will clean up the project completely (by removing the `./demo_io` directory).
 
 ## Vitis Software Project
 
 In this phase of the demo you will run the Vitis tools and create a software program that runs on the Microblaze system.
 You will run a program template and not do any code editing for this particular demo.
-**Note**: These instructions are  for the 2024 version of Vitis.
+**Note**: These instructions are for the 2024.1 version of Vitis.
 Older versions of vitis are much different.
 
 * Open Vitis
-    * Vitis is the software development environment for Xilinx embedded processors including the MicroBlaze. Vitis operates within a 'workspace' and you will need to specify the workspace for your vitis project. For this demo, we will create the workspace within the `demo_io\vitis` directory within your microblaze assignment.### Rebuilding Vivado Project from Tcl
+    * Vitis is the software development environment for Xilinx embedded processors including the MicroBlaze. Vitis operates within a 'workspace' and you will need to specify the workspace for your vitis project. For this demo, we will create the workspace within the `demo_io/vitis` directory within your microblaze assignment.
 
     * Make sure the vitis environment is setup: `source /tools/Xilinx/Vitis/2024.1/settings.sh` 
     * Open from command line (in `microblaze` assignment directory): `vitis -w ./demo_io/vitis`
@@ -167,7 +169,7 @@ Older versions of vitis are much different.
     * With a platform component for the board, you can create an application project. This is the code that will run on the microblaze. For this example, we will modify a hello world application to a simple LED example.
     * Click on the "Examples" icon on the left (an icon that looks like three boxes, one behind the other). Expand "Embedded Software Examples" and select "Empty Application".
     * Click on the button "Create Application Component from Template" (ID should say "empty_application"). 
-        * **Name and Location**: Entery the name `demo_io` in the "component name" box. Leave the component path as the default. Click Next.
+        * **Name and Location**: Enter the name `demo_io` in the "component name" box. Leave the component path as the default. Click Next.
         * **Hardware**: Select "microblaze_io_platform" and click next. 
         * **Domain**: Click next.
         * **Summary**: Click finish.
@@ -178,7 +180,7 @@ Older versions of vitis are much different.
     * Modify the `CMakeLists.txt` file in the 'Settings' Folder to include the new `demo_io.c` file. Add the two lines to specify the project sources as shown in the example below.
     * Save a copy of your modified `CMakeLists.txt` file in your assignment directory (i.e., something like CMakeLists.txt.demo_io). You will need to save this file and copy it over to the Vitis project as part of your automated project building step described below.
     * Build the application project
-        * Click on the 'demo_io' component to make it active and clilck on the hammer in the bottom pain to build the application
+        * Click on the 'demo_io' component to make it active and click on the hammer in the bottom pane to build the application
         * The build window will show the compile process. Note if there are any errors.
         * The executable should be located at : `./demo_io/vitis/demo_io/build/demo_io.elf` (you will need this for a later step)
 * Download the project to the board
