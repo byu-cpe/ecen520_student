@@ -67,7 +67,7 @@ The commented student feedback at the end of `axi.md` (lines 184–189) asks for
   - The MicroBlaze software writes `switches & 0x3` to this register at startup (`mb_uart.c` line 86). With level semantics, the FIFOs would stay cleared as long as a switch is on.
   - Say whether clearing a FIFO also clears its sticky error bits (overflow, underflow, RX error).
 - [ ] **Define the "TX Busy" status bit.** Is it the transmitter's `busy`, or "busy or TX FIFO not empty" (i.e., still has data to send)? Software usually wants the second.
-- [ ] **Describe the reset.** `s_axi_aresetn` is active low and synchronous. Say that it resets the FIFOs, the UART modules, and the AXI state, and that `BVALID` / `RVALID` must be low during reset.
+- [x] **Describe the reset.** `s_axi_aresetn` is active low and synchronous. Say that it resets the FIFOs, the UART modules, and the AXI state, and that `BVALID` / `RVALID` must be low during reset. *Resolved:* added a **Reset** paragraph before the status register: `s_axi_aresetn` is active low and synchronous, resets everything, `BVALID`/`RVALID` must stay low, and the active-high submodule resets need an inverter.
 - [ ] **Add references:**
   - the course AXI lectures (`../lectures/axi.md`);
   - the AMBA AXI protocol specification (ARM IHI 0022), AXI4-Lite section;
@@ -92,9 +92,9 @@ The commented student feedback at the end of `axi.md` (lines 184–189) asks for
 
 - [ ] **Give a complete makefile example** for `sim_uart_axi`, so students don't have to piece it together from the bullets (lines 156–166). The student feedback asks to "clarify the process for simulating".
 - [ ] **Avoid editing `modelsim.ini` by hand.** Use `vmap` commands in the makefile (as `resources/questa_tutorial.md` does for `unisims_ver`). The library paths are hard-coded to `/tools/Xilinx/Vivado/2024.1`, and the library name `axi_vip_v1_1_17` changes with the Vivado version. Put the version in one makefile variable.
-- [ ] **Explain why each library is needed:** `xilinx_vip` contains `axi_vip_pkg` (imported by the testbench), and `axi_vip_v1_1_17` contains the VIP top module that `axi_vip_0.sv` instantiates.
-- [ ] **Mention the VIP protocol checker.** The AXI VIP checks the protocol and reports violations in the simulation log. Tell students to look for VIP errors and warnings in `sim_uart_axi.log`; this is the fastest way to find handshake bugs.
-- [ ] **Clean rule:** say what to remove (`ip/`, Questa `work/`, `.Xil/`, logs) in addition to adding `ip/` to `.gitignore`.
+- [x] **Explain why each library is needed:** `xilinx_vip` contains `axi_vip_pkg` (imported by the testbench), and `axi_vip_v1_1_17` contains the VIP top module that `axi_vip_0.sv` instantiates. *Resolved:* added a two-bullet explanation before the compile steps, with a note that the library version follows the Vivado version (`vmap`, line 94, is not done).
+- [x] **Mention the VIP protocol checker.** The AXI VIP checks the protocol and reports violations in the simulation log. Tell students to look for VIP errors and warnings in `sim_uart_axi.log`; this is the fastest way to find handshake bugs. *Resolved:* added a paragraph after the simulation requirements telling students to search `sim_uart_axi.log` for VIP errors and warnings.
+- [x] **Clean rule:** say what to remove (`ip/`, Questa `work/`, `.Xil/`, logs) in addition to adding `ip/` to `.gitignore`. *Resolved:* the clean rule removes `ip/`, `work/`, `.Xil/`, `*.jou`, `*.log`, and `.dcp` files.
 
 ## AXI UART testbench
 
@@ -144,6 +144,6 @@ The report has one question ("Discuss any unique warning messages…"). The stud
 
 ## Coding standard and general
 
-- [ ] State which coding standard level applies (Level 2 or 3), as the other labs do.
-- [ ] Say where the tx and rx modules come from, and that students should reference them with relative paths rather than copying them (as in tx_download).
-- [ ] The "subordinate/slave" wording is used consistently; consider defining both terms once (AXI4 now uses manager/subordinate).
+- [x] State which coding standard level applies (Level 2 or 3), as the other labs do. *Resolved:* Level 3 (Level 2 plus comments on every function and task, which fits the task-based testbench), stated in Submission and Grading.
+- [x] Say where the tx and rx modules come from, and that students should reference them with relative paths rather than copying them (as in tx_download). *Resolved:* the Transmitter and Receiver sections say to reference `../tx_sim/tx.sv` and `../rx_sim/rx.sv` by relative path and not to copy them.
+- [x] The "subordinate/slave" wording is used consistently; consider defining both terms once (AXI4 now uses manager/subordinate). *Resolved:* the intro defines manager/subordinate and master/slave (noting that the VIP uses "master"), and the md now uses "subordinate" throughout.

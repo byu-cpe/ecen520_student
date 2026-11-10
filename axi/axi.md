@@ -1,6 +1,10 @@
 # AXI Bus Interface
 
-In this assignment you will create an AXI4-Lite subordinate/slave interface that connects to your UART transmitter and receiver modules from previous assignments.
+In this assignment you will create an AXI4-Lite subordinate interface that connects to your UART transmitter and receiver modules from previous assignments.
+
+The AXI specification calls the two sides of a bus transaction the **manager** (the side that starts transactions, such as a processor) and the **subordinate** (the side that responds to them, such as your UART).
+Older versions of the specification, and many AMD tools and documents, use the terms **master** and **slave** for the same roles.
+You will see both sets of terms: for example, the AXI VIP in your testbench is configured as a "master" and its signals are named `M_AXI_*`.
 
 ## FIFO
 
@@ -77,7 +81,7 @@ Review the synthesis report and verify that your fifo was implemented using dist
 
 ## AXI-Lite UART Interface
 
-Create a new module named `uart_axi.sv` that implements an AXI4-Lite subordinate/slave interface to your UART transmitter and receiver modules.
+Create a new module named `uart_axi.sv` that implements an AXI4-Lite subordinate interface to your UART transmitter and receiver modules.
 Base your new module on the module template file named `uart_axi_template.sv`.
 This file includes the port definitions and parameters for your module to help you get started.
 
@@ -107,6 +111,9 @@ Follow the instructions below for building your AXI UART.
 ### Transmitter
 
 Instance your transmitter module from the previous UART transmitter assignment using the parameters of this module.
+Do not copy your transmitter file into this assignment directory.
+Instead, reference it with a relative path to the earlier assignment directory (e.g., `../tx_sim/tx.sv`) in your makefile rules, as you did in the tx_download assignment.
+If you need to fix a bug in the transmitter, make the change in the earlier directory (your original submission is preserved by its tag).
 Instance your fifo module designed above for the transmit path. 
 The input to the transmit FIFO comes from the AXI bus write data (discussed in more detail below).
 The output of the transmit FIFO goes to your UART transmitter module.
@@ -115,6 +122,7 @@ Create a state machine that transmits data from the transmit FIFO to the UART tr
 ### Receiver
 
 Instance your receiver module from the previous UART receiver assignment using the parameters of this module.
+As with the transmitter, reference the receiver file with a relative path (e.g., `../rx_sim/rx.sv`) rather than copying it.
 Instance another fifo module for the receiver path.
 The input to the receiver FIFO comes from your UART receiver module.
 The output of the receiver FIFO goes to the AXI bus read data (discussed in more detail below).
@@ -122,7 +130,7 @@ Create some logic/state machine that writes a byte to the receiver FIFO whenever
 
 ### AXI4-Lite Bus Interface
 
-Implement the AXI4-Lite subordinate/slave interface to support reading and writing data to/from the UART transmitter and receiver.
+Implement the AXI4-Lite subordinate interface to support reading and writing data to/from the UART transmitter and receiver.
 You will also need to implement a status register that indicates the status of the FIFOs and a control register that allows clearing the FIFOs.
 The address map for your AXI interface is as follows:
 
@@ -135,6 +143,13 @@ The address map for your AXI interface is as follows:
 * Writes to address offset 0x00 write a byte to the transmit FIFO.
 * Reads to address offset 0x04 return the value of status register (described below)
 * Writes to address offset 0x04 write the value of the control register (described below)
+
+**Reset**
+
+The AXI reset `s_axi_aresetn` is active low and synchronous to `s_axi_aclk`.
+While it is low, your module must reset both FIFOs, the transmitter and receiver, the transmit and receive logic, and the AXI interface state.
+In particular, `s_axi_bvalid` and `s_axi_rvalid` must be low during reset and must not be asserted until a transaction is received after reset.
+Remember that your FIFO, transmitter, and receiver use active high resets, so invert `s_axi_aresetn` before connecting it to them.
 
 **Status Register**
 | Bit | Purpose |
@@ -187,7 +202,8 @@ vivado -mode batch -source create_vip_files.tcl -log build_vip.log
 This command will generate a directory named `ip` that contains the following AXI VIP source files you need for simulation:
   * `./ip/axi_vip_0/sim/axi_vip_0_pkg.sv`
   * `./ip/axi_vip_0/sim/axi_vip_0.sv`
-Add this directory to your `.gitignore` file and clean this directory as part of your assignment clean makefile rule.
+Add this directory to your `.gitignore` file.
+Your `clean` makefile rule should remove the `ip` directory along with the other generated files: the Questa `work` library, the `.Xil` directory, `*.jou` and `*.log` files, and any checkpoint (`.dcp`) files.
 
 
 ### Testbench
@@ -209,6 +225,10 @@ Copy the axi testbench template file `uart_axi_tb_template.sv` to `uart_axi_tb.s
     * Perform a few reads over the axi bus to read the received bytes from the receiver fifo.
     * Perform a write to the control register to reset the internal FIFOs.
 
+Simulating the VIP requires two precompiled libraries that are provided with Vivado:
+* `xilinx_vip` contains the `axi_vip_pkg` package (imported at the top of the testbench template) that defines the VIP agent classes and the transaction functions such as `AXI4LITE_WRITE_BURST`.
+* `axi_vip_v1_1_17` contains the VIP module itself, which is instanced by the generated `axi_vip_0.sv` wrapper. The version number in this name changes with the Vivado version, so check the `data/questa` directory of your Vivado installation if this library is not found.
+
 To simulate your testbench and the VIP files, you will need to compile the files in modelsim as follows:
   * Compile the `axi_vip_0_pkg.sv` file generated by the `build_vip` rule using the `-L xilinx_vip` flag: `vlog -sv -L xilinx_vip ./ip/axi_vip_0/sim/axi_vip_0_pkg.sv`
   * Compile the `axi_vip_0.sv` file generated by the `build_vip` rule using the `-L xilinx_vip` flag: `vlog -sv -L xilinx_vip ./ip/axi_vip_0/sim/axi_vip_0.sv`
@@ -223,6 +243,10 @@ xilinx_vip = /tools/Xilinx/Vivado/2024.1/data/questa/xilinx_vip
 
 Create a makefile rule `sim_uart_axi` that performs this simulation from the command line and generates a log file named `sim_uart_axi.log`.
 Make sure you have messages in your simulation output that indicate each of the steps described above.
+
+The AXI VIP includes a protocol checker that monitors every transaction and reports violations of the AXI rules (for example, a `VALID` signal that is deasserted before its handshake completes).
+These violations are printed as errors or warnings in the simulation log, with a message identifying the rule that was broken.
+Search `sim_uart_axi.log` for VIP errors and warnings after every simulation and fix all of them: this is the fastest way to find handshake bugs in your design.
 
 Take a screenshot of the simulation waveform that shows one AXI write and one AXI read to your `uart_axi` module.
 Include the `VALID`, `READY`, address, and data signals of each channel used by the transaction, and zoom in so that the individual handshakes are visible.
@@ -240,6 +264,8 @@ Review the synthesis report to identify any potential problems.
 
 1. Implement all the required makefile rules and make sure your `passoff.py` script runs without errors.
 2. Complete and commit the [report.md](report.md) file for this assignment.
+
+You must follow the [Level 3](../resources/coding_standard.md#level-3) coding standards for your SystemVerilog files.
 
 <!--
 - A diagram or something to refer to in the instructions. The one in class helped to grasp it better.  (the diagram could show the axi bus interface, the FIOs and the Rx/RX like I did in class.)
