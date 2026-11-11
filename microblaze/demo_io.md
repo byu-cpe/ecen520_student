@@ -140,7 +140,6 @@ make_wrapper -files [get_files ./demo_io/demo_io.srcs/sources_1/bd/demo_io_bd/de
 add_files -norecurse ./demo_io/demo_io.gen/sources_1/bd/demo_io_bd/hdl/demo_io_bd_wrapper.v
 launch_runs impl_1 -to_step write_bitstream -jobs 4
 wait_on_run impl_1
-
 write_hw_platform -fixed -include_bit -force -file ./demo_io/demo_io.xsa
 ```
 
@@ -151,59 +150,61 @@ Also, make sure your 'clean' rule will clean up the project completely (by remov
 
 In this phase of the demo you will run the Vitis tools and create a software program that runs on the Microblaze system.
 You will run a program template and not do any code editing for this particular demo.
-**Note**: These instructions are for the 2024.1 version of Vitis.
-Older versions of vitis are much different.
+**Note**: These instructions are for the 2024.1 version of Vitis (older versions of vitis are much different).
 
 * Open Vitis
     * Vitis is the software development environment for Xilinx embedded processors including the MicroBlaze. Vitis operates within a 'workspace' and you will need to specify the workspace for your vitis project. For this demo, we will create the workspace within the `demo_io/vitis` directory within your microblaze assignment.
-
     * Make sure the vitis environment is setup: `source /tools/Xilinx/Vitis/2024.1/settings.sh` 
     * Open from command line (in `microblaze` assignment directory): `vitis -w ./demo_io/vitis`
 * Create Platform Component
     * Vitis needs the libraries associated with the processor you are running on. You need to create a "platform component" that has these libraries.
-    * Click on "Create Platform Component". Enter "microblaze_io_platform" for the platform name. Leave the path as given. Click Next.
-    * Make sure 'Hardware Design' is selected. Click on Browse to find the .xsa file you created in the previous Vivado step. `./demo_io/demo_io.xsa`. Click Next and wait while vitis interrogates your platform. 
-    * Click Next again. and finish to complete the platform.
+    * Click on "Create Platform Component". Enter "microblaze_io_platform" for the platform component name. Leave the path as given. Click Next.
+    * Make sure 'Hardware Design' is selected. Click on Browse to find the .xsa file you created in the previous Vivado step. `./demo_io/demo_io.xsa`. Click Next and wait while Vitis interrogates your platform. 
+    * Click Next again (keep defaults for "operating system" and "processor")
+    * Click Finish to complete the platform.
     * When you are done you should have a component with a green diamond named "microblaze_io_platfor" in the components pane.
 * Create Example Application Project
     * With a platform component for the board, you can create an application project. This is the code that will run on the microblaze. For this example, we will modify a hello world application to a simple LED example.
-    * Click on the "Examples" icon on the left (an icon that looks like three boxes, one behind the other). Expand "Embedded Software Examples" and select "Empty Application".
+    * Click on the "Examples" icon on the left (it is an icon on the left tool bar that looks like three boxes, one behind the other). Expand "Embedded Software Examples" and select "Empty Application".
     * Click on the button "Create Application Component from Template" (ID should say "empty_application"). 
-        * **Name and Location**: Enter the name `demo_io` in the "component name" box. Leave the component path as the default. Click Next.
+        * **Name**: Enter the name `demo_io` in the "component name" box.
+        * **Component Location**: Leave the component path as the default. Click Next.
         * **Hardware**: Select "microblaze_io_platform" and click next. 
         * **Domain**: Click next.
         * **Summary**: Click finish.
     * When this is done you should have a component named "demo_io" in your components pane
     * Expand the "demo_io" component and you will see four sub folders that can be expanded: 'Settings', 'Includes', 'Sources', and 'Output'
-        * Expand the 'Sources' folder. This is the folder that contains the source code. 
-        * Copy the file [`demo_io.c`](./demo_io.c) to the directory `demo_io/vitis/demo_io/src/demo_io.c`. This file is the code that will run on your MicroBlaze. This file should show up under the 'Sources' folder. Review the code to familiarize yourself on what it does.
-    * Modify the `CMakeLists.txt` file in the 'Settings' Folder to include the new `demo_io.c` file. Add the two lines to specify the project sources as shown in the example below.
+        * Expand the 'Sources' folder. This is the folder that will hold the source code. 
+        * Copy the file [`demo_io.c`](./demo_io.c) from your repository to the directory `demo_io/vitis/demo_io/src/demo_io.c`. This file is the code that will run on your MicroBlaze. This file should show up under the 'Sources' folder. Review the code to familiarize yourself on what it does.
+    * Modify the `CMakeLists.txt` file in the 'Settings' folder to include the new `demo_io.c` file. Add the two lines to specify the project sources as shown in the example below.
+
+      ```
+      # CMakeLists.txt edits
+      collect(PROJECT_LIB_DEPS xil)
+      collect(PROJECT_LIB_DEPS gcc)
+      collect(PROJECT_LIB_DEPS c)
+
+      # Add files for your project here
+      collect (PROJECT_LIB_SOURCES demo_io.c)
+      collector_list (_sources PROJECT_LIB_SOURCES)
+      # End add
+      ```
+
     * Save a copy of your modified `CMakeLists.txt` file in your assignment directory (i.e., something like CMakeLists.txt.demo_io). You will need to save this file and copy it over to the Vitis project as part of your automated project building step described below.
     * Build the application project
         * Click on the 'demo_io' component to make it active and click on the hammer in the bottom pane to build the application
         * The build window will show the compile process. Note if there are any errors.
-        * The executable should be located at : `./demo_io/vitis/demo_io/build/demo_io.elf` (you will need this for a later step)
+        * The executable should be located at: `./demo_io/vitis/demo_io/build/demo_io.elf` (you will need this for a later step)
 * Download the project to the board
     * Make sure your board is hooked into your computer
-    * Click the 'Run' button. 
+    * Click the 'Run' button (below the hammer 'build' icon)
     * You can rerun the program by pressing the "CPU Reset" button
 
-```
-# CMakeLists.txt edits
-collect(PROJECT_LIB_DEPS xil)
-collect(PROJECT_LIB_DEPS gcc)
-collect(PROJECT_LIB_DEPS c)
-
-# Add files for your project here
-collect (PROJECT_LIB_SOURCES demo_io.c)
-collector_list (_sources PROJECT_LIB_SOURCES)
-# End add
-```
 
 ### Rebuilding Vitis Project from the command line
 
 Creating a Vitis project by hand is cumbersome in a source control system.
-You can perform these steps manually using a custom Python script run within vitis.
+You can perform these steps manually using a custom Python script run within Vitis.
 The script [`demo_io_vitis.py`](./demo_io_vitis.py) is an example can be run to create the Vitis project and build the platform and executable.
 Carefully review this script and its contents.
 This script may need to be edited to match the filenames you have chosen for your `CMakeLists.txt` file.
@@ -217,7 +218,7 @@ Also, make sure your 'clean' rule will clean up the vitis project completely.
 
 ### Running from the command line
 
-You can also download your bitfile and the elf file to your board interactively outside of the vitis gui using the `xsdb` debugger tool.
+You can also download your bitfile and the .elf file to your board interactively outside of the vitis gui using the `xsdb` debugger tool.
 Run the debugger in interactive mode by executing the following command:
 
 `xsdb`
@@ -227,7 +228,7 @@ Once in the interactive tool, execute the following commands to download the bit
 ```
 # Connect to local xsdb server
 connect
-# Connect to NEXYS board
+# Connect to the Nexys 4 DDR board
 targets -filter {name =~ "xc7a100t"} -set
 # Download fpga
 fpga ./demo_io/vitis/microblaze_io/export/microblaze_io/hw/sdt/demo_io.bit
