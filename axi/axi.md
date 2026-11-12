@@ -117,7 +117,7 @@ Instance your transmitter module from the previous UART transmitter assignment u
 Do not copy your transmitter file into this assignment directory.
 Instead, reference it with a relative path to the earlier assignment directory (e.g., `../tx_sim/tx.sv`) in your makefile rules, as you did in the tx_download assignment.
 If you need to fix a bug in the transmitter, make the change in the earlier directory (your original submission is preserved by its tag).
-Instance your fifo module designed above for the transmit path. 
+Instance your fifo module designed above for the transmit path with the default `DATA_WIDTH` of 8 (the FIFO holds bytes, not 32-bit AXI words). 
 The input to the transmit FIFO comes from the AXI bus write data (discussed in more detail below).
 The output of the transmit FIFO goes to your UART transmitter module.
 Create the logic necessary to issues a transmit request to the UART transmitter when the transmit FIFO is not empty and the UART transmitter is not busy.
@@ -136,7 +136,7 @@ The following signals for the transmitter will be hooked up to the AXI bus inter
 
 Instance your receiver module from the previous UART receiver assignment using the parameters of this module.
 As with the transmitter, reference the receiver file with a relative path (e.g., `../rx_sim/rx.sv`) rather than copying it.
-Instance another fifo module for the receiver path.
+Instance another fifo module for the receiver path, also with a `DATA_WIDTH` of 8.
 The input to the receiver FIFO comes from your UART receiver module.
 The output of the receiver FIFO goes to the AXI bus read data (discussed in more detail below).
 Create the logic necessary that writes a byte to the receiver FIFO whenever the UART receiver indicates that a byte has been received and the receive FIFO is not full.
@@ -181,8 +181,10 @@ Offsets 0x08 and 0x0C are unused: reads return 0 and writes have no effect.
 
 **Data width and responses**
 
-* All data is 32 bits wide. A read of the RX data register returns the received byte in bits [7:0] with bits [31:8] set to 0.
-* A write to the TX data register sends bits [7:0] of the write data to the transmit FIFO and ignores bits [31:8].
+* The AXI data buses (`s_axi_wdata` and `s_axi_rdata`) are 32 bits wide, but the UART sends and receives single bytes.
+  Make both FIFOs 8 bits wide (`DATA_WIDTH` = 8) rather than 32 bits: only the low byte of each transfer is used.
+* A write to the TX data register writes bits [7:0] of `s_axi_wdata` into the transmit FIFO and ignores bits [31:8].
+* A read of the RX data register returns the 8-bit receive FIFO output in bits [7:0] of `s_axi_rdata` with bits [31:8] set to 0.
 * Ignore `s_axi_wstrb`: every write is treated as a full 32-bit write.
 * Always respond with `OKAY` (`2'b00`) on `s_axi_bresp` and `s_axi_rresp`, including for the unused offsets and for reads and writes that cause an underflow or overflow.
   Errors are reported through the status register rather than through the AXI response.
