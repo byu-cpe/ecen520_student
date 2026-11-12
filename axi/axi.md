@@ -84,6 +84,7 @@ Review the synthesis report and verify that your fifo was implemented using dist
 Create a new module named `uart_axi.sv` that implements an AXI4-Lite subordinate interface to your UART transmitter and receiver modules.
 Base your new module on the module template file named `uart_axi_template.sv`.
 This file includes the port definitions and parameters for your module to help you get started.
+The following parameters are included:
 
 | Parameter | Default | Purpose |
 | ---- | ---- | ---- |
@@ -93,13 +94,15 @@ This file includes the port definitions and parameters for your module to help y
 | FIFO_DEPTH | 32 | Number of entries in each FIFO (passed to the `DEPTH` parameter of both FIFOs) |
 | C_S_AXI_ADDR_WIDTH | 4 | Width of the AXI address bus |
 
-A Verilog wrapper named `uart_axi_wrapper.v` is also provided.
+A Verilog wrapper named `uart_axi_wrapper.v` is also provided for this assignment.
 It instances your `uart_axi` module and passes through all of its parameters and ports.
-You do not need it for this assignment, but you will use it in the MicroBlaze assignment: the Vivado block diagram editor does not accept SystemVerilog modules directly, so the wrapper is the module you add to the block diagram.
+You do not need it for this assignment, but you will use it in the MicroBlaze assignment.
 Make sure your `uart_axi` module uses exactly the parameter and port names of the template so that the wrapper works without changes.
 
-The figure below shows the structure of the `uart_axi` module.
-An AXI write to the TX data register places a byte in the transmit FIFO, and the transmit logic sends bytes from this FIFO through your transmitter to `tx_out`.
+The general structure of your module is shown in the figure below.
+Your module will instance your transmitter along with a FIFO to buffer data from the AXI interface to the FIFO.
+An AXI write to the TX data register places a byte in the transmit FIFO, and the transmit logic sends bytes from this FIFO through your transmitter (this way you can write multiple bytes to the FIFO before the bytes have finished transmission).
+Your module will also instance your receiver with a FIFO.
 Bytes arriving on `rx_in` are received by your receiver and placed in the receive FIFO, and an AXI read of the RX data register removes a byte from this FIFO.
 The FIFOs separate the AXI bus from the UART: an AXI transaction completes in a few clock cycles while a byte takes many microseconds to send or receive.
 The UART side of each path operates independently of the AXI side. For example, the receiver writes bytes into the receive FIFO whenever they arrive, regardless of whether any AXI reads are taking place.
@@ -117,7 +120,17 @@ If you need to fix a bug in the transmitter, make the change in the earlier dire
 Instance your fifo module designed above for the transmit path. 
 The input to the transmit FIFO comes from the AXI bus write data (discussed in more detail below).
 The output of the transmit FIFO goes to your UART transmitter module.
-Create a state machine that transmits data from the transmit FIFO to the UART transmitter whenever the transmit FIFO is not empty and the UART transmitter is not busy.
+Create the logic necessary to issues a transmit request to the UART transmitter when the transmit FIFO is not empty and the UART transmitter is not busy.
+This logic should operate independently of the AXI bus.
+
+The following signals for the transmitter will be hooked up to the AXI bus interface as described later in the instructions:
+
+* The TX FIFO empty signal
+* The TX FIFO full signal
+* The TX FIFO overflow signal
+* The transmitter busy signal
+* The reset for the transmitter and the TX FIFO
+* The interface for writing data into the TX FIFO
 
 ### Receiver
 
@@ -126,23 +139,84 @@ As with the transmitter, reference the receiver file with a relative path (e.g.,
 Instance another fifo module for the receiver path.
 The input to the receiver FIFO comes from your UART receiver module.
 The output of the receiver FIFO goes to the AXI bus read data (discussed in more detail below).
-Create some logic/state machine that writes a byte to the receiver FIFO whenever the UART receiver indicates that a byte has been received.
+Create the logic necessary that writes a byte to the receiver FIFO whenever the UART receiver indicates that a byte has been received and the receive FIFO is not full.
+This logic should operate independently of the AXI bus.
+
+The following signals for the receiver will be hooked up to the AXI bus interface as described later in the instructions:
+
+* The RX FIFO empty signal
+* The RX FIFO full signal
+* The RX FIFO underflow signal
+* The receiver busy signal
+* The reset for the receiver and the RX FIFO
+* The interface for reading data from the RX FIFO
 
 ### AXI4-Lite Bus Interface
 
-Implement the AXI4-Lite subordinate interface to support reading and writing data to/from the UART transmitter and receiver.
-You will also need to implement a status register that indicates the status of the FIFOs and a control register that allows clearing the FIFOs.
-The address map for your AXI interface is as follows:
+The primary effort invovled with this assignment is creating the AXI4-Lite interface to connect the UART transmitter and receiver to the AXI bus.
+This interface will allow a manager on the AXI bus to read data from your UART (such as the data received over the serial line as well as UART status) and to write data to the UART (such as data to be transmitted over the serial line and set control registers).
+Your AXI UART will have a base address in which all the registers are mapped and should support the following address map:
 
 | Address Offset | Read | Write |
 | ---- | ---- | ---- |
 | 0x00 | RX Data | TX Data |
-| 0x04 | Status Register (read only) | Control Register (write only)
+| 0x04 | Status Register (read only) | Control Register (write only) |
+| 0x08, 0x0C | Reads return 0 | Writes are ignored |
 
-* Reads to address offset 0x00 return a byte from the receiver FIFO. 
+For example, if the manager writes to the baseaddress+0x00, your module will write a byte to the transmit FIFO.
+When reading from this same address, your module will return a byte from the receive FIFO.
+If the manager writes to the baseaddress+0x04, your module will write a value to the control register (described below).
+If the manager reads from the baseaddress+0x04, your module will return the value of the status register (described below).
+
+<!-- * Reads to address offset 0x00 return a byte from the receiver FIFO. 
 * Writes to address offset 0x00 write a byte to the transmit FIFO.
 * Reads to address offset 0x04 return the value of status register (described below)
-* Writes to address offset 0x04 write the value of the control register (described below)
+* Writes to address offset 0x04 write the value of the control register (described below) -->
+
+**Address decode**
+
+The `C_S_AXI_ADDR_WIDTH` of 4 gives four 32-bit registers at offsets 0x00, 0x04, 0x08, and 0x0C.
+Decode the register using address bits [3:2] of the read or write address and ignore bits [1:0].
+Offsets 0x08 and 0x0C are unused: reads return 0 and writes have no effect.
+
+**Data width and responses**
+
+* All data is 32 bits wide. A read of the RX data register returns the received byte in bits [7:0] with bits [31:8] set to 0.
+* A write to the TX data register sends bits [7:0] of the write data to the transmit FIFO and ignores bits [31:8].
+* Ignore `s_axi_wstrb`: every write is treated as a full 32-bit write.
+* Always respond with `OKAY` (`2'b00`) on `s_axi_bresp` and `s_axi_rresp`, including for the unused offsets and for reads and writes that cause an underflow or overflow.
+  Errors are reported through the status register rather than through the AXI response.
+
+**Read and write side effects**
+
+* A read of offset 0x00 removes exactly one byte from the receive FIFO.
+  Do this when the read address handshake completes (`s_axi_arvalid` and `s_axi_arready` both high): capture the FIFO `dout` into your read data register and assert the FIFO `re` for that one cycle.
+  Do not assert `re` again while you wait for `s_axi_rready`, or you will lose bytes.
+* A read of offset 0x00 when the receive FIFO is empty returns 0.
+  Assert `re` anyway so that the FIFO sets its underflow flag (RX underflow in the status register).
+* A write to offset 0x00 asserts the transmit FIFO `we` for one cycle.
+  If the transmit FIFO is full, the FIFO drops the byte and sets its overflow flag (TX overflow in the status register).
+* Reads of the status register have no side effects.
+
+To implement this functionaliy, your logic needs to implement the 'address read' channel to accept the address that the manager wants to read (so you can decide which data to return).
+It also must implement the 'data read' channel to provide a response with the appropriate data (based on the address).
+Your logic will also need to implement the 'address write' channel, 'data write' channel, and 'write response' channel.
+
+For simplicity, create a single AXI state machine that implements the functionality of the five AXI channels.
+Suggestions for this state machine are as follows:
+
+* Have an idle state that is waiting for either a 'address read' or 'address write' sequence
+* When an 'address read' occurs:
+  * Capture the address that needs to be read and complete the 'address read' sequence
+  * Obtain the data that is to be read (status or rx FIFO value)
+  * Perform the 'data read' sequence to provide the appropriate data
+* When an 'address write' occurs:
+  * Capture the address that needs to be written and complete the 'address write' sequence
+  * Capture the data that needs to be written and complete the 'data write' sequence (you could complete both sequences at the same time)
+  * Write the data to the appropriate location (into the TX FIFO or the control register)
+  * Perform the 'write response' sequence
+
+Additional details on this interface are described below:
 
 **Reset**
 
@@ -152,10 +226,16 @@ In particular, `s_axi_bvalid` and `s_axi_rvalid` must be low during reset and mu
 Remember that your FIFO, transmitter, and receiver use active high resets, so invert `s_axi_aresetn` before connecting it to them.
 
 **Status Register**
+
+A status register must be included to allow the manager to read the status to indicate how to interact with the UART.
+The status register must include each of the following bits and in the given location.
+When an AXI read occurs at the status register, return the value of each of the following bits:
+
+
 | Bit | Purpose |
 | ---- | ---- |
-| 0 | TX Busy |
-| 1 | RX Busy |
+| 0 | TX Busy (the transmitter is sending a byte) |
+| 1 | RX Busy (the receiver is receiving a byte) |
 | 2 | RX error status |
 | 3 | TX FIFO full |
 | 4 | RX FIFO empty |
@@ -166,11 +246,33 @@ Remember that your FIFO, transmitter, and receiver use active high resets, so in
 
 Bits that are not listed in the table read as 0.
 
+* **TX Busy** is the `busy` output of your transmitter. It shows only whether the transmitter is sending a byte and ignores the transmit FIFO.
+  Between bytes, TX Busy may be low while the transmit FIFO still holds data.
+  Software that needs to know that all data has been sent should wait until TX FIFO empty is 1 and TX Busy is 0.
+* **RX error status** is sticky: it is set when your receiver completes a byte with its `parityErr` output high, and it stays set until the RX FIFO is cleared (control register bit 1) or the module is reset.
+* **TX overflow** and **RX underflow** are the sticky `overflow` and `underflow` outputs of the corresponding FIFOs.
+
 **Control Register**
+
+Create a control register to allow the manager to control the UART.
+
 | Bit | Purpose |
 | ---- | ---- |
 | 0 | Clear TX FIFO |
 | 1 | Clear RX FIFO |
+
+* The clear bits are one-cycle pulses: writing a 1 to a bit asserts the `clr` input of that FIFO for one clock cycle. Writing a 0 has no effect.
+  The control register does not hold its value, so the FIFOs are never held in the cleared state.
+  This means that writing `0x3` clears both FIFOs, and there is no need to write `0x0` afterwards.
+* Clearing a FIFO also clears its sticky flags: clearing the TX FIFO clears TX overflow, and clearing the RX FIFO clears RX underflow and RX error status.
+* Clearing the TX FIFO does not stop a byte that the transmitter is already sending.
+* The control register is write only: a read of offset 0x04 returns the status register.
+
+**References**
+
+* The AXI lecture notes: [AXI](../lectures/axi.md)
+* The [AMBA AXI Protocol Specification](https://developer.arm.com/documentation/ihi0022/latest) (ARM IHI 0022), in particular the AXI4-Lite section
+* The [Vivado Design Suite: AXI Reference Guide](https://docs.amd.com/v/u/en-US/ug1037-vivado-axi-reference-guide) (UG1037)
 
 <!-- 
 ### Synthesis

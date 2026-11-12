@@ -55,23 +55,23 @@ The commented student feedback at the end of `axi.md` (lines 184–189) asks for
   - `VALID` must not depend on `READY` (a subordinate may make `READY` depend on `VALID`).
   - Only one outstanding transaction per direction is needed for AXI4-Lite in this design (e.g., don't accept a new read address while `RVALID` is still waiting for `RREADY`).
 - [ ] **Add a step-by-step example of one write and one read**, with a timing diagram: AW/W handshake → FIFO write → B response; AR handshake → FIFO read → R response. This was requested in the student feedback (line 188). Also say explicitly that the UART receive path (filling the RX FIFO) and the AXI read path (emptying it) operate independently; the feedback says this was the main source of confusion.
-- [ ] **Define the address decode.** `C_S_AXI_ADDR_WIDTH = 4` gives four 32-bit word offsets (0x0, 0x4, 0x8, 0xC). Say which address bits to decode (e.g., `addr[3:2]`), and what offsets 0x08 and 0x0C do (read 0 with `OKAY`, or return `SLVERR`).
-- [ ] **Define the data width and byte lanes.** The RX data read returns the byte in bits [7:0] with bits [31:8] = 0. Status bits [31:N] are 0. Say whether `WSTRB` is ignored (simplest) or must have bit 0 set to write.
-- [ ] **Define the response codes.** Say whether everything returns `OKAY` (`2'b00`), or whether errors (writing a full TX FIFO, reading an empty RX FIFO, an unused address) return `SLVERR` (`2'b10`).
-- [ ] **Define read side effects.**
+- [x] **Define the address decode.** `C_S_AXI_ADDR_WIDTH = 4` gives four 32-bit word offsets (0x0, 0x4, 0x8, 0xC). Say which address bits to decode (e.g., `addr[3:2]`), and what offsets 0x08 and 0x0C do (read 0 with `OKAY`, or return `SLVERR`). *Resolved:* added an **Address decode** paragraph: decode `addr[3:2]`, ignore `[1:0]`; 0x08/0x0C read 0 and ignore writes (also added to the address map table).
+- [x] **Define the data width and byte lanes.** The RX data read returns the byte in bits [7:0] with bits [31:8] = 0. Status bits [31:N] are 0. Say whether `WSTRB` is ignored (simplest) or must have bit 0 set to write. *Resolved:* added **Data width and responses**: RX data in [7:0] with [31:8] = 0, TX uses `wdata[7:0]`, `WSTRB` ignored.
+- [x] **Define the response codes.** Say whether everything returns `OKAY` (`2'b00`), or whether errors (writing a full TX FIFO, reading an empty RX FIFO, an unused address) return `SLVERR` (`2'b10`). *Resolved:* always `OKAY`, including unused offsets and overflow/underflow; errors are reported in the status register.
+- [x] **Define read side effects.**
   - A read of offset 0x00 pops one byte from the RX FIFO; say on which handshake (AR or R) it happens, and that it must happen exactly once per read.
   - Say what a read returns when the RX FIFO is empty (e.g., 0, with the underflow bit set).
-  - A write to 0x00 when the TX FIFO is full drops the byte and sets the overflow bit.
-- [ ] **Define the control register semantics.**
+  - A write to 0x00 when the TX FIFO is full drops the byte and sets the overflow bit. *Resolved:* added **Read and write side effects**: pop on the AR handshake (capture `dout`, one-cycle `re`, not again while waiting for `RREADY`); empty read returns 0 and still asserts `re` to set underflow; full write drops the byte and sets overflow; status reads have no side effects.
+- [x] **Define the control register semantics.**
   - Are the clear bits one-cycle pulses (self-clearing), or levels that hold the FIFOs clear while set? Recommend pulses.
   - The MicroBlaze software writes `switches & 0x3` to this register at startup (`mb_uart.c` line 86). With level semantics, the FIFOs would stay cleared as long as a switch is on.
-  - Say whether clearing a FIFO also clears its sticky error bits (overflow, underflow, RX error).
-- [ ] **Define the "TX Busy" status bit.** Is it the transmitter's `busy`, or "busy or TX FIFO not empty" (i.e., still has data to send)? Software usually wants the second.
+  - Say whether clearing a FIFO also clears its sticky error bits (overflow, underflow, RX error). *Resolved:* clear bits are one-cycle pulses (register does not hold its value); clearing a FIFO clears its sticky flags (TX overflow; RX underflow and RX error); clearing TX does not abort a byte in progress; register is write-only. RX error is defined as sticky (set on a byte received with `parityErr`). `mb_uart.c` writes 0x3 then 0x0, which still works.
+- [x] **Define the "TX Busy" status bit.** Is it the transmitter's `busy`, or "busy or TX FIFO not empty" (i.e., still has data to send)? Software usually wants the second. *Resolved:* TX Busy is the transmitter's `busy` only (ignores the FIFO). The md says software should wait for TX FIFO empty and TX Busy low to know all data is sent.
 - [x] **Describe the reset.** `s_axi_aresetn` is active low and synchronous. Say that it resets the FIFOs, the UART modules, and the AXI state, and that `BVALID` / `RVALID` must be low during reset. *Resolved:* added a **Reset** paragraph before the status register: `s_axi_aresetn` is active low and synchronous, resets everything, `BVALID`/`RVALID` must stay low, and the active-high submodule resets need an inverter.
-- [ ] **Add references:**
+- [x] **Add references:**
   - the course AXI lectures (`../lectures/axi.md`);
   - the AMBA AXI protocol specification (ARM IHI 0022), AXI4-Lite section;
-  - the AMD AXI Reference Guide (UG1037).
+  - the AMD AXI Reference Guide (UG1037). *Resolved:* added a **References** list after the control register. The ARM and AMD URLs were not verified (AMD's site returns 200 for any path).
 
 ## Provided files
 
