@@ -82,8 +82,10 @@ int main() {
     XGpio_DiscreteWrite(&SSD_gpio, CHANNEL_1, 0);        
     // Turn on all the segments and turn off all of the digit points
     //XGpio_DiscreteWrite(&BTN_gpio, CHANNEL_2, 0x0); 
-    // Clear the FIFOs       
-    Xil_Out32(XPAR_UART_AXI_BASEADDR+4, switches & 0x3);
+    // Clear both FIFOs, then release the clear bits (this works whether the
+    // clear bits are one-cycle pulses or levels)
+    Xil_Out32(XPAR_UART_AXI_BASEADDR+4, 0x3);
+    Xil_Out32(XPAR_UART_AXI_BASEADDR+4, 0x0);
     while(1) {
         // Read UART status
         uart_status = Xil_In32(XPAR_UART_AXI_BASEADDR+4);
