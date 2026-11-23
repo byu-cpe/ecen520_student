@@ -21,12 +21,22 @@ You should have two makefile rules for building this project and the correspondi
 
 Once you have a working system and project, create your own C file to do something interesting with your system.
 The intent is to have you come up with something different than the given C code to demonstrate your microblaze.
+You will describe what your application does and how to use it in your report.
 Name your C code `custom.c` and create a makefile rule `build_custom_vitis` that generates an elf file named  `./mb_uart/vitis/custom/build/custom.elf`
 
 # Submission and Grading
 
 1. Implement all the required makefile rules and make sure your `passoff.py` script runs without errors.
-2. Complete and commit the [report.md](report.md) file for this assignment.
+2. Complete and commit the [report.md](report.md) file for this assignment. The report asks for the following information from your `mb_uart` design:
+    * **Hierarchical utilization report.** Open the implemented design and generate a hierarchical utilization report (Reports->Report Utilization, then select the "Hierarchy" view), or add the following commands to the end of your `build_mb_uart` Tcl script to write it to a file:
+      ```
+      open_run impl_1
+      report_utilization -hierarchical -file mb_uart_utilization_hier.rpt
+      ```
+      Find the rows for the MicroBlaze (`microblaze_0`) and your UART (`uart_axi`) under the block diagram instance.
+    * **Address map.** The base address and range of each AXI peripheral, from the "Address Editor" tab of the block diagram.
+    * **Custom application.** A description of your custom application and how to use it.
+    * **Block diagram screenshot.** Open your `mb_uart` block diagram, click "Regenerate Layout" so the diagram is readable, zoom to fit the whole diagram, and save a screenshot named `mb_uart_bd.png` in your assignment directory. Commit this file.
 
 <!-- Future
 - I don't have a good way of grading this. I need to figure out how to create a bitfile that has the elf integrated into it. This bitfile should bre required.
